@@ -32,7 +32,7 @@ class Application_Model_AmigoDao
     	return $amigo;
     }
     
-    public function obtenerTodos($id){
+    public function obtenerTodos(){
         
     }
     
