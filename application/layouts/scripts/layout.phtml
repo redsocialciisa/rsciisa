@@ -1,21 +1,45 @@
-<?php echo $this->doctype() ?>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<?php 
+	session_start();
+?>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Zend Framework Quickstart Application</title>
-  <?php echo $this->headLink()->appendStylesheet('/css/global.css') ?>
+<meta charset="utf-8">
+    <title>Red Social IPCIISA</title>
+    <meta name="author" content="Red Social IPCIISA">
+    
+    <script type="text/javascript" src="<?php echo $this->baseUrl()?>/bootstrap/js/jquery-1.7.2.min.js"></script>    
+    <link type="text/css" href="<?php echo $this->baseUrl()?>/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link type="text/css" href="<?php echo $this->baseUrl()?>/bootstrap/css/bootstrap-responsive.css" rel="stylesheet" />	
+	<script type="text/javascript" src="<?php echo $this->baseUrl()?>/bootstrap/js/bootstrap.js"></script>		
 </head>
-<body>
-<div id="header" style="background-color: #EEEEEE; height: 30px;">
-    <div id="header-logo" style="float: left">
-        <b>ZF Quickstart Application</b>
-    </div>
-    <div id="header-navigation" style="float: right">
-        <a href="<?php echo $this->url(
-            array('controller'=>'guestbook'),
-            'default',
-            true) ?>">Guestbook</a>
-    </div>
+
+<body style="padding-top: 60px;">
+
+<div class="navbar navbar-fixed-top" data-dropdown="dropdown">
+	<div class="navbar-inner">
+    	<div class="container">
+    		<a class="brand" href="#">IPCIISA</a>
+    	    <div class="nav-collapse">
+	    	    
+	    	    <ul class="nav">
+					<li class="dropdown">
+		              <a class="dropdown-toggle" href="#" data-toggle="dropdown" >
+		              	Dropdown 
+		              	<b class="caret"></b>
+		              </a>
+		              <ul class="dropdown-menu">
+		                <li><a href="#">Mi Perfil</a></li>
+		                <li><a href="#">Cerrar Sesion</a></li>
+		                <li class="divider"></li>
+		                <li><a href="#">One more separated link</a></li>
+		              </ul>
+		            </li>
+			    </ul>
+
+			</div>
+    	</div>
+	</div>
 </div>
 
 <?php echo $this->layout()->content ?>
