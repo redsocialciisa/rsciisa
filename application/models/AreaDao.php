@@ -27,5 +27,10 @@ class Application_Model_AreaDao
     	}
     	return $area;
     }
+    
+    public function obtenerTodos()
+    {
+        
+    }
 
 }
