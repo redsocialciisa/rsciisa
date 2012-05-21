@@ -10,6 +10,7 @@ class IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
+        
 		$objCiisa = new Application_Model_Ciisa();
 		
 		$objCiisa2 = new Application_Model_Ciisa();		
