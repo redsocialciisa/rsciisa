@@ -9,6 +9,8 @@ class Application_Model_Usuario
     private $_cv;
     private $_fechaNacimiento;
     private $_emocionId;
+    private $_password;
+    private $_perfilId;
     
 	/**
 	 * @return the $_id
@@ -60,6 +62,20 @@ class Application_Model_Usuario
 	}
 
 	/**
+	 * @return the $_password
+	 */
+	public function getPassword() {
+		return $this->_password;
+	}
+
+	/**
+	 * @return the $_perfilId
+	 */
+	public function getPerfilId() {
+		return $this->_perfilId;
+	}
+
+	/**
 	 * @param field_type $_id
 	 */
 	public function setId($_id) {
@@ -108,6 +124,24 @@ class Application_Model_Usuario
 		$this->_emocionId = $_emocionId;
 	}
 
+	/**
+	 * @param field_type $_password
+	 */
+	public function setPassword($_password) {
+		$this->_password = $_password;
+	}
+
+	/**
+	 * @param field_type $_perfilId
+	 */
+	public function setPerfilId($_perfilId) {
+		$this->_perfilId = $_perfilId;
+	}
+
+    
+    
+    
+	
     
     
 

@@ -19,16 +19,7 @@ class IndexController extends Zend_Controller_Action
 		    //obtener datos del usuario
 		    //crear obj usuario
 		    //guardar en session el obj usuario
-		    //redireccionamos
-		    
-		    $objUsuarioDao  = new Application_Model_AlbumDao();
-		    
-		    $usuario = $objUsuarioDao->obtenerPorId("6");
-		    
-		    /*echo $usuario->getId();
-		    echo $usuario->getNombre();*/
-			
-		    $this->view->usuario = $usuario;
+		    //redireccionamos		    
 		    
 		    //$_SESSION["usuario"] = $objCiisa;
 		}else{

@@ -30,7 +30,26 @@ class Application_Model_AreaDao
     
     public function obtenerTodos()
     {
-        
+    	$lista = new SplObjectStorage();
+    
+    	$resultado = $this->_table->fetchAll();
+    
+    	if(count($resultado) > 0){
+    
+    		foreach ($resultado as $item)
+    		{
+    			$lista->attach($this->obtenerPorId($item->are_id));
+    		}
+    	}
+    
+    	return $lista;
+    }
+    
+    public function eliminar($are_id)
+    {
+    	$where = 'are_id = ' . $are_id;
+    
+    	return $this->_table->delete($where);
     }
 
 }

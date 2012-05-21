@@ -30,11 +30,16 @@ class Application_Model_AmigoDao
     
     	}
     	return $amigo;
+    }    
+    
+    public function eliminarAmigo($usu_id, $ami_usu_id)
+    {
+    	$where = 'usu_id = ' . $usu_id . 'AND ami_usu_id ='. $ami_usu_id;
+    
+    	return $this->_table->delete($where);
     }
     
-    public function obtenerTodos($id){
-        
-    }
+    
     
 }
 

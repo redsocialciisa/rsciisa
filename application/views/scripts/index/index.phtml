@@ -43,6 +43,11 @@
 </div>
 
 <div>
-	<?php echo $this->usuario->getId(); ?><br>
-	<?php echo $this->usuario->getNombre(); ?>
+	<?php if(count($this->album) > 0){ ?>
+		<?php foreach ($this->album as $album){?>
+				<?php echo $album->getNombre()."-".$album->getFechaCreacion()."-".$album->getUsuario()."-"; ?><br>				
+		<?php }?>
+	<?php } ?>
+	
+
 </div>

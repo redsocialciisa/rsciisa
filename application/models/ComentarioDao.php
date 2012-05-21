@@ -2,7 +2,59 @@
 
 class Application_Model_ComentarioDao
 {
-
+    private $_table;
+    
+    public function __construct()
+    {
+    	$this->_table = new Application_Model_DbTable_ComentarioMap();
+    }
+    
+    public function obtenerPorId($id)
+    {
+    	$id = (int)$id;
+    
+    	$resultado = $this->_table->find($id);
+    
+    	$objComentario = null;
+    
+    	if(count($resultado) > 0){
+    
+    		$objComentario = new Application_Model_Comentario();
+    		 
+    		$objComentario->setId($resultado->current()->com_id);
+    		$objComentario->setTexto($resultado->current()->com_texto);
+    		$objComentario->setFecha($resultado->current()->com_fecha);
+    		$objComentario->setPublicacionId($resultado->current()->pub_id);
+    		$objComentario->setUsuarioId($resultado->current()->usu_id);
+    
+    	}
+    	return $objComentario;
+    }
+    
+    public function obtenerPorPublicacionId($pub_id)
+    {
+    	$lista = new SplObjectStorage();
+    	$where = 'pub_id > '. $pub_id;
+    
+    	$resultado = $this->_table->fetchAll($where);
+    
+    	if(count($resultado) > 0)
+    	{    
+    		foreach ($resultado as $item)
+    		{
+    			$lista->attach($this->obtenerPorId($item->com_id));
+    		}
+    	}
+    
+    	return $lista;
+    }
+    
+    public function eliminar($com_id)
+    {
+    	$where = 'com_id = ' . $com_id;
+    
+    	return $this->_table->delete($where);
+    }
 
 }
 

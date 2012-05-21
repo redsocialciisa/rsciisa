@@ -3,6 +3,7 @@
 class Application_Model_Grupo
 {
     private $_id;
+    private $_usu_id;
     private $_nombre;
     private $_descripcion;
     private $_foto;
@@ -14,6 +15,13 @@ class Application_Model_Grupo
 	 */
 	public function getId() {
 		return $this->_id;
+	}
+
+	/**
+	 * @return the $_usu_id
+	 */
+	public function getUsu_id() {
+		return $this->_usu_id;
 	}
 
 	/**
@@ -59,6 +67,13 @@ class Application_Model_Grupo
 	}
 
 	/**
+	 * @param field_type $_usu_id
+	 */
+	public function setUsu_id($_usu_id) {
+		$this->_usu_id = $_usu_id;
+	}
+
+	/**
 	 * @param field_type $_nombre
 	 */
 	public function setNombre($_nombre) {
@@ -94,6 +109,7 @@ class Application_Model_Grupo
 	}
 
     
+	
 	
 
     
