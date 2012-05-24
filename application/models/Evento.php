@@ -3,18 +3,27 @@
 class Application_Model_Evento
 {
     private $_id;
+    private $_usuarioId;
     private $_nombre;
     private $_descripcion;
     private $_lugar;
     private $_cordenadaX;
-    private $cordenadaY;
-    private $tipoEventoId;
+    private $_cordenadaY;
+    private $_fechaCreacion;    
+    private $_tipoEventoId;
     
 	/**
 	 * @return the $_id
 	 */
 	public function getId() {
 		return $this->_id;
+	}
+
+	/**
+	 * @return the $_usuarioId
+	 */
+	public function getUsuarioId() {
+		return $this->_usuarioId;
 	}
 
 	/**
@@ -46,17 +55,24 @@ class Application_Model_Evento
 	}
 
 	/**
-	 * @return the $cordenadaY
+	 * @return the $_cordenadaY
 	 */
 	public function getCordenadaY() {
-		return $this->cordenadaY;
+		return $this->_cordenadaY;
 	}
 
 	/**
-	 * @return the $tipoEventoId
+	 * @return the $_fechaCreacion
+	 */
+	public function getFechaCreacion() {
+		return $this->_fechaCreacion;
+	}
+
+	/**
+	 * @return the $_tipoEventoId
 	 */
 	public function getTipoEventoId() {
-		return $this->tipoEventoId;
+		return $this->_tipoEventoId;
 	}
 
 	/**
@@ -64,6 +80,13 @@ class Application_Model_Evento
 	 */
 	public function setId($_id) {
 		$this->_id = $_id;
+	}
+
+	/**
+	 * @param field_type $_usuarioId
+	 */
+	public function setUsuarioId($_usuarioId) {
+		$this->_usuarioId = $_usuarioId;
 	}
 
 	/**
@@ -95,21 +118,29 @@ class Application_Model_Evento
 	}
 
 	/**
-	 * @param field_type $cordenadaY
+	 * @param field_type $_cordenadaY
 	 */
-	public function setCordenadaY($cordenadaY) {
-		$this->cordenadaY = $cordenadaY;
+	public function setCordenadaY($_cordenadaY) {
+		$this->_cordenadaY = $_cordenadaY;
 	}
 
 	/**
-	 * @param field_type $tipoEventoId
+	 * @param field_type $_fechaCreacion
 	 */
-	public function setTipoEventoId($tipoEventoId) {
-		$this->tipoEventoId = $tipoEventoId;
+	public function setFechaCreacion($_fechaCreacion) {
+		$this->_fechaCreacion = $_fechaCreacion;
+	}
+
+	/**
+	 * @param field_type $_tipoEventoId
+	 */
+	public function setTipoEventoId($_tipoEventoId) {
+		$this->_tipoEventoId = $_tipoEventoId;
 	}
 
     
 	
+    
     
     
 
