@@ -28,6 +28,21 @@ class Application_Model_SituacionAmigoDao
     	return $objSituacionAmigo;
     }
     
+    public function guardar(Application_Model_SituacionAmigo $situacionAmigo)
+    {
+    	$data = array('sit_ami_id' => $situacionAmigo->getId(),
+    			'sit_ami_nombre' => $situacionAmigo->getNombre()
+    	);
+    
+    	if($situacionAmigo->getId() != null){
+    		$where = 'sit_ami_id = ' . $situacionAmigo->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function obtenerTodos()
     {
     	$lista = new SplObjectStorage();

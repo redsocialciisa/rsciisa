@@ -31,6 +31,24 @@ class Application_Model_HistorialDao
     	return $objHistorial;
     }
     
+    public function guardar(Application_Model_Historial $historial)
+    {
+    	$data = array('his_id' => $historial->getId(),
+    			'his_texto' => $historial->getTexto(),
+    			'his_fecha' => $historial->getFecha(),
+    			'men_id' => $historial->getMensajeId(),
+    			'usu_id' => $historial->getUsuarioId()
+    	);
+    
+    	if($historial->getId() != null){
+    		$where = 'his_id = ' . $historial->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function obtenerPorMensajeId($men_id)
     {
     	$lista = new SplObjectStorage();

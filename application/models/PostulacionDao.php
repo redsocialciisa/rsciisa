@@ -30,6 +30,23 @@ class Application_Model_PostulacionDao
     	return $objPostulacion;
     }
     
+    public function guardar(Application_Model_Postulacion $postulacion)
+    {
+    	$data = array('pos_id' => $postulacion->getId(),
+    			'pos_fecha' => $postulacion->getFecha(),
+    			'usu_id' => $postulacion->getUsuarioId(),
+    			'ofe_id' => $postulacion->getOfertaId()
+    	);
+    
+    	if($postulacion->getId() != null){
+    		$where = 'pos_id = ' . $postulacion->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function obtenerPorUsuarioId($usu_id)
     {
     	$lista = new SplObjectStorage();

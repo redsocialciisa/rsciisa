@@ -28,6 +28,21 @@ class Application_Model_TipoPublicacionDao
     	return $objTipoPublicacion;
     }
     
+    public function guardar(Application_Model_TipoPublicacion $tipoPublicacion)
+    {
+    	$data = array('tip_pub_id' => $tipoPublicacion->getId(),
+    			'tip_pub_nombre' => $tipoPublicacion->getNombre()
+    	);
+    
+    	if($tipoPublicacion->getId() != null){
+    		$where = 'tip_pub_id = ' . $tipoPublicacion->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function obtenerTodos()
     {
     	$lista = new SplObjectStorage();

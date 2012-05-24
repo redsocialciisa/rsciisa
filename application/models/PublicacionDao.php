@@ -34,6 +34,27 @@ class Application_Model_PublicacionDao
     	return $objPublicacion;
     }   
     
+    public function guardar(Application_Model_Publicacion $publicacion)
+    {
+    	$data = array('pub_id' => $publicacion->getId(),
+    			'pub_texto' => $publicacion->getTexto(),
+    			'pub_foto' => $publicacion->getFoto(),
+    			'pub_video' => $publicacion->getVideo(),
+    	        'pub_fecha' => $publicacion->getFecha(),
+    	        'pri_pub_id' => $publicacion->getPrivacidadId(),
+    	        'tip_pub_id' => $publicacion->getTipoId(),
+    	        'usu_id' => $publicacion->getUsuarioId()
+    	);
+    
+    	if($publicacion->getId() != null){
+    		$where = 'pub_id = ' . $publicacion->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function eliminar($pub_id)
     {
     	$where = 'pub_id = ' . $pub_id;

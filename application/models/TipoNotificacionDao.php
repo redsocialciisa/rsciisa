@@ -28,6 +28,21 @@ class Application_Model_TipoNotificacionDao
     	return $objTipoNotificacion;
     }
     
+    public function guardar(Application_Model_TipoNotificacion $tipoNotificacion)
+    {
+    	$data = array('tip_not_id' => $tipoNotificacion->getId(),
+    			'tip_not_nombre' => $tipoNotificacion->getNombre()
+    	);
+    
+    	if($tipoNotificacion->getId() != null){
+    		$where = 'tip_not_id = ' . $tipoNotificacion->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function obtenerTodos()
     {
     	$lista = new SplObjectStorage();

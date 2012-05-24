@@ -31,6 +31,24 @@ class Application_Model_NotificacionDao
     	return $objNotificacion;
     }
     
+    public function guardar(Application_Model_Notificacion $notificacion)
+    {
+    	$data = array('not_id' => $notificacion->getId(),
+    			'not_texto' => $notificacion->getTexto(),
+    			'not_fecha' => $notificacion->getFecha(),
+    			'usu_id' => $notificacion->getUsuarioId(),
+    			'tip_not_id' => $notificacion->getTipoNotificacionId()
+    	);
+    
+    	if($notificacion->getId() != null){
+    		$where = 'not_id = ' . $notificacion->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function obtenerPorUsuarioId($usu_id)
     {
     	$lista = new SplObjectStorage();

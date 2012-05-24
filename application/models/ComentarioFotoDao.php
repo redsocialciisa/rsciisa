@@ -41,11 +41,28 @@ class Application_Model_ComentarioFotoDao
     	{
     		foreach ($resultado as $item)
     		{
-    			$lista->attach($this->obtenerPorId($item->com_id));
+    			$lista->attach($this->obtenerPorId($item->com_fot_id));
     		}
     	}
     
     	return $lista;
+    }
+    
+    public function guardar(Application_Model_ComentarioFoto $comentarioFoto)
+    {
+    	$data = array('com_fot_id' => $comentarioFoto->getId(),
+    			'com_fot_texto' => $comentarioFoto->getTexto(),
+    			'com_fecha' => $comentarioFoto->getFecha(),
+    			'fot_id' => $comentarioFoto->getFotoId()
+    	);
+    
+    	if($comentarioFoto->getId() != null){
+    		$where = 'com_fot_id = ' . $comentarioFoto->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
     }
     
     public function eliminar($com_fot_id)

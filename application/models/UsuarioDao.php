@@ -29,10 +29,76 @@ class Application_Model_UsuarioDao
     		$objUsuario->setCv($resultado->current()->usu_cv);
     		$objUsuario->setFechaNacimiento($resultado->current()->usu_fecha_nacimiento);
     		$objUsuario->setEmocionId($resultado->current()->emo_id);
+    		$objUsuario->setAcepta($resultado->current()->usu_acepta);
     		$objUsuario->setPerfilId($resultado->current()->per_id);
     
     	}
     	return $objUsuario;
+    }
+    
+    public function obtenerPorUsuarioCiisa($usuario)
+    {
+    	$where = "usu_ciisa = '" .$usuario . "'";
+    	 
+    	$resultado = $this->_table->fetchAll($where);
+    	 
+    	if(count($resultado) > 0)
+    	{
+    		return $this->obtenerPorId($resultado->current()->usu_id);
+    	}
+    
+    	return null;
+    }   
+    
+       
+	public function validarAdministrador($usuario, $password)    
+	{
+    	$where = "usu_ciisa = '" .$usuario . "' AND usu_password = '". $password. "'";
+    	
+    	$resultado = $this->_table->fetchAll($where);
+    	
+    	if(count($resultado) > 0)
+    	{
+    	    return $this->obtenerPorId($resultado->current()->usu_id);
+    	}
+    
+    	return null;
+    }
+    
+    public function guardar(Application_Model_Usuario $usuario)
+    {
+    	$data = array('usu_id' => $usuario->getId(),
+    			'usu_ciisa' => $usuario->getUsuarioCiisa(),
+    	        'usu_password' => $usuario->getPassword(),
+    	        'usu_nombre' => $usuario->getNombre(),
+    	        'usu_correo' => $usuario->getCorreo(),
+    	        'usu_fecha_nacimiento' => $usuario->getFechaNacimiento(),
+    	        'emo_id' => $usuario->getEmocionId(),
+    	        'usu_acepta' => $usuario->getAcepta(),
+    	        'per_id' => $usuario->getPerfilId()
+    	);
+    
+    	if($usuario->getId() != null){
+    		$where = 'usu_id = ' . $usuario->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
+    public function guardarAceptacion(Application_Model_Usuario $usuario)
+    {
+    	$data = array('usu_id' => $usuario->getId(),
+    			'usu_acepta' => $usuario->getAcepta(),
+    	);
+    
+    	if($usuario->getId() != null){
+    		$where = 'usu_id = ' . $usuario->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
     }
     
     public function obtenerTodos()
@@ -56,9 +122,9 @@ class Application_Model_UsuarioDao
     {
     	$lista = new SplObjectStorage();
     	$where = 'usu_nombre like %'. $nombre .'%';
-    	$order = 'usu_nombre';
+    	//$order = 'usu_nombre';
     
-    	$resultado = $this->_table->fetchAll($where, $order);
+    	$resultado = $this->_table->fetchAll($where);
     
     	if(count($resultado) > 0)
     	{

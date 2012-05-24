@@ -7,9 +7,7 @@ class Application_Model_Ciisa
     private $_myPass;
     private $_myDB;    
     private $_con;
-    private $_d;
-    
-    
+    private $_d;   
 
 	/**
 	 * @return the $_myServer
@@ -53,6 +51,73 @@ class Application_Model_Ciisa
         }
         
         mssql_close($this->_con);        
+    }
+    
+    function obtenerUsuarioAlumnoCiisa($usuario) {    
+   	
+    	$query = "SELECT
+    				ALU_RUT,
+    				ALU_NOMBRE,    				
+    				ALU_EMAIL,
+    				ALU_SEXO,
+    				convert(nvarchar,Year(ALU_FECNAC)) + '-' + convert(nvarchar,Month(ALU_FECNAC)) + '-' + convert(nvarchar,Day(ALU_FECNAC)) AS ALU_FECNAC
+    			FROM
+    				[RC RCA 2007].[dbo].[ALUMNOS]
+    			WHERE 
+    				ALU_RUT = '$usuario'";
+    
+    	$result = mssql_query($query);
+    	$numRows = mssql_num_rows($result);   	
+    	
+    	if($numRows > 0)
+    	{
+    	    $objUsuario = new Application_Model_Usuario();
+    	    $row = mssql_fetch_array($result);
+    	        	        	    
+    	    $objUsuario->setUsuarioCiisa(trim($row['ALU_RUT']));
+    	    $objUsuario->setNombre(trim($row['ALU_NOMBRE']));
+    	    $objUsuario->setCorreo(trim($row['ALU_EMAIL']));
+    	    $objUsuario->setSexo(trim($row['ALU_SEXO']));
+    	    $objUsuario->setFechaNacimiento($row['ALU_FECNAC']);
+    	    			
+    	    return $objUsuario;
+    	}else{
+    	    return null;
+    	}   	
+    
+    	mssql_close($this->_con);
+    }
+    
+    function obtenerUsuarioProfesorAcademicoCiisa($usuario) {
+    
+    	$query = "SELECT 
+					 PFE_SIGLA,
+					 PFE_RUT,
+					 PFE_NOMBRE,
+				 	 PFE_EMAIL	
+				 FROM 
+					 PROFESOR
+				WHERE 
+					 PFE_SIGLA = '$usuario'";
+    
+    	$result = mssql_query($query);
+    	$numRows = mssql_num_rows($result);
+    	 
+    	if($numRows > 0)
+    	{
+    		$objUsuario = new Application_Model_Usuario();
+    		$row = mssql_fetch_array($result);
+    			
+    		$objUsuario->setUsuarioCiisa(trim($row['PFE_SIGLA']));
+    		$objUsuario->setNombre(trim($row['PFE_NOMBRE']));
+    		$objUsuario->setCorreo(trim($row['PFE_EMAIL']));
+    
+    		return $objUsuario;
+    	}else{
+    		return null;
+    	}
+    
+    	mssql_close($this->_con);
     }
 
     

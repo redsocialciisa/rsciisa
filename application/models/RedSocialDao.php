@@ -28,6 +28,21 @@ class Application_Model_RedSocialDao
     	return $objRedSocial;
     }
     
+    public function guardar(Application_Model_RedSocial $redSocial)
+    {
+    	$data = array('red_id' => $redSocial->getId(),
+    			'red_nombre' => $redSocial->getNombre()
+    	);
+    
+    	if($redSocial->getId() != null){
+    		$where = 'red_id = ' . $redSocial->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function obtenerTodos()
     {
     	$lista = new SplObjectStorage();

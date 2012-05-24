@@ -45,6 +45,21 @@ class Application_Model_AreaDao
     	return $lista;
     }
     
+    public function guardar(Application_Model_Area $area)
+    {
+    	$data = array('are_id' => $area->getId(),
+    			'are_nombre' => $area->getNombre()
+    	);
+    
+    	if($area->getId() != null){
+    		$where = 'are_id = ' . $area->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function eliminar($are_id)
     {
     	$where = 'are_id = ' . $are_id;

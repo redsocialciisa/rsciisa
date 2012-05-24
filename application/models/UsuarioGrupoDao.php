@@ -31,11 +31,47 @@ class Application_Model_UsuarioGrupoDao
     	return $objUsuarioGrupo;
     }
     
+    public function guardar(Application_Model_UsuarioGrupo $usuarioGrupo)
+    {
+    	$data = array('usu_gru_id' => $usuarioGrupo->getId(),
+    			'usu_gru_unido' => $usuarioGrupo->getEventoId(),
+    			'gru_id' => $usuarioGrupo->getUsuarioId(),
+    			'usu_id' => $usuarioGrupo->getAsiste(),
+    			'usu_gru_fecha_une' => $usuarioGrupo->getFechaAsiste()
+    	);
+    
+    	if($usuarioGrupo->getId() != null){
+    		$where = 'usu_gru_id = ' . $usuarioGrupo->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function obtenerPorUsuarioId($usu_id)
     {
     	$lista = new SplObjectStorage();
     	$where = 'usu_id ='. $usu_id;
     	 
+    	$resultado = $this->_table->fetchAll($where);
+    
+    	if(count($resultado) > 0)
+    	{
+    		foreach ($resultado as $item)
+    		{
+    			$lista->attach($this->obtenerPorId($item->usu_gru_id));
+    		}
+    	}
+    
+    	return $lista;
+    }
+    
+    public function obtenerPorGrupoId($gru_id)
+    {
+    	$lista = new SplObjectStorage();
+    	$where = 'gru_id ='. $gru_id;
+    
     	$resultado = $this->_table->fetchAll($where);
     
     	if(count($resultado) > 0)

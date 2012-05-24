@@ -29,6 +29,22 @@ class Application_Model_EmocionDao
     	return $objEmocion;
     }
     
+    public function guardar(Application_Model_Emocion $emocion)
+    {
+    	$data = array('emo_id' => $emocion->getId(),
+    			'emo_nombre' => $emocion->getNombre(),
+    			'emo_foto' => $emocion->getFoto()
+    	);
+    
+    	if($emocion->getId() != null){
+    		$where = 'emo_id = ' . $emocion->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function obtenerTodos()
     {
     	$lista = new SplObjectStorage();

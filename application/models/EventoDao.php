@@ -35,6 +35,28 @@ class Application_Model_EventoDao
     	return $objEvento;
     }
     
+    public function guardar(Application_Model_Evento $evento)
+    {
+    	$data = array('eve_id' => $evento->getId(),
+    			'usu_id' => $evento->get(),
+    			'eve_nombre' => $evento->getFoto(),
+    	        'eve_descripcion' => $evento->getFoto(),
+    	        'eve_lugar' => $evento->getFoto(),
+    	        'eve_cordenada_x' => $evento->getFoto(),
+    	        'eve_cordenada_y' => $evento->getFoto(),
+    	        'eve_fecha_creacion' => $evento->getFoto(),
+    	        'eve_tip_id' => $evento->getFoto()
+    	);
+    
+    	if($evento->getId() != null){
+    		$where = 'eve_id = ' . $evento->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function obtenerPorUsuarioId($usu_id)
     {
     	$listaEventos = new SplObjectStorage();

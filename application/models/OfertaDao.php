@@ -32,6 +32,25 @@ class Application_Model_OfertaDao
     	return $objOferta;
     }
     
+    public function guardar(Application_Model_Oferta $oferta)
+    {
+    	$data = array('ofe_id' => $oferta->getId(),
+    			'ofe_nombre' => $oferta->getNombre(),
+    			'ofe_descripcion' => $oferta->getDescripcion(),
+    			'ofe_fecha_creacion' => $oferta->getFechaCreacion(),
+    			'usu_id' => $oferta->getUsuarioId(),
+    	        'are_id' => $oferta->getAreaId()
+    	);
+    
+    	if($oferta->getId() != null){
+    		$where = 'ofe_id = ' . $oferta->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function obtenerPorUsuarioId($usu_id)
     {
     	$lista = new SplObjectStorage();

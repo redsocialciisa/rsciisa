@@ -28,6 +28,21 @@ class Application_Model_PrivacidadPublicacionDao
     	return $objPrivacidadPublicacion;
     }
     
+    public function guardar(Application_Model_PrivacidadPublicacion $privacidadPublicacion)
+    {
+    	$data = array('pri_pub_id' => $privacidadPublicacion->getId(),
+    			'pri_pub_nombre' => $privacidadPublicacion->getFecha()
+    	);
+    
+    	if($privacidadPublicacion->getId() != null){
+    		$where = 'pri_pub_id = ' . $privacidadPublicacion->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function obtenerTodos()
     {
     	$lista = new SplObjectStorage();

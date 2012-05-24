@@ -28,6 +28,21 @@ class Application_Model_TipoGrupoDao
     	return $objTipoGrupo;
     }
     
+    public function guardar(Application_Model_TipoGrupo $tipoGrupo)
+    {
+    	$data = array('tip_gru_id' => $tipoGrupo->getId(),
+    			'tip_gru_nombre' => $tipoGrupo->getNombre()
+    	);
+    
+    	if($tipoGrupo->getId() != null){
+    		$where = 'tip_gru_id = ' . $tipoGrupo->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function obtenerTodos()
     {
     	$lista = new SplObjectStorage();

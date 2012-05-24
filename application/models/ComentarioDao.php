@@ -49,6 +49,24 @@ class Application_Model_ComentarioDao
     	return $lista;
     }
     
+    public function guardar(Application_Model_Comentario $comentario)
+    {
+    	$data = array('com_id' => $comentario->getId(),
+    			'com_texto' => $comentario->getTexto(),
+    			'com_fecha' => $comentario->getFecha(),
+    			'pub_id' => $comentario->getPublicacionId(),
+    	        'usu_id' => $comentario->getUsuarioId()
+    	);
+    
+    	if($comentario->getId() != null){
+    		$where = 'com_id = ' . $comentario->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function eliminar($com_id)
     {
     	$where = 'com_id = ' . $com_id;

@@ -28,6 +28,21 @@ class Application_Model_HabilidadDao
     	return $objHabilidad;
     }
     
+    public function guardar(Application_Model_Habilidad $habilidad)
+    {
+    	$data = array('hab_id' => $habilidad->getId(),
+    			'hab_nombre' => $habilidad->getNombre()
+    	);
+    
+    	if($habilidad->getId() != null){
+    		$where = 'hab_id = ' . $habilidad->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function eliminar($hab_id)
     {
     	$where = 'hab_id = ' . $hab_id;

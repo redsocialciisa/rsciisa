@@ -31,6 +31,24 @@ class Application_Model_FotoDao
     	return $objFoto;
     }
     
+    public function guardar(Application_Model_Foto $foto)
+    {
+    	$data = array('fot_id' => $foto->getId(),
+    			'fot_nombre' => $foto->getNombre(),
+    			'fot_foto' => $foto->getFoto(),
+    			'fot_fecha_subida' => $foto->getFecha(),
+    			'alb_id' => $foto->getAlbumId()
+    	);
+    
+    	if($foto->getId() != null){
+    		$where = 'fot_id = ' . $foto->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function obtenerPorAlbumId($alb_id)
     {
     	$lista = new SplObjectStorage();

@@ -31,6 +31,24 @@ class Application_Model_MensajeDao
     	return $objMensaje;
     }
     
+    public function guardar(Application_Model_Mensaje $mensaje)
+    {
+    	$data = array('men_id' => $mensaje->getId(),
+    			'usu_id_de' => $mensaje->getDe(),
+    			'usu_id_para' => $mensaje->getPara(),
+    			'men_asunto' => $mensaje->getAsunto(),
+    			'men_fecha' => $mensaje->getFecha()
+    	);
+    
+    	if($mensaje->getId() != null){
+    		$where = 'men_id = ' . $mensaje->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function eliminar($men_id)
     {
     	$where = 'men_id = ' . $men_id;

@@ -32,6 +32,25 @@ class Application_Model_IntegracionDao
     	return $objIntegracion;
     }
     
+    public function guardar(Application_Model_Integracion $integracion)
+    {
+    	$data = array('int_id' => $integracion->getId(),
+    			'int_token' => $integracion->getToken(),
+    			'int_secret' => $integracion->getSecret(),
+    			'int_fecha_permiso' => $integracion->getFechaPermiso(),
+    			'usu_id' => $integracion->getUsuarioId(),
+    	        'red_id' => $integracion->getRedId()
+    	);
+    
+    	if($integracion->getId() != null){
+    		$where = 'int_id = ' . $integracion->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function obtenerPorUsuarioAndRedSocial($usu_id, $red_id)
     {
     	$where = 'usu_id ='. $usu_id .'AND red_id ='. $red_id;   

@@ -10,7 +10,9 @@ class Application_Model_Usuario
     private $_fechaNacimiento;
     private $_emocionId;
     private $_password;
+    private $_acepta;
     private $_perfilId;
+    private $_sexo;
     
 	/**
 	 * @return the $_id
@@ -69,10 +71,24 @@ class Application_Model_Usuario
 	}
 
 	/**
+	 * @return the $_acepta
+	 */
+	public function getAcepta() {
+		return $this->_acepta;
+	}
+
+	/**
 	 * @return the $_perfilId
 	 */
 	public function getPerfilId() {
 		return $this->_perfilId;
+	}
+
+	/**
+	 * @return the $_sexo
+	 */
+	public function getSexo() {
+		return $this->_sexo;
 	}
 
 	/**
@@ -132,14 +148,34 @@ class Application_Model_Usuario
 	}
 
 	/**
+	 * @param field_type $_acepta
+	 */
+	public function setAcepta($_acepta) {
+		$this->_acepta = $_acepta;
+	}
+
+	/**
 	 * @param field_type $_perfilId
 	 */
 	public function setPerfilId($_perfilId) {
 		$this->_perfilId = $_perfilId;
 	}
 
+	/**
+	 * @param field_type $_sexo
+	 */
+	public function setSexo($_sexo) {
+		$this->_sexo = $_sexo;
+	}
+
     
     
+    
+
+    
+    
+    
+	
     
 	
     

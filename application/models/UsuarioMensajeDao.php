@@ -28,6 +28,23 @@ class Application_Model_UsuarioMensajeDao
     	return $objUsuarioMensaje;
     }
     
+    public function guardar(Application_Model_UsuarioMensaje $usuarioMensaje)
+    {
+    	$data = array('usu_men_id' => $usuarioMensaje->getId(),
+    			'usu_men_leido' => $usuarioMensaje->getLeido(),
+    			'usu_id' => $usuarioMensaje->getUsuarioId(),
+    			'men_id' => $usuarioMensaje->getMensajeId()
+    	);
+    
+    	if($usuarioMensaje->getId() != null){
+    		$where = 'usu_men_id = ' . $usuarioMensaje->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
+    	return $this->_table->insert($data);
+    }
+    
     public function obtenerPorUsuarioId($usu_id)
     {
     	$lista = new SplObjectStorage();
@@ -39,7 +56,7 @@ class Application_Model_UsuarioMensajeDao
     	{
     		foreach ($resultado as $item)
     		{
-    			$lista->attach($this->obtenerPorId($item->usu_gru_id));
+    			$lista->attach($this->obtenerPorId($item->usu_men_id));
     		}
     	}
     
