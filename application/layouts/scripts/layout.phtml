@@ -14,27 +14,35 @@
 
 <body style="padding-top: 60px;">
 
+<?php
+	$aut = Zend_Auth::getInstance();
+?>
+
 <div class="navbar navbar-fixed-top" data-dropdown="dropdown">
 	<div class="navbar-inner">
     	<div class="container">
     		<a class="brand" href="#">IPCIISA</a>
     	    <div class="nav-collapse">
-	    	    
-	    	    <ul class="nav">
+    	    
+   	    	<?php if($aut->hasIdentity()){ ?>
+	    	    <ul class="nav secondary-nav pull-right">
 					<li class="dropdown">
 		              <a class="dropdown-toggle" href="#" data-toggle="dropdown" >
-		              	Dropdown 
+		              
+							    <?php echo $aut->getIdentity()->usu_nombre; ?>
+						
 		              	<b class="caret"></b>
 		              </a>
 		              <ul class="dropdown-menu">
 		                <li><a href="#">Mi Perfil</a></li>
-		                <li><a href="#">Cerrar Sesion</a></li>
 		                <li class="divider"></li>
-		                <li><a href="#">One more separated link</a></li>
+		                <li><a href="/index/logout/">Cerrar Sesion</a></li>
 		              </ul>
 		            </li>
 			    </ul>
-
+			 <?php } ?>
+			    
+			    
 			</div>
     	</div>
 	</div>
