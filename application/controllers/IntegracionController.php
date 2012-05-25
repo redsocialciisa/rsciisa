@@ -51,13 +51,15 @@ class IntegracionController extends Zend_Controller_Action
 		}
         
     }
-# --------------------------------------------------------------------------------------------    
+
     public function twitterAction ()
     {
 
         session_start();
         require 'Twitter/tmhOAuth.php';
         require 'Twitter/tmhUtilities.php';
+        
+        $now   = new DateTime;
         $tmhOAuth = new tmhOAuth(array(
         		'consumer_key'    => '4m5dr19FvCwe534XDQ92fw',
         		'consumer_secret' => 'dobuyMsMLs8kTzSl5YDoYv9O9UZlEN1MBSGBKst9hE', ));
@@ -87,6 +89,18 @@ class IntegracionController extends Zend_Controller_Action
         		echo $resp->screen_name."<BR>";
         		echo  "user_token: ".$_SESSION['access_token']['oauth_token']."<BR>";
         		echo  "user_secret: ".$_SESSION['access_token']['oauth_token_secret']."<BR>";
+        		
+        		$objIntegracionDao = new Application_Model_IntegracionDao();
+        		$objIntegracion = new Application_Model_Integracion();
+        		
+        		$objIntegracion->setToken($_SESSION['access_token']['oauth_token']);
+        		$objIntegracion->setSecret($_SESSION['access_token']['oauth_token_secret']);
+        		$objIntegracion->setFechaPermiso($now->format( 'Y-m-d' ));
+        		$objIntegracion->setUsuarioId("2");
+        		$objIntegracion->setRedId("2");
+        		$objIntegracionDao->guardar($objIntegracion);
+        		
+        		
         	} else {
         		outputError($tmhOAuth);
         	}
@@ -136,6 +150,8 @@ class IntegracionController extends Zend_Controller_Action
         // Definimos las llaves secretas
         define('LINKEDIN_KEY', 'qolg75ipkngf');
         define('LINKEDIN_SECRET', 'LNITIz9Vd9hdw7uW');
+        
+        $now   = new DateTime;
         
         // Funcion que sirve para formatear la url en formato oauth
         function urlencode_oauth($str) {
@@ -312,9 +328,216 @@ class IntegracionController extends Zend_Controller_Action
         echo "oauth_token (finales): ".$data['oauth_token']."<BR>";
         echo "oauth_token_secret (finales): ".$data['oauth_token_secret']."<BR>";
         
+        $objIntegracionDao = new Application_Model_IntegracionDao();
+        $objIntegracion = new Application_Model_Integracion();
+        
+        $objIntegracion->setToken($data['oauth_token']);
+        $objIntegracion->setSecret($data['oauth_token_secret']);
+        $objIntegracion->setFechaPermiso($now->format( 'Y-m-d' ));
+        $objIntegracion->setUsuarioId("2");
+        $objIntegracion->setRedId("3");
+        $objIntegracionDao->guardar($objIntegracion);
+        
+        
         unset($_SESSION['linkedin_oauth_token']);
         unset($_SESSION['linkedin_oauth_token_secret']);
        
+    }
+    
+    public function publicarTwitterAction ()
+    {
+        require 'Twitter/tmhOAuth.php';
+        require 'Twitter/tmhUtilities.php';
+        $this->view->title = "Publicar Tweet";
+        $form = new Application_Form_Publicar();
+        $form->submit->setLabel('Publicar');
+        $this->view->form = $form;
+        
+        if ($this->getRequest()->isPost()) {
+        	$formData = $this->getRequest()->getPost();
+        	if ($form->isValid($formData)) {
+        		$texto = $form->getValue('texto');
+        		$objIntegracion = new Application_Model_Integracion();
+        		$objIntegracionDao = new Application_Model_IntegracionDao();
+        		$objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion(2,2);
+        		$tmhOAuth = new tmhOAuth(array(
+        				'consumer_key'    => '4m5dr19FvCwe534XDQ92fw',
+        				'consumer_secret' => 'dobuyMsMLs8kTzSl5YDoYv9O9UZlEN1MBSGBKst9hE',
+        				'user_token'      => $objIntegracion->getToken(),
+        				'user_secret'     => $objIntegracion->getSecret(),
+        		));
+        		
+        		$code = $tmhOAuth->request('POST', $tmhOAuth->url('1/statuses/update'), array(
+        				'status' => $texto
+        		));
+                				
+        	 	$this->_redirect('/integracion');
+        	} else {
+        		$form->populate($formData);
+        	}
+        }
+    }
+    
+    public function publicarLinkedinAction ()
+    {
+        $this->view->title = "Publicar Linkedin";
+        $form = new Application_Form_Publicar();
+        $form->submit->setLabel('Publicar');
+        $this->view->form = $form;
+        
+        if ($this->getRequest()->isPost()) {
+        	$formData = $this->getRequest()->getPost();
+        	if ($form->isValid($formData)) {
+        		$texto = $form->getValue('texto');
+        		$objIntegracion = new Application_Model_Integracion();
+        		$objIntegracionDao = new Application_Model_IntegracionDao();
+        		$objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion(2,3);
+
+        		$xml =
+        		'<?xml version="1.0" encoding="UTF-8"?>
+        		<share>
+        		<comment>'.$texto.'</comment>
+        		<content>
+        		<title>Publicacion desde Red Social Ciisa</title>
+        		<submitted-url>http://redsocial.ipciisa.cl</submitted-url>
+        		<submitted-image-url>http://blog.thewebcafes.com/img/example.jpg</submitted-image-url>
+        		</content>
+        		<visibility>
+        		<code>anyone</code>
+        		</visibility>
+        		</share>';
+        		
+        		// Funcion que sirve para formatear la url en formato oauth
+        		function urlencode_oauth($str) {
+        			return
+        			str_replace('+',' ',str_replace('%7E','~',rawurlencode($str)));
+        		}
+        		
+        		$params = array(
+        				'oauth_consumer_key'=>'qolg75ipkngf',
+        				'oauth_nonce'=>sha1(microtime()),
+        				'oauth_signature_method'=>'HMAC-SHA1',
+        				'oauth_timestamp'=>time(),
+        				'oauth_token'=>$objIntegracion->getToken(),
+        				'oauth_version'=>'1.0'
+        		);
+        		
+        		// sort parameters according to ascending order of key
+        		ksort($params);
+        		
+        		// prepare URL-encoded query string
+        		$q = array();
+        		foreach ($params as $key=>$value) {
+        			$q[] = urlencode_oauth($key).'='.urlencode_oauth($value);
+        		}
+        		$q = implode('&',$q);
+        		
+        		// generate the base string for signature
+        		$parts = array(
+        				'POST',
+        				urlencode_oauth('https://api.linkedin.com/v1/people/~/shares'),
+        				urlencode_oauth($q)
+        		);
+        		$base_string = implode('&',$parts);
+        		
+        		$key = urlencode_oauth('LNITIz9Vd9hdw7uW') . '&' . urlencode_oauth('7ae4e1b9-d303-4892-92f0-b711dbbf3f8b');
+        		$signature = base64_encode(hash_hmac('sha1',$base_string,$key,true));
+        		
+        		
+        		$params['oauth_signature'] = $signature;
+        		$str = array();
+        		foreach ($params as $key=>$value) {
+        			$str[] = $key . '="'.urlencode_oauth($value).'"';
+        		}
+        		$str = implode(', ',$str);
+        		$headers = array(
+        				'POST /v1/people/~/shares HTTP/1.1',
+        				'Host: api.linkedin.com',
+        				'Authorization: OAuth '.$str,
+        				'Content-Type: text/xml;charset=UTF-8',
+        				'Content-Length: '.strlen($xml),
+        				'Connection: close'
+        		);
+        		
+        		$fp = fsockopen("ssl://api.linkedin.com",443,$errno,$errstr,30);
+        		if (!$fp) {
+        			echo 'Unable to connect to LinkedIn'; exit();
+        		}
+        		$out = implode("\r\n",$headers)."\r\n\r\n".$xml . "\r\n\r\n";
+        		fputs($fp,$out);
+        		
+        		// getting LinkedIn server response
+        		$res = '';
+        		while (!feof($fp)) $res .= fgets($fp,4096);
+        		fclose($fp);
+        		
+        		$parts = explode("\n\n",str_replace("\r","",$res));
+        		$headers = explode("\n",$parts[0]);
+        		if ($headers[0] != 'HTTP/1.1 201 Created') {
+        			echo 'Failed';
+        		}        		
+        		$this->_redirect('/integracion');
+        	} 
+        }
+    }
+    
+    public function publicarFacebookAction ()
+    {
+        require 'Facebook/facebook.php';
+        $this->view->title = "Publicar Facebook";
+        $form = new Application_Form_Publicar();
+        $form->submit->setLabel('Publicar');
+        $this->view->form = $form;
+        
+        if ($this->getRequest()->isPost()) {
+        	$formData = $this->getRequest()->getPost();
+        	if ($form->isValid($formData)) {
+        		$texto = $form->getValue('texto');
+        		$objIntegracion = new Application_Model_Integracion();
+        		$objIntegracionDao = new Application_Model_IntegracionDao();
+        		$objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion(2,1);
+        		
+        		$scope = 'publish_stream';
+        		// Create our Application instance (replace this with your appId and secret).
+        		$facebook = new Facebook(array(
+        				'appId'  => '124399157694592',
+        				'secret' => '8c0658db1a7873a56c3551a2ee13464b',
+        				'scope' => $scope
+        		));
+        		
+        		$facebook->setAccessToken($objIntegracion->getToken());
+        		$user = $facebook->getUser();
+        		
+        		if ($user) {
+        			try {
+        				// Proceed knowing you have a logged in user who's authenticated.
+        				$user_profile = $facebook->api('/me');
+        			} catch (FacebookApiException $e) {
+        				error_log($e);
+        				$user = null;
+        			}
+        		}
+        		
+        		if ($user) {
+        			$logoutUrl = $facebook->getLogoutUrl();
+        		} else {
+        			$loginUrl = $facebook->getLoginUrl();
+        		}
+        		
+        		        		
+        		$facebook->api('/me/feed','post', array(
+        				'name'=>'campo nombre',
+        				'message'=>$texto,
+        				'picture'=>'https://www.nakasha-spain.com/shop/images/Hellacopters-In-The-Sign-Of-Th-450786.jpg',
+        				'caption'=>'titulo',
+        				'description'=>'descripcion',
+        		));
+        
+        		$this->_redirect('/integracion');
+        	} else {
+        		$form->populate($formData);
+        	}
+        }
     }
 
 }

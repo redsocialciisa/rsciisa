@@ -30,14 +30,28 @@
 
     <h3>PHP Session</h3>
     <pre><?php print_r($_SESSION); ?></pre>
-    <?php 
+    <?php
+    $now   = new DateTime;
     $ch = curl_init('https://graph.facebook.com/oauth/access_token');
     $token = $_SESSION["fb_124399157694592_access_token"]; 
     $post = 'client_id=124399157694592&client_secret=8c0658db1a7873a56c3551a2ee13464b&grant_type=fb_exchange_token&fb_exchange_token='.$token;
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt ($ch, CURLOPT_POST, 1);
     curl_setopt ($ch, CURLOPT_POSTFIELDS, $post);
     $resultado = curl_exec ($ch);
-    echo $resultado;
+    parse_str($resultado);
+    
+    
+    $objIntegracionDao = new Application_Model_IntegracionDao();
+    $objIntegracion = new Application_Model_Integracion();
+    $objIntegracion->setToken($access_token);
+    #$objIntegracion->setSecret($_SESSION['access_token']['oauth_token_secret']);
+    $objIntegracion->setFechaPermiso($now->format( 'Y-m-d' ));
+    $objIntegracion->setUsuarioId("2");
+    $objIntegracion->setRedId("1");
+    $objIntegracionDao->guardar($objIntegracion);
+    
+    echo 'Access token validado: '.$access_token;
     curl_close ($ch);
     ?>
 
