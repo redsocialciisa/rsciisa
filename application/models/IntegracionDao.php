@@ -53,7 +53,7 @@ class Application_Model_IntegracionDao
     
     public function obtenerPorUsuarioAndRedSocial($usu_id, $red_id)
     {
-    	$where = 'usu_id ='. $usu_id .'AND red_id ='. $red_id;   
+    	$where = 'usu_id ='. $usu_id .' AND red_id ='. $red_id;   
     	$resultado = $this->_table->fetchAll($where);
     
     	$objUsuario = null;
@@ -94,5 +94,30 @@ class Application_Model_IntegracionDao
     	return $this->_table->delete($where);
     }
 
+    public function obtenerLlavesIntegracion($usu_id, $red_id)
+    {
+        $where = 'usu_id ='. $usu_id .' AND red_id ='. $red_id;
+        $resultado = $this->_table->fetchAll($where);
+        #$select = $this->_table->select();
+        #$select->where("usu_id=?", $usu_id);
+        #$select->where("red_id=?", $red_id);
+        #$resultado = $this->_table->fetchAll($select);
+     	$objIntegracion = null;
+        
+        if(count($resultado) > 0){
+        
+        	$objIntegracion = new Application_Model_Integracion();
+        	 
+        	$objIntegracion->setId($resultado->current()->int_id);
+        	$objIntegracion->setToken($resultado->current()->int_token);
+        	$objIntegracion->setSecret($resultado->current()->int_secret);
+        	$objIntegracion->setFechaPermiso($resultado->current()->int_fecha_permiso);
+        	$objIntegracion->setUsuarioId($resultado->current()->usu_id);
+        	$objIntegracion->setRedId($resultado->current()->red_id);
+        
+        }
+        return $objIntegracion;
+    }
+    
 }
 
