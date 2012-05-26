@@ -53,7 +53,7 @@ class Application_Model_IntegracionDao
     
     public function obtenerPorUsuarioAndRedSocial($usu_id, $red_id)
     {
-    	$where = 'usu_id ='. $usu_id .'AND red_id ='. $red_id;   
+    	$where = 'usu_id ='. $usu_id .' AND red_id ='. $red_id;   
     	$resultado = $this->_table->fetchAll($where);
     
     	$objUsuario = null;
@@ -96,11 +96,12 @@ class Application_Model_IntegracionDao
 
     public function obtenerLlavesIntegracion($usu_id, $red_id)
     {
-        #$where = 'usu_id ='. $usu_id .'AND red_id ='. $red_id;
-        $select = $this->_table->select();
-        $select->where("usu_id=?", $usu_id);
-        $select->where("red_id=?", $red_id);
-        $resultado = $this->_table->fetchAll($select);
+        $where = 'usu_id ='. $usu_id .' AND red_id ='. $red_id;
+        $resultado = $this->_table->fetchAll($where);
+        #$select = $this->_table->select();
+        #$select->where("usu_id=?", $usu_id);
+        #$select->where("red_id=?", $red_id);
+        #$resultado = $this->_table->fetchAll($select);
      	$objIntegracion = null;
         
         if(count($resultado) > 0){
