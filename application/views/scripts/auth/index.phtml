@@ -1,7 +1,7 @@
 <br /><br />
 <div id="view-content">
 	<div id="divLogin" align="center">
-		<form id="frmLogin" name="frmLogin" method="post" action="index/index">
+		<form id="frmLogin" name="frmLogin" method="post" action="/index/index">
 			<table>
 				<caption><b>Autenticación</b></caption>
 				<tr>
@@ -13,7 +13,10 @@
 					<td>Usuario: </td><td><input type="text" id="txtUsuario" name="txtUsuario" size="12" maxlength="10" value="111-1"/></td>
 				</tr>
 				<tr>
-					<td>Contraseña: </td><td><input type="password" id="txtPassword" name="txtPassword" size="31" maxlength="30" value="123"/></td>
+					<td>Contraseña: </td>
+					<td>
+						 <input type="password" id="txtPassword" name="txtPassword" size="31" maxlength="30" value="123"/>
+					</td>
 				</tr>
 				<tr>
 					<td colspan="2" align="center">
@@ -99,6 +102,10 @@
 	    </div>
 	</div>	    
 	
+	
+	
+	
+	
 </div>
 
 <script type="text/javascript">
@@ -110,7 +117,7 @@
 		
 		if (usuario == "" || password == "")
 		{
-			var divError = "<div class='alert'>";
+			var divError = "<div class='alert alert-error'>";
 			divError = divError + "<button class='close' data-dismiss='alert'>×</button>";
 			divError = divError + "<strong>Error!</strong> Debes ingresar tus datos de conexión";
 			divError = divError + "</div>";
@@ -153,7 +160,7 @@
 
 				               		if(result == 2)
 				               		{
-				               			var divError = "<div class='alert'>";
+				               			var divError = "<div class='alert alert-error'>";
 				            			divError = divError + "<button class='close' data-dismiss='alert'>×</button>";
 				            			divError = divError + "<strong>Error!</strong> Datos de conexión incorrectos.";
 				            			divError = divError + "</div>";
@@ -242,7 +249,9 @@
 
 		               	    if(result == "ok")
 		               	    {
-				               	document.getElementById("frmLogin").submit();		
+			               	    
+				               	//document.getElementById("frmLogin").submit();
+		               	    	javascript:location.reload();		
 		               	    }
 			              
 			    },  

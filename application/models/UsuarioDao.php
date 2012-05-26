@@ -31,7 +31,8 @@ class Application_Model_UsuarioDao
     		$objUsuario->setEmocionId($resultado->current()->emo_id);
     		$objUsuario->setAcepta($resultado->current()->usu_acepta);
     		$objUsuario->setPerfilId($resultado->current()->per_id);
-    
+    		$objUsuario->setSexo($resultado->current()->usu_sexo);
+    		$objUsuario->setFoto($resultado->current()->usu_foto);    
     	}
     	return $objUsuario;
     }

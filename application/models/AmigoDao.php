@@ -35,9 +35,10 @@ class Application_Model_AmigoDao
     public function obtenerPorUsuarioId($usu_id)
     {
     	$lista = new SplObjectStorage();
-    	$where = 'usu_id = '. $usu_id;
-    
-    	$resultado = $this->_table->fetchAll($where);
+    	$where = 'usu_id = '. $usu_id . ' AND sit_ami_id = 2';
+    	$limit = 5;
+    	
+    	$resultado = $this->_table->fetchAll($where,null,5);
     
     	if(count($resultado) > 0){
     

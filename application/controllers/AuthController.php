@@ -5,7 +5,10 @@ class AuthController extends Zend_Controller_Action
 
     public function init()
     {
-        /* Initialize action controller here */
+        $aut = Zend_Auth::getInstance();
+        if($aut->hasIdentity()){
+            $this->_redirect('/index/index');
+        }
     }
 
     public function indexAction()
@@ -79,6 +82,10 @@ class AuthController extends Zend_Controller_Action
         			$objUsuario = $objCiisa->obtenerUsuarioProfesorAcademicoCiisa($usuario);
         		}
         	}
+        	
+        	//ACTUALIZA ESTADO DE ANIMO
+        	$objUsuario->setEmocionId($emocion);
+        	$objUsuarioDao->actualizaEstadoAnimo($objUsuario);
         	 
         	//DEFINICION DATA ADAPTER (1)
         	$autAdapter = new Zend_Auth_Adapter_DbTable(Zend_Db_Table::getDefaultAdapter());
@@ -114,10 +121,6 @@ class AuthController extends Zend_Controller_Action
         			break;
         	}
         	
-        	$objUsuario->setEmocionId($emocion);
-        	$objUsuarioDao->actualizaEstadoAnimo($objUsuario);
-        	
-        	
         	//IMPRIMIR UN DATO
         	//$aut = Zend_Auth::getInstance();
         	//echo $aut->getIdentity()->usu_id; exit;
@@ -127,6 +130,11 @@ class AuthController extends Zend_Controller_Action
         	
         	//ENVIA VARIABLES A LA VISTA
         	$this->view->ok = "ok";
+        	/*
+        	$aut = Zend_Auth::getInstance();
+        	if($aut->hasIdentity()){
+        		$this->_redirect('/index/index');
+        	}*/
         }
         
        
