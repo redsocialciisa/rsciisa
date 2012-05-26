@@ -9,10 +9,9 @@ class IntegracionController extends Zend_Controller_Action
         
     }
         
-   
     public function facebookAction ()
     {    
-        session_start();
+        #session_start();
         require 'Facebook/facebook.php';
         
 		// Create our Application instance (replace this with your appId and secret).
@@ -55,7 +54,7 @@ class IntegracionController extends Zend_Controller_Action
     public function twitterAction ()
     {
 
-        session_start();
+        #session_start();
         require 'Twitter/tmhOAuth.php';
         require 'Twitter/tmhUtilities.php';
         
@@ -146,7 +145,7 @@ class IntegracionController extends Zend_Controller_Action
 # --------------------------------------------------------------------------------------------    
     public function linkedinAction ()
     {
-        session_start();
+        #session_start();
         // Definimos las llaves secretas
         define('LINKEDIN_KEY', 'qolg75ipkngf');
         define('LINKEDIN_SECRET', 'LNITIz9Vd9hdw7uW');
