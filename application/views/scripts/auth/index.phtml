@@ -1,0 +1,284 @@
+<br /><br />
+<div id="view-content">
+	<div id="divLogin" align="center">
+		<form id="frmLogin" name="frmLogin" method="post" action="/index/index">
+			<table>
+				<caption><b>Autenticación</b></caption>
+				<tr>
+					<td colspan="2">
+		        		<div id="error"></div>		        		
+					</td>
+				</tr>
+				<tr>
+					<td>Usuario: </td><td><input type="text" id="txtUsuario" name="txtUsuario" size="12" maxlength="10" value="111-1"/></td>
+				</tr>
+				<tr>
+					<td>Contraseña: </td>
+					<td>
+						 <input type="password" id="txtPassword" name="txtPassword" size="31" maxlength="30" value="123"/>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center">
+						<input type="button" value="Entrar" class="btn btn-success" onclick="entrar()">
+					</td>
+				</tr>
+			</table>
+		</form>
+
+		<div id="pes">		
+		</div>
+	
+	</div>	
+	
+	<div class="modal hide" id="myModalEstadoAnimo">
+	    <div class="modal-header">
+	    <button class="close" onclick="cerrarModalEstadoAnimo()" data-dismiss="modal">×</button>
+	    <h3>Selecciona tu estado de ánimo !</h3>
+	    </div>
+	    <div class="modal-body">
+			<?php 
+				$columna = 0;
+				$cantColumna = 3;
+			?>
+			<form id="frmLoginOK" name="frmLoginOK">
+				<table>
+					<?php foreach ($this->listaEmociones as $emocion){
+							if($columna == 0){ 
+							   echo "<tr>";
+							} 
+							echo "<td>";?> 
+							<!-- imprimir el objeto -->
+								<table>
+									<tr>
+										<td align="center">
+											<?php echo $emocion->getNombre();?>
+											<input type="radio" name="optEmocion" value="<?php echo $emocion->getId();?>" 
+											<?php if($emocion->getId() == 5){?>
+											    checked="checked"
+											<?php } ?> 
+											onclick="emocionSeleccionada()">
+										</td>
+									</tr>
+									<tr>
+										<td align="center">
+											<img src="<?php echo $this->baseUrl()?>/imagenes/caras/<?php echo $emocion->getFoto(); ?>" width="50%"></img>
+										</td>
+									</tr>
+								</table>						
+							<!-- fin de imprimir el objeto -->
+							<?php 
+							echo "</td>"; 
+							$columna++;
+							 if($columna == $cantColumna){
+								 echo "</tr>";				
+								 $columna = 0;
+							 }
+						 }
+						 echo "</tr>";
+					?>
+				</table>	
+			</form>
+			
+			<input type="hidden" id="hdnEmocion" name="hdnEmocion">
+						
+	    </div>
+	    <div class="modal-footer">
+	  	    <a href="#" onclick="loginOk()" class="btn btn-success" data-dismiss="modal">Seleccionar</a>
+	    </div>
+	</div>
+	
+	<div class="modal hide" id="myModalAceptacion">
+	    <div class="modal-header">
+	    <button class="close" onclick="cerrarPopupAceptacion()" data-dismiss="modal">×</button>
+	    <h3>Modal header</h3>
+	    </div>
+	    <div class="modal-body">
+	    	Aceptacion de terminos y condiciones de RSC...				    
+	    </div>
+	    <div class="modal-footer">
+	  	    <a href="#" onclick="aceptarCondiciones()" class="btn btn-success" data-dismiss="modal">Acepto</a>
+		    <a href="#" onclick="cerrarPopupAceptacion()" class="btn btn-danger"  data-dismiss="modal">No Acepto</a>
+	    </div>
+	</div>	    
+	
+	
+	
+	
+	
+</div>
+
+<script type="text/javascript">
+
+	function entrar()
+	{
+		var usuario = document.getElementById("txtUsuario").value;
+		var password = document.getElementById("txtPassword").value;
+		
+		if (usuario == "" || password == "")
+		{
+			var divError = "<div class='alert alert-error'>";
+			divError = divError + "<button class='close' data-dismiss='alert'>×</button>";
+			divError = divError + "<strong>Error!</strong> Debes ingresar tus datos de conexión";
+			divError = divError + "</div>";
+
+			document.getElementById("error").innerHTML = divError;  														 
+		}
+
+		
+		validarAceptacion(usuario, password);
+
+	}
+
+	function validarAceptacion(usuario, password){
+
+		if(usuario != '') {
+			//selectDestino = $('#cont_obra');
+				$.ajax(
+						{
+						async: true,
+						type: 'POST',
+						url: '<?php echo $this->baseUrl()?>/auth/validar-aceptacion',
+						data: 'txtUsuario=' + usuario + '&txtPassword=' + password,	
+						dataTypeString: 'text',
+						
+						beforeSend: function(data){
+			                //selectDestino.html('<label>Cargando...</label>');
+					    },  
+					    success: function(requestData){  
+					               //selectDestino.html(requestData);
+				               		var result = requestData;				      
+				                  	if(result == 0) //NO HA ACEPTADO
+				              	 	{
+				               			$('#myModalAceptacion').modal('show');
+				               		}
+
+				               		if(result == 1)
+				               		{
+				               			$('#myModalEstadoAnimo').modal('show');	
+				               		}
+
+				               		if(result == 2)
+				               		{
+				               			var divError = "<div class='alert alert-error'>";
+				            			divError = divError + "<button class='close' data-dismiss='alert'>×</button>";
+				            			divError = divError + "<strong>Error!</strong> Datos de conexión incorrectos.";
+				            			divError = divError + "</div>";
+
+				            			document.getElementById("error").innerHTML = divError;  	
+				               		}
+					              
+					    },  
+					    error: function(requestData, strError, strTipoError){          
+					    }
+					    
+						});
+		}
+			
+	}
+
+	function registrarAceptacion(usuario){
+
+		if(usuario != '') {
+			//selectDestino = $('#cont_obra');
+				$.ajax(
+						{
+						async: true,
+						type: 'POST',
+						url: '<?php echo $this->baseUrl()?>/auth/grabar-aceptacion',
+						data: 'txtUsuario=' + usuario,	
+						dataTypeString: 'text',
+						
+						beforeSend: function(data){
+			                //selectDestino.html('<label>Cargando...</label>');
+					    },  
+					    success: function(requestData){  
+					               //selectDestino.html(requestData);				      
+				               		//alert(requestData);				               		
+					              
+					    },  
+					    error: function(requestData, strError, strTipoError){          
+					    }
+					    
+						});
+		}
+			
+	}
+
+	function emocionSeleccionada()
+	{
+		//selecciona el radio button seleccionado
+		var idEmocion = "";
+		
+		for(var i = 0; i <= document.frmLoginOK.optEmocion.length; i++)
+		{
+			if(document.frmLoginOK.optEmocion[i].checked)
+			{
+				 idEmocion = document.frmLoginOK.optEmocion[i].value;
+				 document.getElementById("hdnEmocion").value = idEmocion;
+			}			
+		}
+
+	}
+
+	function loginOk()
+	{
+		var emocion = document.getElementById("hdnEmocion").value;
+		var usuario = document.getElementById("txtUsuario").value;
+		var password = document.getElementById("txtPassword").value;
+
+		if(emocion == "")//por defecto la emoción es 'feliz'
+		{
+			emocion = 5;
+		}
+		
+		$.ajax(
+				{
+				async: true,
+				type: 'POST',
+				url: '<?php echo $this->baseUrl()?>/auth/login-success',
+				data: 'hdnEmocion=' + emocion +'&txtUsuario=' + usuario + '&txtPassword=' + password,	
+				dataTypeString: 'text',
+				
+				beforeSend: function(data){
+	                //selectDestino.html('<label>Cargando...</label>');
+			    },  
+			    success: function(requestData){  
+			               //selectDestino.html(requestData);				      
+		               	    result = requestData;
+
+		               	    if(result == "ok")
+		               	    {
+			               	    
+				               	//document.getElementById("frmLogin").submit();
+		               	    	javascript:location.reload();		
+		               	    }
+			              
+			    },  
+			    error: function(requestData, strError, strTipoError){          
+			    }
+			    
+				});
+		
+	}
+
+	function cerrarModalEstadoAnimo()
+	{		
+		$('#myModalEstadoAnimo').modal();		
+	}
+
+	function cerrarPopupAceptacion()
+	{		
+		$('#myModalAceptacion').modal();		
+	}
+
+	function aceptarCondiciones()
+	{
+		var usuario = document.getElementById("txtUsuario").value;		
+		registrarAceptacion(usuario);
+		
+		$('#myModalAceptacion').modal();
+		$('#myModalEstadoAnimo').modal('show');			
+	}	
+	
+</script>

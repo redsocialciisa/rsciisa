@@ -1,0 +1,87 @@
+<?php
+	//session aut
+	$aut = Zend_Auth::getInstance();
+	//listas
+	$listaAmigos = new SplObjectStorage();
+	//objetos
+	$objAmigoDao = new Application_Model_AmigoDao();
+	$objUsuarioDao = new Application_Model_UsuarioDao();
+	$objEmocionDao = new Application_Model_EmocionDao();
+	
+	//obtener amigos del contacto
+	$listaContactos = $objAmigoDao->obtenerPorUsuarioId($aut->getIdentity()->usu_id);
+	
+	 if(count($listaContactos) > 0){ 
+		 foreach ($listaContactos as $contacto){
+			  $listaAmigos->attach($objUsuarioDao->obtenerPorId($contacto->getAmigoUsuarioId()));
+		 }
+	 }
+?>
+<div class="span3 well" style="width: 300px; left: 0px; top:40px; width:300px; height:800px;">
+         <a class="thumbnail" href="#">
+	       	<img alt="" src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $aut->getIdentity()->usu_foto;?>">
+         </a>
+        <ul>
+	        <li class="span3">
+	        	<h5><?php echo $aut->getIdentity()->usu_nombre;?></h5>
+				<p>Nacido: <?php echo substr($aut->getIdentity()->usu_fecha_nacimiento,0,10); ?></p>
+			</li>
+		</ul>
+        
+        <ul class="nav nav-list">
+	        <li class="span3">
+					<h5>Mensajes</h5>
+					<p> Recibidos </p>
+					<p> Enviados </p>
+			</li>
+			<li class="span3">
+					<h5>Contactos</h5>
+					<p> Solicitudes</p>
+							
+					<?php foreach ($listaAmigos as $amigo){ ?>
+						  <div style="width: 70px;">
+				          	<a class="thumbnail" href="#">
+				            	<img alt="" 
+				            	 src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $amigo->getFoto()?>"
+				            	 <?php $foto = $objEmocionDao->obtenerPorId($amigo->getEmocionId())->getFoto(); 
+				            	 	   $srcEmocion = $this->baseUrl()."/imagenes/caras/".$foto;	
+				            	 	   $imgEmocion = "<div style='width: 80px;'>";
+				            	 	   $imgEmocion = $imgEmocion . "<a class='thumbnail'>";
+				            	 	   $imgEmocion = $imgEmocion . "<img src='$srcEmocion'>";
+				            	 	   $imgEmocion = $imgEmocion . "</a>";
+				            	 	   $imgEmocion = $imgEmocion . "</div>";
+				            	 ?>
+				            	 data-content="<?php echo $amigo->getCorreo();?><?php echo $imgEmocion;?>"				            	 
+				            	 id="contacto<?php echo $amigo->getId();?>" 
+				            	 data-original-title="<?php echo $amigo->getNombre();?>" 
+				            	 onMouseOver="popover(<?php echo $amigo->getId();?>)">
+				          	</a>
+				          </div>
+	 				<?php } ?>
+			</li>
+			<li class="span3">
+					<h5>Álbumes</h5>
+					<p> + Crear</p>
+			</li>
+			<li class="span3">
+					<h5>Grupos</h5>
+					<p> + Crear</p>
+			</li>
+			<li class="span3">
+					<h5>Eventos</h5>
+					<p> + Crear</p>
+			</li>
+			<li class="span3">
+					<h5>Bolsa Ciisa</h5>
+					<p> + Crear</p>
+			</li>
+		</ul>
+</div>
+
+<script type="text/javascript">
+	function popover(id)
+	{
+		$('#contacto' + id).popover('show');	
+	}	
+</script>
+

@@ -63,10 +63,8 @@ class LoginController extends Zend_Controller_Action
                                                 
                         //se crea la session
                         $autAdapter->setIdentity($objUsuario->getId());
-                        $autAdapter->setCredential($objUsuario->getUsuarioCiisa());
-                                                	
-                        $aut = Zend_Auth::getInstance();
-                        
+                        $autAdapter->setCredential($objUsuario->getUsuarioCiisa());                                                	
+                        $aut = Zend_Auth::getInstance();                        
                         $result = $aut->authenticate($autAdapter);
                         	
                         switch ($result->getCode())
@@ -148,13 +146,10 @@ class LoginController extends Zend_Controller_Action
     	if($objUsuarioDao->obtenerPorUsuarioCiisa($usuario) != null)
     	{
     		$objUsuario = $objUsuarioDao->obtenerPorUsuarioCiisa($usuario);
-    		return $objUsuario->getAcepta();
-    	}else{
-    	    return "el usuario incorrecto";
-    	}   	
-		
-		$this->view->saludo = "tocallo win perversa zi";
-    	
+    		echo "hola";
+    	}        
+        
+        //$this->view->saludo = "123123123";
     }    
 
 }

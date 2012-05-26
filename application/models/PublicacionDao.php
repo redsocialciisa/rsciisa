@@ -29,6 +29,7 @@ class Application_Model_PublicacionDao
     		$objPublicacion->setPrivacidadId($resultado->current()->pri_pub_id);
     		$objPublicacion->setTipoId($resultado->current()->tip_pub_id);
     		$objPublicacion->setUsuarioId($resultado->current()->usu_id);
+    		$objPublicacion->setUsuarioPara($resultado->current()->usu_id_para);
     
     	}
     	return $objPublicacion;
@@ -43,7 +44,8 @@ class Application_Model_PublicacionDao
     	        'pub_fecha' => $publicacion->getFecha(),
     	        'pri_pub_id' => $publicacion->getPrivacidadId(),
     	        'tip_pub_id' => $publicacion->getTipoId(),
-    	        'usu_id' => $publicacion->getUsuarioId()
+    	        'usu_id' => $publicacion->getUsuarioId(),
+    	        'usu_id_para' => $publicacion->getUsuarioPara()
     	);
     
     	if($publicacion->getId() != null){

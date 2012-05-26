@@ -50,7 +50,7 @@ class Application_Model_Ciisa
             return false;
         }
         
-        mssql_close($this->_con);        
+        mssql_close($this->_con);
     }
     
     function obtenerUsuarioAlumnoCiisa($usuario) {    
@@ -84,7 +84,7 @@ class Application_Model_Ciisa
     	}else{
     	    return null;
     	}   	
-    
+    	
     	mssql_close($this->_con);
     }
     
@@ -116,9 +116,41 @@ class Application_Model_Ciisa
     	}else{
     		return null;
     	}
-    
+    	
     	mssql_close($this->_con);
+    
     }
+    
+    function obtenerPerfil($usuario) {
+    
+    	$query = "SELECT
+				    	PERFIL_ID
+				  FROM
+				   	 [RC RCA 2007].[dbo].[ACC_PERFILES_USUARIOS]
+				  WHERE
+				  	  PERS_LOGIN = '$usuario'";
+    
+    	$result = mssql_query($query);
+    	$numRows = mssql_num_rows($result);
+    	
+    
+    	if($numRows > 0)
+    	{
+    		$objUsuario = new Application_Model_Usuario();
+    		$row = mssql_fetch_array($result);
+    
+    		return trim($row['PERFIL_ID']);
+    	}
+    	
+    	mssql_close($this->_con);
+    	
+    }
+    
+ 
+    
+    
+    
+ 
 
     
 }

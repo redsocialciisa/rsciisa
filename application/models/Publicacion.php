@@ -10,6 +10,7 @@ class Application_Model_Publicacion
     private $_privacidadId;
     private $_tipoId;
     private $_usuarioId;
+    private $_usuarioPara;
     
 	/**
 	 * @return the $_id
@@ -68,6 +69,13 @@ class Application_Model_Publicacion
 	}
 
 	/**
+	 * @return the $_usuarioPara
+	 */
+	public function getUsuarioPara() {
+		return $this->_usuarioPara;
+	}
+
+	/**
 	 * @param field_type $_id
 	 */
 	public function setId($_id) {
@@ -122,6 +130,14 @@ class Application_Model_Publicacion
 	public function setUsuarioId($_usuarioId) {
 		$this->_usuarioId = $_usuarioId;
 	}
+
+	/**
+	 * @param field_type $_usuarioPara
+	 */
+	public function setUsuarioPara($_usuarioPara) {
+		$this->_usuarioPara = $_usuarioPara;
+	}
+
 
     
     

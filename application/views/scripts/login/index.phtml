@@ -52,28 +52,29 @@
 
 	function validarFormularioLogin()
 	{		
-		if (document.getElementById("txtUsuario").value == "" || document.getElementById("txtPassword").value == "")
+
+		var usr = document.getElementById("txtUsuario").value;
+		var pas = document.getElementById("txtPassword").value;
+		
+		if (usr == "" || pas == "")
 		{
 			$('#myModal').modal('show');
 			return;
 		}
 
-		
-		
-		/*$acepta = 0;
-		if($acepta == 0)
-		{			
+		/*
+		if(terminosAceptados(usr) == false)
+		{
 			$('#myModalTerminos').modal('show');
 			return;
 		}*/
 
-		grabarAceptacion("claudio");
-
+		//grabarAceptacion("claudio");
 		//document.getElementById("frmLogin").submit();
 	}
 
-	/*
-	function validarAceptacionDeTerminos()
+	
+	function validarAceptacion()
 	{		
 		var ajax = nuevoAjax();
 
@@ -88,9 +89,10 @@
 			if (ajax.readyState == 4)
 			{			
 				alert(ajax.responseText);
+				return ajax.responseText;
 			}
 		}
-	}*/
+	}
 
 	
 /*
@@ -116,7 +118,7 @@
 		}
 	}
 */
-	function grabarAceptacion(usuario){
+	function terminosAceptados(usuario){
 
 		if(usuario != '') {
 			//selectDestino = $('#cont_obra');

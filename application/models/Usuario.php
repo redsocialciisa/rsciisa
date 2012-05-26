@@ -13,6 +13,7 @@ class Application_Model_Usuario
     private $_acepta;
     private $_perfilId;
     private $_sexo;
+    private $_foto;
     
 	/**
 	 * @return the $_id
@@ -92,6 +93,13 @@ class Application_Model_Usuario
 	}
 
 	/**
+	 * @return the $_foto
+	 */
+	public function getFoto() {
+		return $this->_foto;
+	}
+
+	/**
 	 * @param field_type $_id
 	 */
 	public function setId($_id) {
@@ -168,8 +176,16 @@ class Application_Model_Usuario
 		$this->_sexo = $_sexo;
 	}
 
+	/**
+	 * @param field_type $_foto
+	 */
+	public function setFoto($_foto) {
+		$this->_foto = $_foto;
+	}
+
     
     
+	    
     
 
     

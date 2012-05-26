@@ -31,7 +31,8 @@ class Application_Model_UsuarioDao
     		$objUsuario->setEmocionId($resultado->current()->emo_id);
     		$objUsuario->setAcepta($resultado->current()->usu_acepta);
     		$objUsuario->setPerfilId($resultado->current()->per_id);
-    
+    		$objUsuario->setSexo($resultado->current()->usu_sexo);
+    		$objUsuario->setFoto($resultado->current()->usu_foto);    
     	}
     	return $objUsuario;
     }
@@ -90,7 +91,7 @@ class Application_Model_UsuarioDao
     public function guardarAceptacion(Application_Model_Usuario $usuario)
     {
     	$data = array('usu_id' => $usuario->getId(),
-    			'usu_acepta' => $usuario->getAcepta(),
+    			'usu_acepta' => "1",
     	);
     
     	if($usuario->getId() != null){
@@ -98,7 +99,19 @@ class Application_Model_UsuarioDao
     		 
     		return $this->_table->update($data, $where);
     	}
+    }
     
+    public function actualizaEstadoAnimo(Application_Model_Usuario $usuario)
+    {
+    	$data = array('usu_id' => $usuario->getId(),
+    			'emo_id' => $usuario->getEmocionId(),
+    	);
+    
+    	if($usuario->getId() != null){
+    		$where = 'usu_id = ' . $usuario->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
     }
     
     public function obtenerTodos()
