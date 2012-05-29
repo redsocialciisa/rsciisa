@@ -91,7 +91,9 @@ class IntegracionController extends Zend_Controller_Action
         		$objIntegracion->setToken($_SESSION['access_token']['oauth_token']);
         		$objIntegracion->setSecret($_SESSION['access_token']['oauth_token_secret']);
         		$objIntegracion->setFechaPermiso($now->format( 'Y-m-d' ));
-        		$objIntegracion->setUsuarioId("2");
+        		
+        		$aut = Zend_Auth::getInstance();
+        		$objIntegracion->setUsuarioId($aut->getIdentity()->usu_id);
         		$objIntegracion->setRedId("2");
         		$objIntegracionDao->guardar($objIntegracion);
         		
@@ -329,7 +331,9 @@ class IntegracionController extends Zend_Controller_Action
         $objIntegracion->setToken($data['oauth_token']);
         $objIntegracion->setSecret($data['oauth_token_secret']);
         $objIntegracion->setFechaPermiso($now->format( 'Y-m-d' ));
-        $objIntegracion->setUsuarioId("2");
+        
+        $aut = Zend_Auth::getInstance();
+        $objIntegracion->setUsuarioId($aut->getIdentity()->usu_id);
         $objIntegracion->setRedId("3");
         $objIntegracionDao->guardar($objIntegracion);
         
@@ -368,8 +372,6 @@ class IntegracionController extends Zend_Controller_Action
         		$code = $tmhOAuth->request('POST', $tmhOAuth->url('1/statuses/update'), array(
         				'status' => $texto
         		));
-                				
-        	 	//$this->_redirect('/integracion');
         		$this->view->ok = "ok";
         	} else {
         		$form->populate($formData);
@@ -441,7 +443,7 @@ class IntegracionController extends Zend_Controller_Action
         		);
         		$base_string = implode('&',$parts);
         		
-        		$key = urlencode_oauth('LNITIz9Vd9hdw7uW') . '&' . urlencode_oauth('7ae4e1b9-d303-4892-92f0-b711dbbf3f8b');
+        		$key = urlencode_oauth('LNITIz9Vd9hdw7uW') . '&' . urlencode_oauth($objIntegracion->getSecret());
         		$signature = base64_encode(hash_hmac('sha1',$base_string,$key,true));
         		
         		
@@ -477,7 +479,7 @@ class IntegracionController extends Zend_Controller_Action
         		if ($headers[0] != 'HTTP/1.1 201 Created') {
         			echo 'Failed';
         		}        		
-        		$this->_redirect('/integracion');
+        		$this->view->ok = "ok";
         	} 
         }
     }
@@ -536,8 +538,6 @@ class IntegracionController extends Zend_Controller_Action
         				'caption'=>'titulo',
         				'description'=>'descripcion',
         		));
-        
-        		//$this->_redirect('/integracion');
         		$this->view->ok = "ok";
         	} else {
         		$form->populate($formData);
