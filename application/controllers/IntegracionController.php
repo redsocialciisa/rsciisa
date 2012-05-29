@@ -355,7 +355,9 @@ class IntegracionController extends Zend_Controller_Action
         		$texto = $form->getValue('texto');
         		$objIntegracion = new Application_Model_Integracion();
         		$objIntegracionDao = new Application_Model_IntegracionDao();
-        		$objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion(2,2);
+        		$aut = Zend_Auth::getInstance();
+        		$objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,2);
+
         		$tmhOAuth = new tmhOAuth(array(
         				'consumer_key'    => '4m5dr19FvCwe534XDQ92fw',
         				'consumer_secret' => 'dobuyMsMLs8kTzSl5YDoYv9O9UZlEN1MBSGBKst9hE',
@@ -389,7 +391,8 @@ class IntegracionController extends Zend_Controller_Action
         		$texto = $form->getValue('texto');
         		$objIntegracion = new Application_Model_Integracion();
         		$objIntegracionDao = new Application_Model_IntegracionDao();
-        		$objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion(2,3);
+        		$aut = Zend_Auth::getInstance();
+        		$objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,3);
 
         		$xml =
         		'<?xml version="1.0" encoding="UTF-8"?>
@@ -494,7 +497,9 @@ class IntegracionController extends Zend_Controller_Action
         		$texto = $form->getValue('texto');
         		$objIntegracion = new Application_Model_Integracion();
         		$objIntegracionDao = new Application_Model_IntegracionDao();
-        		$objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion(2,1);
+        		
+        		$aut = Zend_Auth::getInstance();
+        		$objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,1);
         		
         		$scope = 'publish_stream';
         		// Create our Application instance (replace this with your appId and secret).
