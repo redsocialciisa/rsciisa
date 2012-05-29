@@ -7,7 +7,7 @@ class AuthController extends Zend_Controller_Action
     {
         $aut = Zend_Auth::getInstance();
         if($aut->hasIdentity()){
-            $this->_redirect('/index/index');
+            $this->_redirect('/muro/index');
         }
     }
 
@@ -120,6 +120,9 @@ class AuthController extends Zend_Controller_Action
         			throw new Exception($this->_messages[self::INVALID_LOGIN]);
         			break;
         	}
+        	
+        	//se agrega un nuevo campo extra a la session del usuario
+        	$aut->getIdentity()->perfil_ciisa = $objCiisa->obtenerPerfil($usuario);
         	
         	//IMPRIMIR UN DATO
         	//$aut = Zend_Auth::getInstance();

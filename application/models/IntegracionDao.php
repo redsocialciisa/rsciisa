@@ -89,7 +89,7 @@ class Application_Model_IntegracionDao
     
     public function eliminar($int_id)
     {
-    	$where = 'int_id = ' . $int_id;
+    	$where = 'int_id =' . $int_id;
     
     	return $this->_table->delete($where);
     }

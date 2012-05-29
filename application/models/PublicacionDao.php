@@ -35,6 +35,41 @@ class Application_Model_PublicacionDao
     	return $objPublicacion;
     }   
     
+    public function obtenerMuroPrincipal($perfilCiisa)
+    {
+    	$lista = new SplObjectStorage();
+    	$objPerfilCiisaDao = new Application_Model_PerfilCiisaDao();
+    	
+    	//con el perfil ciisa ej: 'alumno',profesor' etc... se obtiene el perfil que el usuario tiene en nuestra red social.
+    	$objPerfilCiisa = $objPerfilCiisaDao->obtenerPorPerfilCiisa($perfilCiisa);
+    	
+    	if($objPerfilCiisa->getPerfil() == 1)
+    	{
+    	    $where = 'pri_pub_id IN (1,4,5,7)';
+    	}
+    	if($objPerfilCiisa->getPerfil() == 2)
+    	{
+    		$where = 'pri_pub_id IN (2,4,6,7)';
+    	}
+    	if($objPerfilCiisa->getPerfil() == 3)
+    	{
+    		$where = 'pri_pub_id IN (3,5,6,7)';
+    	}
+    	 
+    	$order = 'pub_fecha desc';
+    	$resultado = $this->_table->fetchAll($where,$order);
+    
+    	if(count($resultado) > 0){
+    
+    		foreach ($resultado as $item)
+    		{
+    			$lista->attach($this->obtenerPorId($item->pub_id));
+    		}
+    	}
+    
+    	return $lista;
+    }
+    
     public function guardar(Application_Model_Publicacion $publicacion)
     {
     	$data = array('pub_id' => $publicacion->getId(),

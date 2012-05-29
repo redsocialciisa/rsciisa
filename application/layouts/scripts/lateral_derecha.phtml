@@ -25,6 +25,7 @@
 	        <li class="span3">
 	        	<h5><?php echo $aut->getIdentity()->usu_nombre;?></h5>
 				<p>Nacido: <?php echo substr($aut->getIdentity()->usu_fecha_nacimiento,0,10); ?></p>
+				<p><?php echo $aut->getIdentity()->perfil_ciisa;?></p>
 			</li>
 		</ul>
         
@@ -42,18 +43,19 @@
 						  <div style="width: 70px;">
 				          	<a class="thumbnail" href="#">
 				            	<img alt="" 
-				            	 src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $amigo->getFoto()?>"
-				            	 <?php $foto = $objEmocionDao->obtenerPorId($amigo->getEmocionId())->getFoto(); 
-				            	 	   $srcEmocion = $this->baseUrl()."/imagenes/caras/".$foto;	
-				            	 	   $imgEmocion = "<div style='width: 80px;'>";
+				            	 <?php $foto = $objEmocionDao->obtenerPorId($amigo->getEmocionId())->getFoto();
+				            	 	   $nombre = $amigo->getNombre();
+				            	 	   $srcEmocion = $this->baseUrl()."/imagenes/minicaras/".$foto;	
+				            	 	   $imgEmocion = "<table><tr><td>$nombre</td><td><div style='width: 60px;'>";
 				            	 	   $imgEmocion = $imgEmocion . "<a class='thumbnail'>";
 				            	 	   $imgEmocion = $imgEmocion . "<img src='$srcEmocion'>";
 				            	 	   $imgEmocion = $imgEmocion . "</a>";
-				            	 	   $imgEmocion = $imgEmocion . "</div>";
+				            	 	   $imgEmocion = $imgEmocion . "</div></td</tr></table>";
 				            	 ?>
-				            	 data-content="<?php echo $amigo->getCorreo();?><?php echo $imgEmocion;?>"				            	 
+				            	 src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $amigo->getFoto()?>"
+				            	 data-content="<?php echo $amigo->getCorreo();?>"				            	 
 				            	 id="contacto<?php echo $amigo->getId();?>" 
-				            	 data-original-title="<?php echo $amigo->getNombre();?>" 
+				            	 data-original-title="<?php echo $imgEmocion;?>" 
 				            	 onMouseOver="popover(<?php echo $amigo->getId();?>)">
 				          	</a>
 				          </div>

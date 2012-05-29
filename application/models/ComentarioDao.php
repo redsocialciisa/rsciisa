@@ -34,9 +34,12 @@ class Application_Model_ComentarioDao
     public function obtenerPorPublicacionId($pub_id)
     {
     	$lista = new SplObjectStorage();
-    	$where = 'pub_id > '. $pub_id;
+    	
+    	$where = 'pub_id ='. $pub_id;
+    	$order = 'com_fecha desc';
+    	$count = 5;
     
-    	$resultado = $this->_table->fetchAll($where);
+    	$resultado = $this->_table->fetchAll($where,$order,$count);
     
     	if(count($resultado) > 0)
     	{    
@@ -44,9 +47,19 @@ class Application_Model_ComentarioDao
     		{
     			$lista->attach($this->obtenerPorId($item->com_id));
     		}
+    		
     	}
     
     	return $lista;
+    }
+    
+    public function obtenerCantidadComentariosPorPublicacionId($pub_id)
+    {
+    	$where = 'pub_id ='. $pub_id;
+    
+    	$resultado = $this->_table->fetchAll($where);
+        
+    	return count($resultado);
     }
     
     public function guardar(Application_Model_Comentario $comentario)

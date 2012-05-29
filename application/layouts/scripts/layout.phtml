@@ -29,12 +29,12 @@
    	    	<?php if($aut->hasIdentity()){ ?>
    	    		<ul class="nav">
 			    <li class="active">
-			    <a href="#">Muro Central</a>
+			    <a href="/muro/index/">Muro</a>
 			    </li>
 			    <li><a href="#">Mi Muro</a></li>
 			    <li>
 			    		<div style="width: 40px;">
-	       						<img alt="" src="<?php echo $this->baseUrl()?>/imagenes/caras/<?php echo $objEmocionDao->obtenerPorId($aut->getIdentity()->emo_id)->getFoto();?>">
+	       						<img alt="" src="<?php echo $this->baseUrl()?>/imagenes/minicaras/<?php echo $objEmocionDao->obtenerPorId($aut->getIdentity()->emo_id)->getFoto();?>">
          				</div>
 			    </li>
 			    </ul>
@@ -47,7 +47,7 @@
 		              </a>
 		              
 		              <ul class="dropdown-menu">
-		                <li><a href="#">Mi Perfil</a></li>
+		                <li><a href="/integracion/index/">Mi Perfil</a></li>
 		                <li class="divider"></li>
 		                <li><a href="/index/logout/">Cerrar Sesion</a></li>
 		              </ul>
@@ -74,6 +74,22 @@
 <?php }else{ ?>
 	<?php echo $this->layout()->content ?>
 <?php }?>
+
+<div class="modal hide" id="myModalGenerico">
+    <div class="modal-header">
+    <button class="close" onclick="closeModalGenerico()" data-dismiss="modal">×</button>
+    <h3>Mensaje</h3>
+    	<div id="divModalGenericoTitulo">
+    	</div>
+    </div>
+    <div class="modal-body">
+    	<div id="divModalGenerico">
+    	</div>
+    </div>
+    <div class="modal-footer">
+  	    <a href="#" onclick="closeModalGenerico()" class="btn btn-success" data-dismiss="modal">Aceptar</a>
+    </div>
+</div>	
 
 </body>
 </html>

@@ -341,6 +341,7 @@ class IntegracionController extends Zend_Controller_Action
     
     public function publicarTwitterAction ()
     {
+        $this->_helper->layout()->disableLayout();
         require 'Twitter/tmhOAuth.php';
         require 'Twitter/tmhUtilities.php';
         $this->view->title = "Publicar Tweet";
@@ -366,7 +367,8 @@ class IntegracionController extends Zend_Controller_Action
         				'status' => $texto
         		));
                 				
-        	 	$this->_redirect('/integracion');
+        	 	//$this->_redirect('/integracion');
+        		$this->view->ok = "ok";
         	} else {
         		$form->populate($formData);
         	}
@@ -375,6 +377,7 @@ class IntegracionController extends Zend_Controller_Action
     
     public function publicarLinkedinAction ()
     {
+        $this->_helper->layout()->disableLayout();
         $this->view->title = "Publicar Linkedin";
         $form = new Application_Form_Publicar();
         $form->submit->setLabel('Publicar');
@@ -478,6 +481,7 @@ class IntegracionController extends Zend_Controller_Action
     
     public function publicarFacebookAction ()
     {
+        $this->_helper->layout()->disableLayout();
         require 'Facebook/facebook.php';
         $this->view->title = "Publicar Facebook";
         $form = new Application_Form_Publicar();
@@ -528,11 +532,49 @@ class IntegracionController extends Zend_Controller_Action
         				'description'=>'descripcion',
         		));
         
-        		$this->_redirect('/integracion');
+        		//$this->_redirect('/integracion');
+        		$this->view->ok = "ok";
         	} else {
         		$form->populate($formData);
         	}
         }
+    }
+    
+    public function quitarFacebookAction()
+    {
+        $aut = Zend_Auth::getInstance();
+        $objIntegracionDao = new Application_Model_IntegracionDao();
+        $objFacebook = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id, 1);
+
+        $objIntegracionDao->eliminar($objFacebook->getId());
+        $objIntegracionDao = null;
+        
+        $this->_redirect('/integracion/index');
+        
+    }	
+    
+    public function quitarTwitterAction()
+    {
+        $aut = Zend_Auth::getInstance();
+        $objIntegracionDao = new Application_Model_IntegracionDao();
+        $objTwitter = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id, 2);
+        
+        $objIntegracionDao->eliminar($objTwitter->getId());
+        $objIntegracionDao = null;
+        
+        $this->_redirect('/integracion/index');
+    }
+    
+    public function quitarLinkedinAction()
+    {
+        $aut = Zend_Auth::getInstance();
+        $objIntegracionDao = new Application_Model_IntegracionDao();
+        $objLinkedin = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id, 3);
+        
+        $objIntegracionDao->eliminar($objLinkedin->getId());
+        $objIntegracionDao = null;
+        
+        $this->_redirect('/integracion/index');
     }
 
 }
