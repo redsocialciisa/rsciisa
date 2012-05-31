@@ -1,34 +1,47 @@
 <!--
    See http://developer.yahoo.com/ypatterns/pattern.php?pattern=searchpagination
    -->
+   <?php 
+   		$msj = null;
+   	?>
    <?php if ($this->pageCount): ?>
    <div class="paginationControl">
    <!-- Previous page link -->
    <?php if (isset($this->previous)): ?>
      <a href="<?php echo $this->url(array('page' => $this->previous)); ?>">
-       &lt; Anterior
-     </a> |
+       <img src="/imagenes/proyecto/menos.png" class="span1" title="ver más nuevos">
+     </a> 
    <?php else: ?>
-   <!--  <span class="disabled">&lt; Previous</span> |--> Página
+   <!--  <span class="disabled">&lt; Previous</span> |--> 
    <?php endif; ?>
    
    <!-- Numbered page links -->
    <?php foreach ($this->pagesInRange as $page): ?>
      <?php if ($page != $this->current): ?>
        <a href="<?php echo $this->url(array('page' => $page)); ?>">
-           <?php echo $page; ?>
+           <?php //echo $page; ?>
        </a>
      <?php else: ?>
-       <?php echo $page; ?>
+       <?php //echo $page; 
+       	if ($page == 1)
+       	{
+			$msj = "Últimas publicaciones";       	    
+       	}
+       ?>
      <?php endif; ?>
    <?php endforeach; ?>
    
    <!-- Next page link -->
    <?php if (isset($this->next)): ?>
-           |
+          
      <a href="<?php echo $this->url(array('page' => $this->next));?>">
-       Siguiente &gt;
+       <img src="/imagenes/proyecto/mas.png" class="span1" title="ver más anteriores">
      </a>
+     <?php 
+     	if ($msj != null){
+     	    echo $msj;
+     	}
+     ?>
    <?php else: ?>
    <!--  <span class="disabled">Next &gt;</span> -->  
    <?php endif; ?>

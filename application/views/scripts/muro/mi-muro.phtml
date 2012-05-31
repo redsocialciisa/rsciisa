@@ -2,15 +2,17 @@
 	$objUsuarioDao2 = new Application_Model_UsuarioDao();
 	$objTipPublicacion = new Application_Model_TipoPublicacionDao();
 ?>
-<center><h1>Muro</h1></center>
+<center><h1>Mi Muro</h1></center>
 
 <table>
   <tr>
     <td><?php echo $this->listaPublicaciones;?></td>
-    <td title="Página"><span class="badge badge-important"><?php echo $this->paginaActual;?></span></td>
+    <td title="Página"><span class="badge badge-important">
+    		<?php echo $this->paginaActual;?>
+    </span></td>
   </tr>
 </table>
-  	
+
 <?php if(count($this->listaPublicaciones) > 0){ ?>
 	<?php foreach ($this->listaPublicaciones as $publicacion){?>
 			<div id="publicacion<?php echo $publicacion->getId();?>">
@@ -27,6 +29,7 @@
 						<td>
 							<h3 style="width: 800px;"><?php echo $publicacion->getTexto();?></h3>
 							<input type="hidden" id="hdnTextoPublicacion<?php echo $publicacion->getId();?>" value="<?php echo $publicacion->getTexto();?>">
+							
 							
 							<!-- aquí se muestra la información de la publicación según... el tipo de publicación -->
 							<?php 
@@ -79,7 +82,7 @@
 								    			<td valign="top">
 								    				<?php $objUsuario = $objUsuarioDao->obtenerPorId($comentario->getUsuarioId());?>
 								    				<div style='width: 50px;'>
-														<a class="thumbnail" href="/muro/muro-contacto/id/<?php echo $objUsuario->getId();?>">
+														<a class="thumbnail"href="/muro/muro-contacto/id/<?php echo $objUsuario->getId();?>">
 							      							<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $objUsuario->getFoto();?>"></a>
 						         					</div>
 								    			</td>
@@ -134,7 +137,6 @@
 	<?php $objUsuarioDao = null; ?>
 	<?php $objComentarioDao = null; ?>
   	<?php } ?>
-  	
 <?php } else{ ?>
 			<h4>No se han encontrado publicaciones</h4>
 <?php }?>

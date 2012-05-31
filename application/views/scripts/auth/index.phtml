@@ -1,33 +1,41 @@
 <br /><br />
 <div id="view-content">
 	<div id="divLogin" align="center">
-		<form id="frmLogin" name="frmLogin" method="post" action="/index/index">
-			<table>
-				<caption><b>Autenticación</b></caption>
-				<tr>
-					<td colspan="2">
-		        		<div id="error"></div>		        		
-					</td>
-				</tr>
-				<tr>
-					<td>Usuario: </td><td><input type="text" id="txtUsuario" name="txtUsuario" size="12" maxlength="10" value="111-1"/></td>
-				</tr>
-				<tr>
-					<td>Contraseña: </td>
-					<td>
-						 <input type="password" id="txtPassword" name="txtPassword" size="31" maxlength="30" value="123"/>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2" align="center">
-						<input type="button" value="Entrar" class="btn btn-success" onclick="entrar()">
-					</td>
-				</tr>
-			</table>
-		</form>
-
-		<div id="pes">		
-		</div>
+	
+	<table>
+		<tr>
+			<td>
+				<img src="/imagenes/proyecto/rsc.png">
+			</td>
+			<td>
+				<form id="frmLogin" name="frmLogin" method="post" action="/index/index">
+					<table>
+						<caption><b>Autenticación</b></caption>
+						<tr>
+							<td colspan="2">
+				        		<div id="error"></div>		        		
+							</td>
+						</tr>
+						<tr>
+							<td>Usuario: </td><td><input type="text" id="txtUsuario" name="txtUsuario" size="12" maxlength="10" value="111-1"/></td>
+						</tr>
+						<tr>
+							<td>Contraseña: </td>
+							<td>
+								 <input type="password" id="txtPassword" name="txtPassword" size="31" maxlength="30" value="123"/>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" align="center">
+								<input type="button" value="Entrar" class="btn btn-success" onclick="entrar()">
+								<div id="divLoader"></div>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</td>
+		</tr>		
+		</table>
 	
 	</div>	
 	
@@ -231,7 +239,8 @@
 		{
 			emocion = 5;
 		}
-		
+
+		selectDestino = $('#divLoader');
 		$.ajax(
 				{
 				async: true,
@@ -241,7 +250,7 @@
 				dataTypeString: 'text',
 				
 				beforeSend: function(data){
-	                //selectDestino.html('<label>Cargando...</label>');
+					selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
 			    },  
 			    success: function(requestData){  
 			               //selectDestino.html(requestData);				      
@@ -249,7 +258,7 @@
 
 		               	    if(result == "ok")
 		               	    {
-			               	    
+		               	    	document.getElementById('divLoader').innerHTML = "";
 				               	//document.getElementById("frmLogin").submit();
 		               	    	javascript:location.reload();		
 		               	    }

@@ -32,13 +32,30 @@ class Application_Model_AmigoDao
     	return $amigo;
     }    
     
-    public function obtenerPorUsuarioId($usu_id)
+    public function obtenerCantidadContactosPorUsuarioId($usu_id,$limit)
     {
     	$lista = new SplObjectStorage();
     	$where = 'usu_id = '. $usu_id . ' AND sit_ami_id = 2';
-    	$limit = 5;
     	
-    	$resultado = $this->_table->fetchAll($where,null,5);
+    	$resultado = $this->_table->fetchAll($where,null,$limit);
+    
+    	if(count($resultado) > 0){
+    
+    		foreach ($resultado as $item)
+    		{
+    			$lista->attach($this->obtenerPorId($item->ami_id));
+    		}
+    	}
+    
+    	return $lista;
+    }
+    
+    public function obtenerTodosPorUsuarioId($usu_id)
+    {
+    	$lista = new SplObjectStorage();
+    	$where = 'usu_id = '. $usu_id . ' AND sit_ami_id = 2';
+    	 
+    	$resultado = $this->_table->fetchAll($where);
     
     	if(count($resultado) > 0){
     

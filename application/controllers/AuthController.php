@@ -65,21 +65,36 @@ class AuthController extends Zend_Controller_Action
         
         if($objCiisa->validarAcceso($usuario, $password)) //EXISTE
         {
-        	if($objCiisa->obtenerPerfil($usuario))//ES ALUMNO o EX-ALUMNO
+        	if($objCiisa->obtenerPerfil($usuario) == "ALUMNO" || $objCiisa->obtenerPerfil($usuario) == "EX-ALUMNO")//ES ALUMNO o EX-ALUMNO
         	{
         		if($objUsuarioDao->obtenerPorUsuarioCiisa($usuario) != null) //EXISTE EN RSC
         		{
         			$objUsuario = $objUsuarioDao->obtenerPorUsuarioCiisa($usuario);
-        		}else{ //NO EXISTE EN RSC
+        		}else{ 
+        		    //NO EXISTE EN RSC
         			$objUsuario = $objCiisa->obtenerUsuarioAlumnoCiisa($usuario);
+        			//SE CREA AL USUARIO EN LA TABLA DE LA RSC
+        			$objUsuario->setFoto("user.png");
+        			$objUsuario->setAcepta(1);
+        			$objUsuario->setEmocionId(1);
+        			$objUsuario->setPerfilId(2);
+        			$objUsuario->setPrivacidadPublicacionId(7); //por defecto 7 - 'todos'
+        			$objUsuario->setId($objUsuarioDao->guardar($objUsuario));
         		}
-        		 
         	}else{ //PROFESOR U OTRO
         		if($objUsuarioDao->obtenerPorUsuarioCiisa($usuario) != null) //EXISTE EN RSC
         		{
         			$objUsuario = $objUsuarioDao->obtenerPorUsuarioCiisa($usuario);
-        		}else{//NO EXISTE EN RSC
+        		}else{
+        		    //NO EXISTE EN RSC
         			$objUsuario = $objCiisa->obtenerUsuarioProfesorAcademicoCiisa($usuario);
+        			//SE CREA AL USUARIO EN LA TABLA DE LA RSC
+        			$objUsuario->setFoto("user.png");
+        			$objUsuario->setAcepta(1);
+        			$objUsuario->setEmocionId(1);
+        			$objUsuario->setPerfilId(2);
+        			$objUsuario->setPrivacidadPublicacionId(7); //por defecto 7 - 'todos'
+        			$objUsuario->setId($objUsuarioDao->guardar($objUsuario));
         		}
         	}
         	
@@ -142,6 +157,7 @@ class AuthController extends Zend_Controller_Action
         
        
     }
+    
 
 }
 

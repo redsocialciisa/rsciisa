@@ -10,6 +10,12 @@
     <link type="text/css" href="<?php echo $this->baseUrl()?>/bootstrap/css/bootstrap-responsive.css" rel="stylesheet" />	
 	<script type="text/javascript" src="<?php echo $this->baseUrl()?>/bootstrap/js/bootstrap.js"></script>
 	<script type="text/javascript" src="<?php echo $this->baseUrl()?>/ajax/ajax.js"></script>
+		
+		<style type="text/css">
+			textarea {
+				resize:none;
+			} 
+		</style> 
 	
 </head>
 
@@ -31,7 +37,7 @@
 			    <li class="active">
 			    <a href="/muro/index/">Muro</a>
 			    </li>
-			    <li><a href="#">Mi Muro</a></li>
+			    <li><a href="/muro/mi-muro/">Mi Muro</a></li>
 			    <li>
 			    		<div style="width: 40px;">
 	       						<img alt="" src="<?php echo $this->baseUrl()?>/imagenes/minicaras/<?php echo $objEmocionDao->obtenerPorId($aut->getIdentity()->emo_id)->getFoto();?>">
@@ -49,7 +55,7 @@
 		              <ul class="dropdown-menu">
 		                <li><a href="/integracion/index/">Mi Perfil</a></li>
 		                <li class="divider"></li>
-		                <li><a href="/index/logout/">Cerrar Sesion</a></li>
+		                <li><a href="/muro/logout/">Cerrar Sesion</a></li>
 		              </ul>
 		            </li>
 			    </ul>

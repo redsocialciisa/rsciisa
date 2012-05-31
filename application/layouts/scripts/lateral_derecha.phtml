@@ -16,8 +16,6 @@ if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,3) 
     $profile = json_decode($oauth->getLastResponse());
 }
 
-
-
 ?>
 <?php
 	//session aut
@@ -30,7 +28,7 @@ if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,3) 
 	$objEmocionDao = new Application_Model_EmocionDao();
 	
 	//obtener amigos del contacto
-	$listaContactos = $objAmigoDao->obtenerPorUsuarioId($aut->getIdentity()->usu_id);
+	$listaContactos = $objAmigoDao->obtenerCantidadContactosPorUsuarioId($aut->getIdentity()->usu_id,5);
 	
 	 if(count($listaContactos) > 0){ 
 		 foreach ($listaContactos as $contacto){
@@ -38,7 +36,7 @@ if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,3) 
 		 }
 	 }
 ?>
-<div class="span3 well" style="width: 300px; left: 0px; top:40px; width:300px; height:800px;">
+<div class="span3 well" style="width: 300px; left: 0px; top:40px; width:300px; height:1500px; background-color: #999">
          <a class="thumbnail" href="#">
 	       	<img alt="" src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $aut->getIdentity()->usu_foto;?>">
          </a>

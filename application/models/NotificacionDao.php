@@ -26,6 +26,8 @@ class Application_Model_NotificacionDao
     		$objNotificacion->setFecha($resultado->current()->not_fecha);
     		$objNotificacion->setUsuarioId($resultado->current()->usu_id);
     		$objNotificacion->setTipoNotificacionId($resultado->current()->tip_not_id);
+    		$objNotificacion->setUsuarioIdPara($resultado->current()->usu_id_para);
+    		$objNotificacion->setLeido($resultado->current()->usu_leido);
     
     	}
     	return $objNotificacion;
@@ -37,7 +39,9 @@ class Application_Model_NotificacionDao
     			'not_texto' => $notificacion->getTexto(),
     			'not_fecha' => $notificacion->getFecha(),
     			'usu_id' => $notificacion->getUsuarioId(),
-    			'tip_not_id' => $notificacion->getTipoNotificacionId()
+    			'tip_not_id' => $notificacion->getTipoNotificacionId(),
+    	        'usu_id_para' => $notificacion->getUsuarioIdPara(),
+    	        'usu_leido' => $notificacion->getLeido()
     	);
     
     	if($notificacion->getId() != null){

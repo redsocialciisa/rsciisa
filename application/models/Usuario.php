@@ -14,6 +14,7 @@ class Application_Model_Usuario
     private $_perfilId;
     private $_sexo;
     private $_foto;
+    private $_privacidadPublicacionId;
     
 	/**
 	 * @return the $_id
@@ -100,6 +101,13 @@ class Application_Model_Usuario
 	}
 
 	/**
+	 * @return the $_privacidadPublicacionId
+	 */
+	public function getPrivacidadPublicacionId() {
+		return $this->_privacidadPublicacionId;
+	}
+
+	/**
 	 * @param field_type $_id
 	 */
 	public function setId($_id) {
@@ -182,6 +190,17 @@ class Application_Model_Usuario
 	public function setFoto($_foto) {
 		$this->_foto = $_foto;
 	}
+
+	/**
+	 * @param field_type $_privacidadPublicacionId
+	 */
+	public function setPrivacidadPublicacionId($_privacidadPublicacionId) {
+		$this->_privacidadPublicacionId = $_privacidadPublicacionId;
+	}
+
+    
+    
+    
 
     
     

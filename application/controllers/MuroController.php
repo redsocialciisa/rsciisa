@@ -5,7 +5,14 @@ class MuroController extends Zend_Controller_Action
 
     public function init()
     {
-        /* Initialize action controller here */
+        //validación, si no está logeado vuelve al login
+		$aut = Zend_Auth::getInstance();
+		if($aut->hasIdentity() == false){
+			$this->_redirect('/auth');
+		}
+		
+		//$aut = Zend_Auth::getInstance();
+		//Zend_Debug::dump($aut->getIdentity());exit;
     }
 
     public function indexAction()
@@ -13,6 +20,7 @@ class MuroController extends Zend_Controller_Action
         $aut = Zend_Auth::getInstance();
         $perfil = $aut->getIdentity()->perfil_ciisa;
         $objPublicacionDao = new  Application_Model_PublicacionDao();
+        $paginaActual = $this->getRequest()->getParam('page');
         
         //se obtiene el listado de publicaciones según el perfil entrante
         $listaPublicaciones = $objPublicacionDao->obtenerMuroPrincipal($perfil);
@@ -21,13 +29,14 @@ class MuroController extends Zend_Controller_Action
         Zend_View_Helper_PaginationControl::setDefaultViewPartial ( 'paginator/items.phtml' );
         
         $paginator = Zend_Paginator::factory( $listaPublicaciones );
-        $paginator->setDefaultItemCountPerPage( 5 );
+        $paginator->setDefaultItemCountPerPage( 3 );
         
         if ($this->_hasParam ( 'page' )) {
         	$paginator->setCurrentPageNumber( $this->_getParam ( 'page' ) );
         }
         
         $this->view->listaPublicaciones = $paginator;
+        $this->view->paginaActual =  $this->getRequest()->getParam('page');
         
     }
     
@@ -68,20 +77,21 @@ class MuroController extends Zend_Controller_Action
                 
                 $htmlComentarios .= "</td><td valign='top'>";
                 
-                if($idCom == $comentario->getId())                
+                if($idCom == $comentario->getId())
+                {                
                 	$htmlComentarios .= "<p class='label label-warning'>".$objUsuario->getNombre()."</p>";
-                else
+                }else{
                     $htmlComentarios .= "<p class='label'>".$objUsuario->getNombre()."</p>";
+                }
                     
-				$htmlComentarios .= "<p>".$comentario->getTexto()."</p>";
+				$htmlComentarios .= "<div class='span6'><p>".$comentario->getTexto()."</p></div>";
                 $htmlComentarios .= "<p>".$comentario->getFecha()."</p>";
-                
                 $htmlComentarios .= "</td></tr></table>";
                 
             }
         }
         
-        $htmlComentarios .= "comentarios: <span class='badge badge-info'>".count($listaComentarios)."</span>";
+        $htmlComentarios .= "comentarios: <span class='badge badge-info'>".$objComentarioDao->obtenerCantidadComentariosPorPublicacionId($idPublicacion)."</span>";
         
         $htmlComentarios .= "</div>";
 
@@ -90,6 +100,72 @@ class MuroController extends Zend_Controller_Action
         $objUsuarioDao = null;
         
         $this->view->ok = $htmlComentarios;
+    }
+    
+    public function miMuroAction()
+    {
+        $aut = Zend_Auth::getInstance();
+        //$perfil = $aut->getIdentity()->perfil_ciisa;
+        $objPublicacionDao = new  Application_Model_PublicacionDao();
+        
+        //se obtiene el listado de publicaciones según el perfil entrante
+        $listaPublicaciones = $objPublicacionDao->obtenerMisPublicaciones();
+        
+        //plantilla de paginator
+        Zend_View_Helper_PaginationControl::setDefaultViewPartial ( 'paginator/items.phtml' );
+        
+        $paginator = Zend_Paginator::factory( $listaPublicaciones );
+        $paginator->setDefaultItemCountPerPage( 5 );
+        
+        if ($this->_hasParam ( 'page' )) {
+        	$paginator->setCurrentPageNumber( $this->_getParam ( 'page' ) );
+        }
+        
+        $this->view->paginaActual =  $this->getRequest()->getParam('page');
+        $this->view->listaPublicaciones = $paginator;
+        
+    }
+    
+    public function muroContactoAction()
+    {
+        $idUsuario = $this->getRequest()->getParam('id');
+        
+    	$aut = Zend_Auth::getInstance();
+    	if($aut->getIdentity()->usu_id == $idUsuario)
+    	{
+    	    $this->_redirect('/muro/mi-muro');
+    	}
+    	
+    	$objPublicacionDao = new  Application_Model_PublicacionDao();
+    	$objUsuarioDao = new Application_Model_UsuarioDao();
+    
+    	//se obtiene el listado de publicaciones según el perfil entrante
+    	$listaPublicaciones = $objPublicacionDao->obtenerPublicacionesContacto($idUsuario);
+    
+    	//plantilla de paginator
+    	Zend_View_Helper_PaginationControl::setDefaultViewPartial ( 'paginator/items.phtml' );
+    
+    	$paginator = Zend_Paginator::factory( $listaPublicaciones );
+    	$paginator->setDefaultItemCountPerPage( 5 );
+    
+    	if ($this->_hasParam ( 'page' )) {
+    		$paginator->setCurrentPageNumber( $this->_getParam ( 'page' ) );
+    	}
+    
+    	$this->view->paginaActual =  $this->getRequest()->getParam('page');
+    	$this->view->listaPublicaciones = $paginator;
+    	$this->view->Contacto = $objUsuarioDao->obtenerPorId($idUsuario);
+    	
+    	$objUsuarioDao = null;
+    	$objPublicacionDao = null;
+    
+    }
+    
+    
+    public function logoutAction()
+    {
+    	Zend_Auth::getInstance()->clearIdentity();
+    	$this->_redirect('/auth');
     }
 
 
