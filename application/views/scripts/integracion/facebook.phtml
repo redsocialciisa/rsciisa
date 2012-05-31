@@ -1,7 +1,6 @@
 <!doctype html>
 <html xmlns:fb="http://www.facebook.com/2008/fbml">
   <head>
-    <title>php-sdk</title>
     <style>
       body {
         font-family: 'Lucida Grande', Verdana, Arial, sans-serif;
@@ -16,54 +15,41 @@
     </style>
   </head>
   <body>
-    <h1>php-sdk</h1>
+    <?php 
+    	if ($this->user)
+    	{  
+	       	$now   = new DateTime;
+		    $ch = curl_init('https://graph.facebook.com/oauth/access_token');
+		    $token = $_SESSION["fb_124399157694592_access_token"]; 
+		    $post = 'client_id=124399157694592&client_secret=8c0658db1a7873a56c3551a2ee13464b&grant_type=fb_exchange_token&fb_exchange_token='.$token;
+		    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		    curl_setopt ($ch, CURLOPT_POST, 1);
+		    curl_setopt ($ch, CURLOPT_POSTFIELDS, $post);
+		    $resultado = curl_exec ($ch);
+		    parse_str($resultado);
+	    
+		    $objIntegracionDao = new Application_Model_IntegracionDao();
+		    $objIntegracion = new Application_Model_Integracion();
+		    $objIntegracion->setToken($access_token);
+		    #$objIntegracion->setSecret($_SESSION['access_token']['oauth_token_secret']);
+		    $objIntegracion->setFechaPermiso($now->format( 'Y-m-d' ));
+		    $aut = Zend_Auth::getInstance();
+		    $objIntegracion->setUsuarioId($aut->getIdentity()->usu_id);
+		    $objIntegracion->setRedId("1");
+		    $objIntegracionDao->guardar($objIntegracion);
+		    curl_close ($ch);
+    	}      
+      else 
+      {
+          	echo "<div>";
+		    echo"<a href=".$this->link.">Integrar con Facebook</a>";
+		    echo "</div>";
+      }?>
 
     <?php if ($this->user): ?>
-      <a href="<?php echo $this->link; ?>">Logout</a>
-      
+      <h3>Sincronizacion con Facebook exitosa</h3>
     <?php else: ?>
-      <div>
-        Login using OAuth 2.0 handled by the PHP SDK:
-        <a href="<?php echo $this->link; ?>">Login with Facebook</a>
-      </div>
-    <?php endif ?>
-
-    <h3>PHP Session</h3>
-    <pre><?php print_r($_SESSION); ?></pre>
-    <?php
-    $now   = new DateTime;
-    $ch = curl_init('https://graph.facebook.com/oauth/access_token');
-    $token = $_SESSION["fb_124399157694592_access_token"]; 
-    $post = 'client_id=124399157694592&client_secret=8c0658db1a7873a56c3551a2ee13464b&grant_type=fb_exchange_token&fb_exchange_token='.$token;
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt ($ch, CURLOPT_POST, 1);
-    curl_setopt ($ch, CURLOPT_POSTFIELDS, $post);
-    $resultado = curl_exec ($ch);
-    parse_str($resultado);
-    
-    
-    $objIntegracionDao = new Application_Model_IntegracionDao();
-    $objIntegracion = new Application_Model_Integracion();
-    $objIntegracion->setToken($access_token);
-    #$objIntegracion->setSecret($_SESSION['access_token']['oauth_token_secret']);
-    $objIntegracion->setFechaPermiso($now->format( 'Y-m-d' ));
-    $aut = Zend_Auth::getInstance();
-    $objIntegracion->setUsuarioId($aut->getIdentity()->usu_id);
-    $objIntegracion->setRedId("1");
-    $objIntegracionDao->guardar($objIntegracion);
-    
-    echo 'Access token validado: '.$access_token;
-    curl_close ($ch);
-    ?>
-
-    <?php if ($this->user): ?>
-      <h3>You</h3>
-      <img src="https://graph.facebook.com/<?php echo $this->user; ?>/picture">
-
-      <h3>Your User Object (/me)</h3>
-      <pre><?php print_r($this->userprofile); ?></pre>
-    <?php else: ?>
-      <strong><em>You are not Connected.</em></strong>
+      <strong><em>No estas conectado.</em></strong>
     <?php endif ?>
   </body>
 </html>
