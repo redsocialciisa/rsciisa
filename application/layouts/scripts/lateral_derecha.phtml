@@ -3,6 +3,33 @@ $objIntegracion = new Application_Model_Integracion();
 $objIntegracionDao = new Application_Model_IntegracionDao();
 $aut = Zend_Auth::getInstance();
 
+if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,2) != null)
+{
+    require 'Twitter/tmhOAuth.php';
+    require 'Twitter/tmhUtilities.php';
+    $objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,2);
+    $tmhOAuth = new tmhOAuth(array(
+    		'consumer_key'    => '4m5dr19FvCwe534XDQ92fw',
+    		'consumer_secret' => 'dobuyMsMLs8kTzSl5YDoYv9O9UZlEN1MBSGBKst9hE',
+    		'user_token'      => $objIntegracion->getToken(),
+    		'user_secret'     => $objIntegracion->getSecret(),
+    ));
+    
+    $code_datos = $tmhOAuth->request('GET', $tmhOAuth->url('1/account/verify_credentials'));
+    
+    if ($code_datos == 200) {
+    	$datos = json_decode($tmhOAuth->response['response']);
+    }
+
+    $code_tweet = $tmhOAuth->request('GET', $tmhOAuth->url('1/statuses/user_timeline'), array(
+    		'include_entities' => '1',
+    		'include_rts'      => '1',
+    		'screen_name'      => $datos->screen_name,
+    		'count'            => 5,
+    ));
+    
+}
+
 if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,3) != null)
 {
     define("API_CONSUMER_KEY", "qolg75ipkngf");
@@ -36,6 +63,8 @@ if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,3) 
 		 }
 	 }
 ?>
+
+
 <div class="span3 well" style="width: 300px; left: 0px; top:40px; width:300px; height:1500px; background-color: #999">
          <a class="thumbnail" href="#">
 	       	<img alt="" src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $aut->getIdentity()->usu_foto;?>">
@@ -104,6 +133,9 @@ if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,3) 
 
 <?php if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,3) != null) {?>
 <table>
+  <tr>
+    <th>Linked In</th>
+  </tr>
 	<tr>
 		<td colspan="2">
 			<?php echo $profile->firstName." ".$profile->lastName;?> 
@@ -122,10 +154,69 @@ if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,3) 
 </table>
 <?php }?>
 
+<?php if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,2) != null)
+{?>
+
+<table>
+  <tr>
+    <th>Twitter</th>
+  </tr>
+  <tr>
+    <td rowspan="2"><img src="<?php echo $datos->profile_image_url; ?>"> </td>
+    <td> Sigo: <?php echo $datos->friends_count; ?> </td>
+  </tr>
+  <tr>
+  	<td> Me siguen: <?php echo $datos->followers_count; ?> </td>
+  </tr>
+</table>  
+<?php
+	if ($code_tweet == 200) {
+	    $timeline = json_decode($tmhOAuth->response['response'], true);
+		foreach ($timeline as $tweet) :
+			$entified_tweet = tmhUtilities::entify_with_options($tweet);
+			$is_retweet = isset($tweet['retweeted_status']);
+		
+			$diff = time() - strtotime($tweet['created_at']);
+			if ($diff < 60*60)
+				$created_at = 'Hace '.floor($diff/60). ' minutos ';
+			elseif ($diff < 60*60*24)
+			$created_at = 'Hace '.floor($diff/(60*60)) . ' horas';
+			else
+				$created_at = date('d M', strtotime($tweet['created_at']));
+		
+			$permalink  = str_replace(array('%screen_name%','%id%','%created_at%'),
+					array(	$tweet['user']['screen_name'],$tweet['id_str'],	$created_at,),
+					'<a href="https://twitter.com/%screen_name%/%id%">%created_at%</a>'	);
+
+?>
+<table>
+	  <tr>
+	  	<td style="width:100px" >
+	  		<?php echo $tweet['text'];  ?>
+	  	</td>
+	  </tr>
+	  <tr>
+	  	<td>
+	  		<?php 
+	  		echo $permalink;
+	  		if ($is_retweet):
+	  			echo " retweet ";
+	  		endif;
+	  		echo " Via ".$tweet['source']."<br>";
+	  		?>
+	  	</td>
+	  </tr>
+       <?php  
+	endforeach;
+	}
+	echo "</table>";
+	}
+	?>
+
+
 <script type="text/javascript">
 	function popover(id)
 	{
 		$('#contacto' + id).popover('show');	
-	}	
+	}
 </script>
-

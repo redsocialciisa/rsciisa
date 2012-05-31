@@ -80,11 +80,7 @@ class IntegracionController extends Zend_Controller_Action
         
         	$code = $tmhOAuth->request('GET', $tmhOAuth->url('1/account/verify_credentials'));
         	if ($code == 200) {
-        		$resp = json_decode($tmhOAuth->response['response']);
-        		echo $resp->screen_name."<BR>";
-        		echo  "user_token: ".$_SESSION['access_token']['oauth_token']."<BR>";
-        		echo  "user_secret: ".$_SESSION['access_token']['oauth_token_secret']."<BR>";
-        		
+        		$resp = json_decode($tmhOAuth->response['response']);        		
         		$objIntegracionDao = new Application_Model_IntegracionDao();
         		$objIntegracion = new Application_Model_Integracion();
         		
@@ -96,6 +92,7 @@ class IntegracionController extends Zend_Controller_Action
         		$objIntegracion->setUsuarioId($aut->getIdentity()->usu_id);
         		$objIntegracion->setRedId("2");
         		$objIntegracionDao->guardar($objIntegracion);
+        		echo "Integracion con Twitter exitosa"."<BR>";
         		
         		
         	} else {
@@ -162,11 +159,6 @@ class IntegracionController extends Zend_Controller_Action
         		'authorize'=>'https://www.linkedin.com/uas/oauth/authorize',
         		'access_token'=>'https://api.linkedin.com/uas/oauth/accessToken'
         );
-        
-        echo "Linkedin Key: qolg75ipkngf <BR>";
-        echo "Linkedin Secret: LNITIz9Vd9hdw7uW <BR>";
-        echo "oauth_token (antes de autentificar): ".$_GET['oauth_token']."<BR>";
-        echo "oauth_verifier (antes de autentificar): ".$_GET['oauth_verifier']."<BR>";
         
         // Verifica si ya esta autorizada la aplicacion, si no esta procede a solicitarla
         if (empty($_GET['oauth_token']) || empty($_GET['oauth_verifier']) || $_GET['oauth_token']!=$_SESSION['linkedin_oauth_token']) {
@@ -322,9 +314,6 @@ class IntegracionController extends Zend_Controller_Action
         $_SESSION['linkedin_access_token'] = $data['oauth_token'];
         $_SESSION['linkedin_access_token_secret'] = $data['oauth_token_secret'];
         
-        echo "oauth_token (finales): ".$data['oauth_token']."<BR>";
-        echo "oauth_token_secret (finales): ".$data['oauth_token_secret']."<BR>";
-        
         $objIntegracionDao = new Application_Model_IntegracionDao();
         $objIntegracion = new Application_Model_Integracion();
         
@@ -336,6 +325,7 @@ class IntegracionController extends Zend_Controller_Action
         $objIntegracion->setUsuarioId($aut->getIdentity()->usu_id);
         $objIntegracion->setRedId("3");
         $objIntegracionDao->guardar($objIntegracion);
+        echo "Integracion con Linked In exitosa"."<BR>";
         
         
         unset($_SESSION['linkedin_oauth_token']);
