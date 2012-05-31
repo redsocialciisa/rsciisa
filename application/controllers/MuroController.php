@@ -29,7 +29,7 @@ class MuroController extends Zend_Controller_Action
         Zend_View_Helper_PaginationControl::setDefaultViewPartial ( 'paginator/items.phtml' );
         
         $paginator = Zend_Paginator::factory( $listaPublicaciones );
-        $paginator->setDefaultItemCountPerPage( 3 );
+        $paginator->setDefaultItemCountPerPage( 5 );
         
         if ($this->_hasParam ( 'page' )) {
         	$paginator->setCurrentPageNumber( $this->_getParam ( 'page' ) );

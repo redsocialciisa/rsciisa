@@ -20,7 +20,13 @@
 <table>
   <tr>
     <td><?php echo $this->listaPublicaciones;?></td>
-    <td title="Página"><span class="badge badge-important"><?php echo $this->paginaActual;?></span></td>
+    <td title="Página"><span class="badge badge-important">
+    		<?php if ($this->paginaActual == null){
+    			echo "1";
+    		}
+    			echo $this->paginaActual;
+    		?>
+    </span></td>
   </tr>
 </table>
 
