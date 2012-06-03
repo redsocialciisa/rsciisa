@@ -1,0 +1,54 @@
+ <h1>Base CSS</h1>
+ 
+ <div class="tabbable">
+    <ul class="nav nav-tabs">
+	    <li class="active"><a href="#tab1" data-toggle="tab">Mis Datos Personales</a></li>
+	    <li><a href="#tab2" data-toggle="tab">Integración con Redes Sociales</a></li>
+    </ul>
+    <div class="tab-content">
+	    <div class="tab-pane active" id="tab1">
+	      <?php if($this->success == "ok")
+				{
+				    $msj = "";
+					$msj .= "<div class='alert alert-success'>";
+					$msj .= "<button class='close' data-dismiss='alert'>×</button>";
+					$msj .= "<strong>Éxito!</strong> Tus datos fueron actualizados correctamente !!";
+					$msj .= "</div>";
+					echo $msj;	
+				}?>
+				
+				<?php
+					echo $this->form; 
+				?>
+	    </div>
+	    <div class="tab-pane" id="tab2">
+	    	<?php 
+				$aut = Zend_Auth::getInstance();
+				$objIntegracionDao = new Application_Model_IntegracionDao();
+				$objFacebook = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id, 1);
+				$objTwitter = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id, 2);
+				$objLinkedin = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id, 3);
+				$objIntegracionDao = null;
+			?>
+			
+			<?php if ($objFacebook == null){?>
+				<p><img src="/imagenes/proyecto/fb.png"> <a href="/integracion/facebook/">Integrar con Facebook</a></p>
+			<?php }else{ ?>
+				<p><img src="/imagenes/proyecto/fb.png"> <a href="/integracion/quitar-facebook/">Quitar Facebook</a></p>
+			<?php } ?>
+			
+			<?php if ($objTwitter == null){?>
+				<p><img src="/imagenes/proyecto/tt.png"> <a href="/integracion/twitter/">Integrar con Twitter</a></p>
+			<?php }else{ ?>
+				<p><img src="/imagenes/proyecto/tt.png"> <a href="/integracion/quitar-twitter/">Quitar Twitter</a></p>
+			<?php } ?>
+			
+			<?php if ($objLinkedin == null){?>
+				<p><img src="/imagenes/proyecto/in.png"> <a href="/integracion/linkedin/">Integrar con Linkedin</a></p>
+			<?php }else{ ?>
+				<p><img src="/imagenes/proyecto/in.png"> <a href="/integracion/quitar-linkedin/">Quitar Linkedin</a></p>
+			<?php } ?>
+			
+	    </div>
+    </div>
+</div>

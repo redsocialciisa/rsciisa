@@ -138,13 +138,14 @@ class AuthController extends Zend_Controller_Action
         	
         	//se agrega un nuevo campo extra a la session del usuario
         	$aut->getIdentity()->perfil_ciisa = $objCiisa->obtenerPerfil($usuario);
+        	$aut->getIdentity()->carrera = $objCiisa->obtenerCarrera($usuario);
         	
         	//IMPRIMIR UN DATO
         	//$aut = Zend_Auth::getInstance();
         	//echo $aut->getIdentity()->usu_id; exit;
         	 
         	//IMPRIMIR TODA LA SESSION
-        	//Zend_Debug::dump($aut->getIdentity());exit;
+        	//Zend_Debug::dump($aut->getIdentity());exit();
         	
         	//ENVIA VARIABLES A LA VISTA
         	$this->view->ok = "ok";

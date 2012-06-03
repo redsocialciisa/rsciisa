@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="utf-8">
     <title>Red Social IPCIISA</title>
@@ -15,7 +15,28 @@
 			textarea {
 				resize:none;
 			} 
+			
+			.cont {
+				width: 600px;
+				word-wrap: break-word; 
+			}
+			
+			.cont2 {
+				width: 600px;
+				word-wrap: break-word; 
+			}
+
 		</style> 
+		
+		<script type="text/javascript">
+			function soloLetras(e) { // 1
+			    tecla = (document.all) ? e.keyCode : e.which; // 2
+			    if (tecla==8) return true; // 3
+			    patron =/[A-Za-zñÑ\s]/; // 4
+			    te = String.fromCharCode(tecla); // 5
+			    return patron.test(te); // 6
+			} 
+		</script>
 	
 </head>
 
@@ -24,6 +45,7 @@
 <?php
 	$aut = Zend_Auth::getInstance();
 	$objEmocionDao = new Application_Model_EmocionDao();
+	$objUsuarioDao = new Application_Model_UsuarioDao();
 ?>
 
 <div class="navbar navbar-fixed-top" data-dropdown="dropdown">
@@ -37,6 +59,9 @@
 			    <li class="active">
 			    <a href="/muro/index/">Muro</a>
 			    </li>
+			    <li>
+			    <a href="/muro/noticias/">Noticias</a>
+			    </li>
 			    <li><a href="/muro/mi-muro/">Mi Muro</a></li>
 			    <li>
 			    		<div style="width: 40px;">
@@ -47,13 +72,15 @@
    	    	
 	    	    <ul class="nav secondary-nav pull-right">
 					<li class="dropdown">
-		              <a class="dropdown-toggle" href="#" data-toggle="dropdown" >
-							    <?php echo $aut->getIdentity()->usu_nombre; ?>
+		              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+							    <?php 
+							    	echo $objUsuarioDao->obtenerPorId($aut->getIdentity()->usu_id)->getNombre();
+							   	?>
 		              	<b class="caret"></b>
 		              </a>
 		              
 		              <ul class="dropdown-menu">
-		                <li><a href="/integracion/index/">Mi Perfil</a></li>
+		                <li><a href="/perfil/">Mi Perfil</a></li>
 		                <li class="divider"></li>
 		                <li><a href="/muro/logout/">Cerrar Sesion</a></li>
 		              </ul>
@@ -81,11 +108,11 @@
 	<?php echo $this->layout()->content ?>
 <?php }?>
 
-<div class="modal hide" id="myModalGenerico">
+<div class="modal hide" id="myModalGenerico" style="width: 700px;">
     <div class="modal-header">
     <button class="close" onclick="closeModalGenerico()" data-dismiss="modal">×</button>
-    <h3>Mensaje</h3>
     	<div id="divModalGenericoTitulo">
+    		<h3>Mensaje</h3>
     	</div>
     </div>
     <div class="modal-body">

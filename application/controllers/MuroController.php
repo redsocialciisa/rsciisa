@@ -20,7 +20,6 @@ class MuroController extends Zend_Controller_Action
         $aut = Zend_Auth::getInstance();
         $perfil = $aut->getIdentity()->perfil_ciisa;
         $objPublicacionDao = new  Application_Model_PublicacionDao();
-        $paginaActual = $this->getRequest()->getParam('page');
         
         //se obtiene el listado de publicaciones según el perfil entrante
         $listaPublicaciones = $objPublicacionDao->obtenerMuroPrincipal($perfil);
@@ -29,6 +28,7 @@ class MuroController extends Zend_Controller_Action
         Zend_View_Helper_PaginationControl::setDefaultViewPartial ( 'paginator/items.phtml' );
         
         $paginator = Zend_Paginator::factory( $listaPublicaciones );
+        
         $paginator->setDefaultItemCountPerPage( 5 );
         
         if ($this->_hasParam ( 'page' )) {
@@ -36,7 +36,6 @@ class MuroController extends Zend_Controller_Action
         }
         
         $this->view->listaPublicaciones = $paginator;
-        $this->view->paginaActual =  $this->getRequest()->getParam('page');
         
     }
     
@@ -71,7 +70,7 @@ class MuroController extends Zend_Controller_Action
                 
                 $htmlComentarios .= "<table><tr><td valign='top'>";
                 
-                $htmlComentarios .= "<div style='width: 50px;'><a class='thumbnail'>";
+                $htmlComentarios .= "<div style='width: 50px;'><a class='thumbnail'>";  
                 $htmlComentarios .= "<img src='/imagenes/usuarios/".$objUsuario->getFoto()."'>";
                 $htmlComentarios .= "</div>";
                 
@@ -84,7 +83,7 @@ class MuroController extends Zend_Controller_Action
                     $htmlComentarios .= "<p class='label'>".$objUsuario->getNombre()."</p>";
                 }
                     
-				$htmlComentarios .= "<div class='span6'><p>".$comentario->getTexto()."</p></div>";
+				$htmlComentarios .= "<div class='cont'><p>".$comentario->getTexto()."</p></div>";
                 $htmlComentarios .= "<p>".$comentario->getFecha()."</p>";
                 $htmlComentarios .= "</td></tr></table>";
                 
@@ -161,6 +160,29 @@ class MuroController extends Zend_Controller_Action
     
     }
     
+    public function noticiasAction()
+    {
+    	$aut = Zend_Auth::getInstance();
+    	//$perfil = $aut->getIdentity()->perfil_ciisa;
+    	$objPublicacionDao = new  Application_Model_PublicacionDao();
+    
+    	//se obtiene el listado de publicaciones según el perfil entrante
+    	$listaPublicacionesGEO = $objPublicacionDao->obtenerPublicacionesGrupoEventoOferta();
+    
+    	//plantilla de paginator
+    	Zend_View_Helper_PaginationControl::setDefaultViewPartial ( 'paginator/items.phtml' );
+    
+    	$paginator = Zend_Paginator::factory( $listaPublicacionesGEO );
+    	$paginator->setDefaultItemCountPerPage( 5 );
+    
+    	if ($this->_hasParam ( 'page' )) {
+    		$paginator->setCurrentPageNumber( $this->_getParam ( 'page' ) );
+    	}
+    
+    	$this->view->paginaActual =  $this->getRequest()->getParam('page');
+    	$this->view->listaPublicaciones = $paginator;
+    
+    }
     
     public function logoutAction()
     {

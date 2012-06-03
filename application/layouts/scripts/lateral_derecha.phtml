@@ -67,12 +67,11 @@ if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,3) 
 
 <div class="span3 well" style="width: 300px; left: 0px; top:40px; width:300px; height:1500px; background-color: #999">
          <a class="thumbnail" href="#">
-	       	<img alt="" src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $aut->getIdentity()->usu_foto;?>">
-         </a>
+	       	<img alt="" src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $objUsuarioDao->obtenerPorId($aut->getIdentity()->usu_id)->getFoto();?>"></a>
         <ul>
 	        <li class="span3">
-	        	<h5><?php echo $aut->getIdentity()->usu_nombre;?></h5>
-				<p>Nacido: <?php echo substr($aut->getIdentity()->usu_fecha_nacimiento,0,10); ?></p>
+	        	<h5><?php echo $objUsuarioDao->obtenerPorId($aut->getIdentity()->usu_id)->getNombre();?></h5>
+				<p>Nacido: <?php echo substr($objUsuarioDao->obtenerPorId($aut->getIdentity()->usu_id)->getFechaNacimiento(),0,10);?></p>
 				<p><?php echo $aut->getIdentity()->perfil_ciisa;?></p>
 			</li>
 		</ul>

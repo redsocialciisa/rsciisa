@@ -253,12 +253,13 @@
 					selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
 			    },  
 			    success: function(requestData){  
-			               //selectDestino.html(requestData);				      
-		               	    result = requestData;
-
+			                //selectDestino.html(requestData);				      
+		               	     result = requestData;
+			               	 //selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
+			               	 
 		               	    if(result == "ok")
 		               	    {
-		               	    	document.getElementById('divLoader').innerHTML = "";
+		               	    	//document.getElementById('divLoader').innerHTML = "";
 				               	//document.getElementById("frmLogin").submit();
 		               	    	javascript:location.reload();		
 		               	    }

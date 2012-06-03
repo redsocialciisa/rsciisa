@@ -68,15 +68,17 @@ class Application_Model_PublicacionDao
     	
     	switch ($objPerfilRsc->getPerfil()) {
     		case 1:
-    			$where .= 'pri_pub_id IN (1,4,5,7)';
+    			$where .= 'pri_pub_id IN (1,4,5,7) AND ';
     			break;
     		case 2:
-    			$where .= 'pri_pub_id IN (2,4,6,7)';
+    			$where .= 'pri_pub_id IN (2,4,6,7) AND ';
     			break;
     		case 3:
-    			$where .= 'pri_pub_id IN (3,5,6,7)';
+    			$where .= 'pri_pub_id IN (3,5,6,7) AND ';
     			break;
     	}
+    	
+    	$where .= 'tip_pub_id IN (1,2,3)';
     	
     	$order = 'pub_fecha desc';
     	$resultado = $this->_table->fetchAll($where,$order);
@@ -88,7 +90,7 @@ class Application_Model_PublicacionDao
     			$lista->attach($this->obtenerPorId($item->pub_id));
     		}
     	}
-    
+    	
     	return $lista;
     }
     
@@ -209,6 +211,29 @@ class Application_Model_PublicacionDao
     
     	return $this->_table->delete($where);
     }
+    
+    public function obtenerPublicacionesGrupoEventoOferta()
+    {
+    	$aut = Zend_Auth::getInstance();
+    	$lista = new SplObjectStorage();
+    
+    	$objUsuarioDao = new Application_Model_UsuarioDao();
+    
+    	$where = 'tip_pub_id IN (4,5,6)';
+    	$order = 'pub_fecha desc';
+    	
+    	$resultado = $this->_table->fetchAll($where,$order);
+    	 
+    	if(count($resultado) > 0){
+    
+    		foreach ($resultado as $item)
+    		{
+    			$lista->attach($this->obtenerPorId($item->pub_id));
+    		}
+    	}
+    
+    	return $lista;
+    
+    }
 
 }
-
