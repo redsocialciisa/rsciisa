@@ -70,7 +70,7 @@ class IntegracionController extends Zend_Controller_Action
         
         // reset request?
         if ( isset($_REQUEST['wipe'])) {
-        	session_destroy();
+            session_destroy();
         	header("Location: {$here}");
         
         	// already got some credentials stored?

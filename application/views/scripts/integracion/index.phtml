@@ -1,3 +1,41 @@
+<script type="text/javascript">
+   function show_login_status(network, status)
+   {
+    if (status)
+    {
+     document.getElementById("twitter").innerHTML="Estas logueado con Twitter";
+    }else{
+     document.getElementById("twitter").innerHTML="No estas logueado con Twitter";
+    }
+   }
+ </script>
+  
+<img style="display:none;" src="https://twitter.com/login?redirect_after_login=%2Fimages%2Fspinner.gif" onload="show_login_status('Twitter', true)" onerror="show_login_status('Twitter', false)" />
+<div id="twitter"></div>
+<div id="fb-root"></div>
+
+
+ <script>
+ window.fbAsyncInit = function(){
+  FB.init({ appId:'312220765516835', status:true,  cookie:true, xfbml:true});
+  FB.getLoginStatus(function(response){
+   if (response.status != "unknown")
+   {
+    document.getElementById("fb-root").innerHTML="Estas logueado con Facebook";
+   }else{
+    document.getElementById("fb-root").innerHTML="No estas logueado con Facebook";
+   }
+  });
+ };
+ // Load the SDK Asynchronously
+ (function(d){
+  var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+  js = d.createElement('script'); js.id = id; js.async = true;
+  js.src = "http://connect.facebook.net/en_US/all.js";
+  d.getElementsByTagName('head')[0].appendChild(js);
+ }(document));
+</script>
+
 <?php 
 	$aut = Zend_Auth::getInstance();
 	$objIntegracionDao = new Application_Model_IntegracionDao();
