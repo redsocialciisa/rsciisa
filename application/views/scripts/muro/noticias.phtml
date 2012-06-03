@@ -1,0 +1,403 @@
+<?php 
+	$objUsuarioDao2 = new Application_Model_UsuarioDao();
+	$objTipPublicacion = new Application_Model_TipoPublicacionDao();
+?>
+<center><h1>Noticias</h1></center>
+ 
+<?php echo $this->listaPublicaciones;?>
+<?php if(count($this->listaPublicaciones) > 0){ ?>
+	<?php foreach ($this->listaPublicaciones as $publicacion){?>
+			<div id="publicacion<?php echo $publicacion->getId();?>">
+				<table>
+					<caption class="label label-success">Categoría:  <?php echo $objTipPublicacion->obtenerPorId($publicacion->getTipoId())->getNombre();?></caption>
+					<tr>
+						<td rowspan="3" valign="top">
+							<div style='width: 100px;'>
+								<a class="thumbnail" href="/muro/muro-contacto/id/<?php echo $publicacion->getUsuarioId();?>">
+	      							<img alt="" src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getFoto();?>">
+         						</a>
+         					</div>
+						</td>
+						<td>
+							<h5 class="cont2"><?php echo $publicacion->getTexto();?></h5>
+							<input type="hidden" id="hdnTextoPublicacion<?php echo $publicacion->getId();?>" value="<?php echo $publicacion->getTexto();?>">
+							
+							<!-- aquí se muestra la información de la publicación según... el tipo de publicación -->
+							<?php 
+							if($publicacion->getTipoId() == 4){ ?>
+								<?php $fechaPublicacion = strtotime($publicacion->getFecha()); ?>
+								<table class="span2" border="2">
+									<tr>
+										<td align="center" bgcolor="#DF7401">
+											<?php
+												switch (date("m", $fechaPublicacion))
+												{
+													case 1:
+													    echo "Ene";
+													break;
+													case 2:
+														echo "Feb";
+														break;
+													case 3:
+														echo "Mar";
+														break;
+													case 4:
+														echo "Abr";
+														break;
+													case 5:
+														echo "May";
+														break;
+													case 6:
+														echo "Jun";
+														break;
+													case 7:
+														echo "Jul";
+														break;
+													case 8:
+														echo "Ago";
+														break;
+													case 9:
+														echo "Sep";
+														break;
+													case 10:
+														echo "Oct";
+														break;
+													case 11:
+														echo "Nov";
+														break;
+													case 12:
+														echo "Dic";
+														break;
+												}
+												echo " - ";
+												echo date("Y", $fechaPublicacion);
+											?>
+										</td>
+									 </tr>
+									 <tr>
+									 	<td align="center">
+									 		<h2><?php 
+									 				echo date("d", $fechaPublicacion); 
+									 		?></h2>
+									 	</td>
+									 </tr>
+								</table>
+							
+							<?php } ?>
+							<?php							 
+							if($publicacion->getTipoId() == 5){ ?>
+							
+							
+							<?php } ?>
+							<?php  
+							if($publicacion->getTipoId() == 6){ ?>
+							
+							
+							<?php } ?>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<?php 
+								$objUsuarioDao = new Application_Model_UsuarioDao();
+								$objComentarioDao = new Application_Model_ComentarioDao();
+								$objIntegracionDao = new Application_Model_IntegracionDao();
+								
+								$aut = Zend_Auth::getInstance();
+								$tieneFacebook = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id, 1);
+								$tieneTwitter = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id, 2);
+								$tieneLinkedin = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id, 3);
+								$objIntegracionDao = null;
+								
+								$listaComentarios = $objComentarioDao->obtenerPorPublicacionId($publicacion->getId());?>
+							<div id="divComentariosPublicacion<?php echo $publicacion->getId();?>">
+							<?php if(count($listaComentarios) > 0){
+								    foreach ($listaComentarios as $comentario){?>
+								    	<table>
+								    		<tr>
+								    			<td valign="top">
+								    				<?php $objUsuario = $objUsuarioDao->obtenerPorId($comentario->getUsuarioId());?>
+								    				<div style='width: 50px;'>
+														<a class="thumbnail" href="/muro/muro-contacto/id/<?php echo $objUsuario->getId();?>">
+							      							<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $objUsuario->getFoto();?>"></a>
+						         					</div>
+								    			</td>
+								    			<td valign="top">
+								    				<p class="label"><?php echo $objUsuario->getNombre(); ?></p>
+								    				<div class="cont"><p><?php echo $comentario->getTexto();?></p></div>
+								    				<p><?php echo $comentario->getFecha();?></p>
+								    			</td>
+								    		</tr>
+								    	</table>
+							  <?php } ?>
+							  comentarios: <span class="badge badge-info"><?php echo $objComentarioDao->obtenerCantidadComentariosPorPublicacionId($publicacion->getId());?></span>
+						  <?php } ?>
+						  </div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<table>
+								<tr>
+									<td>
+										<div id="divLoaderComentario<?php echo $publicacion->getId();?>"></div>
+										<textarea id="txtComentario<?php echo $publicacion->getId();?>" rows="1" placeholder="Escribe algo aquí..." class="span5"></textarea>
+										<button class="btn btn-inverse" onclick="comentarPublicacion(<?php echo $publicacion->getId();?>)">Comentar</button>
+									</td>
+									<td>
+										<?php if ($tieneTwitter != null){?>
+											<button class="btn btn-info" onclick="openModalPost(<?php echo $publicacion->getId();?>,1)">Twitter</button>
+										<?php } ?>
+									</td>
+									<td>
+										<?php if ($tieneFacebook != null){?>
+											<button class="btn btn-primary" onclick="openModalPost(<?php echo $publicacion->getId();?>,2)">Facebook</button>
+										<?php } ?>
+									</td>
+									<td>
+										<?php if ($tieneLinkedin != null){?>
+											<button class="btn btn-warning" onclick="openModalPost(<?php echo $publicacion->getId();?>,3)">Linkedin</button>
+										<?php } ?>
+										<?php
+											$tieneTwitter = null;
+											$tieneFacebook = null;
+											$tieneLinkedin = null;
+										?>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</div>
+	<?php $objUsuarioDao = null; ?>
+	<?php $objComentarioDao = null; ?>
+  	<?php } ?>
+  	
+<?php } else{ ?>
+			<h4>No se han encontrado publicaciones</h4>
+<?php }?>
+
+<div class="modal hide" id="myModalPost">
+    <div class="modal-header">
+    <button class="close" onclick="cerrarModalPost()" data-dismiss="modal">×</button>
+    <h3>Compartir</h3>
+    </div>
+    <div class="modal-body">
+    		<table>
+    			<tr>
+    				<td>
+    					<textarea id="txtTexto" name="txtTexto">
+    					</textarea>
+    				</td>
+    			</tr>
+    		</table>
+    </div>
+    <div class="modal-footer">
+  	    <div id="divBotonera">
+  	    </div>
+    </div>
+</div>	
+
+
+
+<script type="text/javascript">
+	function closeModalPost()
+	{		
+		$('#myModalPost').modal();		
+	}
+
+	function openModalPost(id,red)
+	{	
+		if(red == 1){//twitter
+			$boton = "<a href='#' onclick='compartirEnTwitter()' class='btn btn-success' data-dismiss='modal'>Compartir</a>";
+		}
+		if(red == 2){//facebook
+			$boton = "<a href='#' onclick='compartirEnFacebook()' class='btn btn-success' data-dismiss='modal'>Compartir</a>";
+		}
+		if(red == 3){//linkedin
+			$boton = "<a href='#' onclick='compartirEnLinkedin()' class='btn btn-success' data-dismiss='modal'>Compartir</a>";
+		}
+		$boton = $boton + "<a href='#' onclick='closeModalPost()' class='btn btn-danger'  data-dismiss='modal'>Cerrar</a>";
+		
+		document.getElementById("divBotonera").innerHTML = $boton;
+		
+		document.getElementById("txtTexto").value = document.getElementById("hdnTextoPublicacion" + id).value; 
+		
+		$('#myModalPost').modal('show');		
+	}
+
+	function compartirEnTwitter(){
+
+		var texto = document.getElementById("txtTexto").value;
+		
+		if(texto != '') {
+			//selectDestino = $('#cont_obra');
+				$.ajax(
+						{
+						async: true,
+						type: 'POST',
+						url: '<?php echo $this->baseUrl()?>/integracion/publicar-twitter',
+						data: 'texto=' + texto,	
+						dataTypeString: 'text',
+						
+						beforeSend: function(data){
+			                //selectDestino.html('<label>Cargando...</label>');
+					    },  
+					    success: function(requestData){  
+					               //selectDestino.html(requestData);
+							    	alert(requestData);
+				               		document.getElementById("divModalGenerico").innerHTML = "Se ha compartido con éxito tu publicación en Twitter";
+					    			$('#myModalGenerico').modal('show');
+				               		
+					    },  
+					    error: function(requestData, strError, strTipoError){          
+					    }
+					    
+						});
+		}
+			
+	}
+
+	function compartirEnFacebook(){
+
+		var texto = document.getElementById("txtTexto").value;
+		
+		if(texto != '') {
+			//selectDestino = $('#cont_obra');
+				$.ajax(
+						{
+						async: true,
+						type: 'POST',
+						url: '<?php echo $this->baseUrl()?>/integracion/publicar-facebook',
+						data: 'texto=' + texto,	
+						dataTypeString: 'text',
+						
+						beforeSend: function(data){
+			                //selectDestino.html('<label>Cargando...</label>');
+					    },  
+					    success: function(requestData){  
+					               //selectDestino.html(requestData);
+				               		alert(requestData);
+					    			document.getElementById("divModalGenerico").innerHTML = "Se ha compartido con éxito tu publicación en Facebook";
+					    			$('#myModalGenerico').modal('show');
+					    },  
+					    error: function(requestData, strError, strTipoError){          
+					    }
+					    
+						});
+		}
+			
+	}
+
+	function compartirEnLinkedin(){
+
+		var texto = document.getElementById("txtTexto").value;
+		
+		if(texto != '') {
+			//selectDestino = $('#cont_obra');
+				$.ajax(
+						{
+						async: true,
+						type: 'POST',
+						url: '<?php echo $this->baseUrl()?>/integracion/publicar-linkedin',
+						data: 'texto=' + texto,	
+						dataTypeString: 'text',
+						
+						beforeSend: function(data){
+			                //selectDestino.html('<label>Cargando...</label>');
+					    },  
+					    success: function(requestData){  
+					               //selectDestino.html(requestData);
+				               		alert(requestData);
+				               		document.getElementById("divModalGenerico").innerHTML = "Se ha compartido con éxito tu publicación en Linkedin";
+					    			$('#myModalGenerico').modal('show');
+				               		
+					    },  
+					    error: function(requestData, strError, strTipoError){          
+					    }
+					    
+						});
+		}
+			
+	}
+
+	function comentarPublicacion(idPublicacion){
+		
+		//document.getElementById("divComentariosPublicacion" + idPublicacion).innerHTML = "hola";
+		var texto = document.getElementById("txtComentario" + idPublicacion).value; 
+		var divLoader = "divLoaderComentario" + idPublicacion;
+		
+		if(texto != '') {
+			selectDestino = $('#' + divLoader);
+				$.ajax(
+						{
+						async: true,
+						type: 'POST',
+						url: '<?php echo $this->baseUrl()?>/muro/comentar-publicacion',
+						data: 'texto=' + texto + '&idPublicacion=' + idPublicacion,	
+						dataTypeString: 'text',
+						
+						beforeSend: function(data){
+			                selectDestino.html('<img src="/imagenes/proyecto/ajax-loader-bar.gif">');
+					    },  
+					    success: function(requestData){  
+					               //selectDestino.html(requestData);
+				               		result = requestData;
+
+					               	document.getElementById("divComentariosPublicacion" + idPublicacion).innerHTML = result;
+				               		document.getElementById("txtComentario" + idPublicacion).value = "";
+					               	document.getElementById(divLoader).innerHTML = "";
+					    },  
+					    error: function(requestData, strError, strTipoError){          
+					    }
+					    
+						});
+		}
+		
+	}
+
+	function verFoto(titulo,foto)
+	{
+		var html = ""; 
+		html = html + "<div style='width: 100%;'>";
+		html = html + "<a class='thumbnail'>";
+		html = html + "<img src='<?php echo $this->baseUrl()?>/imagenes/fotos/"+foto+"'>";
+		html = html + "</a>";
+		html = html + "</div>";    
+			
+		document.getElementById("divModalGenerico").innerHTML = html;
+		document.getElementById("divModalGenericoTitulo").innerHTML = titulo;
+		
+		
+		$('#myModalGenerico').modal('show');
+	}
+
+
+	function setPaginator(paginator){
+
+		if(paginator != '') {
+			//selectDestino = $('#' + divLoader);
+				$.ajax(
+						{
+						async: true,
+						type: 'POST',
+						url: '<?php echo $this->baseUrl()?>/muro/set-paginator',
+						data: 'paginator=' + paginator,	
+						dataTypeString: 'text',
+						
+						beforeSend: function(data){
+			                //selectDestino.html('<img src="/imagenes/proyecto/ajax-loader-bar.gif">');
+					    },  
+					    success: function(requestData){  
+					               //selectDestino.html(requestData);
+				               		alert(requestData);
+					    },  
+					    error: function(requestData, strError, strTipoError){          
+					    }
+					    
+						});
+		}
+		
+	}
+</script>
