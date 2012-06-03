@@ -31,8 +31,8 @@ class Application_Model_UsuarioDao
     		$objUsuario->setEmocionId($resultado->current()->emo_id);
     		$objUsuario->setAcepta($resultado->current()->usu_acepta);
     		$objUsuario->setPerfilId($resultado->current()->per_id);
-    		$objUsuario->setSexo($resultado->current()->usu_sexo);
-    		$objUsuario->setFoto($resultado->current()->usu_foto);    
+    		$objUsuario->setFoto($resultado->current()->usu_foto);
+    		$objUsuario->setPrivacidadPublicacionId($resultado->current()->pri_pub_id);
     	}
     	return $objUsuario;
     }
@@ -76,7 +76,9 @@ class Application_Model_UsuarioDao
     	        'usu_fecha_nacimiento' => $usuario->getFechaNacimiento(),
     	        'emo_id' => $usuario->getEmocionId(),
     	        'usu_acepta' => $usuario->getAcepta(),
-    	        'per_id' => $usuario->getPerfilId()
+    	        'usu_foto' => $usuario->getFoto(),
+    	        'per_id' => $usuario->getPerfilId(),
+    	        'pri_pub_id' => $usuario->getPrivacidadPublicacionId() 
     	);
     
     	if($usuario->getId() != null){
@@ -86,6 +88,26 @@ class Application_Model_UsuarioDao
     	}
     
     	return $this->_table->insert($data);
+    }
+    
+    public function actualizar(Application_Model_Usuario $usuario)
+    {
+    	$data = array('usu_id' => $usuario->getId(),
+    			'usu_nombre' => $usuario->getNombre(),
+    			'usu_correo' => $usuario->getCorreo(),
+    			'usu_fecha_nacimiento' => $usuario->getFechaNacimiento(),
+    	        'usu_cv' => $usuario->getCv(),
+    			'usu_foto' => $usuario->getFoto(),
+    			'pri_pub_id' => $usuario->getPrivacidadPublicacionId(),
+    	        'emo_id' => $usuario->getPrivacidadPublicacionId()
+    	);
+    
+    	if($usuario->getId() != null){
+    		$where = 'usu_id = ' . $usuario->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
     }
     
     public function guardarAceptacion(Application_Model_Usuario $usuario)

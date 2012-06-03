@@ -59,13 +59,12 @@ class Application_Model_Ciisa
     				ALU_RUT,
     				ALU_NOMBRE,    				
     				ALU_EMAIL,
-    				ALU_SEXO,
     				convert(nvarchar,Year(ALU_FECNAC)) + '-' + convert(nvarchar,Month(ALU_FECNAC)) + '-' + convert(nvarchar,Day(ALU_FECNAC)) AS ALU_FECNAC
     			FROM
     				[RC RCA 2007].[dbo].[ALUMNOS]
     			WHERE 
-    				ALU_RUT = '$usuario'";
-    
+    				ALU_RUT = '$usuario'"; 
+		    
     	$result = mssql_query($query);
     	$numRows = mssql_num_rows($result);   	
     	
@@ -77,7 +76,6 @@ class Application_Model_Ciisa
     	    $objUsuario->setUsuarioCiisa(trim($row['ALU_RUT']));
     	    $objUsuario->setNombre(trim($row['ALU_NOMBRE']));
     	    $objUsuario->setCorreo(trim($row['ALU_EMAIL']));
-    	    $objUsuario->setSexo(trim($row['ALU_SEXO']));
     	    $objUsuario->setFechaNacimiento($row['ALU_FECNAC']);
     	    			
     	    return $objUsuario;
@@ -145,6 +143,40 @@ class Application_Model_Ciisa
     	mssql_close($this->_con);
     	
     }
+    
+    function obtenerCarrera($usuario) {
+    
+    	$query = "SELECT
+				    	rtrim(C.CAR_NOMBRE) as CAR_NOMBRE
+				  FROM
+				    	[RC RCA 2007].[dbo].[ALUMNOS] AS A,
+				    	[RC RCA 2007].[dbo].[ALUMNO_CARRERA] AS AC,
+				    	[RC RCA 2007].[dbo].[CARRERA] AS C
+				  WHERE
+				  	  	A.ALU_RUT = '$usuario'
+				  AND   A.ALU_RUT = AC.ALU_RUT
+				  AND   AC.CAR_CODIGO = C.CAR_CODIGO";
+    
+    	$result = mssql_query($query);
+    	$numRows = mssql_num_rows($result);
+    	 
+    
+    	if($numRows > 0)
+    	{
+    		$objUsuario = new Application_Model_Usuario();
+    		$row = mssql_fetch_array($result);
+    
+    		return trim($row['CAR_NOMBRE']);
+    	}else{
+    	    return "";
+    	}
+    	 
+    	mssql_close($this->_con);
+    	 
+    }
+    
+    
+    
     
  
     

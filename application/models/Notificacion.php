@@ -7,6 +7,8 @@ class Application_Model_Notificacion
     private $_fecha;
     private $_usuarioId;
     private $_tipoNotificacionId;
+    private $_usuarioIdPara;
+    private $_leido;
     
 	/**
 	 * @return the $_id
@@ -44,6 +46,20 @@ class Application_Model_Notificacion
 	}
 
 	/**
+	 * @return the $_usuarioIdPara
+	 */
+	public function getUsuarioIdPara() {
+		return $this->_usuarioIdPara;
+	}
+
+	/**
+	 * @return the $_leido
+	 */
+	public function getLeido() {
+		return $this->_leido;
+	}
+
+	/**
 	 * @param field_type $_id
 	 */
 	public function setId($_id) {
@@ -78,7 +94,21 @@ class Application_Model_Notificacion
 		$this->_tipoNotificacionId = $_tipoNotificacionId;
 	}
 
-    
+	/**
+	 * @param field_type $_usuarioIdPara
+	 */
+	public function setUsuarioIdPara($_usuarioIdPara) {
+		$this->_usuarioIdPara = $_usuarioIdPara;
+	}
+
+	/**
+	 * @param field_type $_leido
+	 */
+	public function setLeido($_leido) {
+		$this->_leido = $_leido;
+	}
+
+
     
 
 }

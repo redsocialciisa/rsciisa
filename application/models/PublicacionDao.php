@@ -37,25 +37,49 @@ class Application_Model_PublicacionDao
     
     public function obtenerMuroPrincipal($perfilCiisa)
     {
+        $perfilCiisa = trim($perfilCiisa);
+        $aut = Zend_Auth::getInstance();
+        
     	$lista = new SplObjectStorage();
     	$objPerfilCiisaDao = new Application_Model_PerfilCiisaDao();
+    	$objAmigo = new Application_Model_AmigoDao();
+    	
+    	//se obtiene la lista de mis amigos, para obtener solo las publicaciones de ellos. 
+    	$usu_id_in = "";
+    	$listaAmigos = $objAmigo->obtenerTodosPorUsuarioId($aut->getIdentity()->usu_id);
+    	$i = 1;
+    	foreach ($listaAmigos as $amigo)
+    	{
+    	    if($i != count($listaAmigos))
+    	    {
+    	    	$usu_id_in .= $amigo->getAmigoUsuarioId().",";
+    	    }else{
+    	        $usu_id_in .= $amigo->getAmigoUsuarioId();
+    	    }
+    	    $i = $i + 1;
+    	}
+    	//note: la variable $usu_id_in se genera de la siguiente forma = 2,3,5,3
+    	//ademas de obtener las publicaciones de mis amigos... debo agragar mis publicaciones al muro, agregamos nuestro ID también.
+    	
+    	$where = 'usu_id IN ('.$aut->getIdentity()->usu_id.','.$usu_id_in.') AND ';
     	
     	//con el perfil ciisa ej: 'alumno',profesor' etc... se obtiene el perfil que el usuario tiene en nuestra red social.
-    	$objPerfilCiisa = $objPerfilCiisaDao->obtenerPorPerfilCiisa($perfilCiisa);
+    	$objPerfilRsc = $objPerfilCiisaDao->obtenerPorPerfilCiisa($perfilCiisa);
     	
-    	if($objPerfilCiisa->getPerfil() == 1)
-    	{
-    	    $where = 'pri_pub_id IN (1,4,5,7)';
+    	switch ($objPerfilRsc->getPerfil()) {
+    		case 1:
+    			$where .= 'pri_pub_id IN (1,4,5,7) AND ';
+    			break;
+    		case 2:
+    			$where .= 'pri_pub_id IN (2,4,6,7) AND ';
+    			break;
+    		case 3:
+    			$where .= 'pri_pub_id IN (3,5,6,7) AND ';
+    			break;
     	}
-    	if($objPerfilCiisa->getPerfil() == 2)
-    	{
-    		$where = 'pri_pub_id IN (2,4,6,7)';
-    	}
-    	if($objPerfilCiisa->getPerfil() == 3)
-    	{
-    		$where = 'pri_pub_id IN (3,5,6,7)';
-    	}
-    	 
+    	
+    	$where .= 'tip_pub_id IN (1,2,3)';
+    	
     	$order = 'pub_fecha desc';
     	$resultado = $this->_table->fetchAll($where,$order);
     
@@ -66,8 +90,97 @@ class Application_Model_PublicacionDao
     			$lista->attach($this->obtenerPorId($item->pub_id));
     		}
     	}
+    	
+    	return $lista;
+    }
+    
+    public function obtenerMisPublicaciones()
+    {
+        $aut = Zend_Auth::getInstance();
+        $lista = new SplObjectStorage();
+        
+        $objUsuarioDao = new Application_Model_UsuarioDao();
+        $objCiisa = new Application_Model_Ciisa();
+        $objPerfilCiisaDao = new Application_Model_PerfilCiisaDao();
+        
+        $perfilCiisa = $objCiisa->obtenerPerfil($aut->getIdentity()->usu_ciisa); //profesor, alumno, secretaria, admin etc...
+        
+        $objPerfilRsc = $objPerfilCiisaDao->obtenerPorPerfilCiisa($perfilCiisa);
+        
+        $where = "";
+    	      
+        switch ($objPerfilRsc->getPerfil()) {
+        	case 1:
+        		//$where .= 'pri_pub_id IN (1,4,5,7)';
+        		break;
+        	case 2:
+        		//$where .= 'pri_pub_id IN (2,4,6,7)';
+        		break;
+        	case 3:
+        		//$where .= 'pri_pub_id IN (3,5,6,7)';
+        		break;
+        }
+        
+    	//$where .= ' AND usu_id_para ='.$aut->getIdentity()->usu_id;
+    	$where .= 'usu_id_para ='.$aut->getIdentity()->usu_id;
+    	
+    	$order = 'pub_fecha desc';
+    	$resultado = $this->_table->fetchAll($where,$order);
+    	
+    	if(count($resultado) > 0){
+    
+    		foreach ($resultado as $item)
+    		{
+    			$lista->attach($this->obtenerPorId($item->pub_id));
+    		}
+    	}
     
     	return $lista;
+        
+    }
+    
+    public function obtenerPublicacionesContacto($usu_id_para)
+    {
+    	$aut = Zend_Auth::getInstance();
+    	$lista = new SplObjectStorage();
+    
+    	$objUsuarioDao = new Application_Model_UsuarioDao();
+    	$objCiisa = new Application_Model_Ciisa();
+    	$objPerfilCiisaDao = new Application_Model_PerfilCiisaDao();
+    
+    	$perfilCiisa = $objCiisa->obtenerPerfil($aut->getIdentity()->usu_ciisa); //profesor, alumno, secretaria, admin etc...
+    
+    	$objPerfilRsc = $objPerfilCiisaDao->obtenerPorPerfilCiisa($perfilCiisa);
+    
+    	$where = "";
+    	 
+    	switch ($objPerfilRsc->getPerfil()) {
+    		case 1:
+    			$where .= 'pri_pub_id IN (1,4,5,7)';
+    			break;
+    		case 2:
+    			$where .= 'pri_pub_id IN (2,4,6,7)';
+    			break;
+    		case 3:
+    			$where .= 'pri_pub_id IN (3,5,6,7)';
+    			break;
+    	}
+    
+    	$where .= ' AND usu_id_para ='.$usu_id_para;
+    	 
+    	$order = 'pub_fecha desc';
+    	$resultado = $this->_table->fetchAll($where,$order);
+    	 
+    	if(count($resultado) > 0){
+    
+    		foreach ($resultado as $item)
+    		{
+    			$lista->attach($this->obtenerPorId($item->pub_id));
+    		}
+    	}
+    
+    	return $lista;
+    
     }
     
     public function guardar(Application_Model_Publicacion $publicacion)
@@ -98,6 +211,29 @@ class Application_Model_PublicacionDao
     
     	return $this->_table->delete($where);
     }
+    
+    public function obtenerPublicacionesGrupoEventoOferta()
+    {
+    	$aut = Zend_Auth::getInstance();
+    	$lista = new SplObjectStorage();
+    
+    	$objUsuarioDao = new Application_Model_UsuarioDao();
+    
+    	$where = 'tip_pub_id IN (4,5,6)';
+    	$order = 'pub_fecha desc';
+    	
+    	$resultado = $this->_table->fetchAll($where,$order);
+    	 
+    	if(count($resultado) > 0){
+    
+    		foreach ($resultado as $item)
+    		{
+    			$lista->attach($this->obtenerPorId($item->pub_id));
+    		}
+    	}
+    
+    	return $lista;
+    
+    }
 
 }
-

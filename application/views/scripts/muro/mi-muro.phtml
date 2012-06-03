@@ -2,14 +2,26 @@
 	$objUsuarioDao2 = new Application_Model_UsuarioDao();
 	$objTipPublicacion = new Application_Model_TipoPublicacionDao();
 ?>
-<center><h1>Muro</h1></center>
- 
-<?php echo $this->listaPublicaciones;?>
+<center><h1>Mi Muro</h1></center>
+
+<table>
+  <tr>
+    <td><?php echo $this->listaPublicaciones;?></td>
+    <td title="Página"><span class="badge badge-important">
+    		<?php if ($this->paginaActual == null){
+    			echo "1";
+    		}
+    			echo $this->paginaActual;
+    		?>
+    </span></td>
+  </tr>
+</table>
+
 <?php if(count($this->listaPublicaciones) > 0){ ?>
 	<?php foreach ($this->listaPublicaciones as $publicacion){?>
 			<div id="publicacion<?php echo $publicacion->getId();?>">
 				<table>
-					<caption class="label label-success">Categoría:  <?php echo $objTipPublicacion->obtenerPorId($publicacion->getTipoId())->getNombre();?></caption>
+					<caption class="label label-success">Categoría:  <?php echo $objTipPublicacion->obtenerPorId($publicacion->getTipoId())->getNombre();?>  </caption>
 					<tr>
 						<td rowspan="3" valign="top">
 							<div style='width: 100px;'>
@@ -19,27 +31,37 @@
          					</div>
 						</td>
 						<td>
-							<h5 class="cont2"><?php echo $publicacion->getTexto();?></h5>
+							<h3 style="width: 800px;"><?php echo $publicacion->getTexto();?></h3>
 							<input type="hidden" id="hdnTextoPublicacion<?php echo $publicacion->getId();?>" value="<?php echo $publicacion->getTexto();?>">
+							
 							
 							<!-- aquí se muestra la información de la publicación según... el tipo de publicación -->
 							<?php 
-							if($publicacion->getTipoId() == 1){ ?>
-							<?php } ?>
-							
-							<?php
-							if($publicacion->getTipoId() == 2){ ?>
+							if($publicacion->getTipoId() == 1)
+							{?>
+							    txt
+							<?php 
+							}elseif($publicacion->getTipoId() == 2){ ?>
 								<div style='width: 200px;'>
 									<a class="thumbnail">
 		      							<img src="<?php echo $this->baseUrl()?>/imagenes/fotos/<?php echo $publicacion->getFoto();?>" onclick="verFoto('<?php echo $publicacion->getTexto();?>','<?php echo $publicacion->getFoto();?>')">
 	         						</a>
          						</div>    
-							<?php } ?>
-							
-							<?php if($publicacion->getTipoId() == 3){ ?>
-									<iframe class="youtube-player" width="320" height="190" src="http://www.youtube.com/embed/deY8DZHBkeM">
-									</iframe>
-							<?php } ?>
+							<?php 
+							}elseif($publicacion->getTipoId() == 3){ ?>
+								video    
+							<?php 
+							}elseif($publicacion->getTipoId() == 4){ ?>
+								eve    
+							<?php 
+							}elseif($publicacion->getTipoId() == 5){ ?>
+								grp    
+							<?php 
+							}elseif($publicacion->getTipoId() == 6){ ?>
+								ofe    
+							<?php 
+							} 
+							?>
 						</td>
 					</tr>
 					<tr>
@@ -64,13 +86,13 @@
 								    			<td valign="top">
 								    				<?php $objUsuario = $objUsuarioDao->obtenerPorId($comentario->getUsuarioId());?>
 								    				<div style='width: 50px;'>
-														<a class="thumbnail" href="/muro/muro-contacto/id/<?php echo $objUsuario->getId();?>">
+														<a class="thumbnail"href="/muro/muro-contacto/id/<?php echo $objUsuario->getId();?>">
 							      							<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $objUsuario->getFoto();?>"></a>
 						         					</div>
 								    			</td>
 								    			<td valign="top">
 								    				<p class="label"><?php echo $objUsuario->getNombre(); ?></p>
-								    				<div class="cont"><p><?php echo $comentario->getTexto();?></p></div>
+								    				<div class="span6"><p><?php echo $comentario->getTexto();?></p></div>
 								    				<p><?php echo $comentario->getFecha();?></p>
 								    			</td>
 								    		</tr>
@@ -119,7 +141,6 @@
 	<?php $objUsuarioDao = null; ?>
 	<?php $objComentarioDao = null; ?>
   	<?php } ?>
-  	
 <?php } else{ ?>
 			<h4>No se han encontrado publicaciones</h4>
 <?php }?>
@@ -144,8 +165,6 @@
   	    </div>
     </div>
 </div>	
-
-
 
 <script type="text/javascript">
 	function closeModalPost()
@@ -290,10 +309,9 @@
 					    success: function(requestData){  
 					               //selectDestino.html(requestData);
 				               		result = requestData;
-
-					               	document.getElementById("divComentariosPublicacion" + idPublicacion).innerHTML = result;
+				               		document.getElementById("divComentariosPublicacion" + idPublicacion).innerHTML = result;
 				               		document.getElementById("txtComentario" + idPublicacion).value = "";
-					               	document.getElementById(divLoader).innerHTML = "";
+				               		document.getElementById(divLoader).innerHTML = "";
 					    },  
 					    error: function(requestData, strError, strTipoError){          
 					    }
@@ -313,37 +331,9 @@
 		html = html + "</div>";    
 			
 		document.getElementById("divModalGenerico").innerHTML = html;
-		document.getElementById("divModalGenericoTitulo").innerHTML = "<div class='cont'>" + titulo + "</div>";
+		document.getElementById("divModalGenericoTitulo").innerHTML = titulo;
 		
 		
 		$('#myModalGenerico').modal('show');
-	}
-
-
-	function setPaginator(paginator){
-
-		if(paginator != '') {
-			//selectDestino = $('#' + divLoader);
-				$.ajax(
-						{
-						async: true,
-						type: 'POST',
-						url: '<?php echo $this->baseUrl()?>/muro/set-paginator',
-						data: 'paginator=' + paginator,	
-						dataTypeString: 'text',
-						
-						beforeSend: function(data){
-			                //selectDestino.html('<img src="/imagenes/proyecto/ajax-loader-bar.gif">');
-					    },  
-					    success: function(requestData){  
-					               //selectDestino.html(requestData);
-				               		alert(requestData);
-					    },  
-					    error: function(requestData, strError, strTipoError){          
-					    }
-					    
-						});
-		}
-		
 	}
 </script>
