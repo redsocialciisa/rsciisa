@@ -14,7 +14,7 @@ class IndexController extends Zend_Controller_Action
         }*/
         
     }
-
+    
     public function indexAction()
     {
         /*$aut = Zend_Auth::getInstance();

@@ -6,7 +6,11 @@
 <table>
 	<tr style="background-color:  #46a546">
 		<td align="right">
-			<h1 class="span10"><?php echo $objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getNombre();?></h1>
+		
+			<div style="width: 800px;">
+				<h1><?php echo $objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getNombre();?></h1>
+			</div>
+		
 			<img width="50px" src="<?php echo $this->baseUrl()?>/imagenes/minicaras/<?php echo $objEmocionDao->obtenerPorId($this->Contacto->getEmocionId())->getFoto();?>">
 		</td>
 		<td align="right">
@@ -17,19 +21,7 @@
 	</tr>
 </table>
 
-<table>
-  <tr>
-    <td><?php echo $this->listaPublicaciones;?></td>
-    <td title="Página"><span class="badge badge-important">
-    		<?php if ($this->paginaActual == null){
-    			echo "1";
-    		}
-    			echo $this->paginaActual;
-    		?>
-    </span></td>
-  </tr>
-</table>
-
+<?php echo $this->listaPublicaciones;?>
 	<?php if(count($this->listaPublicaciones) > 0){ ?>
 				<?php foreach ($this->listaPublicaciones as $publicacion){?>
 						<div id="publicacion<?php echo $publicacion->getId();?>">
@@ -44,37 +36,28 @@
 			         					</div>
 									</td>
 									<td>
-										<h3 class="span10"><?php echo $publicacion->getTexto();?></h3>
+										<h5 class="cont2"><?php echo $publicacion->getTexto();?></h5>
 										<input type="hidden" id="hdnTextoPublicacion<?php echo $publicacion->getId();?>" value="<?php echo $publicacion->getTexto();?>">
 										
 										
-										<!-- aquí se muestra la información de la publicación según... el tipo de publicación -->
-										<?php 
-										if($publicacion->getTipoId() == 1)
-										{?>
-										    txt
-										<?php 
-										}elseif($publicacion->getTipoId() == 2){ ?>
-											<div style='width: 200px;'>
-												<a class="thumbnail">
-					      							<img src="<?php echo $this->baseUrl()?>/imagenes/fotos/<?php echo $publicacion->getFoto();?>" onclick="verFoto('<?php echo $publicacion->getTexto();?>','<?php echo $publicacion->getFoto();?>')">
-				         						</a>
-			         						</div>    
-										<?php 
-										}elseif($publicacion->getTipoId() == 3){ ?>
-											video    
-										<?php 
-										}elseif($publicacion->getTipoId() == 4){ ?>
-											eve    
-										<?php 
-										}elseif($publicacion->getTipoId() == 5){ ?>
-											grp    
-										<?php 
-										}elseif($publicacion->getTipoId() == 6){ ?>
-											ofe    
-										<?php 
-										} 
-										?>
+											<!-- aquí se muestra la información de la publicación según... el tipo de publicación -->
+											<?php 
+											if($publicacion->getTipoId() == 1){ ?>
+											<?php } ?>
+											
+											<?php
+											if($publicacion->getTipoId() == 2){ ?>
+												<div style='width: 200px;'>
+													<a class="thumbnail">
+						      							<img src="<?php echo $this->baseUrl()?>/imagenes/fotos/<?php echo $publicacion->getFoto();?>" onclick="verFoto('<?php echo $publicacion->getTexto();?>','<?php echo $publicacion->getFoto();?>')">
+					         						</a>
+				         						</div>    
+											<?php } ?>
+											
+											<?php if($publicacion->getTipoId() == 3){ ?>
+													<iframe class="youtube-player" width="320" height="190" src="http://www.youtube.com/embed/<?php echo $publicacion->getVideo();?>">
+													</iframe>
+											<?php } ?>
 									</td>
 								</tr>
 								<tr>
@@ -105,7 +88,7 @@
 											    			</td>
 											    			<td valign="top">
 											    				<p class="label"><?php echo $objUsuario->getNombre(); ?></p>
-											    				<div class="span10"><p><?php echo $comentario->getTexto();?></p></div>
+											    				<div class="cont"><p><?php echo $comentario->getTexto();?></p></div>
 											    				<p><?php echo $comentario->getFecha();?></p>
 											    			</td>
 											    		</tr>

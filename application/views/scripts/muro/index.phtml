@@ -37,7 +37,7 @@
 							<?php } ?>
 							
 							<?php if($publicacion->getTipoId() == 3){ ?>
-									<iframe class="youtube-player" width="320" height="190" src="http://www.youtube.com/embed/deY8DZHBkeM">
+									<iframe class="youtube-player" width="320" height="190" src="http://www.youtube.com/embed/<?php echo $publicacion->getVideo();?>">
 									</iframe>
 							<?php } ?>
 						</td>
