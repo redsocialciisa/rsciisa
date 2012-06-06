@@ -36,7 +36,7 @@ class Application_Form_FormPerfil extends Zend_Form
         		->setAttrib('readonly', true);
         
         $perfilciisa = new Zend_Form_Element_Text('txtPerfil');
-        $perfilciisa->setLabel('Perfil Ciisa: ')
+        $perfilciisa->setLabel('Perfil CIISA: ')
         			->setValue($aut->getIdentity()->perfil_ciisa)
         			->setAttrib('readonly', true);
         

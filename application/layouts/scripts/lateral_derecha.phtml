@@ -131,7 +131,7 @@ if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,3) 
 			<div class="span3 well">
 			<table>
 			  <tr>
-			    <th>Linked In</th>
+			    <th class="label label-info">Linked In</th>
 			  </tr>
 				<tr>
 					<td colspan="2">
@@ -197,7 +197,9 @@ if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,3) 
 				<table border="2">
 					  <tr style="background-color: #81BEF7">
 					  	<td style="width: 200px;">
+					  		<div class="cont0">
 					  			<?php echo $tweet['text'];?>
+					  		</div>
 					  	</td>
 					  </tr>
 					  <tr>
