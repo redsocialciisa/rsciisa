@@ -40,8 +40,12 @@
 			    patron =/[A-Za-zñÑ\s]/; // 4
 			    te = String.fromCharCode(tecla); // 5
 			    return patron.test(te); // 6
+			}
+
+			function trim(cad)
+			{
+				return cad.replace(/^s+|s+$/g,"");
 			} 
-			
 		</script>
 	
 </head>

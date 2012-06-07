@@ -52,13 +52,13 @@ class Application_Form_FormPublicacion extends Zend_Form
         		'1' => 'Texto',
         ))
         ->setAttrib('onclick', 'desabilitarFotoVideo()')
-        ->setAttrib('checked',true)
         ->setAttrib('name', 'grpTipo');
         
         $tipoFoto = new Zend_Form_Element_Radio('optFoto');
         $tipoFoto->addMultiOptions(array(
         		'2' => 'Foto',
         ))
+        ->setAttrib('checked',true)
         ->setAttrib('onclick', 'desabilitarVideo()')
         ->setAttrib('name', 'grpTipo');
         
@@ -69,13 +69,15 @@ class Application_Form_FormPublicacion extends Zend_Form
         ->setAttrib('onclick', 'desabilitarFoto()')
         ->setAttrib('name', 'grpTipo');
         
-        $nombre = new Zend_Form_Element_Textarea('txtTexto');
+        /*
+        $nombre = new Zend_Form_Element_Textarea('txtTextoPublicacion');
         $nombre->setRequired(true)
         	   ->setValue('')
         	   ->setAttrib('rows', 4)
         	   ->setAttrib('class', 'span4')
         	   ->clearErrorMessages()
-               ->addErrorMessage('Escribe algo...');
+        	   ->setName('txtTextoPublicacion')
+               ->addErrorMessage('Escribe algo...'); */
         
         $fileFoto = new Zend_Form_Element_File('fileFoto');
         $fileFoto->addValidator('IsImage')
@@ -109,7 +111,7 @@ class Application_Form_FormPublicacion extends Zend_Form
         $this->addElement($tipoTexto);
         $this->addElement($tipoFoto);
         $this->addElement($tipoVideo);
-        $this->addElement($nombre);
+        //$this->addElement($nombre);
         $this->addElement($fileFoto);
         $this->addElement($txtVideo);
         $this->addElement($cbxAlumno);

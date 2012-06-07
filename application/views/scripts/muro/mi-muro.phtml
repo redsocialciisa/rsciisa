@@ -178,54 +178,64 @@
 <div class="<?php echo $flagModal;?>" id="myModalPublicacion" style="width: 700px;">
     <div class="modal-header">
     <button class="close" onclick="closeModalPublicacion()" data-dismiss="modal">×</button>
-			Nueva Publicacion !!    
+			Publicación
     </div>
     <div class="modal-body">
 		
 <form action="<?php echo $this->formPublicacion->getAction();?>" 
-	  name="<?php echo $this->formPublicacion->getName();?>" 
+	  name="<?php echo $this->formPublicacion->getName();?>"
+	  id="formPublicacion"  
 	  method="<?php echo $this->formPublicacion->getMethod();?>"
 	  enctype="<?php echo $this->formPublicacion->getEnctype(); ?>">
 	  
 	  
 	  <?php echo $this->xxx;?>
 	  
-	<table>
+	<table align="center">
 			<tr>
 				<td></td>
-				<td><?php echo $this->formPublicacion->optTexto;?></td>
 				<td><?php echo $this->formPublicacion->optFoto;?></td>
+				<td><?php echo $this->formPublicacion->optTexto;?></td>
 				<td><?php echo $this->formPublicacion->optVideo;?></td>
 			</tr>
 			<tr>
-				<td colspan="4"><h5>Publicación</h5></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td colspan="4"><?php echo $this->formPublicacion->txtTexto;?></td>
+				<td colspan="4"><h5>Publicación:</h5></td>
 			</tr>
 			<tr>
 				<td colspan="4">
-					<div id="divFoto" style="display: none;">
-						<table>
-							<tr>
-								<td>Imagen:</td>
-								<td><?php echo $this->formPublicacion->fileFoto;?></td>
-							</tr>
-						</table>
+					<textarea rows="3" id="txtTextoPublicacion" name="txtTextoPublicacion" class="span4"></textarea>
+					<div id="divErrorTexto"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="4">
+					<div id="divFoto" style="display: block;">
+							<table>
+								<tr>
+									<td>
+										Imagen: 
+									</td>
+									<td>
+										<?php echo $this->formPublicacion->fileFoto;?>
+										<div id="divErrorSinFoto"></div>
+									</td>
+								</tr>
+							</table>
 					</div>
 				</td>
 			</tr>
+			
 			<tr>
 				<td colspan="4">
 					<div id="divVideo" style="display: none;">
 						<table>
 							<tr>
 								<td>
-									Url Youtube:
+									ID video Youtube:
 								</td>
 								<td><?php echo $this->formPublicacion->txtVideo;?>
 									<div id="divErrorVideo"></div>
+									<input type="hidden" value="" id="hdnFlagErrorVideo" name="hdnFlagErrorVideo">
 								</td>
 							</tr>
 						</table>
@@ -240,11 +250,18 @@
 			<tr>
 				<td></td>
 				<td>Alumnos<?php echo $this->formPublicacion->cbxAlumno;?></td>
-				<td>Profesor<?php echo $this->formPublicacion->cbxProfesor;?></td>
-				<td>Academico<?php echo $this->formPublicacion->cbxAcademico;?></td>
+				<td>Profesores<?php echo $this->formPublicacion->cbxProfesor;?></td>
+				<td>Academicos<?php echo $this->formPublicacion->cbxAcademico;?></td>
 			</tr>
 			<tr>
-				<td colspan="3"><?php echo $this->formPublicacion->btnCrearPublicacion;?></td>
+				<td colspan="4">
+					<div id="divErrorPrivacidadPublicacion"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<input type="button" value="Publicar" id="btnCrearPublicacion" name="btnCrearPublicacion" onClick="validarFormPublicacion()">
+				</td>
 			</tr>
 		</table>
 </form>
@@ -256,6 +273,78 @@
 </div>	
 
 <script type="text/javascript">
+
+	function validarFormPublicacion()
+	{
+
+		if(document.getElementById("cbxAlumno").checked == false && document.getElementById("cbxProfesor").checked == false && document.getElementById("cbxAcademico").checked == false)
+		{
+			document.getElementById("divErrorPrivacidadPublicacion").innerHTML = "<ul type='square'><li> Debes seleccionar al menos una privacidad de publicación.... </ul>";
+			return;
+		}  
+		
+		//si tiene seleccionado foto
+		if(document.getElementsByName("grpTipo")[0].checked == true)
+		{
+			if(document.getElementById("txtTextoPublicacion").value == "")
+			{
+				document.getElementById("divErrorTexto").innerHTML =  "<ul type='square'><li> Escribe algo aquí... </ul>";
+				return;
+			}else{
+				document.getElementById("divErrorTexto").innerHTML = "";
+			}
+
+			if(document.getElementById("fileFoto").value == "")
+			{
+				document.getElementById("divErrorSinFoto").innerHTML =  "<ul type='square'><li> Tienes que subir una foto... recuerda menor a 2 MB.. </ul>";
+				return;
+			}else{
+				document.getElementById("divErrorSinFoto").innerHTML = "";
+			}
+		}
+
+		//si tiene seleccionado texto
+		if(document.getElementsByName("grpTipo")[1].checked == true)
+		{
+			if(document.getElementById("txtTextoPublicacion").value == "")
+			{
+				document.getElementById("divErrorTexto").innerHTML =  "<ul type='square'><li> Escribe algo aquí... </ul>";
+				return;
+			}else{
+				document.getElementById("divErrorTexto").innerHTML = "";
+			}
+		}
+
+		//si tiene seleccionado video
+		if(document.getElementsByName("grpTipo")[2].checked == true)
+		{
+			if(document.getElementById("txtTextoPublicacion").value == "")
+			{
+				document.getElementById("divErrorTexto").innerHTML =  "<ul type='square'><li> Escribe algo aquí... </ul>";
+				return;
+			}else{
+				document.getElementById("divErrorTexto").innerHTML = "";
+			}
+			
+			if(document.getElementById("txtVideo").value == "")
+			{
+				document.getElementById("divErrorVideo").innerHTML =  "<ul type='square'><li> Debes ingresar el ID de un video YouTube </ul>";
+				return;
+			}
+
+			if(document.getElementById("hdnFlagErrorVideo").value == "error")
+			{
+				document.getElementById("divErrorVideo").innerHTML =  "<ul type='square'><li> El ID de YouTube no existe... </ul>";
+				return;
+			}else{
+				document.getElementById("divErrorVideo").innerHTML = "";
+				document.getElementById("hdnFlagErrorVideo").value = "";
+			}
+			
+		}
+		
+		document.getElementById("formPublicacion").submit();
+	}
 
 	function textCounter(textarea, counterID) {
 		
@@ -274,18 +363,22 @@
 	{
 		document.getElementById("divFoto").style.display = "none";
 		document.getElementById("divVideo").style.display = "none";
+		document.getElementById("fileFoto").value = "";
+		document.getElementById("txtVideo").value = "";
 	}
 
 	function desabilitarFoto()
 	{
 		document.getElementById("divFoto").style.display = "none";
 		document.getElementById("divVideo").style.display = "block";
+		document.getElementById("fileFoto").value = "";
 	}
 
 	function desabilitarVideo()
 	{
 		document.getElementById("divVideo").style.display = "none";
 		document.getElementById("divFoto").style.display = "block";
+		document.getElementById("txtVideo").value = "";
 	}
 
 	function ValidaUrlYouTube(youTubeID)
@@ -307,10 +400,11 @@
 				               		var result = requestData;
 							    	if(result == "error")
 							    	{
-								    	document.getElementById("divErrorVideo").innerHTML =  "<b class='label label-important'>El ID de Youtube no existe :( </b>";
-									    	
+								    	document.getElementById("divErrorVideo").innerHTML =  "<ul type='square'><li>El ID de Youtube no existe :( </ul>";
+								    	document.getElementById("hdnFlagErrorVideo").value = "error";
 							    	}else{
 							    		document.getElementById("divErrorVideo").innerHTML = "";
+							    		document.getElementById("hdnFlagErrorVideo").value = "";
 							    	}
 					    },  
 					    error: function(requestData, strError, strTipoError){          

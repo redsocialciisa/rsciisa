@@ -170,7 +170,7 @@ class MuroController extends Zend_Controller_Action
         		
         		$objPublicacion->setUsuarioId($aut->getIdentity()->usu_id);
         		$objPublicacion->setUsuarioPara($aut->getIdentity()->usu_id);
-        		$objPublicacion->setTexto($this->getRequest()->getParam('txtTexto'));
+        		$objPublicacion->setTexto($this->getRequest()->getParam('txtTextoPublicacion'));
         		$objPublicacion->setTipoId($this->getRequest()->getParam('grpTipo'));
         		$objPublicacion->setPrivacidadId($tipoPrivacidad);
         		$objPublicacion->setVideo($this->getRequest()->getParam('txtVideo'));

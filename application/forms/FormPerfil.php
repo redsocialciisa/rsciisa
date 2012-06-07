@@ -31,10 +31,6 @@ class Application_Form_FormPerfil extends Zend_Form
                 ->setAttrib('class', 'span4')
       		    ->setAttrib('readonly', true);        
         
-        $jornada = new Zend_Form_Element_Text('txtJornada');
-        $jornada->setLabel('Jornada: ')
-        		->setAttrib('readonly', true);
-        
         $perfilciisa = new Zend_Form_Element_Text('txtPerfil');
         $perfilciisa->setLabel('Perfil CIISA: ')
         			->setValue($aut->getIdentity()->perfil_ciisa)
@@ -69,7 +65,6 @@ class Application_Form_FormPerfil extends Zend_Form
         $this->addElement($fileFoto);
         $this->addElement($nombre);
         $this->addElement($carrera);
-        $this->addElement($jornada);
         $this->addElement($perfilciisa);
         $this->addElement($fecha);
         $this->addElement($correo);
