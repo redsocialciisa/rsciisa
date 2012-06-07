@@ -131,6 +131,9 @@ class IntegracionController extends Zend_Controller_Action
         		$force  = isset($_REQUEST['force']) ? '&force_login=1' : '';
         		$authurl = $tmhOAuth->url("oauth/{$method}", '') .  "?oauth_token={$_SESSION['oauth']['oauth_token']}{$force}";
         		echo '<p>Para completar la integracion ingrese a la siguiente URL: <a href="'. $authurl . '">' . $authurl . '</a></p>';
+        		echo '<FORM METHOD="LINK" ACTION="'. $authurl . '">
+ 						<INPUT TYPE="submit" VALUE="Integrar">
+ 					</FORM>';
         	} else {
         		outputError($tmhOAuth);
         	}
