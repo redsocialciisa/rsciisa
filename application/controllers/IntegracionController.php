@@ -56,8 +56,8 @@ class IntegracionController extends Zend_Controller_Action
         
         $now   = new DateTime;
         $tmhOAuth = new tmhOAuth(array(
-        		'consumer_key'    => '4m5dr19FvCwe534XDQ92fw',
-        		'consumer_secret' => 'dobuyMsMLs8kTzSl5YDoYv9O9UZlEN1MBSGBKst9hE', ));
+        		'consumer_key'    => 'NZNFpwarV1FCbT0EV1hNQ',
+        		'consumer_secret' => 'nWfUFp5pjZLRHYHifLLEAupe5qijFHfgDA60Z4NGo', ));
         
         $here = tmhUtilities::php_self();
         $_REQUEST['authenticate'] = 'authenticate';
