@@ -14,7 +14,12 @@
 		<style type="text/css">
 			textarea {
 				resize:none;
-			} 
+			}
+
+			.cont0 {
+				width: 150px;
+				word-wrap: break-word; 
+			}
 			
 			.cont {
 				width: 600px;
@@ -36,16 +41,7 @@
 			    te = String.fromCharCode(tecla); // 5
 			    return patron.test(te); // 6
 			} 
-
-			function closeModalGrupo()
-			{
-				$('#myModalGrupo').modal();
-			}
-
-			function openModalGrupo()
-			{
-				$('#myModalGrupo').modal('show');
-			}
+			
 		</script>
 	
 </head>
@@ -60,7 +56,7 @@
 
 <div class="navbar navbar-fixed-top" data-dropdown="dropdown">
 	<div class="navbar-inner">
-    	<div class="contacloseModalGrupoiner">
+    	<div class="container">
     		<a class="brand" href="#">IPCIISA</a>
     	    <div class="nav-collapse">
     	    
@@ -131,20 +127,6 @@
     </div>
     <div class="modal-footer">
   	    <a href="#" onclick="closeModalGenerico()" class="btn btn-success" data-dismiss="modal">Aceptar</a>
-    </div>
-</div>	
-
-<div class="modal hide" id="myModalGrupo" style="width: 700px;">
-    <div class="modal-header">
-    <button class="close" onclick="closeModalGrupo()" data-dismiss="modal">×</button>
-    		<h3>Crear Grupo</h3>
-    </div>
-    <div class="modal-body">
-			
-    </div>
-    <div class="modal-footer">
-  	    <a href="#" onclick="openModalGrupo()" class="btn btn-success" data-dismiss="modal">Aceptar</a>
-  	    <a href="#" onclick="closeModalGrupo()" class="btn btn-success" data-dismiss="modal">Cancelar</a>
     </div>
 </div>	
 

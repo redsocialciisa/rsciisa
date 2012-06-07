@@ -48,20 +48,27 @@ class Application_Model_PublicacionDao
     	$usu_id_in = "";
     	$listaAmigos = $objAmigo->obtenerTodosPorUsuarioId($aut->getIdentity()->usu_id);
     	$i = 1;
-    	foreach ($listaAmigos as $amigo)
-    	{
-    	    if($i != count($listaAmigos))
-    	    {
-    	    	$usu_id_in .= $amigo->getAmigoUsuarioId().",";
-    	    }else{
-    	        $usu_id_in .= $amigo->getAmigoUsuarioId();
-    	    }
-    	    $i = $i + 1;
+    	
+    	if(count($listaAmigos) > 0){
+	    	foreach ($listaAmigos as $amigo)
+	    	{
+	    	    if($i != count($listaAmigos))
+	    	    {
+	    	    	$usu_id_in .= $amigo->getAmigoUsuarioId().",";
+	    	    }else{
+	    	        $usu_id_in .= $amigo->getAmigoUsuarioId();
+	    	    }
+	    	    $i = $i + 1;
+	    	}
     	}
     	//note: la variable $usu_id_in se genera de la siguiente forma = 2,3,5,3
     	//ademas de obtener las publicaciones de mis amigos... debo agragar mis publicaciones al muro, agregamos nuestro ID también.
     	
-    	$where = 'usu_id IN ('.$aut->getIdentity()->usu_id.','.$usu_id_in.') AND ';
+    	if(count($listaAmigos) > 0){
+    		$where = 'usu_id IN ('.$aut->getIdentity()->usu_id.','.$usu_id_in.') AND ';
+    	}else{
+    	    $where = 'usu_id IN ('.$aut->getIdentity()->usu_id.') AND ';
+    	}
     	
     	//con el perfil ciisa ej: 'alumno',profesor' etc... se obtiene el perfil que el usuario tiene en nuestra red social.
     	$objPerfilRsc = $objPerfilCiisaDao->obtenerPorPerfilCiisa($perfilCiisa);
@@ -108,21 +115,8 @@ class Application_Model_PublicacionDao
         $objPerfilRsc = $objPerfilCiisaDao->obtenerPorPerfilCiisa($perfilCiisa);
         
         $where = "";
-    	      
-        switch ($objPerfilRsc->getPerfil()) {
-        	case 1:
-        		//$where .= 'pri_pub_id IN (1,4,5,7)';
-        		break;
-        	case 2:
-        		//$where .= 'pri_pub_id IN (2,4,6,7)';
-        		break;
-        	case 3:
-        		//$where .= 'pri_pub_id IN (3,5,6,7)';
-        		break;
-        }
-        
-    	//$where .= ' AND usu_id_para ='.$aut->getIdentity()->usu_id;
-    	$where .= 'usu_id_para ='.$aut->getIdentity()->usu_id;
+    	$where .= 'usu_id_para ='.$aut->getIdentity()->usu_id.' AND ';
+    	$where .= 'tip_pub_id IN (1,2,3)';
     	
     	$order = 'pub_fecha desc';
     	$resultado = $this->_table->fetchAll($where,$order);
@@ -166,7 +160,8 @@ class Application_Model_PublicacionDao
     			break;
     	}
     
-    	$where .= ' AND usu_id_para ='.$usu_id_para;
+    	$where .= ' AND usu_id_para ='.$usu_id_para.' AND ';
+    	$where .= 'tip_pub_id IN (1,2,3)';
     	 
     	$order = 'pub_fecha desc';
     	$resultado = $this->_table->fetchAll($where,$order);
