@@ -140,6 +140,57 @@ class AuthController extends Zend_Controller_Action
         	$aut->getIdentity()->perfil_ciisa = $objCiisa->obtenerPerfil($usuario);
         	$aut->getIdentity()->carrera = $objCiisa->obtenerCarrera($usuario);
         	
+        	//lol
+        	//$objUsuario->getId()
+        	
+        	$objIntegracion = new Application_Model_Integracion();
+        	$objIntegracionDao = new Application_Model_IntegracionDao();
+        	if ($objIntegracionDao->obtenerLlavesIntegracion($objUsuario->getId(),3) != null)
+        	{
+        		define("API_CONSUMER_KEY", "qolg75ipkngf");
+        		define("API_CONSUMER_SECRET", "LNITIz9Vd9hdw7uW");
+        		require 'linkedin/helpers.php';
+        		$oauth = new OAuth(API_CONSUMER_KEY, API_CONSUMER_SECRET);
+        		$objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,3);
+        		$oauth->setToken($objIntegracion->getToken(),$objIntegracion->getSecret());
+        		$api_url = "http://api.linkedin.com/v1/people/~:(first-name,last-name,headline,picture-url,public-profile-url)";
+        		$oauth->fetch($api_url, array(), OAUTH_HTTP_METHOD_GET, array('x-li-format' => 'json'));
+        		$profile = json_decode($oauth->getLastResponse());
+        		
+        		$aut->getIdentity()->linkedinNombre = $profile->firstName;
+        		$aut->getIdentity()->linkedinApellido = $profile->lastName;
+        		$aut->getIdentity()->linkedinEmpleo = $profile->headline;
+        		$aut->getIdentity()->linkedinFoto = $profile->pictureUrl;
+        		$aut->getIdentity()->linkedinPerfil = $profile->publicProfileUrl;
+        		
+        		$oauth = null;
+        		$objIntegracion = null;
+        		$profile = null;
+        	}
+        	
+        	if ($objIntegracionDao->obtenerLlavesIntegracion($objUsuario->getId(),1) != null)
+        	{
+        		require("Facebook/facebook.php");
+        		$facebook = new Facebook(array(
+        				'appId'  => '124399157694592',
+        				'secret' => '8c0658db1a7873a56c3551a2ee13464b',
+        		));
+        		$objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,1);
+        		$facebook->setAccessToken($objIntegracion->getToken());
+        		$user = $facebook->getUser();
+        		$user_profile = $facebook->api('/me','GET');
+        		$fields = $facebook->api('/me', array('fields'=>'picture'));
+        		
+        		$aut->getIdentity()->facebookNombre = $user_profile['name'];
+        		$aut->getIdentity()->facebookFoto = $fields['picture'];
+        		$aut->getIdentity()->facebookLink = $user_profile['link'];
+        		
+        		$facebook = null;
+        		$objIntegracion = null;
+        		$user_profile = null;
+        		$fields = null;
+        	}
+        	
         	//IMPRIMIR UN DATO
         	//$aut = Zend_Auth::getInstance();
         	//echo $aut->getIdentity()->usu_id; exit;

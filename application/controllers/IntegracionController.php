@@ -130,10 +130,9 @@ class IntegracionController extends Zend_Controller_Action
         		$method = isset($_REQUEST['authenticate']) ? 'authenticate' : 'authorize';
         		$force  = isset($_REQUEST['force']) ? '&force_login=1' : '';
         		$authurl = $tmhOAuth->url("oauth/{$method}", '') .  "?oauth_token={$_SESSION['oauth']['oauth_token']}{$force}";
-        		echo '<p>Para completar la integracion ingrese a la siguiente URL: <a href="'. $authurl . '">' . $authurl . '</a></p>';
-        		echo '<FORM METHOD="LINK" ACTION="'. $authurl . '">
- 						<INPUT TYPE="submit" VALUE="Integrar">
- 					</FORM>';
+        		echo '<p>Para completar la integracion precione el siguiente boton</p>';
+        		$link = "'".$authurl."'";
+        		echo '<input type=button onClick="parent.location='.$link.'" value="Integrar con Twitter">';
         	} else {
         		outputError($tmhOAuth);
         	}

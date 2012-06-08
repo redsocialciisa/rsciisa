@@ -30,19 +30,6 @@ if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,2) 
     
 }
 
-if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,3) != null)
-{
-    define("API_CONSUMER_KEY", "qolg75ipkngf");
-    define("API_CONSUMER_SECRET", "LNITIz9Vd9hdw7uW");
-    require 'linkedin/helpers.php';
-    $oauth = new OAuth(API_CONSUMER_KEY, API_CONSUMER_SECRET);
-    $objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,3);
-    $oauth->setToken($objIntegracion->getToken(),$objIntegracion->getSecret());
-    $api_url = "http://api.linkedin.com/v1/people/~:(first-name,last-name,headline,picture-url,public-profile-url)";
-    $oauth->fetch($api_url, array(), OAUTH_HTTP_METHOD_GET, array('x-li-format' => 'json'));
-    $profile = json_decode($oauth->getLastResponse());
-}
-
 ?>
 <?php
 	//session aut
@@ -135,20 +122,20 @@ if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,3) 
 			  </tr>
 				<tr>
 					<td colspan="2">
-						<?php echo $profile->firstName." ".$profile->lastName;?> 
+						<?php echo $aut->getIdentity()->linkedinNombre." ".$aut->getIdentity()->linkedinApellido; ?>
 					</td>
 				</tr>
 				<tr>
 					<td colspan="2">
-						<?php echo $profile->headline;?>
+						<?php echo $aut->getIdentity()->linkedinEmpleo;?>
 					</td>
 				</tr>
 				<tr>
 					<td>
-						<img src="<?php echo $profile->pictureUrl; ?>">
+						<img src="<?php echo $aut->getIdentity()->linkedinFoto; ?>">
 					</td>
 					<td>
-						<a href="<?php echo $profile->publicProfileUrl;?>" class="btn">Ver Perfil</a>
+						<a href="<?php echo $aut->getIdentity()->linkedinPerfil;?>" class="btn">Ver Perfil</a>
 					</td>
 				</tr>
 			
@@ -219,9 +206,29 @@ if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,3) 
 					echo "</table></div>";
 					}
 					?>
-			
-		
-		
+					
+	<?php if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,1) != null) {?>
+	<div class="span3 well">
+				<table>
+				  	<caption class="label label-info">Facebook</caption>
+					<tr>
+						<td colspan="2">
+							<?php echo $aut->getIdentity()->facebookNombre;?>
+						</td>
+					</tr>
+				  	<tr>
+					<td>
+						<img src="<?php echo $aut->getIdentity()->facebookFoto; ?>">
+					</td>
+					<td>
+						<a href="<?php echo $aut->getIdentity()->facebookLink;?>" class="btn">Ver Perfil</a>
+					</td>
+				</tr>
+				  
+				</table>
+	</div> 				
+	<?php }?>				
+					
 </div>
 
 
