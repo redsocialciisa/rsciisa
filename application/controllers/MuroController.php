@@ -78,9 +78,9 @@ class MuroController extends Zend_Controller_Action
                 
                 if($idCom == $comentario->getId())
                 {                
-                	$htmlComentarios .= "<p class='label label-warning'>".$objUsuario->getNombre()."</p>";
+                	$htmlComentarios .= "<p class='label label-info span4'>".$objUsuario->getNombre()."</p>";
                 }else{
-                    $htmlComentarios .= "<p class='label'>".$objUsuario->getNombre()."</p>";
+                    $htmlComentarios .= "<p class='label span4'>".$objUsuario->getNombre()."</p>";
                 }
                     
 				$htmlComentarios .= "<div class='cont'><p>".$comentario->getTexto()."</p></div>";
@@ -176,15 +176,20 @@ class MuroController extends Zend_Controller_Action
         		$objPublicacion->setVideo($this->getRequest()->getParam('txtVideo'));
         		
         		$fecha = new DateTime();
-				//$fecha->format('Y-m-d H:i:s');  
         		$objPublicacion->setFecha($fecha->format('Y-m-d H:i:s'));
+        		
+        		$fecha = new DateTime();
+        		$fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
         		
         		if(isset($_FILES['fileFoto']['name']) && $_FILES['fileFoto']['name'] != "")
         		{
+        		    $fecha = new DateTime();
+        		    $fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
+        		    
 	        		$foto_name = $_FILES['fileFoto']['name'];
-	        		$objPublicacion->setFoto($foto_name);
+	        		$objPublicacion->setFoto($fechahora."_".$foto_name);
 	        		$foto_tmp 	= $_FILES['fileFoto']['tmp_name'];
-	        		copy($foto_tmp, "/var/www/rsciisa/public/imagenes/fotos/".$foto_name);
+	        		copy($foto_tmp, "/var/www/rsciisa/public/imagenes/fotos/".$fechahora."_".$foto_name);
         		}
         		
         		$objPublicacionDao->guardar($objPublicacion);

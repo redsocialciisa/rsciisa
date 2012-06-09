@@ -13,7 +13,7 @@ class Application_Form_FormPublicacion extends Zend_Form
         $pro = false;
         $aca = false;
         
-        switch ($aut->getIdentity()->pri_pub_id) {
+        switch ($objUsuario->getPrivacidadPublicacionId()) {
         	case 1:
         		$alu = true;
         	break;
@@ -87,7 +87,7 @@ class Application_Form_FormPublicacion extends Zend_Form
        
         $txtVideo = new Zend_Form_Element_Text('txtVideo');
         $txtVideo->setValue('')
-        		 ->setAttrib('onblur','ValidaUrlYouTube(this.value)')
+        		 //->setAttrib('onblur','ValidaUrlYouTube(this.value)')
 		         ->setAttrib('class', 'span4');
         
         $cbxAlumno = new Zend_Form_Element_Checkbox('cbxAlumno');
@@ -104,9 +104,9 @@ class Application_Form_FormPublicacion extends Zend_Form
         
         //$hdnTipoPublicacion = new Zend_Form_Element_Hidden('')
         
-        $buttonEnviar = $this->createElement('submit', 'btnCrearPublicacion');
-        $buttonEnviar->setLabel('Crear Publicacion')
-       				 ->setAttrib('class', 'label label-success');
+       // $buttonEnviar = $this->createElement('submit', 'btnCrearPublicacion');
+       // $buttonEnviar->setLabel('Crear Publicacion')
+       	//			 ->setAttrib('class', 'label label-success');
         
         $this->addElement($tipoTexto);
         $this->addElement($tipoFoto);
@@ -117,7 +117,7 @@ class Application_Form_FormPublicacion extends Zend_Form
         $this->addElement($cbxAlumno);
         $this->addElement($cbxProfesor);
         $this->addElement($cbxAcademico);
-        $this->addElement($buttonEnviar);
+        //$this->addElement($buttonEnviar);
         
         /*
         $this->clearDecorators();

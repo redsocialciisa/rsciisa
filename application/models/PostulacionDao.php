@@ -89,6 +89,7 @@ class Application_Model_PostulacionDao
     
     	return $this->_table->delete($where);
     }
+    
 
 }
 

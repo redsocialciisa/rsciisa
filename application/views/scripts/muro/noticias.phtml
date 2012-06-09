@@ -24,6 +24,7 @@
 							
 							<!-- aquí se muestra la información de la publicación según... el tipo de publicación -->
 							<?php 
+							$objPublicacionAux = new Application_Model_PublicacionDao();
 							if($publicacion->getTipoId() == 4){ ?>
 								<?php $fechaPublicacion = strtotime($publicacion->getFecha()); ?>
 								<table class="span2" border="2">
@@ -82,9 +83,9 @@
 									 	</td>
 									 </tr>
 								</table>
-							
+								<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha());?></p>
 							<?php } ?>
-							<?php							 
+							<?php
 							if($publicacion->getTipoId() == 5){ ?>
 							<?php
 								$objOfertaDao = new Application_Model_OfertaDao();
@@ -93,11 +94,11 @@
 								<div>
 									<img src="/imagenes/proyecto/oferta.png">								
 								</div>
+								<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha());?></p>
 							<?php } ?>
 							<?php  
 							if($publicacion->getTipoId() == 6){ ?>
-							
-							
+								<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha());?></p>
 							<?php } ?>
 						</td>
 					</tr>
@@ -146,7 +147,7 @@
 								<tr>
 									<td>
 										<div id="divLoaderComentario<?php echo $publicacion->getId();?>"></div>
-										<textarea id="txtComentario<?php echo $publicacion->getId();?>" rows="1" placeholder="Escribe algo aquí..." class="span5"></textarea>
+										<textarea id="txtComentario<?php echo $publicacion->getId();?>" rows="1" placeholder="Escribe algo aquí..." class="span5" onkeypress="ValidarCaracteres(this, 499)"></textarea>
 										<button class="btn btn-inverse" onclick="comentarPublicacion(<?php echo $publicacion->getId();?>)">Comentar</button>
 									</td>
 									<td>
