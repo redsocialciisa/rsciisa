@@ -24,6 +24,7 @@
 							
 							<!-- aquí se muestra la información de la publicación según... el tipo de publicación -->
 							<?php 
+							$objPublicacionAux = new Application_Model_PublicacionDao();
 							if($publicacion->getTipoId() == 4){ ?>
 								<?php $fechaPublicacion = strtotime($publicacion->getFecha()); ?>
 								<table class="span2" border="2">
@@ -82,17 +83,22 @@
 									 	</td>
 									 </tr>
 								</table>
-							
+								<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha());?></p>
 							<?php } ?>
-							<?php							 
+							<?php
 							if($publicacion->getTipoId() == 5){ ?>
-							
-							
+							<?php
+								$objOfertaDao = new Application_Model_OfertaDao();
+								
+							?>
+								<div>
+									<img src="/imagenes/proyecto/oferta.png">								
+								</div>
+								<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha());?></p>
 							<?php } ?>
 							<?php  
 							if($publicacion->getTipoId() == 6){ ?>
-							
-							
+								<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha());?></p>
 							<?php } ?>
 						</td>
 					</tr>
@@ -141,7 +147,7 @@
 								<tr>
 									<td>
 										<div id="divLoaderComentario<?php echo $publicacion->getId();?>"></div>
-										<textarea id="txtComentario<?php echo $publicacion->getId();?>" rows="1" placeholder="Escribe algo aquí..." class="span5"></textarea>
+										<textarea id="txtComentario<?php echo $publicacion->getId();?>" rows="1" placeholder="Escribe algo aquí..." class="span5" onkeypress="ValidarCaracteres(this, 499)"></textarea>
 										<button class="btn btn-inverse" onclick="comentarPublicacion(<?php echo $publicacion->getId();?>)">Comentar</button>
 									</td>
 									<td>
@@ -181,14 +187,32 @@
 <div class="modal hide" id="myModalPost">
     <div class="modal-header">
     <button class="close" onclick="cerrarModalPost()" data-dismiss="modal">×</button>
-    <h3>Compartir</h3>
+    
+    <table>
+    	<tr>
+    		<td>
+				Compartir en     			
+    		</td>
+    		<td>
+    			<div id="divIcoRed"></div>
+    		</td>
+    	</tr>
+    </table>
+    
     </div>
     <div class="modal-body">
     		<table>
     			<tr>
     				<td>
-    					<textarea id="txtTexto" name="txtTexto">
+    					<input type="hidden" id="maximoPost" name="maximoPost">
+    					<textarea id="txtTexto" name="txtTexto" onKeyDown="textCounter(this, 'count_display');">
     					</textarea>
+    					<span id="count_display" style="display:none;">140 caracteres restantes</span>
+    				</td>
+    			</tr>
+    			<tr>
+    				<td align="center">
+    					<div id="divLoaderCompartiendo"></div>
     				</td>
     			</tr>
     		</table>
@@ -196,12 +220,27 @@
     <div class="modal-footer">
   	    <div id="divBotonera">
   	    </div>
+  	    
     </div>
-</div>	
+</div>
 
 
 
 <script type="text/javascript">
+
+	function textCounter(textarea, counterID) {
+		
+		var maxLen = document.getElementById("maximoPost").value;
+		document.getElementById("count_display").style.display = "block";
+		
+		cnt = document.getElementById(counterID);
+		if (textarea.value.length > (maxLen))
+		{
+			textarea.value = textarea.value.substring(0,maxLen);
+		}
+		cnt.innerHTML = (maxLen - textarea.value.length) + ' Caracteres Restantes';
+	}
+	
 	function closeModalPost()
 	{		
 		$('#myModalPost').modal();		
@@ -210,16 +249,25 @@
 	function openModalPost(id,red)
 	{	
 		if(red == 1){//twitter
-			$boton = "<a href='#' onclick='compartirEnTwitter()' class='btn btn-success' data-dismiss='modal'>Compartir</a>";
+			$boton = "<a href='#' onclick='compartirEnTwitter()' class='btn btn-success'>Compartir</a>";
+			document.getElementById("divIcoRed").innerHTML = "<img src='/imagenes/proyecto/tt.png'>";
+			document.getElementById("maximoPost").value = "130";
+			document.getElementById("count_display").innerHTML = "140";
 		}
 		if(red == 2){//facebook
-			$boton = "<a href='#' onclick='compartirEnFacebook()' class='btn btn-success' data-dismiss='modal'>Compartir</a>";
+			$boton = "<a href='#' onclick='compartirEnFacebook()' class='btn btn-success'>Compartir</a>";
+			document.getElementById("divIcoRed").innerHTML = "<img src='/imagenes/proyecto/fb.png'>";
+			document.getElementById("maximoPost").value = "500";
+			document.getElementById("count_display").innerHTML = "500";
 		}
 		if(red == 3){//linkedin
-			$boton = "<a href='#' onclick='compartirEnLinkedin()' class='btn btn-success' data-dismiss='modal'>Compartir</a>";
+			$boton = "<a href='#' onclick='compartirEnLinkedin()' class='btn btn-success'>Compartir</a>";
+			document.getElementById("divIcoRed").innerHTML = "<img src='/imagenes/proyecto/in.png'>";
+			document.getElementById("maximoPost").value = "600";
+			document.getElementById("count_display").innerHTML = "600";
 		}
-		$boton = $boton + "<a href='#' onclick='closeModalPost()' class='btn btn-danger'  data-dismiss='modal'>Cerrar</a>";
-		
+
+		$boton = $boton + "  <a href='#'' class='btn btn-danger' data-dismiss='modal'>Cerrar</a>";		
 		document.getElementById("divBotonera").innerHTML = $boton;
 		
 		document.getElementById("txtTexto").value = document.getElementById("hdnTextoPublicacion" + id).value; 
@@ -230,9 +278,15 @@
 	function compartirEnTwitter(){
 
 		var texto = document.getElementById("txtTexto").value;
+
+		if(texto.length > 140)
+		{
+			document.getElementById("divLoaderCompartiendo").innerHTML = "<p class='label label-important'>No puedes superar los 140 caracteres para compartir en twiiter !!</p>";
+			return;
+		}
 		
 		if(texto != '') {
-			//selectDestino = $('#cont_obra');
+			selectDestino = $('#divLoaderCompartiendo');
 				$.ajax(
 						{
 						async: true,
@@ -242,14 +296,14 @@
 						dataTypeString: 'text',
 						
 						beforeSend: function(data){
-			                //selectDestino.html('<label>Cargando...</label>');
+			                selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
 					    },  
 					    success: function(requestData){  
 					               //selectDestino.html(requestData);
-							    	alert(requestData);
+							    	//alert(requestData);
 				               		document.getElementById("divModalGenerico").innerHTML = "Se ha compartido con éxito tu publicación en Twitter";
-					    			$('#myModalGenerico').modal('show');
-				               		
+			               			document.getElementById("divLoaderCompartiendo").innerHTML = "<p class='label label-success'>Publicación compartida con éxito !!</p>";
+					    			//$('#myModalGenerico').modal('show');
 					    },  
 					    error: function(requestData, strError, strTipoError){          
 					    }
@@ -262,9 +316,16 @@
 	function compartirEnFacebook(){
 
 		var texto = document.getElementById("txtTexto").value;
+
+		/*
+		if(texto.length > 501)
+		{
+			document.getElementById("divLoaderCompartiendo").innerHTML = "<p class='label label-important'>No puedes superar los 500 caracteres para compartir en Facebook !!</p>";
+			return;
+		}*/
 		
 		if(texto != '') {
-			//selectDestino = $('#cont_obra');
+			selectDestino = $('#divLoaderCompartiendo');
 				$.ajax(
 						{
 						async: true,
@@ -274,13 +335,14 @@
 						dataTypeString: 'text',
 						
 						beforeSend: function(data){
-			                //selectDestino.html('<label>Cargando...</label>');
+							  selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
 					    },  
 					    success: function(requestData){  
 					               //selectDestino.html(requestData);
-				               		alert(requestData);
+				               		//alert(requestData);
 					    			document.getElementById("divModalGenerico").innerHTML = "Se ha compartido con éxito tu publicación en Facebook";
-					    			$('#myModalGenerico').modal('show');
+					    			document.getElementById("divLoaderCompartiendo").innerHTML = "<p class='label label-success'>Publicación compartida con éxito !!</p>";
+					    			//$('#myModalGenerico').modal('show');
 					    },  
 					    error: function(requestData, strError, strTipoError){          
 					    }
@@ -295,7 +357,7 @@
 		var texto = document.getElementById("txtTexto").value;
 		
 		if(texto != '') {
-			//selectDestino = $('#cont_obra');
+			selectDestino = $('#divLoaderCompartiendo');
 				$.ajax(
 						{
 						async: true,
@@ -305,13 +367,14 @@
 						dataTypeString: 'text',
 						
 						beforeSend: function(data){
-			                //selectDestino.html('<label>Cargando...</label>');
+							  selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
 					    },  
 					    success: function(requestData){  
 					               //selectDestino.html(requestData);
-				               		alert(requestData);
+				               		//alert(requestData);
 				               		document.getElementById("divModalGenerico").innerHTML = "Se ha compartido con éxito tu publicación en Linkedin";
-					    			$('#myModalGenerico').modal('show');
+				               		document.getElementById("divLoaderCompartiendo").innerHTML = "<p class='label label-success'>Publicación compartida con éxito !!</p>";
+					    			//$('#myModalGenerico').modal('show');
 				               		
 					    },  
 					    error: function(requestData, strError, strTipoError){          

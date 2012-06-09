@@ -10,6 +10,11 @@
     <link type="text/css" href="<?php echo $this->baseUrl()?>/bootstrap/css/bootstrap-responsive.css" rel="stylesheet" />	
 	<script type="text/javascript" src="<?php echo $this->baseUrl()?>/bootstrap/js/bootstrap.js"></script>
 	<script type="text/javascript" src="<?php echo $this->baseUrl()?>/ajax/ajax.js"></script>
+	
+	<link type="text/css" href="<?php echo $this->baseUrl()?>/bootstrap/css/cupertino/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
+	<script type="text/javascript" src="<?php echo $this->baseUrl()?>/bootstrap/js/jquery-ui-1.8.21.custom.min.js"></script>
+	
+	<link type="text/css" href="<?php echo $this->baseUrl()?>/bootstrap/css/cupertino/screen.css" rel="stylesheet" />	
 		
 		<style type="text/css">
 			textarea {
@@ -33,6 +38,27 @@
 
 		</style> 
 		
+		
+		<script type="text/javascript">
+			$(function(){
+
+				// Datepicker
+				$('#datepicker').datepicker({
+					inline: true,
+			         dateFormat: 'dd-mm-yy',
+			         changeMonth: true,
+			         changeYear: true,
+			         dayNamesMin: ['Do','Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+			         dayNames: ['Domingo','Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'],
+			         duration: 'fast',
+			         monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+			         monthNamesShort: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'], 
+			         firstDay: 1	
+				});
+
+			});
+		</script>
+		
 		<script type="text/javascript">
 			function soloLetras(e) { // 1
 			    tecla = (document.all) ? e.keyCode : e.which; // 2
@@ -40,13 +66,24 @@
 			    patron =/[A-Za-zñÑ\s]/; // 4
 			    te = String.fromCharCode(tecla); // 5
 			    return patron.test(te); // 6
+			}
+
+			function trim(cad)
+			{
+				return cad.replace(/^s+|s+$/g,"");
 			} 
-			
+
+			function ValidarCaracteres(textareaControl, maxlength) {
+
+	            if (textareaControl.value.length > maxlength) {
+	                textareaControl.value = textareaControl.value.substring(0, maxlength);
+	            }
+	        }		
 		</script>
 	
 </head>
 
-<body style="padding-top: 40px;">
+<body style="padding-top: 45px;">
 
 <?php
 	$aut = Zend_Auth::getInstance();
@@ -57,12 +94,19 @@
 <div class="navbar navbar-fixed-top" data-dropdown="dropdown">
 	<div class="navbar-inner">
     	<div class="container">
-    		<a class="brand" href="#">IPCIISA</a>
+    	
     	    <div class="nav-collapse">
-    	    
+    	  
    	    	<?php if($aut->hasIdentity()){ ?>
+   	    	
    	    		<ul class="nav">
-			    <li class="active">
+   	    		<li>
+   	    			 <img src="/imagenes/proyecto/logo5.png">
+			    </li>
+   	    		<li>
+			  	    <img src="/imagenes/proyecto/logo4.png" width="50%">
+			    </li>
+			    <li>
 			    <a href="/muro/index/">Muro</a>
 			    </li>
 			    <li>
@@ -98,21 +142,43 @@
 	</div>
 </div>
 
-<?php if($aut->hasIdentity()){ ?>
-	<table>
-		<tr valign="top">
-			<td>
-				
-					<?php echo $this->render('lateral_derecha.phtml')?>
-			</td>
-			<td>
-					<?php echo $this->layout()->content ?>
-			</td>
-		</tr>
-	</table>
-<?php }else{ ?>
-	<?php echo $this->layout()->content ?>
-<?php }?>
+
+
+<div class="colmask threecol">
+	<div class="colmid">
+		<div class="colleft">
+		
+		<table align="left" style="width: 100%">
+			<tr>
+				<td valign="top"><!-- style="background-color: #999" -->
+					<div class="col1">
+						<?php if($aut->hasIdentity()){ 
+								echo $this->render('lateral_derecha.phtml');			
+							   } 
+						?>
+					</div>
+				</td>
+				<td valign="top">
+					<div class="col2">
+						<?php echo $this->layout()->content; ?>
+					</div>
+				</td>
+				<td valign="top">
+					<div class="col3">
+						<?php if($aut->hasIdentity()){ 
+								echo $this->render('lateral_derecha.phtml');			
+							   } 
+						?>
+					</div>
+				</td>
+			</tr>
+		</table>
+		
+		</div>
+	</div>
+</div>
+
+
 
 <div class="modal hide" id="myModalGenerico" style="width: 700px;">
     <div class="modal-header">

@@ -8,6 +8,9 @@ class Application_Form_FormPerfil extends Zend_Form
         $aut = Zend_Auth::getInstance();
         $objUsuarioDao = new Application_Model_UsuarioDao();
         $objUsuario = $objUsuarioDao->obtenerPorId($aut->getIdentity()->usu_id);
+        $objPrivacidadPublicacion = new Application_Model_PrivacidadPublicacionDao();
+        
+        $listaPrivacidad = $objPrivacidadPublicacion->obtenerTodos();
         
         $fileFoto = new Zend_Form_Element_File('fileFoto');
         $fileFoto->setLabel('Foto Perfil: ')
@@ -31,10 +34,6 @@ class Application_Form_FormPerfil extends Zend_Form
                 ->setAttrib('class', 'span4')
       		    ->setAttrib('readonly', true);        
         
-        $jornada = new Zend_Form_Element_Text('txtJornada');
-        $jornada->setLabel('Jornada: ')
-        		->setAttrib('readonly', true);
-        
         $perfilciisa = new Zend_Form_Element_Text('txtPerfil');
         $perfilciisa->setLabel('Perfil Ciisa: ')
         			->setValue($aut->getIdentity()->perfil_ciisa)
@@ -43,6 +42,8 @@ class Application_Form_FormPerfil extends Zend_Form
         $fecha = new Zend_Form_Element_Text('txtFechaNacimiento');
         $fecha->setLabel('Fecha Nacimiento: ')
         	    ->setValue($objUsuario->getFechaNacimiento())
+        	    ->setAttrib('id', 'datepicker')
+        	    ->setAttrib('name', 'datepicker')
 		        ->clearErrorMessages()
 		        ->addErrorMessage('Debes ingresar tu fecha de nacimiento');
         
@@ -55,12 +56,21 @@ class Application_Form_FormPerfil extends Zend_Form
 		        ->clearErrorMessages()
 		        ->addErrorMessage('Correo electrónico inválido');
         
+        $comboPrivacidad = new Zend_Form_Element_Select('sltPrivacidad');
+        $comboPrivacidad->setLabel('Privacidad de Publicación: ');
+         
+        foreach ($listaPrivacidad as $item){
+        	$comboPrivacidad->addMultiOption($item->getId(), $item->getNombre());
+        }
+        $comboPrivacidad->setValue($objUsuario->getPrivacidadPublicacionId());
+        
+        /*
         $this->setEnctype(Zend_Form::ENCTYPE_MULTIPART);
         $fileCv = new Zend_Form_Element_File('fileCurriculum');
         $fileCv->setLabel('Curriculum Vitae: ')
         		->setAttrib('class', 'span4')
         		->setMaxFileSize(2097152) // 2mb
-        		->addValidator('Extension',false,array('doc','pdf'));
+        		->addValidator('Extension',false,array('doc','pdf'));*/
         
         $buttonEnviar = $this->createElement('submit', 'enviar');
         $buttonEnviar->setLabel('Actualizar mis datos')
@@ -69,11 +79,10 @@ class Application_Form_FormPerfil extends Zend_Form
         $this->addElement($fileFoto);
         $this->addElement($nombre);
         $this->addElement($carrera);
-        $this->addElement($jornada);
         $this->addElement($perfilciisa);
         $this->addElement($fecha);
         $this->addElement($correo);
-        $this->addElement($fileCv);
+        $this->addElement($comboPrivacidad);
         $this->addElement($buttonEnviar);
     }
 

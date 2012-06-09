@@ -546,7 +546,7 @@ class IntegracionController extends Zend_Controller_Action
         $objIntegracionDao->eliminar($objFacebook->getId());
         $objIntegracionDao = null;
         
-        $this->_redirect('/integracion/index');
+        $this->_redirect('/perfil/index');
         
     }	
     
@@ -559,7 +559,7 @@ class IntegracionController extends Zend_Controller_Action
         $objIntegracionDao->eliminar($objTwitter->getId());
         $objIntegracionDao = null;
         
-        $this->_redirect('/integracion/index');
+        $this->_redirect('/perfil/index');
     }
     
     public function quitarLinkedinAction()
@@ -571,7 +571,7 @@ class IntegracionController extends Zend_Controller_Action
         $objIntegracionDao->eliminar($objLinkedin->getId());
         $objIntegracionDao = null;
         
-        $this->_redirect('/integracion/index');
+        $this->_redirect('/perfil/index');
     }
 
 }

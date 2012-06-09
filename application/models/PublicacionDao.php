@@ -230,5 +230,79 @@ class Application_Model_PublicacionDao
     	return $lista;
     
     }
+    
+    public function calcularTiempoTranscurrido($date1)
+    {
+    
+        $fecha = new DateTime();
+    	$diff = abs(strtotime($fecha->format('Y-m-d H:i:s')) - strtotime($date1));
+    
+    	$years   = floor($diff / (365*60*60*24));
+    	$months  = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
+    	$days    = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
+    	$hours   = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24 - $days*60*60*24)/ (60*60));
+    	$minuts  = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24 - $days*60*60*24 - $hours*60*60)/ 60);
+    	$seconds = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24 - $days*60*60*24 - $hours*60*60 - $minuts*60));
+    
+    	if($years > 0)
+    	{
+    		if($years == 1)
+    		{
+    			return "hace " . $years . " Año";
+    		}else{
+    			return "hace " . $years . " Años";
+    		}
+    	}
+    
+    	if($years < 1 && $months > 0)
+    	{
+    		if($months == 1)
+    		{
+    			return "hace " . $months . " Mes";
+    		}else{
+    			return "hace " . $months . " Meses";
+    		}
+    	}
+    
+    	if($years < 1 && $months < 1 && $days > 0)
+    	{
+    		if($days == 1)
+    		{
+    			return "hace " . $days . " Dia";
+    		}else{
+    			return "hace " . $days . " Dias";
+    		}
+    	}
+    
+    	if($years < 1 && $months < 1 && $days < 1 && $hours > 0)
+    	{
+    		if($hours == 1)
+    		{
+    			return "hace " . $hours . " hora";
+    		}else{
+    			return "hace " . $hours . " horas";
+    		}
+    	}
+    
+    	if($years < 1 && $months < 1 && $days < 1 && $hours < 1 && $minuts > 0)
+    	{
+    		if($minuts == 1)
+    		{
+    			return "hace " . $minuts . " minuto";
+    		}else{
+    			return "hace " . $minuts . " minutos";
+    		}
+    	}
+    
+    	if($years < 1 && $months < 1 && $days < 1 && $hours < 1 && $minuts < 1 && $seconds > 0)
+    	{
+    		if($seconds == 1)
+    		{
+    			return "hace " . $seconds . " segundo";
+    		}else{
+    			return "hace " . $seconds . " segundos";
+    		}
+    	}
+    }
 
 }

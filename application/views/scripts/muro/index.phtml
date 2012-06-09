@@ -7,9 +7,9 @@
 <?php echo $this->listaPublicaciones;?>
 <?php if(count($this->listaPublicaciones) > 0){ ?>
 	<?php foreach ($this->listaPublicaciones as $publicacion){?>
-			<div id="publicacion<?php echo $publicacion->getId();?>">
+			<div id="publicacion<?php echo $publicacion->getId();?>" align="center">
 				<table>
-					<caption class="label label-success">Categoría:  <?php echo $objTipPublicacion->obtenerPorId($publicacion->getTipoId())->getNombre();?></caption>
+					<caption style="background-color: #20a74b">Categoría:  <?php echo $objTipPublicacion->obtenerPorId($publicacion->getTipoId())->getNombre();?></caption>
 					<tr>
 						<td rowspan="3" valign="top">
 							<div style='width: 100px;'>
@@ -21,25 +21,30 @@
 						<td>
 							<h5 class="cont2"><?php echo $publicacion->getTexto();?></h5>
 							<input type="hidden" id="hdnTextoPublicacion<?php echo $publicacion->getId();?>" value="<?php echo $publicacion->getTexto();?>">
-							
+								
 							<!-- aquí se muestra la información de la publicación según... el tipo de publicación -->
 							<?php 
+							$objPublicacionAux = new Application_Model_PublicacionDao();
 							if($publicacion->getTipoId() == 1){ ?>
+								<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha());?></p>
 							<?php } ?>
-							
+								
 							<?php
 							if($publicacion->getTipoId() == 2){ ?>
 								<div style='width: 200px;'>
 									<a class="thumbnail">
 		      							<img src="<?php echo $this->baseUrl()?>/imagenes/fotos/<?php echo $publicacion->getFoto();?>" onclick="verFoto('<?php echo $publicacion->getTexto();?>','<?php echo $publicacion->getFoto();?>')">
 	         						</a>
-         						</div>    
+         						</div>
+         						<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha()); ?></p>  
 							<?php } ?>
 							
 							<?php if($publicacion->getTipoId() == 3){ ?>
 									<iframe class="youtube-player" width="320" height="190" src="http://www.youtube.com/embed/deY8DZHBkeM">
 									</iframe>
+									<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha()); ?></p>    
 							<?php } ?>
+							<?php $objPublicacionAux = null;?>
 						</td>
 					</tr>
 					<tr>
@@ -69,7 +74,7 @@
 						         					</div>
 								    			</td>
 								    			<td valign="top">
-								    				<p class="label"><?php echo $objUsuario->getNombre(); ?></p>
+								    				<p class="label span4" ><?php echo $objUsuario->getNombre(); ?></p>
 								    				<div class="cont"><p><?php echo $comentario->getTexto();?></p></div>
 								    				<p><?php echo $comentario->getFecha();?></p>
 								    			</td>
@@ -87,7 +92,7 @@
 								<tr>
 									<td>
 										<div id="divLoaderComentario<?php echo $publicacion->getId();?>"></div>
-										<textarea id="txtComentario<?php echo $publicacion->getId();?>" rows="1" placeholder="Escribe algo aquí..." class="span5"></textarea>
+										<textarea id="txtComentario<?php echo $publicacion->getId();?>" rows="1" placeholder="Escribe algo aquí..." class="span5" onkeypress="ValidarCaracteres(this, 499)"></textarea>
 										<button class="btn btn-inverse" onclick="comentarPublicacion(<?php echo $publicacion->getId();?>)">Comentar</button>
 									</td>
 									<td>
