@@ -7,9 +7,9 @@
 <?php echo $this->listaPublicaciones;?>
 <?php if(count($this->listaPublicaciones) > 0){ ?>
 	<?php foreach ($this->listaPublicaciones as $publicacion){?>
-			<div id="publicacion<?php echo $publicacion->getId();?>">
+			<div id="publicacion<?php echo $publicacion->getId();?>" align="center">
 				<table>
-					<caption class="label label-success">Categoría:  <?php echo $objTipPublicacion->obtenerPorId($publicacion->getTipoId())->getNombre();?></caption>
+					<caption style="background-color: #20a74b">Categoría:  <?php echo $objTipPublicacion->obtenerPorId($publicacion->getTipoId())->getNombre();?></caption>
 					<tr>
 						<td rowspan="3" valign="top">
 							<div style='width: 100px;'>
@@ -152,17 +152,17 @@
 									</td>
 									<td>
 										<?php if ($tieneTwitter != null){?>
-											<button class="btn btn-info" onclick="openModalPost(<?php echo $publicacion->getId();?>,1)">Twitter</button>
+											<img src="/imagenes/proyecto/twitter.png" onclick="openModalPost(<?php echo $publicacion->getId();?>,1)">
 										<?php } ?>
 									</td>
 									<td>
 										<?php if ($tieneFacebook != null){?>
-											<button class="btn btn-primary" onclick="openModalPost(<?php echo $publicacion->getId();?>,2)">Facebook</button>
+											<img src="/imagenes/proyecto/facebook.png" onclick="openModalPost(<?php echo $publicacion->getId();?>,2)">
 										<?php } ?>
 									</td>
 									<td>
 										<?php if ($tieneLinkedin != null){?>
-											<button class="btn btn-warning" onclick="openModalPost(<?php echo $publicacion->getId();?>,3)">Linkedin</button>
+											<img src="/imagenes/proyecto/linkedin.png" onclick="openModalPost(<?php echo $publicacion->getId();?>,3)">
 										<?php } ?>
 										<?php
 											$tieneTwitter = null;

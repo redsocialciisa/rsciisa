@@ -161,6 +161,7 @@ class AuthController extends Zend_Controller_Action
         		$aut->getIdentity()->linkedinApellido = $profile->lastName;
         		$aut->getIdentity()->linkedinEmpleo = $profile->headline;
         		$aut->getIdentity()->linkedinFoto = $profile->pictureUrl;
+        		
         		$aut->getIdentity()->linkedinPerfil = $profile->publicProfileUrl;
         		
         		$oauth = null;

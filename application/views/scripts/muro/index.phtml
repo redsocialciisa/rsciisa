@@ -97,17 +97,17 @@
 									</td>
 									<td>
 										<?php if ($tieneTwitter != null){?>
-											<button class="btn btn-info" onclick="openModalPost(<?php echo $publicacion->getId();?>,1)">Twitter</button>
+											<img src="/imagenes/proyecto/twitter.png" onclick="openModalPost(<?php echo $publicacion->getId();?>,1)">
 										<?php } ?>
 									</td>
 									<td>
 										<?php if ($tieneFacebook != null){?>
-											<button class="btn btn-primary" onclick="openModalPost(<?php echo $publicacion->getId();?>,2)">Facebook</button>
+											<img src="/imagenes/proyecto/facebook.png" onclick="openModalPost(<?php echo $publicacion->getId();?>,2)">
 										<?php } ?>
 									</td>
 									<td>
 										<?php if ($tieneLinkedin != null){?>
-											<button class="btn btn-warning" onclick="openModalPost(<?php echo $publicacion->getId();?>,3)">Linkedin</button>
+											<img src="/imagenes/proyecto/linkedin.png" onclick="openModalPost(<?php echo $publicacion->getId();?>,3)">
 										<?php } ?>
 										<?php
 											$tieneTwitter = null;
