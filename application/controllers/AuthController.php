@@ -151,7 +151,7 @@ class AuthController extends Zend_Controller_Action
         		define("API_CONSUMER_SECRET", "LNITIz9Vd9hdw7uW");
         		require 'linkedin/helpers.php';
         		$oauth = new OAuth(API_CONSUMER_KEY, API_CONSUMER_SECRET);
-        		$objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,3);
+        		$objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion($objUsuario->getId(),3);
         		$oauth->setToken($objIntegracion->getToken(),$objIntegracion->getSecret());
         		$api_url = "http://api.linkedin.com/v1/people/~:(first-name,last-name,headline,picture-url,public-profile-url)";
         		$oauth->fetch($api_url, array(), OAUTH_HTTP_METHOD_GET, array('x-li-format' => 'json'));
@@ -168,6 +168,10 @@ class AuthController extends Zend_Controller_Action
         		$objIntegracion = null;
         		$profile = null;
         	}
+        	else
+        	{
+        	    $aut->getIdentity()->linkedinNombre = null;
+        	}    
         	
         	if ($objIntegracionDao->obtenerLlavesIntegracion($objUsuario->getId(),1) != null)
         	{
@@ -176,7 +180,7 @@ class AuthController extends Zend_Controller_Action
         				'appId'  => '124399157694592',
         				'secret' => '8c0658db1a7873a56c3551a2ee13464b',
         		));
-        		$objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,1);
+        		$objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion($objUsuario->getId(),1);
         		$facebook->setAccessToken($objIntegracion->getToken());
         		$user = $facebook->getUser();
         		$user_profile = $facebook->api('/me','GET');
@@ -191,6 +195,46 @@ class AuthController extends Zend_Controller_Action
         		$user_profile = null;
         		$fields = null;
         	}
+        	else 
+        	{
+        	    $aut->getIdentity()->facebookNombre = null;
+        	}    
+        	
+        	if ($objIntegracionDao->obtenerLlavesIntegracion($objUsuario->getId(),2) != null)
+        	{
+        		require 'Twitter/tmhOAuth.php';
+        		require 'Twitter/tmhUtilities.php';
+        		$objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion($objUsuario->getId(),2);
+        		$tmhOAuth = new tmhOAuth(array(
+        				'consumer_key'    => '4m5dr19FvCwe534XDQ92fw',
+        				'consumer_secret' => 'dobuyMsMLs8kTzSl5YDoYv9O9UZlEN1MBSGBKst9hE',
+        				'user_token'      => $objIntegracion->getToken(),
+        				'user_secret'     => $objIntegracion->getSecret(),
+        		));
+        	
+        		$code_datos = $tmhOAuth->request('GET', $tmhOAuth->url('1/account/verify_credentials'));
+        	
+        		if ($code_datos == 200) {
+        			$datos = json_decode($tmhOAuth->response['response']);
+        		}
+        	
+        		$code_tweet = $tmhOAuth->request('GET', $tmhOAuth->url('1/statuses/user_timeline'), array(
+        				'include_entities' => '1',
+        				'include_rts'      => '1',
+        				'screen_name'      => $datos->screen_name,
+        				'count'            => 5,
+        		));
+        		
+        		$aut->getIdentity()->twitterArregloDatos = $datos;
+        		$aut->getIdentity()->twitterArregloTweet = json_decode($tmhOAuth->response['response'], true);
+        	
+        	}
+        	else
+        	{
+        	    $aut->getIdentity()->twitterArregloDatos = null;
+        	}    
+        	
+        	
         	
         	//IMPRIMIR UN DATO
         	//$aut = Zend_Auth::getInstance();

@@ -1,0 +1,171 @@
+ <?php 
+ $aut = Zend_Auth::getInstance();
+ 
+ ?>
+ 
+ <a href="#" onclick="openModalGrupo()">Crear Grupo</a>
+ 
+ 
+ <div class="tabbable">
+    <ul class="nav nav-tabs">
+    	<li><a href="#misGruposParticipo" data-toggle="tab">Mis grupos en que participo</a></li>
+    	<li><a href="#misGruposInvitaciones" data-toggle="tab">Invitaciones</a></li>
+    </ul>
+    <div class="tab-content">
+    	<div class="tab-pane active" id="misGruposParticipo">
+    		<p>Mis grupos que participo</p>
+    		<?php echo $this->listaGrupoUsuario;?>
+    		<table>
+    			<?php 
+		    		foreach ($this->listaGrupoUsuario as $item)
+		    		{
+    			?>
+					<tr id="rowUno<?php echo $item->getId();?>" style="display: block;">
+						<td colspan=2>
+							<?php echo $item->getNombre();?>
+						</td>			
+					</tr>
+					<tr id="rowDos<?php echo $item->getId();?>" style="display: block;">
+						<td>
+							<div style='width: 80px;'>
+								<a class='thumbnail'>
+									<img src="/imagenes/grupos/<?php echo $item->getFoto();?>" >
+								</a>
+							</div>
+						</td>
+						<td>
+							<?php if ($aut->getIdentity()->usu_id == $item->getUsuId()) {?>
+							<a class="btn btn-info"> Agregar contactos </a>
+							<a class="btn btn-info"> Editar grupo </a>
+							<a class="btn btn-info" onclick="openModalBorrar(<?php echo $item->getId();?>)"> Borrar grupo </a>
+							<?php }?>
+							<a class="btn btn-info"> Ver grupo </a>
+						</td>			
+					</tr>  
+				<?php }?>
+
+    		
+    		</table>
+    	</div>
+    	<div class="tab-pane" id="misGruposInvitaciones">
+    		<p>Invitaciones</p>
+    	</div>
+    </div>
+</div>
+
+<?php 
+	$flag = "modal hide";
+	if($this->error == "error")
+	{
+	    $flag = "modal";
+	}else{
+	    $flag = "modal hide";
+	}
+?>
+
+<div class="<?php echo $flag;?>" id="myModalGrupo" style="width: 700px;">
+    <div class="modal-header">
+    <button class="close" onclick="closeModalGrupo()" data-dismiss="modal">×</button>
+    		<h3>Crear Grupo</h3>
+    </div>
+    <div class="modal-body">
+    	<form action="/grupo/index/" method="post" enctype="<?php echo $this->form->getEnctype(); ?>">
+			<?php
+                echo $this->form->txtNombre;
+				echo $this->form->fileFoto;
+			?>	
+				<textarea id="txtDescripcion" name="txtDescripcion" onKeyDown="textCounter(this, 'count_display');"></textarea>
+			<?php 	
+				echo $this->form->optPublico;
+				echo $this->form->optPrivado;
+				echo $this->form->enviar;
+             ?>
+             
+        </form>
+    </div>
+</div>	
+
+
+<div class="modal hide" id="myModalBorrar" style="width: 700px;">
+    <div class="modal-header">
+    <button class="close" onclick="closeModalBorrar()" data-dismiss="modal">×</button>
+    	Mensaje
+    </div>
+    <div class="modal-body">
+    	¿Estás seguro de eliminar el grupo <div id="divGrupo"></div> ?
+    	<input type="hidden" id="hdnGrupoId">
+    </div>
+    <div class="modal-footer">
+    	<a href="#" onclick="eliminarGrupo()" class="btn btn-success" data-dismiss="modal">Eliminar</a>
+  	    <a href="#" onclick="closeModalBorrar()" class="btn btn-success" data-dismiss="modal">No</a>
+    </div>
+</div>	
+
+
+<script type="text/javascript">
+	function openModalGrupo()
+	{
+		$('#myModalGrupo').modal("show");	
+	}
+
+	function closeModalGrupo()
+	{
+		$('#myModalGrupo').modal();	
+	}
+
+	function openModalBorrar(idGrupo)
+	{
+		document.getElementById("hdnGrupoId").value = idGrupo;
+		$('#myModalBorrar').modal("show");	
+	}
+
+	function closeModalBorrar()
+	{
+		$('#myModalBorrar').modal();	
+	}
+
+	function eliminarGrupo(){
+
+		var grupoId = document.getElementById("hdnGrupoId").value;
+
+			$.ajax(
+						{
+						async: true,
+						type: 'POST',
+						url: '<?php echo $this->baseUrl()?>/grupo/eliminar',
+						data: 'grupoId=' + grupoId,	
+						dataTypeString: 'text',
+						
+						beforeSend: function(data){
+							  //selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
+					    },  
+					    success: function(requestData){
+						    var result = requestData;
+
+							if(result == "ok")
+							{
+								document.getElementById("rowUno" + grupoId).style.display = "none";
+								document.getElementById("rowDos" + grupoId).style.display = "none";
+							}
+						      
+					    },  
+					    error: function(requestData, strError, strTipoError){          
+					    }
+					    
+						});
+	}
+	
+
+	function textCounter(textarea, counterID) 
+	{
+		var maxLen = document.getElementById("maximoPost").value;
+		document.getElementById("count_display").style.display = "block";
+		
+		cnt = document.getElementById(counterID);
+		if (textarea.value.length > (maxLen))
+		{
+			textarea.value = textarea.value.substring(0,maxLen);
+		}
+		cnt.innerHTML = (maxLen - textarea.value.length) + ' Caracteres Restantes';
+	}
+</script>

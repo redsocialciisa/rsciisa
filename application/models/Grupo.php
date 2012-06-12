@@ -3,13 +3,12 @@
 class Application_Model_Grupo
 {
     private $_id;
-    private $_usu_id;
+    private $_usuId;
     private $_nombre;
     private $_descripcion;
     private $_foto;
     private $_fechaCreacion;
     private $_tipoGrupoId;
-    
 	/**
 	 * @return the $_id
 	 */
@@ -18,10 +17,10 @@ class Application_Model_Grupo
 	}
 
 	/**
-	 * @return the $_usu_id
+	 * @return the $_usuId
 	 */
-	public function getUsu_id() {
-		return $this->_usu_id;
+	public function getUsuId() {
+		return $this->_usuId;
 	}
 
 	/**
@@ -67,10 +66,10 @@ class Application_Model_Grupo
 	}
 
 	/**
-	 * @param field_type $_usu_id
+	 * @param field_type $_usuId
 	 */
-	public function setUsu_id($_usu_id) {
-		$this->_usu_id = $_usu_id;
+	public function setUsuId($_usuId) {
+		$this->_usuId = $_usuId;
 	}
 
 	/**
@@ -108,6 +107,8 @@ class Application_Model_Grupo
 		$this->_tipoGrupoId = $_tipoGrupoId;
 	}
 
+    
+	
     
 	
 	

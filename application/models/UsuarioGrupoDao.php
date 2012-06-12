@@ -34,10 +34,10 @@ class Application_Model_UsuarioGrupoDao
     public function guardar(Application_Model_UsuarioGrupo $usuarioGrupo)
     {
     	$data = array('usu_gru_id' => $usuarioGrupo->getId(),
-    			'usu_gru_unido' => $usuarioGrupo->getEventoId(),
-    			'gru_id' => $usuarioGrupo->getUsuarioId(),
-    			'usu_id' => $usuarioGrupo->getAsiste(),
-    			'usu_gru_fecha_une' => $usuarioGrupo->getFechaAsiste()
+    			'usu_gru_unido' => $usuarioGrupo->getParticipa(),
+    			'gru_id' => $usuarioGrupo->getGrupoId(),
+    			'usu_id' => $usuarioGrupo->getUsuarioId(),
+    			'usu_gru_fecha_une' => $usuarioGrupo->getFechaParticipa()
     	);
     
     	if($usuarioGrupo->getId() != null){
@@ -53,14 +53,16 @@ class Application_Model_UsuarioGrupoDao
     {
     	$lista = new SplObjectStorage();
     	$where = 'usu_id ='. $usu_id;
-    	 
+		$objGrupoDao = new Application_Model_GrupoDao();
+    	
+    	
     	$resultado = $this->_table->fetchAll($where);
     
     	if(count($resultado) > 0)
     	{
     		foreach ($resultado as $item)
     		{
-    			$lista->attach($this->obtenerPorId($item->usu_gru_id));
+    			$lista->attach($objGrupoDao->obtenerPorId($this->obtenerPorId($item->usu_gru_id)->getGrupoId()));
     		}
     	}
     
@@ -83,6 +85,13 @@ class Application_Model_UsuarioGrupoDao
     	}
     
     	return $lista;
+    }
+    
+    public function eliminarUsuariosPorGrupoId($gru_id)
+    {
+    	$where = 'gru_id = ' . $gru_id;
+    
+    	return $this->_table->delete($where);
     }
     
     public function eliminar($usu_gru_id)

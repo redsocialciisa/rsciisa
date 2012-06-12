@@ -57,7 +57,7 @@ class Zend_Validate_File_Upload extends Zend_Validate_Abstract
         self::INI_SIZE       => "Archivo excede los 2Mb",
         self::FORM_SIZE      => "Archivo '%value%' excede los 2Mb",
         self::PARTIAL        => "File '%value%' was only partially uploaded",
-        self::NO_FILE        => "File '%value%' was not uploaded",
+        self::NO_FILE        => "Debe subir un archivo",
         self::NO_TMP_DIR     => "No temporary directory was found for file '%value%'",
         self::CANT_WRITE     => "File '%value%' can't be written",
         self::EXTENSION      => "A PHP extension returned an error while uploading the file '%value%'",
