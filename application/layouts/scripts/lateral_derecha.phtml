@@ -30,6 +30,8 @@ if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,2) 
     
 }
 
+
+$objIntegracion = null;
 ?>
 <?php
 	//session aut
@@ -55,7 +57,7 @@ if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,2) 
 			<div class="span3 well">
 			<table>
 			  <tr>
-			    <th class="label label-info">Linked In</th>
+			    <td align="center" colspan="2" class="label label-info">Linked In</td>
 			  </tr>
 				<tr>
 					<td colspan="2">
@@ -83,10 +85,13 @@ if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,2) 
 			
 			<?php if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,2) != null)
 				{?>
-				
 				<div class="span3 well">
 				<table>
-				  <caption class="label label-info">Twitter</caption>
+				   <tr>
+			    	<td style="width: 200px;" colspan="2" class="label label-info">
+			    		Twiiter
+			    	</td>
+			  	   </tr>
 				  <tr>
 				    <td rowspan="2">
 				    	<img src="<?php echo $datos->profile_image_url; ?>"> 
@@ -147,7 +152,9 @@ if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,2) 
 	<?php if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,1) != null) {?>
 	<div class="span3 well">
 				<table>
-				  	<caption class="label label-info">Facebook</caption>
+				  	 <tr>
+				  		<td colspan="2" class="label label-info" style="width: 200px;">Facebook</td>
+				  	</tr>
 					<tr>
 						<td colspan="2">
 							<?php echo $aut->getIdentity()->facebookNombre;?>
@@ -166,7 +173,14 @@ if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,2) 
 	</div> 				
 	<?php }?>				
 					
-
+<?php 
+	$objIntegracionDao = null;
+	$listaAmigos = null;
+	$objAmigoDao = null;
+	$objUsuarioDao = null;
+	$objEmocionDao = null;
+	$listaContactos = null;
+?>
 
 <script type="text/javascript">
 	function popover(id)

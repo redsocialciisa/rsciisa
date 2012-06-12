@@ -40,6 +40,43 @@ class AuthController extends Zend_Controller_Action
        	
     }
     
+    public function validarIntegracionAction()
+    {
+    	$this->_helper->layout()->disableLayout();
+    	$usuario = $this->getRequest()->getParam('txtUsuario');
+    	$objUsuarioDao = new Application_Model_UsuarioDao();
+    	$objIntegracionDao = new Application_Model_IntegracionDao();
+
+    	$objUsuario = $objUsuarioDao->obtenerPorUsuarioCiisa($usuario);
+    	
+    	$tieneFacebook = $objIntegracionDao->booleanObtenerLlavesIntegracion($objUsuario->getId(), 1);
+    	$tieneTwitter = $objIntegracionDao->booleanObtenerLlavesIntegracion($objUsuario->getId(), 2);
+    	$tieneLinkedin = $objIntegracionDao->booleanObtenerLlavesIntegracion($objUsuario->getId(), 3);
+    	
+    	if ($tieneTwitter == false && $tieneFacebook == false && $tieneLinkedin == false){
+    		$htmlLoader = "<img src='/imagenes/proyecto/ajax-loader.gif'><br>";
+    	}else{
+    	    $htmlLoader = "sincronizando con tus redes sociales, por favor espera...<br>";
+    	}
+    	
+    	if ($tieneTwitter){
+    		$htmlLoader = $htmlLoader . "<img src='/imagenes/proyecto/twitter.png'><img src='/imagenes/proyecto/ajax-loader-bar.gif'><br>";
+    	}
+    	if ($tieneFacebook){
+    		$htmlLoader = $htmlLoader . "<img src='/imagenes/proyecto/facebook.png'><img src='/imagenes/proyecto/ajax-loader-bar.gif'><br>";
+    	}
+    	if ($tieneLinkedin){
+    		$htmlLoader = $htmlLoader . "<img src='/imagenes/proyecto/linkedin.png'><img src='/imagenes/proyecto/ajax-loader-bar.gif'>";
+    	}
+    	
+    	$objIntegracionDao = null;
+    	$objUsuario = null;
+    	$objUsuarioDao = null;
+    	
+    	$this->view->valor = $htmlLoader;
+    
+    }
+    
     public function grabarAceptacionAction()
     {
         $this->_helper->layout()->disableLayout();

@@ -115,5 +115,17 @@ class Application_Model_IntegracionDao
         return $objIntegracion;
     }
     
+    public function booleanObtenerLlavesIntegracion($usu_id, $red_id)
+    {
+    	$where = 'usu_id ='. $usu_id .' AND red_id ='. $red_id;
+    	$resultado = $this->_table->fetchAll($where);
+    
+    	if(count($resultado) > 0){
+    		return true;
+    	}else{
+    	    return false;
+    	}
+    }
+    
 }
 

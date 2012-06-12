@@ -21,7 +21,7 @@
          					</div>
 						</td>
 						<td>
-							<h5 class="cont2"><?php echo $publicacion->getTexto();?></h5>
+							<h5 class="cont2"><a href="/publicacion/index/id/<?php echo $publicacion->getId();?>"><?php echo $publicacion->getTexto();?></a></h5>
 							<input type="hidden" id="hdnTextoPublicacion<?php echo $publicacion->getId();?>" value="<?php echo $publicacion->getTexto();?>">
 							
 							
@@ -34,11 +34,11 @@
 								
 							<?php
 							if($publicacion->getTipoId() == 2){ ?>
-								<div style='width: 200px;'>
+								<div style="width: 320px; height: 190px;'">
 									<a class="thumbnail">
 		      							<img src="<?php echo $this->baseUrl()?>/imagenes/fotos/<?php echo $publicacion->getFoto();?>" onclick="verFoto('<?php echo $publicacion->getTexto();?>','<?php echo $publicacion->getFoto();?>')">
 	         						</a>
-         						</div>
+         						</div><br>
          						<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha()); ?></p>  
 							<?php } ?>
 							
@@ -47,7 +47,6 @@
 									</iframe>
 									<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha()); ?></p>    
 							<?php } ?>
-								  <?php $objPublicacionAux = null;?>
 						</td>
 					</tr>
 					<tr>
@@ -79,13 +78,18 @@
 								    			<td valign="top">
 								    				<p class="label"><?php echo $objUsuario->getNombre(); ?></p>
 								    				<div class="cont"><p><?php echo $comentario->getTexto();?></p></div>
-								    				<p><?php echo $comentario->getFecha();?></p>
+								    				<p>
+								    					<?php echo $objPublicacionAux->calcularTiempoTranscurrido($comentario->getFecha());?>
+								    				</p>
 								    			</td>
 								    		</tr>
 								    	</table>
 							  <?php } ?>
 							  comentarios: <span class="badge badge-info"><?php echo $objComentarioDao->obtenerCantidadComentariosPorPublicacionId($publicacion->getId());?></span>
 						  <?php } ?>
+						  <?php
+						  	$objPublicacionAux = null;
+						  ?>
 						  </div>
 						</td>
 					</tr>
@@ -100,19 +104,19 @@
 									</td>
 									<td>
 										<?php if ($tieneTwitter != null){?>
-											<img src="/imagenes/proyecto/twitter.png" onclick="openModalPost(<?php echo $publicacion->getId();?>,1)">
+											<a href="#"><img src="/imagenes/proyecto/twitter.png" onclick="openModalPost(<?php echo $publicacion->getId();?>,1)"></a>
 										<?php } ?>
 									</td>
 									<td>
 										<?php if ($tieneFacebook != null){?>
-											<img src="/imagenes/proyecto/facebook.png" onclick="openModalPost(<?php echo $publicacion->getId();?>,2)">
+											<a href="#"><img src="/imagenes/proyecto/facebook.png" onclick="openModalPost(<?php echo $publicacion->getId();?>,2)"></a>
 										<?php } ?>
 									</td>
 									<td>
 										<?php if ($tieneLinkedin != null){?>
-											<img src="/imagenes/proyecto/linkedin.png" onclick="openModalPost(<?php echo $publicacion->getId();?>,3)">
+											<a href="#"><img src="/imagenes/proyecto/linkedin.png" onclick="openModalPost(<?php echo $publicacion->getId();?>,3)"></a>
 										<?php } ?>
-										<?php
+										<?php 
 											$tieneTwitter = null;
 											$tieneFacebook = null;
 											$tieneLinkedin = null;
@@ -167,12 +171,10 @@
     <div class="modal-footer">
   	    <div id="divBotonera">
   	    </div>
-  	    
     </div>
 </div>
 
 <?php 
-	
 	  $flagModal = "modal hide";
 	  if($this->error == "error"){
     	$flagModal = "modal"; 
@@ -188,14 +190,11 @@
     </div>
     <div class="modal-body">
 		
-<form action="<?php echo $this->formPublicacion->getAction();?>" 
+<form action="/muro/mi-muro/" 
 	  name="<?php echo $this->formPublicacion->getName();?>"
 	  id="formPublicacion"  
 	  method="<?php echo $this->formPublicacion->getMethod();?>"
 	  enctype="<?php echo $this->formPublicacion->getEnctype(); ?>">
-	  
-	  
-	  <?php echo $this->xxx;?>
 	  
 	<table align="center">
 			<tr>
@@ -503,13 +502,6 @@
 
 		var texto = document.getElementById("txtTexto").value;
 
-		/*
-		if(texto.length > 501)
-		{
-			document.getElementById("divLoaderCompartiendo").innerHTML = "<p class='label label-important'>No puedes superar los 500 caracteres para compartir en Facebook !!</p>";
-			return;
-		}*/
-		
 		if(texto != '') {
 			selectDestino = $('#divLoaderCompartiendo');
 				$.ajax(

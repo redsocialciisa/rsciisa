@@ -19,7 +19,7 @@
          					</div>
 						</td>
 						<td>
-							<h5 class="cont2"><?php echo $publicacion->getTexto();?></h5>
+							<h5 class="cont2"><a href="/publicacion/index/id/<?php echo $publicacion->getId();?>"><?php echo $publicacion->getTexto();?></a></h5>
 							<input type="hidden" id="hdnTextoPublicacion<?php echo $publicacion->getId();?>" value="<?php echo $publicacion->getTexto();?>">
 							
 							<!-- aquí se muestra la información de la publicación según... el tipo de publicación -->
@@ -131,13 +131,18 @@
 								    			<td valign="top">
 								    				<p class="label"><?php echo $objUsuario->getNombre(); ?></p>
 								    				<div class="cont"><p><?php echo $comentario->getTexto();?></p></div>
-								    				<p><?php echo $comentario->getFecha();?></p>
+								    				<p>
+								    				<?php echo $objPublicacionAux->calcularTiempoTranscurrido($comentario->getFecha());?>
+								    				</p>
 								    			</td>
 								    		</tr>
 								    	</table>
 							  <?php } ?>
 							  comentarios: <span class="badge badge-info"><?php echo $objComentarioDao->obtenerCantidadComentariosPorPublicacionId($publicacion->getId());?></span>
 						  <?php } ?>
+						  <?php
+						  	$objPublicacionAux = null;
+						  ?>
 						  </div>
 						</td>
 					</tr>
@@ -152,17 +157,17 @@
 									</td>
 									<td>
 										<?php if ($tieneTwitter != null){?>
-											<img src="/imagenes/proyecto/twitter.png" onclick="openModalPost(<?php echo $publicacion->getId();?>,1)">
+											<a href="#"><img src="/imagenes/proyecto/twitter.png" onclick="openModalPost(<?php echo $publicacion->getId();?>,1)"></a>
 										<?php } ?>
 									</td>
 									<td>
 										<?php if ($tieneFacebook != null){?>
-											<img src="/imagenes/proyecto/facebook.png" onclick="openModalPost(<?php echo $publicacion->getId();?>,2)">
+											<a href="#"><img src="/imagenes/proyecto/facebook.png" onclick="openModalPost(<?php echo $publicacion->getId();?>,2)"></a>
 										<?php } ?>
 									</td>
 									<td>
 										<?php if ($tieneLinkedin != null){?>
-											<img src="/imagenes/proyecto/linkedin.png" onclick="openModalPost(<?php echo $publicacion->getId();?>,3)">
+											<a href="#"><img src="/imagenes/proyecto/linkedin.png" onclick="openModalPost(<?php echo $publicacion->getId();?>,3)"></a>
 										<?php } ?>
 										<?php
 											$tieneTwitter = null;
@@ -220,31 +225,11 @@
     <div class="modal-footer">
   	    <div id="divBotonera">
   	    </div>
-  	    
     </div>
 </div>
 
 
-
 <script type="text/javascript">
-
-	function textCounter(textarea, counterID) {
-		
-		var maxLen = document.getElementById("maximoPost").value;
-		document.getElementById("count_display").style.display = "block";
-		
-		cnt = document.getElementById(counterID);
-		if (textarea.value.length > (maxLen))
-		{
-			textarea.value = textarea.value.substring(0,maxLen);
-		}
-		cnt.innerHTML = (maxLen - textarea.value.length) + ' Caracteres Restantes';
-	}
-	
-	function closeModalPost()
-	{		
-		$('#myModalPost').modal();		
-	}
 
 	function openModalPost(id,red)
 	{	
@@ -266,13 +251,44 @@
 			document.getElementById("maximoPost").value = "600";
 			document.getElementById("count_display").innerHTML = "600";
 		}
-
+	
 		$boton = $boton + "  <a href='#'' class='btn btn-danger' data-dismiss='modal'>Cerrar</a>";		
 		document.getElementById("divBotonera").innerHTML = $boton;
 		
 		document.getElementById("txtTexto").value = document.getElementById("hdnTextoPublicacion" + id).value; 
 		
 		$('#myModalPost').modal('show');		
+	}
+	
+	function textCounter(textarea, counterID) {
+		
+		var maxLen = document.getElementById("maximoPost").value;
+		document.getElementById("count_display").style.display = "block";
+		
+		cnt = document.getElementById(counterID);
+		if (textarea.value.length > (maxLen))
+		{
+			textarea.value = textarea.value.substring(0,maxLen);
+		}
+		cnt.innerHTML = (maxLen - textarea.value.length) + ' Caracteres Restantes';
+	}
+
+	function closeModalPost()
+	{		
+		$('#myModalPost').modal();		
+	}
+
+	function textCounter(textarea, counterID) {
+		
+		var maxLen = document.getElementById("maximoPost").value;
+		document.getElementById("count_display").style.display = "block";
+		
+		cnt = document.getElementById(counterID);
+		if (textarea.value.length > (maxLen))
+		{
+			textarea.value = textarea.value.substring(0,maxLen);
+		}
+		cnt.innerHTML = (maxLen - textarea.value.length) + ' Caracteres Restantes';
 	}
 
 	function compartirEnTwitter(){
@@ -317,13 +333,6 @@
 
 		var texto = document.getElementById("txtTexto").value;
 
-		/*
-		if(texto.length > 501)
-		{
-			document.getElementById("divLoaderCompartiendo").innerHTML = "<p class='label label-important'>No puedes superar los 500 caracteres para compartir en Facebook !!</p>";
-			return;
-		}*/
-		
 		if(texto != '') {
 			selectDestino = $('#divLoaderCompartiendo');
 				$.ajax(

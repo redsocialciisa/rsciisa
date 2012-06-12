@@ -41,9 +41,9 @@ class Application_Form_FormPerfil extends Zend_Form
         
         $fecha = new Zend_Form_Element_Text('txtFechaNacimiento');
         $fecha->setLabel('Fecha Nacimiento: ')
-        	    ->setValue($objUsuario->getFechaNacimiento())
-        	    ->setAttrib('id', 'datepicker')
-        	    ->setAttrib('name', 'datepicker')
+        	    ->setValue(substr($objUsuario->getFechaNacimiento(),8,2).substr($objUsuario->getFechaNacimiento(),4,3)."-".substr($objUsuario->getFechaNacimiento(),0,4))
+        	    ->setAttrib('id', 'txtFechaNacimiento')
+        	    ->setAttrib('name', 'txtFechaNacimiento')
 		        ->clearErrorMessages()
 		        ->addErrorMessage('Debes ingresar tu fecha de nacimiento');
         

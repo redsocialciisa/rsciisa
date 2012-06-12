@@ -153,6 +153,64 @@ class Application_Model_UsuarioDao
     	return $lista;
     }
     
+    public function obtenerTodosLosNombres()
+    {
+    	$lista = new SplObjectStorage();
+    
+    	$resultado = $this->_table->fetchAll();
+    
+    	if(count($resultado) > 0)
+    	{
+    		foreach ($resultado as $item)
+    		{
+    			$lista->attach($this->obtenerPorNombrePorId($item->usu_id));
+    		}
+    	}
+    
+    	return $lista;
+    }
+    
+    public function obtenerTodosPorString($cadena)
+    {
+        $cadena = trim($cadena);
+        
+    	$lista = new SplObjectStorage();
+    	$where = "usu_nombre like '%".$cadena."%'";
+    	
+    	$resultado = $this->_table->fetchAll($where);
+    
+    	if(count($resultado) > 0)
+    	{
+    		foreach ($resultado as $item)
+    		{
+    		    if($item->usu_id != 6) //administrador
+    		    {
+    				$lista->attach($this->obtenerPorId($item->usu_id));
+    		    }
+    		}
+    	}
+    
+    	return $lista;
+    }
+
+    public function obtenerPorNombrePorId($id)
+    {/*exclusivo para el usu de buscar contactos*/
+    	$id = (int)$id;
+    
+    	$resultado = $this->_table->find($id);
+    
+    	$objUsuario = null;
+    
+    	if(count($resultado) > 0){
+    
+    		$objUsuario = new Application_Model_Usuario();
+    		 
+    		$objUsuario->setId($resultado->current()->usu_id);
+    		$objUsuario->setNombre($resultado->current()->usu_nombre);
+    	}
+    	return $objUsuario;
+    }
+    
     public function obtenerPorNombre($nombre)
     {
     	$lista = new SplObjectStorage();

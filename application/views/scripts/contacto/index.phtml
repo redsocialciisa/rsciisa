@@ -1,0 +1,23 @@
+<table>
+<?php foreach ($this->listaUsuarios as $usuario) {?>
+	<tr>
+		<td colspan="2" class="span4">
+			<p><?php echo $usuario->getNombre();?></p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div style='width: 80px;'>
+				<a class='thumbnail'>
+					<img src="/imagenes/usuarios/<?php echo $usuario->getFoto();?>">
+				</a>
+			</div>
+		</td>
+		<td>
+			a b c
+		</td>
+	</tr>
+<?php } ?>
+</table>
+
+

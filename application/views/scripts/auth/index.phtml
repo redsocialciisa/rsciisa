@@ -50,14 +50,14 @@
 				$cantColumna = 3;
 			?>
 			<form id="frmLoginOK" name="frmLoginOK">
-				<table>
+				<table width="100%" align="center">
 					<?php foreach ($this->listaEmociones as $emocion){
 							if($columna == 0){ 
 							   echo "<tr>";
 							} 
 							echo "<td>";?> 
 							<!-- imprimir el objeto -->
-								<table>
+								<table align="center">
 									<tr>
 										<td align="center">
 											<?php echo $emocion->getNombre();?>
@@ -70,7 +70,7 @@
 									</tr>
 									<tr>
 										<td align="center">
-											<img src="<?php echo $this->baseUrl()?>/imagenes/caras/<?php echo $emocion->getFoto(); ?>" width="50%"></img>
+											<img src="<?php echo $this->baseUrl()?>/imagenes/caras/<?php echo $emocion->getFoto(); ?>"></img>
 										</td>
 									</tr>
 								</table>						
@@ -89,6 +89,7 @@
 			</form>
 			
 			<input type="hidden" id="hdnEmocion" name="hdnEmocion">
+			<input type="hidden" id="hdnLoaderSincronizacion" name="hdnLoaderSincronizacion">
 						
 	    </div>
 	    <div class="modal-footer">
@@ -163,6 +164,7 @@
 
 				               		if(result == 1)
 				               		{
+				               			obtenerIntegracion();
 				               			$('#myModalEstadoAnimo').modal('show');	
 				               		}
 
@@ -183,6 +185,32 @@
 						});
 		}
 			
+	}
+
+	function obtenerIntegracion(){
+
+		var usuario = document.getElementById("txtUsuario").value;
+		
+		$.ajax(
+				{
+				async: true,
+				type: 'POST',
+				url: '<?php echo $this->baseUrl()?>/auth/validar-integracion',
+				data: 'txtUsuario=' + usuario,	
+				dataTypeString: 'text',
+				
+				beforeSend: function(data){
+	                //selectDestino.html('<label>Cargando...</label>');
+			    },  
+			    success: function(requestData){  
+		               		//alert(requestData);
+               				var result = requestData;
+		               		document.getElementById("hdnLoaderSincronizacion").value = result;				               		
+			    },  
+			    error: function(requestData, strError, strTipoError){          
+			    }
+			    
+				});
 	}
 
 	function registrarAceptacion(usuario){
@@ -234,6 +262,7 @@
 		var emocion = document.getElementById("hdnEmocion").value;
 		var usuario = document.getElementById("txtUsuario").value;
 		var password = document.getElementById("txtPassword").value;
+		var sincronizacion = document.getElementById("hdnLoaderSincronizacion").value;
 
 		if(emocion == "")//por defecto la emoción es 'feliz'
 		{
@@ -250,7 +279,8 @@
 				dataTypeString: 'text',
 				
 				beforeSend: function(data){
-					selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
+				  // selectDestino.html("<img src='/imagenes/proyecto/ajax-loader.gif'>");
+					selectDestino.html(sincronizacion);
 			    },  
 			    success: function(requestData){  
 			                //selectDestino.html(requestData);				      

@@ -73,6 +73,7 @@ class Application_Model_PublicacionDao
     	//con el perfil ciisa ej: 'alumno',profesor' etc... se obtiene el perfil que el usuario tiene en nuestra red social.
     	$objPerfilRsc = $objPerfilCiisaDao->obtenerPorPerfilCiisa($perfilCiisa);
     	
+    	/*
     	switch ($objPerfilRsc->getPerfil()) {
     		case 1:
     			$where .= 'pri_pub_id IN (1,4,5,7) AND ';
@@ -83,7 +84,7 @@ class Application_Model_PublicacionDao
     		case 3:
     			$where .= 'pri_pub_id IN (3,5,6,7) AND ';
     			break;
-    	}
+    	}*/
     	
     	$where .= 'tip_pub_id IN (1,2,3)';
     	
@@ -94,7 +95,23 @@ class Application_Model_PublicacionDao
     
     		foreach ($resultado as $item)
     		{
-    			$lista->attach($this->obtenerPorId($item->pub_id));
+    		    switch ($objPerfilRsc->getPerfil()) {
+    		    	case 1:
+    		    	    $lista->attach($this->obtenerPorId($item->pub_id));
+    		    		break;
+    		    	case 2:
+    		    	    if($item->usu_id == $aut->getIdentity()->usu_id)
+    		    	    {
+    		    	       $lista->attach($this->obtenerPorId($item->pub_id));
+    		    	    }
+    		    		break;
+    		    	case 3:
+    		    	    if($item->usu_id == $aut->getIdentity()->usu_id)
+    		    	    {
+    		    	    	$lista->attach($this->obtenerPorId($item->pub_id));
+    		    	    }
+    		    		break;
+    		    }
     		}
     	}
     	

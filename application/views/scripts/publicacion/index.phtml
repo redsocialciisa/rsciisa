@@ -1,0 +1,92 @@
+<?php echo $this->publicacion->getFecha(); ?>
+<table>
+  <tr>
+    <td align="left" colspan="2">
+    
+    	<table>
+    		<tr>
+    			<td>
+    				<div style="width: 100%;">
+				    	 <a class="thumbnail">
+					       	<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $this->usuario->getFoto();?>">
+					     </a>
+				    </div>
+    			</td>
+    			<td valign="top">
+    				<div class="cont2">
+			    		<?php echo $this->publicacion->getTexto(); ?>
+			    	</div>
+    			</td>
+    		</tr>
+    	</table>
+    </td>
+  </tr>
+  <tr>
+  	<td colspan="2" valign="top" align="center">
+ 		<?php if($this->publicacion->getTipoId() == 2){?>
+ 				<table>
+ 					<tr>
+ 						<td>
+ 							<div style="width: 800px; height: 600px;">
+	 							<a class="thumbnail" href="#">
+							       	<img src="<?php echo $this->baseUrl()?>/imagenes/fotos/<?php echo $this->publicacion->getFoto();?>">
+							     </a>
+						     </div>
+ 						</td>
+ 					</tr>
+ 				</table>
+ 		<?php } ?>
+ 		<?php if($this->publicacion->getTipoId() == 3){?>
+ 				<iframe class="youtube-player" width="800" height="600" src="http://www.youtube.com/embed/<?php echo $this->publicacion->getVideo();?>?wmode=transparent">
+									</iframe>
+ 		<?php } ?>
+ 		<?php if($this->publicacion->getTipoId() == 4){?>
+ 				evento
+ 		<?php } ?>
+  	
+  	</td>
+  </tr>
+  <tr>
+  	<td colspan="2" valign="top">
+	  <?php 
+			$objUsuarioDao = new Application_Model_UsuarioDao();
+			$objComentarioDao = new Application_Model_ComentarioDao();
+			$objIntegracionDao = new Application_Model_IntegracionDao();
+			$objPublicacionAux = new Application_Model_PublicacionDao();
+			
+			$aut = Zend_Auth::getInstance();
+			$tieneFacebook = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id, 1);
+			$tieneTwitter = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id, 2);
+			$tieneLinkedin = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id, 3);
+			$objIntegracionDao = null;
+			
+		    if(count($this->comentarios) > 0){
+			    foreach ($this->comentarios as $comentario){?>
+			    	<table>
+			    		<tr>
+			    			<td valign="top">
+			    				<?php $objUsuario = $objUsuarioDao->obtenerPorId($comentario->getUsuarioId());?>
+			    				<div style='width: 50px;'>
+									<a class="thumbnail" href="/muro/muro-contacto/id/<?php echo $objUsuario->getId();?>">
+		      							<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $objUsuario->getFoto();?>"></a>
+	         					</div>
+			    			</td>
+			    			<td valign="top">
+			    				<p class="label span8" ><?php echo $objUsuario->getNombre(); ?></p>
+			    				<div class="cont"><p><?php echo $comentario->getTexto();?></p></div>
+			    				<p>
+			    					<?php echo $objPublicacionAux->calcularTiempoTranscurrido($comentario->getFecha());?>
+			    				</p>
+			    			</td>
+			    		</tr>
+			    	</table>
+		  <?php } ?>
+		  comentarios: <span class="badge badge-info"><?php echo $objComentarioDao->obtenerCantidadComentariosPorPublicacionId($this->publicacion->getId());?></span>
+	  <?php } ?>
+	  <?php
+	  	$objPublicacionAux = null;
+	  ?>
+  	</td>
+  </tr>
+</table>
+

@@ -47,7 +47,10 @@ class PerfilController extends Zend_Controller_Action
         	    
         	    $objUsuario->setId($aut->getIdentity()->usu_id);
         	    $objUsuario->setNombre($this->getRequest()->getParam('txtNombre'));
-        	    $objUsuario->setFechaNacimiento($this->getRequest()->getParam('txtFechaNacimiento'));
+        	    
+        	    $date = strtotime($this->getRequest()->getParam('txtFechaNacimiento'));
+        	    $objUsuario->setFechaNacimiento(date("Y", $date)."-".date("m", $date)."-".date("d", $date));
+        	    
         	    $objUsuario->setCorreo($this->getRequest()->getParam('txtCorreo'));
         	    $objUsuario->setPrivacidadPublicacionId($this->getRequest()->getParam('sltPrivacidad'));
         	    $objUsuario->setEmocionId($aut->getIdentity()->emo_id);
@@ -63,7 +66,6 @@ class PerfilController extends Zend_Controller_Action
         
         $this->view->form = $form;
     }
-
 
 }
 

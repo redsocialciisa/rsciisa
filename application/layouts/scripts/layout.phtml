@@ -40,7 +40,7 @@
 			$(function(){
 
 				// Datepicker
-				$('#datepicker').datepicker({
+				$('#txtFechaNacimiento').datepicker({
 					inline: true,
 			         dateFormat: 'dd-mm-yy',
 			         changeMonth: true,
@@ -75,12 +75,12 @@
 	            if (textareaControl.value.length > maxlength) {
 	                textareaControl.value = textareaControl.value.substring(0, maxlength);
 	            }
-	        }		
+	        }	
 		</script>
 	
 </head>
 
-<body style="padding-top: 45px;">
+<body style="padding-top: 25px;">
 
 <?php
 	$aut = Zend_Auth::getInstance();
@@ -88,14 +88,38 @@
 	$objUsuarioDao = new Application_Model_UsuarioDao();
 ?>
 
+<form action="/contacto/index/" method="post">
 <div class="navbar navbar-fixed-top" data-dropdown="dropdown">
 	<div class="navbar-inner">
     	<div class="container">
-    	
     	    <div class="nav-collapse">
-    	  
+			   			
    	    	<?php if($aut->hasIdentity()){ ?>
-   	    	
+
+   	    		<?php 
+   	    			$datSource = "[";
+   	    			$listaUsuarios = $objUsuarioDao->obtenerTodosLosNombres();
+   	    			$i = 1;
+   	    			 foreach ($listaUsuarios as $item)
+   	    			 {
+   	    			     if($item->getNombre() !="ADMINISTRADOR")
+   	    			     {
+	   	    			     $datSource .= "&quot;".$item->getNombre()."&quot;";
+	   	    			     
+	   	    			     if(count($listaUsuarios) != $i){
+	   	    			         $datSource .= ",";
+	   	    			     }
+   	    			     }
+   	    			     $i++;
+   	    			 }
+   	    			 $datSource .= "]";
+   	    			 
+   	    			//echo $datSource;
+   	    			//$datSource = "[&quot;Claudio Derby&quot;]";
+   	    		?>
+   	    		
+   	    		<input id="txtBuscador" name="txtBuscador" type="text" data-source="<?php echo $datSource;?>" data-items="10" data-provide="typeahead" style="margin: 0 auto;" class="search-query span2"  placeholder="Buscar..">
+   	    		
    	    		<ul class="nav">
    	    		<li>
    	    			 <img src="/imagenes/proyecto/logo5.png">
@@ -115,11 +139,14 @@
 	       						<img alt="" src="<?php echo $this->baseUrl()?>/imagenes/minicaras/<?php echo $objEmocionDao->obtenerPorId($aut->getIdentity()->emo_id)->getFoto();?>">
          				</div>
 			    </li>
+			    
 			    </ul>
    	    	
 	    	    <ul class="nav secondary-nav pull-right">
+	    	    	
 					<li class="dropdown">
 		              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+		              			<i class="icon-user icon-white"></i>
 							    <?php 
 							    	echo $objUsuarioDao->obtenerPorId($aut->getIdentity()->usu_id)->getNombre();
 							   	?>
@@ -138,8 +165,7 @@
     	</div>
 	</div>
 </div>
-
-
+</form>
 
 <div class="colmask threecol">
 	<div class="colmid">
@@ -154,18 +180,21 @@
 							   } 
 						?>
 					</div>
+					<br>
 				</td>
 				<td valign="top">
 					<div class="col2">
 						<?php echo $this->layout()->content; ?>
 					</div>
 				</td>
-				<td valign="top">
-					<div class="col3">
+				<td valign="top" align="rigth">
+					<div class="col3" align="center">
+						<br>
 						<?php if($aut->hasIdentity()){ 
 								echo $this->render('lateral_derecha.phtml');			
 							   } 
 						?>
+						<br>
 					</div>
 				</td>
 			</tr>
@@ -176,11 +205,10 @@
 </div>
 
 
-
 <div class="modal hide" id="myModalGenerico" style="width: 700px;">
     <div class="modal-header">
     <button class="close" onclick="closeModalGenerico()" data-dismiss="modal">×</button>
-    	<div id="divModalGenericoTitulo">
+    	<div id="divModalGenericoTitulo" class="cont2">
     		<h3>Mensaje</h3>
     	</div>
     </div>
