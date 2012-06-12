@@ -22,6 +22,7 @@ class Application_Model_GrupoDao
     		$objGrupo = new Application_Model_Grupo();
     		 
     		$objGrupo->setId($resultado->current()->gru_id);
+    		$objGrupo->setUsuId($resultado->current()->usu_id);
     		$objGrupo->setNombre($resultado->current()->gru_nombre);
     		$objGrupo->setDescripcion($resultado->current()->gru_descripcion);
     		$objGrupo->setFoto($resultado->current()->gru_foto);
@@ -39,7 +40,8 @@ class Application_Model_GrupoDao
     			'gru_descripcion' => $grupo->getDescripcion(),
     			'gru_foto' => $grupo->getFoto(),
     			'gru_fecha_creacion' => $grupo->getFechaCreacion(),
-    	        'tip_gru_id' => $grupo->getTipoGrupoId()
+    	        'tip_gru_id' => $grupo->getTipoGrupoId(),
+    	        'usu_id' => $grupo->getUsuId()
     	);
     
     	if($grupo->getId() != null){

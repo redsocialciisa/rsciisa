@@ -1,39 +1,9 @@
 <?php
-$objIntegracion = new Application_Model_Integracion();
-$objIntegracionDao = new Application_Model_IntegracionDao();
-$aut = Zend_Auth::getInstance();
+	require_once 'Twitter/tmhUtilities.php';
+	$objIntegracion = new Application_Model_Integracion();
+	$objIntegracionDao = new Application_Model_IntegracionDao();
+	$aut = Zend_Auth::getInstance();
 
-if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,2) != null)
-{
-    require 'Twitter/tmhOAuth.php';
-    require 'Twitter/tmhUtilities.php';
-    $objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,2);
-    $tmhOAuth = new tmhOAuth(array(
-    		'consumer_key'    => '4m5dr19FvCwe534XDQ92fw',
-    		'consumer_secret' => 'dobuyMsMLs8kTzSl5YDoYv9O9UZlEN1MBSGBKst9hE',
-    		'user_token'      => $objIntegracion->getToken(),
-    		'user_secret'     => $objIntegracion->getSecret(),
-    ));
-    
-    $code_datos = $tmhOAuth->request('GET', $tmhOAuth->url('1/account/verify_credentials'));
-    
-    if ($code_datos == 200) {
-    	$datos = json_decode($tmhOAuth->response['response']);
-    }
-
-    $code_tweet = $tmhOAuth->request('GET', $tmhOAuth->url('1/statuses/user_timeline'), array(
-    		'include_entities' => '1',
-    		'include_rts'      => '1',
-    		'screen_name'      => $datos->screen_name,
-    		'count'            => 5,
-    ));
-    
-}
-
-
-$objIntegracion = null;
-?>
-<?php
 	//session aut
 	$aut = Zend_Auth::getInstance();
 	//listas
@@ -53,7 +23,7 @@ $objIntegracion = null;
 	 }
 ?>
 
-		<?php if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,3) != null) {?>
+		<?php if ( $aut->getIdentity()->linkedinNombre != null ) {?>
 			<div class="span3 well">
 			<table>
 			  <tr>
@@ -83,7 +53,7 @@ $objIntegracion = null;
 			
 			<?php }?>
 			
-			<?php if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,2) != null)
+			<?php if ($aut->getIdentity()->twitterArregloDatos != null)
 				{?>
 				<div class="span3 well">
 				<table>
@@ -94,17 +64,17 @@ $objIntegracion = null;
 			  	   </tr>
 				  <tr>
 				    <td rowspan="2">
-				    	<img src="<?php echo $datos->profile_image_url; ?>"> 
+				    	<img src="<?php echo $aut->getIdentity()->twitterArregloDatos->profile_image_url; ?>"> 
 				    </td>
 				    <td> 
-				    	<p>Sigo:<span class="badge badge-info"><?php echo $datos->friends_count; ?></span></p>
-				    	<p>Me siguen:<span class="badge badge-info"><?php echo $datos->followers_count; ?></span></p> 
+				    	<p>Sigo:<span class="badge badge-info"><?php echo $aut->getIdentity()->twitterArregloDatos->friends_count; ?></span></p>
+				    	<p>Me siguen:<span class="badge badge-info"><?php echo $aut->getIdentity()->twitterArregloDatos->followers_count; ?></span></p> 
 				    </td>
 				  </tr>
 				</table>  
 				<?php
-					if ($code_tweet == 200) {
-					    $timeline = json_decode($tmhOAuth->response['response'], true);
+					
+					    $timeline = $aut->getIdentity()->twitterArregloTweet;
 						foreach ($timeline as $tweet) :
 							$entified_tweet = tmhUtilities::entify_with_options($tweet);
 							$is_retweet = isset($tweet['retweeted_status']);
@@ -119,37 +89,37 @@ $objIntegracion = null;
 						
 							$permalink  = str_replace(array('%screen_name%','%id%','%created_at%'),
 									array(	$tweet['user']['screen_name'],$tweet['id_str'],	$created_at,),
-									'<a href="https://twitter.com/%screen_name%/%id%">%created_at%</a>'	);
+									'%created_at% - <a href="https://twitter.com/%screen_name%/status/%id%">Ir al Tweet</a>');
 				
 				?>
 				
-				<table border="2">
-					  <tr style="background-color: #81BEF7">
+				<table>
+					  <tr>
 					  	<td style="width: 200px;">
 					  		<div class="cont0">
 					  			<?php echo $tweet['text'];?>
 					  		</div>
-					  	</td>
-					  </tr>
-					  <tr>
-					  	<td>
-					  		<?php 
+					  		<br>
+					  		<div>
+					  			<?php 
 					  		echo $permalink;
 					  		if ($is_retweet):
 					  			echo " retweet ";
 					  		endif;
 					  		echo " <br>Via ".$tweet['source']."<br>";
 					  		?>
+					  		</div>
 					  	</td>
 					  </tr>
+					 <hr></hr>
 				       <?php  
 					endforeach;
-					}
+					
 					echo "</table></div>";
 					}
 					?>
 					
-	<?php if ($objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,1) != null) {?>
+	<?php if ( $aut->getIdentity()->facebookNombre != null) {?>
 	<div class="span3 well">
 				<table>
 				  	 <tr>
