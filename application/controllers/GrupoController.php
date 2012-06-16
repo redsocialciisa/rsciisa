@@ -104,5 +104,64 @@ class GrupoController extends Zend_Controller_Action
         
     }
     
+    public function contactosAction()
+    {
+        $aut = Zend_Auth::getInstance();
+        $objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
+        $objAmigoDao = new Application_Model_AmigoDao();
+        
+        $grupoId = $this->getRequest()->getParam('grupoId');
+        $listaGrupoUsuarios = $objUsuarioGrupoDao->obtenerPorGrupoId($grupoId);
+        $listaAmigoNoInvitado = $objAmigoDao->amigoNoInvitadoGrupo($grupoId,$aut->getIdentity()->usu_id);
+        
+        
+        //Paginador
+        Zend_View_Helper_PaginationControl::setDefaultViewPartial ( 'paginator/items.phtml' );
+        $paginatorGrupoUsuarios = Zend_Paginator::factory($listaGrupoUsuarios);
+        $paginatorGrupoUsuarios->setDefaultItemCountPerPage( 5 );
+        
+        $paginatorAmigoNoInvitado = Zend_Paginator::factory($listaAmigoNoInvitado);
+        $paginatorAmigoNoInvitado->setDefaultItemCountPerPage( 5 );
+        
+        if ($this->_hasParam ( 'page' )) {
+        	$paginatorGrupoUsuarios->setCurrentPageNumber( $this->_getParam ( 'page' ) );
+        }
+        
+        if ($this->_hasParam ( 'page' )) {
+        	$paginatorAmigoNoInvitado->setCurrentPageNumber( $this->_getParam ( 'page' ) );
+        }
+        
+        
+        $this->view->grupoId = $grupoId;
+        $this->view->listaGrupoUsuarios = $paginatorGrupoUsuarios;
+        $this->view->listaAmigoNoInvitado = $paginatorAmigoNoInvitado;
+
+    }
+    
+    public function marcarEliminarAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $usu_id = $this->getRequest()->getParam('usuarioId');
+        $gru_id = $this->getRequest()->getParam('grupoId');
+        $cbx_usuario = $this->getRequest()->getParam('cbxUsuario');
+        
+        $objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
+        $objUsuarioGrupoDao->marcarEliminar($gru_id, $usu_id, $cbx_usuario);
+        
+        $this->view->ok = "ok";
+    }
+    
+    
+    public function eliminarUsuarioGrupoAction()
+    {
+        $grupoId = $this->getRequest()->getParam('grupoId');
+        
+        $objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
+        
+        $objUsuarioGrupoDao->eliminarUsuariosPorGrupo($grupoId);
+        
+        $this->_redirect('/grupo/contactos/grupoId/' . $grupoId);
+    }
+    
 }
 

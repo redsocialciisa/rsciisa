@@ -1,0 +1,135 @@
+ <div class="tabbable">
+    <ul class="nav nav-tabs">
+    	<li><a href="#GruposContacto" data-toggle="tab">Contactos del grupo</a></li>
+    	<li><a href="#GruposInvitarContactos" data-toggle="tab">Invitar contactos</a></li>
+    </ul>
+    <div class="tab-content">
+    	<div class="tab-pane active" id="GruposContacto">
+    		<?php echo $this->listaGrupoUsuarios;?>
+    		
+    		<?php 
+				$columna = 0;
+				$cantColumna = 3;
+			?>
+			<form id="frmLoginOK" name="frmLoginOK">
+				<table width="100%" align="center">
+					<?php foreach ($this->listaGrupoUsuarios as $usuario){
+							if($columna == 0){ 
+							   echo "<tr>";
+							} 
+							echo "<td>";?> 
+							<!-- imprimir el objeto -->
+								<table align="center">
+									<tr>
+										<td align="center">
+											<?php 
+											echo $usuario->getNombre();
+											$objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
+											$flagEliminado = $objUsuarioGrupoDao->obtenerPorGrupoYUsuario($this->grupoId, $usuario->getId());
+												if($flagEliminado == 1)
+												{
+												    	$flagEliminado = "checked='checked'";
+												}
+											?>
+										</td>
+									</tr>
+									<tr>
+										<td align="center">
+											<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $usuario->getFoto(); ?>"></img>
+											<?php 
+												$aut = Zend_Auth::getInstance();
+												if($usuario->getId() != $aut->getIdentity()->usu_id){ ?>
+													<input type="checkbox" <?php echo $flagEliminado; ?> id="cbx<?php echo $usuario->getId();?>" name="cbx<?php echo $usuario->getId();?>" onclick="aEliminar(<?php echo $usuario->getId();?>)">
+											<?php } ?>
+											<?php $objUsuarioGrupoDao = null;?>
+										</td>
+									</tr>
+								</table>						
+							<!-- fin de imprimir el objeto -->
+							<?php 
+							echo "</td>"; 
+							$columna++;
+							 if($columna == $cantColumna){
+								 echo "</tr>";				
+								 $columna = 0;
+							 }
+						 }
+						 echo "</tr>";
+					?>
+				</table>
+				
+				<button type="button" onclick="openModalConfirmarEliminar(<?php echo $this->grupoId;?>)">
+				Eliminar contactos seleccionados
+				</button>
+    		
+    	</div>
+    	<div class="tab-pane" id="GruposInvitarContactos">
+    		<p>Invitar contactos</p>
+    		<?php echo $this->listaAmigoNoInvitado;?>
+    		<?php 
+		    		foreach ($this->listaAmigoNoInvitado as $item)
+		    		{
+		    		    echo $item->getNombre();
+		    		}
+    		?>
+    	</div>
+    </div>
+ </div>
+ 
+ 
+<div class="modal hide" id="myModalEliminarUsuarioGrupo" style="width: 700px;">
+    <div class="modal-header">
+    <button class="close" data-dismiss="modal">×</button>
+    	Mensaje
+    </div>
+    <div class="modal-body">
+    	¿Estás seguro de eliminar los usuarios? <div id="divGrupo"></div> 
+    </div>
+    <div class="modal-footer">
+    	<a class="btn btn-success" href="/grupo/eliminar-usuario-grupo/grupoId/<?php echo $this->grupoId;?>">Si</a>
+  	    <a href="#" class="btn btn-success" data-dismiss="modal">No</a>
+    </div>
+</div>	
+ 
+ <script type="text/javascript">
+ 
+ function openModalConfirmarEliminar(idGrupo)
+	{
+		$('#myModalEliminarUsuarioGrupo').modal("show");	
+	}
+
+ function aEliminar(usuId)
+	{
+		var cbxUsuario = document.getElementById("cbx" + usuId).checked;
+		var check = "";		
+
+		if (cbxUsuario)
+		{
+			check = 1;
+		}
+		else		 
+		{
+			check = 0;
+		}	
+
+		$.ajax(
+				{
+				async: true,
+				type: 'POST',
+				url: '<?php echo $this->baseUrl()?>/grupo/marcar-eliminar',
+				data: 'usuarioId='+usuId+'&cbxUsuario='+check+'&grupoId='+<?php echo $this->grupoId;?>,	
+				dataTypeString: 'text',
+				
+				beforeSend: function(data){
+					  //selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
+			    },  
+			    success: function(requestData){
+				    var result = requestData;
+
+			    },  
+			    error: function(requestData, strError, strTipoError){          
+			    }
+			    
+				});
+	}
+ </script>   		

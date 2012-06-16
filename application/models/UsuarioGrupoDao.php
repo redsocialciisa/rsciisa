@@ -26,6 +26,7 @@ class Application_Model_UsuarioGrupoDao
     		$objUsuarioGrupo->setGrupoId($resultado->current()->gru_id);
     		$objUsuarioGrupo->setUsuarioId($resultado->current()->usu_id);
     		$objUsuarioGrupo->setFechaParticipa($resultado->current()->usu_gru_fecha_une);
+    		$objUsuarioGrupo->setEliminar($resultado->current()->usu_gru_eliminar);
     
     	}
     	return $objUsuarioGrupo;
@@ -73,6 +74,8 @@ class Application_Model_UsuarioGrupoDao
     {
     	$lista = new SplObjectStorage();
     	$where = 'gru_id ='. $gru_id;
+    	$objUsuarioDao = new Application_Model_UsuarioDao();
+    	
     
     	$resultado = $this->_table->fetchAll($where);
     
@@ -80,16 +83,16 @@ class Application_Model_UsuarioGrupoDao
     	{
     		foreach ($resultado as $item)
     		{
-    			$lista->attach($this->obtenerPorId($item->usu_gru_id));
+    		   	$lista->attach($objUsuarioDao->obtenerPorId($this->obtenerPorId($item->usu_gru_id)->getUsuarioId()));
     		}
     	}
     
     	return $lista;
     }
     
-    public function eliminarUsuariosPorGrupoId($gru_id)
+    public function eliminarUsuariosPorGrupo($gru_id)
     {
-    	$where = 'gru_id = ' . $gru_id;
+    	$where = 'gru_id = ' . $gru_id.' and usu_gru_eliminar = 1';
     
     	return $this->_table->delete($where);
     }
@@ -100,6 +103,32 @@ class Application_Model_UsuarioGrupoDao
     
     	return $this->_table->delete($where);
     }
+    
+    public function obtenerPorGrupoYUsuario($gru_id,$usu_id)
+    {
+    	$where = 'gru_id ='. $gru_id.' and usu_id ='.$usu_id;
+    
+    	$resultado = $this->_table->fetchAll($where);
+    
+    	if(count($resultado) > 0)
+    	{
+    		foreach ($resultado as $item)
+    		{
+				return $this->obtenerPorId($item->usu_gru_id)->getEliminar();
+    		}
+    	}
+    }
+    
+    public function marcarEliminar($gru_id,$usu_id,$cbx_usuario)
+    {
+        	$data = array('usu_gru_eliminar' => $cbx_usuario);
+ 
+        	$where = 'gru_id = '.$gru_id.' and usu_id = '. $usu_id;
+        	
+    		return $this->_table->update($data, $where);
+    }
 
+    
+    
 }
 

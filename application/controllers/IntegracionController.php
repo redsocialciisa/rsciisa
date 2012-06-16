@@ -92,7 +92,7 @@ class IntegracionController extends Zend_Controller_Action
         		$objIntegracion->setUsuarioId($aut->getIdentity()->usu_id);
         		$objIntegracion->setRedId("2");
         		$objIntegracionDao->guardar($objIntegracion);
-        		echo "Integracion con Twitter exitosa"."<BR>";
+        		$this->view->mensajeTwitter = "Integracion con Twitter exitosa";
         		
         		
         	} else {
@@ -327,7 +327,7 @@ class IntegracionController extends Zend_Controller_Action
         $objIntegracion->setUsuarioId($aut->getIdentity()->usu_id);
         $objIntegracion->setRedId("3");
         $objIntegracionDao->guardar($objIntegracion);
-        echo "Integracion con Linked In exitosa"."<BR>";
+        $this->view->mensajeLinkedin = "Integracion con Linked In exitosa";
         
         
         unset($_SESSION['linkedin_oauth_token']);
@@ -489,8 +489,11 @@ class IntegracionController extends Zend_Controller_Action
         	$formData = $this->getRequest()->getPost();
         	if ($form->isValid($formData)) {
         		$texto = $form->getValue('texto');
+        		$id = $form->getValue('id');
         		$objIntegracion = new Application_Model_Integracion();
         		$objIntegracionDao = new Application_Model_IntegracionDao();
+        		$objPublicacion = new Application_Model_Publicacion();
+        		$objPublicacionDao = new Application_Model_PublicacionDao();
         		
         		$aut = Zend_Auth::getInstance();
         		$objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id,1);
@@ -505,6 +508,7 @@ class IntegracionController extends Zend_Controller_Action
         		
         		$facebook->setAccessToken($objIntegracion->getToken());
         		$user = $facebook->getUser();
+        		
         		
         		if ($user) {
         			try {
@@ -522,13 +526,20 @@ class IntegracionController extends Zend_Controller_Action
         			$loginUrl = $facebook->getLoginUrl();
         		}
         		
+        		$objPublicacion = $objPublicacionDao->obtenerPorId($id);
+        		
+        		if ($objPublicacion->getTipoId() == 2)
+        		{
+        		    $urlFoto = 'http://of.novadvice.com/imagenes/fotos/'.$objPublicacion->getFoto();
+        		}
+        		else
+        		{
+        		    $urlFoto = 'http://of.novadvice.com/imagenes/proyecto/rsc.png';
+        		}        
         		        		
         		$facebook->api('/me/feed','post', array(
-        				'name'=>'campo nombre',
         				'message'=>$texto,
-        				'picture'=>'https://www.nakasha-spain.com/shop/images/Hellacopters-In-The-Sign-Of-Th-450786.jpg',
-        				'caption'=>'titulo',
-        				'description'=>'descripcion',
+        				'picture'=>$urlFoto,
         		));
         		$this->view->ok = "ok";
         	} else {
@@ -545,7 +556,7 @@ class IntegracionController extends Zend_Controller_Action
 
         $objIntegracionDao->eliminar($objFacebook->getId());
         $objIntegracionDao = null;
-        
+        $aut->getIdentity()->facebookNombre = null;
         $this->_redirect('/perfil/index');
         
     }	
@@ -558,7 +569,7 @@ class IntegracionController extends Zend_Controller_Action
         
         $objIntegracionDao->eliminar($objTwitter->getId());
         $objIntegracionDao = null;
-        
+        $aut->getIdentity()->twitterArregloDatos = null;
         $this->_redirect('/perfil/index');
     }
     
@@ -570,7 +581,7 @@ class IntegracionController extends Zend_Controller_Action
         
         $objIntegracionDao->eliminar($objLinkedin->getId());
         $objIntegracionDao = null;
-        
+        $aut->getIdentity()->linkedinNombre = null;
         $this->_redirect('/perfil/index');
     }
 
