@@ -16,6 +16,8 @@ class GrupoController extends Zend_Controller_Action
         $objUsuarioGrupo = new Application_Model_UsuarioGrupo();
         $objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
         $objGrupo = new Application_Model_Grupo();
+        $objPublicacion = new Application_Model_Publicacion();
+        $objPublicacionDao = new Application_Model_PublicacionDao();
         $fecha = new DateTime();
         
         
@@ -41,14 +43,24 @@ class GrupoController extends Zend_Controller_Action
         			copy($foto_tmp, "/var/www/rsciisa/public/imagenes/grupos/".$fechahora."_".$foto_name);
         			$objGrupo->setFoto($fechahora."_".$foto_name);
         		}
+        		
+        		$objPublicacion->setFecha($fechahora);
+        		$objPublicacion->setFoto($fechahora."_".$foto_name);
+        		$objPublicacion->setPrivacidadId(7);
+        		$objPublicacion->setTexto($this->getRequest()->getParam('txtDescripcion'));
+        		$objPublicacion->setUsuarioPara($aut->getIdentity()->usu_id);
+        		$objPublicacion->setTipoId(5);
+        		$objPublicacion->setUsuarioId($aut->getIdentity()->usu_id);
+        		$objPublicacionDao->guardar($objPublicacion);
 
         		$idGrupo = $objGrupoDao->guardar($objGrupo);
-        		
         		$objUsuarioGrupo->setParticipa(0);
         		$objUsuarioGrupo->setGrupoId($idGrupo);
         		$objUsuarioGrupo->setUsuarioId($aut->getIdentity()->usu_id);
         		$objUsuarioGrupo->setFechaParticipa($fechahora);
         		$objUsuarioGrupoDao->guardar($objUsuarioGrupo);
+        		
+
         		
         	}else{
         		$form->populate($formData);
