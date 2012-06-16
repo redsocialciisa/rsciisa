@@ -90,6 +90,13 @@ class Application_Model_UsuarioGrupoDao
     	return $lista;
     }
     
+    public function eliminarUsuariosPorGrupoId($gru_id)
+    {
+    	$where = 'gru_id = ' . $gru_id;
+    
+    	return $this->_table->delete($where);
+    }
+    
     public function eliminarUsuariosPorGrupo($gru_id)
     {
     	$where = 'gru_id = ' . $gru_id.' and usu_gru_eliminar = 1';
@@ -124,10 +131,20 @@ class Application_Model_UsuarioGrupoDao
         	$data = array('usu_gru_eliminar' => $cbx_usuario);
  
         	$where = 'gru_id = '.$gru_id.' and usu_id = '. $usu_id;
-        	
     		return $this->_table->update($data, $where);
     }
 
+    
+    public function obtenerMarcadosEliminar($gru_id)
+    {
+    	$where = 'gru_id ='. $gru_id.' and usu_gru_eliminar = 1';
+    
+    	$resultado = $this->_table->fetchAll($where);
+    
+  		return count($resultado);
+    }
+    
+    
     
     
 }

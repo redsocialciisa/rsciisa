@@ -10,6 +10,7 @@
     		<?php 
 				$columna = 0;
 				$cantColumna = 3;
+				$countCheck = 0;
 			?>
 			<form id="frmLoginOK" name="frmLoginOK">
 				<table width="100%" align="center">
@@ -40,8 +41,10 @@
 												$aut = Zend_Auth::getInstance();
 												if($usuario->getId() != $aut->getIdentity()->usu_id){ ?>
 													<input type="checkbox" <?php echo $flagEliminado; ?> id="cbx<?php echo $usuario->getId();?>" name="cbx<?php echo $usuario->getId();?>" onclick="aEliminar(<?php echo $usuario->getId();?>)">
-											<?php } ?>
-											<?php $objUsuarioGrupoDao = null;?>
+											<?php 
+											} 
+											?>
+											<?php #$objUsuarioGrupoDao = null;?>
 										</td>
 									</tr>
 								</table>						
@@ -75,12 +78,14 @@
     	</div>
     </div>
  </div>
- 
- 
+     	<?php 
+    	$countCheck = $objUsuarioGrupoDao->obtenerMarcadosEliminar($this->grupoId);
+    	?>
+<input type="hidden" id="hdnCountEliminar" value="<?php echo $countCheck;?>">
 <div class="modal hide" id="myModalEliminarUsuarioGrupo" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
-    	Mensaje
+    	Eliminar usuarios
     </div>
     <div class="modal-body">
     	¿Estás seguro de eliminar los usuarios? <div id="divGrupo"></div> 
@@ -89,13 +94,37 @@
     	<a class="btn btn-success" href="/grupo/eliminar-usuario-grupo/grupoId/<?php echo $this->grupoId;?>">Si</a>
   	    <a href="#" class="btn btn-success" data-dismiss="modal">No</a>
     </div>
+    
 </div>	
+ 
+<div class="modal hide" id="myModalEliminarUsuarioGrupoNoSelecionado" style="width: 700px;">
+    <div class="modal-header">
+    <button class="close" data-dismiss="modal">×</button>
+    	Eliminar usuarios
+    </div>
+    <div class="modal-body">
+    	No hay usuarios seleccionados<div id="divGrupo"></div> 
+    </div>
+    <div class="modal-footer">
+  	    <a href="#" class="btn btn-success" data-dismiss="modal">Aceptar</a>
+    </div>
+    
+</div>	
+ 
+ 
  
  <script type="text/javascript">
  
  function openModalConfirmarEliminar(idGrupo)
 	{
-		$('#myModalEliminarUsuarioGrupo').modal("show");	
+		if (document.getElementById("hdnCountEliminar").value > 0)
+		{
+			$('#myModalEliminarUsuarioGrupo').modal("show");
+		}		
+		else
+		{
+			$('#myModalEliminarUsuarioGrupoNoSelecionado').modal("show");
+		}		
 	}
 
  function aEliminar(usuId)
@@ -106,10 +135,12 @@
 		if (cbxUsuario)
 		{
 			check = 1;
+			document.getElementById("hdnCountEliminar").value = document.getElementById("hdnCountEliminar").value + 1;
 		}
 		else		 
 		{
 			check = 0;
+			document.getElementById("hdnCountEliminar").value = document.getElementById("hdnCountEliminar").value - 1;
 		}	
 
 		$.ajax(
