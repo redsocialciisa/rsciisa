@@ -185,8 +185,7 @@ class Application_Model_AmigoDao
     	$where = 'usu_id = ' . $ami_usu_id . ' AND ami_usu_id ='. $usu_id;
     	return $this->_table->delete($where);
     }  
-<<<<<<< HEAD
-=======
+
 
 	public function amigoNoInvitadoGrupo($grupoId,$usu_id)
 	{
@@ -202,7 +201,6 @@ class Application_Model_AmigoDao
 	    {
 	    	foreach ($resultado as $item)
 	    	{
-	    	    #echo $item->usu_id;
 	    	    $lista->attach($objUsuarioDao->obtenerPorId($item->usu_id));
 	    	}
 	    }
@@ -211,7 +209,6 @@ class Application_Model_AmigoDao
 	    
 	}
     
->>>>>>> refs/heads/rfribla
 }
 
 ?>
