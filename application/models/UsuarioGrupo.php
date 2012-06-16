@@ -7,7 +7,7 @@ class Application_Model_UsuarioGrupo
     private $_usuarioId;
     private $_fechaParticipa;
     private $_participa;
-    
+    private $_eliminar;
 	/**
 	 * @return the $_id
 	 */
@@ -41,6 +41,13 @@ class Application_Model_UsuarioGrupo
 	 */
 	public function getParticipa() {
 		return $this->_participa;
+	}
+
+	/**
+	 * @return the $_eliminar
+	 */
+	public function getEliminar() {
+		return $this->_eliminar;
 	}
 
 	/**
@@ -78,6 +85,15 @@ class Application_Model_UsuarioGrupo
 		$this->_participa = $_participa;
 	}
 
+	/**
+	 * @param field_type $_eliminar
+	 */
+	public function setEliminar($_eliminar) {
+		$this->_eliminar = $_eliminar;
+	}
+
+    
+	
     
     
 

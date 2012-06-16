@@ -177,9 +177,6 @@ class AuthController extends Zend_Controller_Action
         	$aut->getIdentity()->perfil_ciisa = $objCiisa->obtenerPerfil($usuario);
         	$aut->getIdentity()->carrera = $objCiisa->obtenerCarrera($usuario);
         	
-        	//lol
-        	//$objUsuario->getId()
-        	
         	$objIntegracion = new Application_Model_Integracion();
         	$objIntegracionDao = new Application_Model_IntegracionDao();
         	if ($objIntegracionDao->obtenerLlavesIntegracion($objUsuario->getId(),3) != null)

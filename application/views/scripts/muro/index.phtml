@@ -154,6 +154,7 @@
     			<tr>
     				<td>
     					<input type="hidden" id="maximoPost" name="maximoPost">
+    					<input type="hidden" id="idPost" name="idPost">
     					<textarea id="txtTexto" name="txtTexto" onKeyDown="textCounter(this, 'count_display');">
     					</textarea>
     					<span id="count_display" style="display:none;">140 caracteres restantes</span>
@@ -205,6 +206,7 @@
 		document.getElementById("divBotonera").innerHTML = $boton;
 		
 		document.getElementById("txtTexto").value = document.getElementById("hdnTextoPublicacion" + id).value; 
+		document.getElementById("idPost").value = id;
 		
 		$('#myModalPost').modal('show');		
 	}
@@ -262,6 +264,7 @@
 	function compartirEnFacebook(){
 
 		var texto = document.getElementById("txtTexto").value;
+		var id = document.getElementById("idPost").value;
 
 		if(texto != '') {
 			selectDestino = $('#divLoaderCompartiendo');
@@ -270,7 +273,7 @@
 						async: true,
 						type: 'POST',
 						url: '<?php echo $this->baseUrl()?>/integracion/publicar-facebook',
-						data: 'texto=' + texto,	
+						data: 'texto=' + texto+'&id='+ id,	
 						dataTypeString: 'text',
 						
 						beforeSend: function(data){

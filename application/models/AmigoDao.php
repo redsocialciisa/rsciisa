@@ -101,7 +101,28 @@ class Application_Model_AmigoDao
     	return $this->_table->delete($where);
     }  
 
-
+	public function amigoNoInvitadoGrupo($grupoId,$usu_id)
+	{
+	    $aut = Zend_Auth::getInstance();
+	    
+	    $lista = new SplObjectStorage();
+	    $where = 'usu_id not in (SELECT usu_id FROM rsc_usuarios_grupos where gru_id = '.$grupoId.') and ami_usu_id ='.$usu_id;
+	    $objUsuarioDao = new Application_Model_UsuarioDao();
+	    
+	    $resultado = $this->_table->fetchAll($where);
+	    
+	    if(count($resultado) > 0)
+	    {
+	    	foreach ($resultado as $item)
+	    	{
+	    	    #echo $item->usu_id;
+	    	    $lista->attach($objUsuarioDao->obtenerPorId($item->usu_id));
+	    	}
+	    }
+	    
+	    return $lista;
+	    
+	}
     
 }
 

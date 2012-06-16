@@ -13,7 +13,6 @@
     </ul>
     <div class="tab-content">
     	<div class="tab-pane active" id="misGruposParticipo">
-    		<p>Mis grupos que participo</p>
     		<?php echo $this->listaGrupoUsuario;?>
     		<table>
     			<?php 
@@ -35,7 +34,7 @@
 						</td>
 						<td>
 							<?php if ($aut->getIdentity()->usu_id == $item->getUsuId()) {?>
-							<a class="btn btn-info"> Agregar contactos </a>
+							<a href="<?php echo $this->url(array('controller'=>'grupo', 'action'=>'contactos', 'grupoId'=>$item->getId())); ?>"  class="btn btn-info"> Contactos </a>
 							<a class="btn btn-info"> Editar grupo </a>
 							<a class="btn btn-info" onclick="openModalBorrar(<?php echo $item->getId();?>)"> Borrar grupo </a>
 							<?php }?>
