@@ -14,7 +14,7 @@
 						<td rowspan="3" valign="top">
 							<div style='width: 100px;'>
 								<a class="thumbnail" href="/muro/muro-contacto/id/<?php echo $publicacion->getUsuarioId();?>">
-	      							<img alt="" src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getFoto();?>">
+	      								<img alt="" src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getFoto();?>">
          						</a>
          					</div>
 						</td>
@@ -90,9 +90,12 @@
 							<?php
 								$objOfertaDao = new Application_Model_OfertaDao();
 							?>
-								<div>
-									<img src="/imagenes/proyecto/oferta.png">								
-								</div>
+								<div style="width: 320px; height: 100%;">
+									<a class="thumbnail">
+											<img src="/imagenes/proyecto/oferta.png">		      							
+	         						</a>
+         						</div>
+								
 								<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha());?></p>
 							<?php } ?>
 							<?php  

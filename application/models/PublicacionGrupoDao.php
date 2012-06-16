@@ -29,6 +29,28 @@ class Application_Model_PublicacionGrupoDao
     	return $publicacionGrupo;
     }
     
+    public function obtenerPorPublicacionId($pub_id)
+    {
+    	$id = (int)$id;
+    
+    	$where = 'pub_id ='. $pub_id;
+    	 
+    	$resultado = $this->_table->fetchAll($where);
+    
+    	$publicacionGrupo = null;
+    
+    	if(count($resultado) > 0){
+    
+    		$publicacionGrupo = new Application_Model_PublicacionGrupo();
+    		 
+    		$publicacionGrupo->setId($resultado->current()->pub_gru_id);
+    		$publicacionGrupo->setPublicacionId($resultado->current()->pub_id);
+    		$publicacionGrupo->setGrupoId($resultado->current()->gru_id);
+    
+    	}
+    	return $publicacionGrupo;
+    }
+    
     public function obtenerPublicacionesDelGrupo($gru_id)
     {
     	$aut = Zend_Auth::getInstance();

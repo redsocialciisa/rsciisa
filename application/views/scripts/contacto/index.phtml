@@ -28,11 +28,11 @@
 												<tr>
 													<td>
 														<div class="btn-group">
-												          <a href="#" class="btn btn-primary"><i class="icon-user icon-white"></i> User</a>
+												          <a href="#" class="btn btn-primary"><i class="icon-user icon-white"></i>Contacto</a>
 												          <a href="#" data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="caret"></span></a>
 												          <ul class="dropdown-menu">
 												            <li><a href="#"><i class="icon-pencil"></i> Mensaje </a></li>
-												            <li><a href="#" onclick="eliminarContacto(<?php echo $usuario->getId();?>)"><i class="icon-trash"></i> Eliminar </a></li>
+												            <li><a href="#" onclick="openMyModalEliminarContacto(<?php echo $usuario->getId();?>,'<?php echo $usuario->getNombre();?>')"><i class="icon-trash"></i> Eliminar </a></li>
 												            <li class="divider"></li>
 												            <li><a href="#"><i class="i"></i> Muro </a></li>
 												          </ul>
@@ -90,7 +90,7 @@
     					</td>
     					<td>
 							<button href="#" class="btn btn-success" onclick="aceptarContacto(<?php echo $usuarioPendiente->getId();?>)">Aceptar</button>
-							<button href="#" class="btn btn-danger" onclick="rechazarContacto(<?php echo $usuarioPendiente->getId();?>)">Rechazar</button>	
+							<button href="#" class="btn btn-danger" onclick="openMyModalRechazarContacto(<?php echo $usuarioPendiente->getId();?>,'<?php echo $usuarioPendiente->getNombre();?>')">Rechazar</button>	
     					</td>
     				</tr>
     	<?php } ?>
@@ -99,6 +99,36 @@
     </div>
     </div>
 </div>
+
+<div class="modal hide" id="myModalEliminarContacto" style="width: 700px;">
+    <div class="modal-header">
+    <button class="close" data-dismiss="modal">×</button>
+    <img src="/imagenes/proyecto/Info.png">&nbsp;<b>Eliminar contacto</b>
+    </div>
+    <div class="modal-body">
+    <div id="divNombreUsuario"></div>
+    <input type="hidden" id="hdnUsuario" name="hdnUsuario">
+    </div>
+    <div class="modal-footer">
+  	    <a href="#" onclick="eliminarContacto()" class="btn btn-success" data-dismiss="modal">Si, eliminar</a>
+  	    <a href="#" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
+    </div>
+</div>	
+
+<div class="modal hide" id="myModalRechazarContacto" style="width: 700px;">
+    <div class="modal-header">
+    <button class="close" data-dismiss="modal">×</button>
+    <img src="/imagenes/proyecto/Info.png">&nbsp;<b>Rechazar solicitud de contacto</b>
+    </div>
+    <div class="modal-body">
+    <div id="divNombreUsuarioRechazo"></div>
+    <input type="hidden" id="hdnUsuarioRechazo" name="hdnUsuarioRechazo">
+    </div>
+    <div class="modal-footer">
+  	    <a href="#" onclick="rechazarContacto()" class="btn btn-success" data-dismiss="modal">Si, rechazar</a>
+  	    <a href="#" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
+    </div>
+</div>	
 
 <script type="text/javascript">
 					
@@ -134,8 +164,10 @@ function aceptarContacto(id)
 	
 }
 
-function rechazarContacto(id)
+function rechazarContacto()
 {
+	id = document.getElementById("hdnUsuarioRechazo").value ;
+	
 	$.ajax(
 			{
 			async: true,
@@ -165,8 +197,23 @@ function rechazarContacto(id)
 	
 }
 
-function eliminarContacto(id)
+function openMyModalEliminarContacto(id,nombre)
 {
+	document.getElementById("hdnUsuario").value = id;
+	document.getElementById("divNombreUsuario").innerHTML = "¿Estás seguro de eliminar a: <b>" + nombre + "</b> ?";
+	$('#myModalEliminarContacto').modal('show');			
+}
+
+function openMyModalRechazarContacto(id,nombre)
+{
+	document.getElementById("hdnUsuarioRechazo").value = id;
+	document.getElementById("divNombreUsuarioRechazo").innerHTML = "¿Estás seguro de rechazar la solicitud de: <b>" + nombre + "</b> ?";
+	$('#myModalRechazarContacto').modal('show');			
+}
+
+function eliminarContacto()
+{
+	id = document.getElementById("hdnUsuario").value 
 	
 	$.ajax(
 			{

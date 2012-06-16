@@ -26,6 +26,7 @@ class Application_Form_FormPerfil extends Zend_Form
         	   ->setValue($objUsuario->getNombre())
         	   ->setAttrib('class', 'span4')
         	   ->setAttrib('onkeypress', 'return soloLetras(event)')
+        	   ->setAttrib('readonly', true)
         	   ->clearErrorMessages()
                ->addErrorMessage('Debes ingresar el nombre de usuario');
         
