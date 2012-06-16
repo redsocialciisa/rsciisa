@@ -373,6 +373,85 @@ class MuroController extends Zend_Controller_Action
         }
     }
     
+    public function muroGrupoAction()
+    {
+        $idGrupo = $this->getRequest()->getParam('id');
+        $aut = Zend_Auth::getInstance();
+        
+        $objPublicacionGrupoDao = new Application_Model_PublicacionGrupoDao();
+        $listaPublicaciones = $objPublicacionGrupoDao->obtenerPublicacionesDelGrupo($idGrupo);
+        
+        //plantilla de paginator
+        Zend_View_Helper_PaginationControl::setDefaultViewPartial ( 'paginator/items.phtml' );
+        
+        $paginator = Zend_Paginator::factory( $listaPublicaciones );
+        $paginator->setDefaultItemCountPerPage( 5 );
+        
+        if ($this->_hasParam ( 'page' )) {
+        	$paginator->setCurrentPageNumber( $this->_getParam ( 'page' ) );
+        }
+        
+        $formPublicacion = new Application_Form_FormPublicacion();
+        if($this->getRequest()->isPost())
+        {
+        	$formData = $this->_request->getPost();
+        	if($formPublicacion->isValid($this->_getAllParams()))
+        	{
+        	    $objPublicacion = new Application_Model_Publicacion();
+        	    $objPublicacionDao = new Application_Model_PublicacionDao();
+        	    
+        		$aut = Zend_Auth::getInstance();
+				        		
+        		$objPublicacion->setUsuarioId($aut->getIdentity()->usu_id);
+        		$objPublicacion->setUsuarioPara($aut->getIdentity()->usu_id);
+        		$objPublicacion->setTexto($this->getRequest()->getParam('txtTextoPublicacion'));
+        		$objPublicacion->setTipoId($this->getRequest()->getParam('grpTipo'));
+        		$objPublicacion->setPrivacidadId(7); //POR  DEFECTO
+        		$objPublicacion->setVideo($this->getRequest()->getParam('txtVideo'));
+        		
+        		$fecha = new DateTime();
+        		$objPublicacion->setFecha($fecha->format('Y-m-d H:i:s'));
+        		
+        		$fecha = new DateTime();
+        		$fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
+        		
+        		if(isset($_FILES['fileFoto']['name']) && $_FILES['fileFoto']['name'] != "")
+        		{
+        		    $fecha = new DateTime();
+        		    $fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
+        		    
+	        		$foto_name = $_FILES['fileFoto']['name'];
+	        		$objPublicacion->setFoto($fechahora."_".$foto_name);
+	        		$foto_tmp 	= $_FILES['fileFoto']['tmp_name'];
+	        		copy($foto_tmp, "/var/www/rsciisa/public/imagenes/fotos/".$fechahora."_".$foto_name);
+        		}
+        		
+        		 //se genera la publicacion
+        		 $idPublicacion = $objPublicacionDao->guardar($objPublicacion);
+        		 
+        		 //objeto que sera guardado en la tabla intermedia
+        		 $objPublicacionGrupo = new Application_Model_PublicacionGrupo();
+        		 $objPublicacionGrupo->setGrupoId($idGrupo);
+        		 $objPublicacionGrupo->setPublicacionId($idPublicacion);
+        		 
+        		 //se graba en la tabla intermedia
+        		 $objPublicacionGrupoDao->guardar($objPublicacionGrupo); 
+        		
+           		 $this->view->success = "success";
+        		 $this->_redirect('/muro/muro-grupo/id/'.$idGrupo);
+        		
+        	}else{
+        	    //$formPublicacion->optFoto->setAttrib('checked',true);
+        	    $formPublicacion->populate($formData);
+        	    $this->view->error = "error";        	    
+        	}
+        }
+        
+        $this->view->Grupo = $idGrupo;
+        $this->view->listaPublicaciones = $paginator;
+       	$this->view->formPublicacion = $formPublicacion;
+    }
+    
     public function logoutAction()
     {
     	Zend_Auth::getInstance()->clearIdentity();

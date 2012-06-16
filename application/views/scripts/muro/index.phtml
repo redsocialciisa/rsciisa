@@ -31,7 +31,7 @@
 								
 							<?php
 							if($publicacion->getTipoId() == 2){ ?>
-								<div style="width: 320px; height: 190px;'">
+								<div style="width: 320px; height: 100%;">
 									<a class="thumbnail">
 		      							<img src="<?php echo $this->baseUrl()?>/imagenes/fotos/<?php echo $publicacion->getFoto();?>" onclick="verFoto('<?php echo $publicacion->getTexto();?>','<?php echo $publicacion->getFoto();?>')">
 	         						</a>

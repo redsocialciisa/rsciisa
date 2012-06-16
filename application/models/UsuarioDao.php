@@ -176,8 +176,9 @@ class Application_Model_UsuarioDao
         
     	$lista = new SplObjectStorage();
     	$where = "usu_nombre like '%".$cadena."%'";
+    	$order = "usu_nombre asc";
     	
-    	$resultado = $this->_table->fetchAll($where);
+    	$resultado = $this->_table->fetchAll($where, $order);
     
     	if(count($resultado) > 0)
     	{

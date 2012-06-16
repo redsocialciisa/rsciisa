@@ -50,9 +50,38 @@ class Application_Model_AmigoDao
     	return $lista;
     }
     
+    public function sonAmigos($usu_id,$ami_usu_id)
+    {
+    	$lista = new SplObjectStorage();
+    	$where = 'usu_id = '. $usu_id . ' AND ami_usu_id = '.$ami_usu_id.' AND sit_ami_id = 2';
+    	 
+    	$resultado = $this->_table->fetchAll($where);
+    
+    	if(count($resultado) > 0){
+			return true;    
+    	}
+    
+    	return false;
+    }
+    
+    public function solicitudPendiente($usu_id,$ami_usu_id)
+    {
+    	$lista = new SplObjectStorage();
+    	$where = 'usu_id = '. $usu_id . ' AND ami_usu_id = '.$ami_usu_id.' AND sit_ami_id = 1';
+    
+    	$resultado = $this->_table->fetchAll($where);
+    
+    	if(count($resultado) > 0){
+    		return true;
+    	}
+    
+    	return false;
+    }
+    
     public function obtenerTodosPorUsuarioId($usu_id)
     {
     	$lista = new SplObjectStorage();
+    	
     	$where = 'usu_id = '. $usu_id . ' AND sit_ami_id = 2';
     	 
     	$resultado = $this->_table->fetchAll($where);
@@ -64,45 +93,98 @@ class Application_Model_AmigoDao
     			$lista->attach($this->obtenerPorId($item->ami_id));
     		}
     	}
+    	
+    	$objUsuarioDao = null;
+    	
+    	return $lista;
+    }
     
+    public function obtenerTodosUsuariosPorUsuarioId($usu_id)
+    {
+    	$lista = new SplObjectStorage();
+    	$objUsuarioDao = new Application_Model_UsuarioDao();
+    	 
+    	$where = 'usu_id = '. $usu_id . ' AND sit_ami_id = 2';
+    
+    	$resultado = $this->_table->fetchAll($where);
+    
+    	if(count($resultado) > 0){
+    
+    		foreach ($resultado as $item)
+    		{
+    			$lista->attach($objUsuarioDao->obtenerPorId($this->obtenerPorId($item->ami_id)->getAmigoUsuarioId()));
+    		}
+    	}
+    	 
+    	$objUsuarioDao = null;
+    	 
+    	return $lista;
+    }
+    
+    public function obtenerSolicitudesPendientesPorUsuarioId($usu_id)
+    {
+    	$lista = new SplObjectStorage();
+    	$objUsuarioDao = new Application_Model_UsuarioDao();
+    	 
+    	$where = 'ami_usu_id = '. $usu_id . ' AND sit_ami_id = 1';
+    
+    	$resultado = $this->_table->fetchAll($where);
+    
+    	if(count($resultado) > 0){
+    
+    		foreach ($resultado as $item)
+    		{
+    			$lista->attach($objUsuarioDao->obtenerPorId($this->obtenerPorId($item->ami_id)->getUsuarioId()));
+    		}
+    	}
+    	 
+    	$objUsuarioDao = null;
+    	 
     	return $lista;
     }
     
     public function guardarSolicitud(Application_Model_Amigo $amigo)
     {
-        $sit_ami_id = "1";
-        
     	$data = array('ami_fecha_solicitud' => $amigo->getFechaSolicitud(),
     			'ami_usu_id' => $amigo->getAmigoUsuarioId(),
     			'usu_id' => $amigo->getUsuarioId(),
-    			'sit_ami_id' => $sit_ami_id
+    			'sit_ami_id' => $amigo->getEstadoAmistad()
     	);    
         
     	return $this->_table->insert($data);
     }
     
+    public function guardarAsociacionAutomatica(Application_Model_Amigo $amigo)
+    {
+    	$data = array('ami_fecha_solicitud' => $amigo->getFechaSolicitud(),
+    	        'ami_fecha_amistad' => $amigo->getFechaAmistad(),
+    			'ami_usu_id' => $amigo->getAmigoUsuarioId(),
+    			'usu_id' => $amigo->getUsuarioId(),
+    			'sit_ami_id' => $amigo->getEstadoAmistad()
+    	);
+    
+    	return $this->_table->insert($data);
+    }
+    
    public function confirmarAmistad(Application_Model_Amigo $amigo)
    {
-	    $sit_ami_id = "2";
-	       
 	   	$data = array('ami_fecha_amistad' => $amigo->getFechaAmistad(),
-	   	        	  'sit_ami_id' => $sit_ami_id
+	   	        	  'sit_ami_id' => $amigo->getEstadoAmistad()
 	   	);
 	   
-	   	$where = 'usu_id = ' . $amigo->getUsuarioId() . 'AND ami_usu_id ='. $amigo->getAmigoUsuarioId();
+	   	$where = 'usu_id = ' . $amigo->getUsuarioId() . ' AND ami_usu_id = '. $amigo->getAmigoUsuarioId();
 	   		 
 	   	return $this->_table->update($data, $where);   		
    }
     
     public function eliminarAmigo($usu_id, $ami_usu_id)
     {
-    	$where = 'usu_id = ' . $usu_id . 'AND ami_usu_id ='. $ami_usu_id;
-    
+    	$where = 'usu_id = ' . $usu_id . ' AND ami_usu_id ='. $ami_usu_id;
+    	$this->_table->delete($where);
+    	
+    	$where = 'usu_id = ' . $ami_usu_id . ' AND ami_usu_id ='. $usu_id;
     	return $this->_table->delete($where);
     }  
-
-
-    
 }
 
 ?>

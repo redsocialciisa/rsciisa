@@ -175,15 +175,30 @@ class Application_Model_Ciisa
     	 
     }
     
+    function obtenerDescripcionPerfil($perfilCiisa) {
     
+    	$query = "SELECT
+    					rtrim(PERFIL_NOMBRE) AS PERFIL_NOMBRE
+    			  FROM
+    					[RC RCA 2007].[dbo].[ACC_PERFILES]
+    			  WHERE
+    					PERFIL_ID = '$perfilCiisa'";
     
+    	$result = mssql_query($query);
+    	$numRows = mssql_num_rows($result);
+    	mssql_close($this->_con);
     
- 
+    	if($numRows > 0)
+    	{
+    	$objUsuario = new Application_Model_Usuario();
+    	$row = mssql_fetch_array($result);
+    	
+    	return trim($row['PERFIL_NOMBRE']);
+    	}else{
+    	return "";
+    	}
     
-    
-    
- 
-
+    	}
     
 }
 

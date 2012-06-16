@@ -7,6 +7,7 @@ class Application_Form_FormPerfil extends Zend_Form
     {
         $aut = Zend_Auth::getInstance();
         $objUsuarioDao = new Application_Model_UsuarioDao();
+        $objCiisa = new Application_Model_Ciisa();
         $objUsuario = $objUsuarioDao->obtenerPorId($aut->getIdentity()->usu_id);
         $objPrivacidadPublicacion = new Application_Model_PrivacidadPublicacionDao();
         
@@ -36,7 +37,7 @@ class Application_Form_FormPerfil extends Zend_Form
         
         $perfilciisa = new Zend_Form_Element_Text('txtPerfil');
         $perfilciisa->setLabel('Perfil Ciisa: ')
-        			->setValue($aut->getIdentity()->perfil_ciisa)
+        			->setValue($objCiisa->obtenerDescripcionPerfil($aut->getIdentity()->perfil_ciisa))
         			->setAttrib('readonly', true);
         
         $fecha = new Zend_Form_Element_Text('txtFechaNacimiento');
@@ -78,8 +79,11 @@ class Application_Form_FormPerfil extends Zend_Form
         
         $this->addElement($fileFoto);
         $this->addElement($nombre);
-        $this->addElement($carrera);
-        $this->addElement($perfilciisa);
+        if($aut->getIdentity()->perfil_ciisa == "ALUMNO" || $aut->getIdentity()->perfil_ciisa == "EX-ALUMNO")
+        {
+        	$this->addElement($carrera);
+        }
+		$this->addElement($perfilciisa);
         $this->addElement($fecha);
         $this->addElement($correo);
         $this->addElement($comboPrivacidad);

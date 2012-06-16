@@ -17,6 +17,11 @@
 			textarea {
 				resize:none;
 			}
+			
+			.contMini {
+				width: 100px;
+				word-wrap: break-word; 
+			}
 
 			.cont0 {
 				width: 150px;
@@ -76,6 +81,21 @@
 	                textareaControl.value = textareaControl.value.substring(0, maxlength);
 	            }
 	        }	
+
+			function validarBusqueda()
+			{
+				var contenido = trim(document.getElementById("txtBuscador").value);
+
+				if(contenido.length > 3)
+				{
+					document.getElementById("formBusqueda").submit();
+					return;
+				}
+				
+				document.getElementById("divModalGenerico").innerHTML = "Tu búsqueda debe contener 4 caracteres como mínimo.";
+				$('#myModalGenerico').modal('show');			
+			}
+
 		</script>
 	
 </head>
@@ -88,7 +108,7 @@
 	$objUsuarioDao = new Application_Model_UsuarioDao();
 ?>
 
-<form action="/contacto/index/" method="post">
+<form action="/contacto/busqueda/" id="formBusqueda" method="post">
 <div class="navbar navbar-fixed-top" data-dropdown="dropdown">
 	<div class="navbar-inner">
     	<div class="container">
@@ -119,6 +139,7 @@
    	    		?>
    	    		
    	    		<input id="txtBuscador" name="txtBuscador" type="text" data-source="<?php echo $datSource;?>" data-items="10" data-provide="typeahead" style="margin: 0 auto;" class="search-query span2"  placeholder="Buscar..">
+   	    		<button type="button" class="btn" onclick="validarBusqueda()">Ir..</button>
    	    		
    	    		<ul class="nav">
    	    		<li>

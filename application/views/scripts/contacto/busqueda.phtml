@@ -1,0 +1,146 @@
+			<?php 
+				$aut = Zend_Auth::getInstance();
+				$objAmigoDao = new Application_Model_AmigoDao();
+				$columna = 0;
+				$cantColumna = 3;
+			?>
+			<h2>Resultado de la búsqueda: </h2>
+			<div id="divSolicitudEnviada"></div>
+			<table width="100%" align="center">
+					<?php foreach ($this->listaUsuarios as $usuario){
+							if($columna == 0){ 
+							   echo "<tr>";
+							} 
+							echo "<td>";?> 
+							<!-- imprimir el objeto -->
+								<table align="center">
+									<tr>
+										<td align="center">
+									       <!--   <div>
+									          <a href="#" class="btn btn-primary"><i class="icon-user icon-white"></i> </a>
+									        </div>-->
+										</td>
+									</tr>
+									<tr>
+										<td align="center">
+											<table>
+												<tr>
+													<td>
+														<div style='width: 100px;'>
+		            	 	   								<a class='thumbnail'  href="/muro/muro-contacto/id/<?php echo $usuario->getId();?>">
+																<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $usuario->getFoto(); ?>"></img>
+															</a>
+														</div>
+													</td>
+													<td valign="top" class="contMini">
+														<p><?php echo $usuario->getNombre();?></p>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<?php
+															$flagAmigo = $objAmigoDao->sonAmigos($aut->getIdentity()->usu_id, $usuario->getId());
+															$flagPendiente = $objAmigoDao->solicitudPendiente($aut->getIdentity()->usu_id, $usuario->getId());
+														?>
+				
+														<?php 
+														if ($usuario->getId() != $aut->getIdentity()->usu_id)
+					    								{ 
+					    								    if($flagAmigo){?>	
+																	<i class="icon-plus"></i><a href="#">Es tu amigo(@)</a>
+															<?php }else{?>
+																		<?php if($flagPendiente){?>
+																				<i class="icon-time"></i><a href="#" >Espera contacto..</a>
+																		<?php }else{ ?>
+																			 <div id="divIcoAgregar<?php echo $usuario->getId();?>" style="display: block;"> 	
+																							<i class="icon-plus"></i><a href="#" onclick="openModalAgregar(<?php echo $usuario->getId();?>)">Enviar Solicitud</a>
+																			 </div>
+																		<?php } ?>
+															<?php }?>
+														<?php } ?>
+														<div id="divMsjAgregado<?php echo $usuario->getId();?>"></div>
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>						
+							<!-- fin de imprimir el objeto -->
+							<?php 
+							echo "</td>"; 
+							$columna++;
+							 if($columna == $cantColumna){
+								 echo "</tr>";				
+								 $columna = 0;
+							 }
+						 }
+						 echo "</tr>";
+					?>
+				</table>
+				
+				<div class="modal hide" id="myModalAgregar" style="width: 700px;">
+				    <div class="modal-header">
+				    <button class="close" onclick="closeModalAgregar()" data-dismiss="modal">×</button>
+				    Mensaje
+				    </div>
+				    <div class="modal-body">
+				    
+				    <input type="hidden" id="hdnUsuario" name="hdnUsuario">
+				    
+				    </div>
+				    <div class="modal-footer">
+				  	    <a href="#" onclick="agregarContacto()" class="btn btn-success" data-dismiss="modal">Agregar</a>
+				  	    <a href="#" onclick="closeModalAgregar()" class="btn btn-success" data-dismiss="modal">No</a>
+				    </div>
+				</div>		
+				
+	<script type="text/javascript">
+
+		function agregarContacto(){
+
+			var usuario = document.getElementById("hdnUsuario").value;
+			
+			$.ajax(
+					{
+					async: true,
+					type: 'POST',
+					url: '<?php echo $this->baseUrl()?>/contacto/agregar',
+					data: 'usuario=' + usuario,	
+					dataTypeString: 'text',
+					
+					beforeSend: function(data){
+		                //selectDestino.html('<label>Cargando...</label>');
+				    },  
+				    success: function(requestData){
+					    		var result = requestData;  
+								if(result == "ok")
+								{
+									var divMsj = "<div class='alert alert-success'>";
+									divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+									divMsj = divMsj + "<strong>Éxito!</strong> Se ha enviado la solicitud con éxito.";
+									divMsj = divMsj + "</div>";
+
+			            			document.getElementById("divSolicitudEnviada").innerHTML = divMsj;
+
+			            			document.getElementById("divIcoAgregar" + usuario).style.display = "none";
+			            			document.getElementById("divMsjAgregado" + usuario).innerHTML = "<i class='icon-time'></i><a href='#' >Espera contacto..</a>";
+								}
+				    },  
+				    error: function(requestData, strError, strTipoError){          
+				    }
+				    
+					});
+		}
+		
+		function closeModalAgregar()
+		{		
+			$('#myModalAgregar').modal();		
+		}
+	
+		function openModalAgregar(id)
+		{
+			document.getElementById("hdnUsuario").value = id; 
+			$('#myModalAgregar').modal('show');			
+		}
+	</script>
+

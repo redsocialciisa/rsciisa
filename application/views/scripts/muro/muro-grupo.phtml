@@ -2,7 +2,7 @@
 	$objUsuarioDao2 = new Application_Model_UsuarioDao();
 	$objTipPublicacion = new Application_Model_TipoPublicacionDao();
 ?>
-<center><h1>Mi Muro</h1></center>
+<center><h1>Grupo XXXXXX</h1></center>
 
 <a href="#"><img src="/imagenes/proyecto/luz.png" width="40px;" onclick="openModalPublicacion()" title="Publicar algo..."></a>
 
@@ -190,7 +190,7 @@
     </div>
     <div class="modal-body">
 		
-<form action="/muro/mi-muro/" 
+<form action="/muro/muro-grupo/"
 	  name="<?php echo $this->formPublicacion->getName();?>"
 	  id="formPublicacion"  
 	  method="<?php echo $this->formPublicacion->getMethod();?>"
@@ -241,26 +241,11 @@
 								<td><?php echo $this->formPublicacion->txtVideo;?>
 									<div id="divErrorVideo"></div>
 									<input type="hidden" value="" id="hdnFlagErrorVideo" name="hdnFlagErrorVideo">
+									<input type="hidden"value="<?php echo $this->Grupo;?>" id="id" name="id">
 								</td>
 							</tr>
 						</table>
 					</div>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="4">
-					<b>Quienes podrán visualizar tu publicación ?</b>
-				</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>Alumnos<?php echo $this->formPublicacion->cbxAlumno;?></td>
-				<td>Profesores<?php echo $this->formPublicacion->cbxProfesor;?></td>
-				<td>Academicos<?php echo $this->formPublicacion->cbxAcademico;?></td>
-			</tr>
-			<tr>
-				<td colspan="4">
-					<div id="divErrorPrivacidadPublicacion"></div>
 				</td>
 			</tr>
 		</table>
@@ -278,12 +263,6 @@
 	function validarFormPublicacion()
 	{
 
-		if(document.getElementById("cbxAlumno").checked == false && document.getElementById("cbxProfesor").checked == false && document.getElementById("cbxAcademico").checked == false)
-		{
-			document.getElementById("divErrorPrivacidadPublicacion").innerHTML = "<ul type='square'><li> Debes seleccionar al menos una privacidad de publicación.... </ul>";
-			return;
-		}  
-		
 		//si tiene seleccionado foto
 		if(document.getElementsByName("grpTipo")[0].checked == true)
 		{
