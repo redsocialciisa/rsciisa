@@ -298,5 +298,29 @@ class GrupoController extends Zend_Controller_Action
         
     }
     
+    public function unirseAction()
+    {
+    	$aut = Zend_Auth::getInstance();
+    	$this->_helper->layout()->disableLayout();
+    	$pub_id = $this->getRequest()->getParam('idPublicacion');
+    	$objPublicacionGrupoDao = new Application_Model_PublicacionGrupoDao();
+    	$objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
+    	$objUsuarioGrupo = new Application_Model_UsuarioGrupo();
+    
+    	$objGrupo = $objPublicacionGrupoDao->obtenerPorPublicacionId($pub_id)->getGrupoId();
+    
+    	$objUsuarioGrupo->setParticipa(1);
+    	$objUsuarioGrupo->setGrupoId($objGrupo);
+    	$objUsuarioGrupo->setUsuarioId($aut->getIdentity()->usu_id);
+    
+    	$fecha = new DateTime();
+    	$fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
+    	$objUsuarioGrupo->setFechaParticipa($fechahora);
+    
+    	$objUsuarioGrupoDao->guardar($objUsuarioGrupo);
+    
+    	$this->view->ok = $objGrupo;
+    }
+    
 }
 
