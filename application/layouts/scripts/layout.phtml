@@ -9,6 +9,7 @@
     <link type="text/css" href="<?php echo $this->baseUrl()?>/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link type="text/css" href="<?php echo $this->baseUrl()?>/bootstrap/css/bootstrap-responsive.css" rel="stylesheet" />	
 	<script type="text/javascript" src="<?php echo $this->baseUrl()?>/bootstrap/js/bootstrap.js"></script>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 	
 	<link type="text/css" href="<?php echo $this->baseUrl()?>/bootstrap/css/cupertino/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
 	<script type="text/javascript" src="<?php echo $this->baseUrl()?>/bootstrap/js/jquery-ui-1.8.21.custom.min.js"></script>
@@ -40,12 +41,49 @@
 
 		</style> 
 		
+		<style type="text/css">
+			  div#map {
+			    position: relative;
+			  	width: 100%;
+			  }
+			
+			  div#crosshair {
+			    position: absolute;
+			    top: 192px;
+			    height: 19px;
+			    width: 19px;
+			    left: 50%;
+			    margin-left: -8px;
+			    display: block;
+			    background: url(<?php echo $this->baseUrl()?>/imagenes/proyecto/flag2_16x16.gif);
+			    background-position: center center;
+			    background-repeat: no-repeat;
+			}
+			</style>
 		
 		<script type="text/javascript">
 			$(function(){
 
 				// Datepicker
 				$('#txtFechaNacimiento').datepicker({
+					inline: true,
+			         dateFormat: 'dd-mm-yy',
+			         changeMonth: true,
+			         changeYear: true,
+			         dayNamesMin: ['Do','Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+			         dayNames: ['Domingo','Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'],
+			         duration: 'fast',
+			         monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+			         monthNamesShort: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'], 
+			         firstDay: 1	
+				});
+
+			});
+
+			$(function(){
+
+				// Datepicker
+				$('#txtFechaEvento').datepicker({
 					inline: true,
 			         dateFormat: 'dd-mm-yy',
 			         changeMonth: true,

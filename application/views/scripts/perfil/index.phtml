@@ -22,6 +22,9 @@
 				?>
 	    </div>
 	    <div class="tab-pane" id="tab2">
+	    
+	    	<div id="divMensajeExito"></div>
+	    
 	    	<?php 
 				$aut = Zend_Auth::getInstance();
 				$objIntegracionDao = new Application_Model_IntegracionDao();
@@ -34,21 +37,130 @@
 			<?php if ($objFacebook == null){?>
 				<p><img src="/imagenes/proyecto/fb.png"> <a href="/integracion/facebook/">Integrar con Facebook</a></p>
 			<?php }else{ ?>
-				<p><img src="/imagenes/proyecto/fb.png"> <a href="/integracion/quitar-facebook/">Quitar Facebook</a></p>
+				<p id="lbtIFQuitar"><img src="/imagenes/proyecto/fb.png"> <a href="#" onclick="quitarIntegracionFacebook()">Quitar Facebook</a></p>
+				<p  style="display: none;" id="lbtIF"><img src="/imagenes/proyecto/fb.png"><a href="/integracion/facebook/">Integrar con Facebook</a></p>
 			<?php } ?>
 			
 			<?php if ($objTwitter == null){?>
 				<p><img src="/imagenes/proyecto/tt.png"> <a href="/integracion/twitter/">Integrar con Twitter</a></p>
 			<?php }else{ ?>
-				<p><img src="/imagenes/proyecto/tt.png"> <a href="/integracion/quitar-twitter/">Quitar Twitter</a></p>
+				<p id="lbtITQuitar"><img src="/imagenes/proyecto/tt.png"><a href="#" onclick="quitarIntegracionTwitter()">Quitar Twitter</a></p>
+				<p style="display: none;" id="lbtIT"><img src="/imagenes/proyecto/tt.png"><a href="/integracion/twitter/">Integrar con Twitter</a></p>
 			<?php } ?>
 			
 			<?php if ($objLinkedin == null){?>
 				<p><img src="/imagenes/proyecto/in.png"> <a href="/integracion/linkedin/">Integrar con Linkedin</a></p>
 			<?php }else{ ?>
-				<p><img src="/imagenes/proyecto/in.png"> <a href="/integracion/quitar-linkedin/">Quitar Linkedin</a></p>
+				<p id="lbtILQuitar"><img src="/imagenes/proyecto/in.png"> <a href="#" onclick="quitarIntegracionLinkedin()">Quitar Linkedin</a></p>
+				<p style="display: none;" id="lbtIL"><img src="/imagenes/proyecto/in.png"><a href="/integracion/linkedin/">Integrar con Linkedin</a></p>
 			<?php } ?>
 			
 	    </div>
     </div>
 </div>
+
+<script type="text/javascript">
+
+function quitarIntegracionTwitter(){
+		
+	$.ajax(
+			{
+			async: true,
+			type: 'POST',
+			url: '<?php echo $this->baseUrl()?>/integracion/quitar-twitter',
+			data: 'sinparam=sinparam',	
+			dataTypeString: 'text',
+			
+			beforeSend: function(data){
+				//loader
+		    },  
+		    success: function(requestData){  
+	               		if(requestData == "ok")
+	               		{
+	               			document.getElementById("lbtIT").style.display = "block";
+	               			document.getElementById("lbtITQuitar").style.display = "none";
+
+	               			var divMsj= "<div class='alert alert-success'>";
+	               			divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+	               			divMsj = divMsj + "<strong>Éxito!</strong> Integración con Twitter quitada con éxito !!";
+	               			divMsj = divMsj + "</div>";
+	               			
+	               			document.getElementById("divMensajeExito").innerHTML = divMsj;
+	               		} 
+		    },  
+		    error: function(requestData, strError, strTipoError){          
+		    }
+		    
+			});
+		
+	}
+
+function quitarIntegracionFacebook(){
+	
+	$.ajax(
+			{
+			async: true,
+			type: 'POST',
+			url: '<?php echo $this->baseUrl()?>/integracion/quitar-facebook',
+			data: 'sinparam=sinparam',	
+			dataTypeString: 'text',
+			
+			beforeSend: function(data){
+				//loader
+		    },  
+		    success: function(requestData){  
+	               		if(requestData == "ok")
+	               		{
+	               			document.getElementById("lbtIF").style.display = "block";
+	               			document.getElementById("lbtIFQuitar").style.display = "none";
+
+	               			var divMsj= "<div class='alert alert-error'>";
+	               			divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+	               			divMsj = divMsj + "<strong>Éxito!</strong> Integración Facebook quitada con éxito !!";
+	               			divMsj = divMsj + "</div>";
+	               			
+	               			document.getElementById("divMensajeExito").innerHTML = divMsj;
+	               		} 
+		    },  
+		    error: function(requestData, strError, strTipoError){          
+		    }
+		    
+			});
+		
+	}
+
+function quitarIntegracionLinkedin(){
+	
+	$.ajax(
+			{
+			async: true,
+			type: 'POST',
+			url: '<?php echo $this->baseUrl()?>/integracion/quitar-linkedin',
+			data: 'sinparam=sinparam',	
+			dataTypeString: 'text',
+			
+			beforeSend: function(data){
+				//loader
+		    },  
+		    success: function(requestData){  
+	               		if(requestData == "ok")
+	               		{
+	               			document.getElementById("lbtIL").style.display = "block";
+	               			document.getElementById("lbtILQuitar").style.display = "none";
+
+	               			var divMsj= "<div class='alert alert-success'>";
+	               			divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+	               			divMsj = divMsj + "<strong>Éxito!</strong> Integración con Linkedin quitada con éxito !!";
+	               			divMsj = divMsj + "</div>";
+	               			
+	               			document.getElementById("divMensajeExito").innerHTML = divMsj;
+	               		} 
+		    },  
+		    error: function(requestData, strError, strTipoError){          
+		    }
+		    
+			});
+		
+	}
+
+</script>

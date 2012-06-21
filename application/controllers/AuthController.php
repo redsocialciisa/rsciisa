@@ -56,7 +56,7 @@ class AuthController extends Zend_Controller_Action
     	if ($tieneTwitter == false && $tieneFacebook == false && $tieneLinkedin == false){
     		$htmlLoader = "<img src='/imagenes/proyecto/ajax-loader.gif'><br>";
     	}else{
-    	    $htmlLoader = "sincronizando con tus redes sociales, por favor espera...<br>";
+    	    $htmlLoader = "Sincronizando con tus redes sociales, por favor espera...<br>";
     	}
     	
     	if ($tieneTwitter){

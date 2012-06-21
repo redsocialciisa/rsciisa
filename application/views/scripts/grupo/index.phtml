@@ -73,7 +73,7 @@
                 echo $this->form->txtNombre;
 				echo $this->form->fileFoto;
 			?>	
-				<textarea id="txtDescripcion" name="txtDescripcion" onKeyDown="textCounter(this, 'count_display');"></textarea>
+				<textarea id="txtDescripcion" name="txtDescripcion" onKeyDown="ValidarCaracteres(this, 499);"></textarea>
 			<?php 	
 				echo $this->form->optPublico;
 				echo $this->form->optPrivado;

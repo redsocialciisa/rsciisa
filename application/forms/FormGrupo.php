@@ -15,6 +15,7 @@ class Application_Form_FormGrupo extends Zend_Form
         $nombre->setLabel('Nombre: ')
         ->setRequired(true)
         ->setValue('')
+        ->setAttrib('maxlength', '49')
         ->setAttrib('class', 'span4')
         ->clearErrorMessages()
         ->addErrorMessage('Debes ingresar el nombre del grupo');

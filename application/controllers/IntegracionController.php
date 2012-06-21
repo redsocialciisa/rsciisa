@@ -550,6 +550,8 @@ class IntegracionController extends Zend_Controller_Action
     
     public function quitarFacebookAction()
     {
+        $this->_helper->layout()->disableLayout();
+        
         $aut = Zend_Auth::getInstance();
         $objIntegracionDao = new Application_Model_IntegracionDao();
         $objFacebook = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id, 1);
@@ -557,12 +559,13 @@ class IntegracionController extends Zend_Controller_Action
         $objIntegracionDao->eliminar($objFacebook->getId());
         $objIntegracionDao = null;
         $aut->getIdentity()->facebookNombre = null;
-        $this->_redirect('/perfil/index');
-        
+       
+        $this->view->ok = "ok";
     }	
     
     public function quitarTwitterAction()
     {
+        $this->_helper->layout()->disableLayout();
         $aut = Zend_Auth::getInstance();
         $objIntegracionDao = new Application_Model_IntegracionDao();
         $objTwitter = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id, 2);
@@ -570,11 +573,14 @@ class IntegracionController extends Zend_Controller_Action
         $objIntegracionDao->eliminar($objTwitter->getId());
         $objIntegracionDao = null;
         $aut->getIdentity()->twitterArregloDatos = null;
-        $this->_redirect('/perfil/index');
+        
+        $this->view->ok = "ok";
     }
     
     public function quitarLinkedinAction()
     {
+        $this->_helper->layout()->disableLayout();
+        
         $aut = Zend_Auth::getInstance();
         $objIntegracionDao = new Application_Model_IntegracionDao();
         $objLinkedin = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id, 3);
@@ -582,7 +588,8 @@ class IntegracionController extends Zend_Controller_Action
         $objIntegracionDao->eliminar($objLinkedin->getId());
         $objIntegracionDao = null;
         $aut->getIdentity()->linkedinNombre = null;
-        $this->_redirect('/perfil/index');
+        
+        $this->view->ok = "ok";
     }
 
 }

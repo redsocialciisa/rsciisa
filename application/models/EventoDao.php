@@ -29,8 +29,8 @@ class Application_Model_EventoDao
     		$objEvento->setCordenadaX($resultado->current()->eve_cordenada_x);
     		$objEvento->setCordenadaY($resultado->current()->eve_cordenada_y);
     		$objEvento->setFechaCreacion($resultado->current()->eve_fecha_creacion);
-    		$objEvento->setTipoEventoId($resultado->current()->eve_tip_id);    		
-    
+    		$objEvento->setTipoEventoId($resultado->current()->eve_tip_id);
+    		$objEvento->setHora($resultado->current()->eve_hora);
     	}
     	return $objEvento;
     }
@@ -38,14 +38,15 @@ class Application_Model_EventoDao
     public function guardar(Application_Model_Evento $evento)
     {
     	$data = array('eve_id' => $evento->getId(),
-    			'usu_id' => $evento->get(),
-    			'eve_nombre' => $evento->getFoto(),
-    	        'eve_descripcion' => $evento->getFoto(),
-    	        'eve_lugar' => $evento->getFoto(),
-    	        'eve_cordenada_x' => $evento->getFoto(),
-    	        'eve_cordenada_y' => $evento->getFoto(),
-    	        'eve_fecha_creacion' => $evento->getFoto(),
-    	        'eve_tip_id' => $evento->getFoto()
+    			'usu_id' => $evento->getUsuarioId(),
+    			'eve_nombre' => $evento->getNombre(),
+    	        'eve_descripcion' => $evento->getDescripcion(),
+    	        'eve_lugar' => $evento->getLugar(),
+    	        'eve_cordenada_x' => $evento->getCordenadaX(),
+    	        'eve_cordenada_y' => $evento->getCordenadaY(),
+    	        'eve_fecha_creacion' => $evento->getFechaCreacion(),
+    	        'tip_eve_id' => $evento->getTipoEventoId(),
+    	        'eve_hora' => $evento->getHora()
     	);
     
     	if($evento->getId() != null){

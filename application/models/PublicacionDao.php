@@ -91,27 +91,32 @@ class Application_Model_PublicacionDao
     	$order = 'pub_fecha desc';
     	$resultado = $this->_table->fetchAll($where,$order);
     
-    	if(count($resultado) > 0){
-    
+    	if(count($resultado) > 0){ 
     		foreach ($resultado as $item)
     		{
-    		    switch ($objPerfilRsc->getPerfil()) {
-    		    	case 1:
-    		    	    $lista->attach($this->obtenerPorId($item->pub_id));
-    		    		break;
-    		    	case 2:
-    		    	    if($item->usu_id == $aut->getIdentity()->usu_id)
-    		    	    {
-    		    	       $lista->attach($this->obtenerPorId($item->pub_id));
-    		    	    }
-    		    		break;
-    		    	case 3:
-    		    	    if($item->usu_id == $aut->getIdentity()->usu_id)
-    		    	    {
-    		    	    	$lista->attach($this->obtenerPorId($item->pub_id));
-    		    	    }
-    		    		break;
+    		    $objPublicacionGrupoDao = new Application_Model_PublicacionGrupoDao();
+    		     
+    		    if($objPublicacionGrupoDao->obtenerPorPublicacionId($item->pub_id) == null)
+    		    {
+    		        switch ($objPerfilRsc->getPerfil()) {
+	    		    	case 1:
+	    		    	    if($item->pri_pub_id == 1 || $item->pri_pub_id == 4 || $item->pri_pub_id == 5 || $item->pri_pub_id == 7 || $item->usu_id == $aut->getIdentity()->usu_id){
+	    		    	    	$lista->attach($this->obtenerPorId($item->pub_id));
+	    		    	    }
+	    		    		break;
+	    		    	case 2:
+    		    	        if($item->pri_pub_id == 2 || $item->pri_pub_id == 4 || $item->pri_pub_id == 6 || $item->pri_pub_id == 7 || $item->usu_id == $aut->getIdentity()->usu_id){
+    		    	       		$lista->attach($this->obtenerPorId($item->pub_id));
+    		    	        }
+	    		    		break;
+	    		    	case 3:
+    		    	        if($item->pri_pub_id == 3 || $item->pri_pub_id == 5 || $item->pri_pub_id == 6 || $item->pri_pub_id == 7 || $item->usu_id == $aut->getIdentity()->usu_id){
+    		    	    		$lista->attach($this->obtenerPorId($item->pub_id));
+    		    	        }
+	    		    		break;
+	    		    }
     		    }
+    		    $objPublicacionGrupoDao = null;
     		}
     	}
     	
@@ -142,7 +147,14 @@ class Application_Model_PublicacionDao
     
     		foreach ($resultado as $item)
     		{
-    			$lista->attach($this->obtenerPorId($item->pub_id));
+    		    $objPublicacionGrupoDao = new Application_Model_PublicacionGrupoDao();
+    		    
+    		    if($objPublicacionGrupoDao->obtenerPorPublicacionId($item->pub_id) == null)
+    		    {
+    		        $lista->attach($this->obtenerPorId($item->pub_id));
+    		    }
+    		    
+    			$objPublicacionGrupoDao = null;
     		}
     	}
     
@@ -187,7 +199,14 @@ class Application_Model_PublicacionDao
     
     		foreach ($resultado as $item)
     		{
-    			$lista->attach($this->obtenerPorId($item->pub_id));
+    			$objPublicacionGrupoDao = new Application_Model_PublicacionGrupoDao();
+    			
+    			if($objPublicacionGrupoDao->obtenerPorPublicacionId($item->pub_id) == null)
+    			{
+    				$lista->attach($this->obtenerPorId($item->pub_id));
+    			}
+    			
+    			$objPublicacionGrupoDao = null;
     		}
     	}
     

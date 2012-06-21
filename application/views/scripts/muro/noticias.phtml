@@ -19,14 +19,15 @@
          					</div>
 						</td>
 						<td>
-							<h5 class="cont2"><a href="/publicacion/index/id/<?php echo $publicacion->getId();?>"><?php echo $publicacion->getTexto();?></a></h5>
-							<input type="hidden" id="hdnTextoPublicacion<?php echo $publicacion->getId();?>" value="<?php echo $publicacion->getTexto();?>">
-							
 							<!-- aquí se muestra la información de la publicación según... el tipo de publicación -->
 							<?php 
 							$objPublicacionAux = new Application_Model_PublicacionDao();
 							if($publicacion->getTipoId() == 4){ ?>
 								<?php $fechaPublicacion = strtotime($publicacion->getFecha()); ?>
+								
+								<h5 class="cont2"><a href="/publicacion/index/id/<?php echo $publicacion->getId();?>"><?php echo $publicacion->getTexto();?></a></h5>
+								<input type="hidden" id="hdnTextoPublicacion<?php echo $publicacion->getId();?>" value="<?php echo $publicacion->getTexto();?>">
+							
 								<table class="span2" border="2">
 									<tr>
 										<td align="center" bgcolor="#DF7401">
@@ -88,18 +89,31 @@
 							<?php
 							if($publicacion->getTipoId() == 5){ ?>
 							<?php
-								$objOfertaDao = new Application_Model_OfertaDao();
+								$aut = Zend_Auth::getInstance();
+								$objPublicacionGrupoDao = new Application_Model_PublicacionGrupoDao();
+								$objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
+								$objGrupoDao = new Application_Model_GrupoDao();
+									
+								$gru_id = $objPublicacionGrupoDao->obtenerPorPublicacionId($publicacion->getId())->getGrupoId();
+								$objGrupo = $objGrupoDao->obtenerPorId($gru_id);
 							?>
+								<h5 class="cont2"><a href="/muro/muro-grupo/id/<?php echo $gru_id;?>"><?php echo $publicacion->getTexto();?></a></h5>
+								<input type="hidden" id="hdnTextoPublicacion<?php echo $publicacion->getId();?>" value="<?php echo $publicacion->getTexto();?>">
+							
 								<div style="width: 320px; height: 100%;">
 									<a class="thumbnail">
-											<img src="/imagenes/proyecto/oferta.png">		      							
+											<img src="/imagenes/grupos/<?php echo $publicacion->getFoto();?>">
+											<br>
+											<?php if($objUsuarioGrupoDao->obtenerPorGrupoYUsuario($gru_id, $aut->getIdentity()->usu_id) == null){?>
+												<button href="#" onclick="openMyModalUnirseGrupo(<?php echo $publicacion->getId();?>,'<?php echo $objGrupo->getNombre();?>');" class="btn btn-success">Unete</button>
+											<?php } 
+											$objPublicacionGrupoDao = null;
+											$objUsuarioGrupoDao = null;
+											$objGrupoDao = null;
+											?>
 	         						</a>
          						</div>
 								
-								<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha());?></p>
-							<?php } ?>
-							<?php  
-							if($publicacion->getTipoId() == 6){ ?>
 								<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha());?></p>
 							<?php } ?>
 						</td>
@@ -230,8 +244,58 @@
     </div>
 </div>
 
+<div class="modal hide" id="myModalUnirseGrupo" style="width: 700px;">
+    <div class="modal-header">
+    <button class="close" data-dismiss="modal">×</button>
+    		<img src="/imagenes/proyecto/Info.png">&nbsp;<b>Unirse al grupo</b>
+    </div>
+    <div class="modal-body">
+	
+	    <div id="divUnirseGrupo"></div>
+	    <input type="hidden" id="hdnIdPublicacion">
+	    <input type="hidden" id="hdnNombrePublicacion">
+	    
+    </div>
+    <div class="modal-footer">
+  	    <a href="#" onclick="unirseAlGrupo()" class="btn btn-success" data-dismiss="modal">Unirse</a>
+  	    <a href="#" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
+    </div>
+</div>	
 
 <script type="text/javascript">
+
+	function openMyModalUnirseGrupo(id, nombre)
+	{
+		document.getElementById("hdnNombrePublicacion").innerHTML = nombre;
+		document.getElementById("divUnirseGrupo").innerHTML = "¿Estás seguro de unirte al grupo <b>" + nombre +"</b> ?";
+		document.getElementById("hdnIdPublicacion").value = id;
+		$('#myModalUnirseGrupo').modal('show');		
+	}	
+
+	function unirseAlGrupo(){
+
+		var idPublicacion = document.getElementById("hdnIdPublicacion").value;
+		
+				$.ajax(
+						{
+						async: true,
+						type: 'POST',
+						url: '<?php echo $this->baseUrl()?>/grupo/unirse',
+						data: 'idPublicacion=' + idPublicacion,	
+						dataTypeString: 'text',
+						
+						beforeSend: function(data){
+			                //selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
+					    },  
+					    success: function(requestData){  
+							    	alert(requestData);
+					    },  
+					    error: function(requestData, strError, strTipoError){          
+					    }
+					    
+						});
+			
+	}
 
 	function openModalPost(id,red)
 	{	

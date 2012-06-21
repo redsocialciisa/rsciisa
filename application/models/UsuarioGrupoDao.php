@@ -123,6 +123,8 @@ class Application_Model_UsuarioGrupoDao
     		{
 				return $this->obtenerPorId($item->usu_gru_id)->getEliminar();
     		}
+    	}else{
+    	    	return null;
     	}
     }
     

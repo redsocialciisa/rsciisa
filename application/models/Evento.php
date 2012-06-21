@@ -11,6 +11,7 @@ class Application_Model_Evento
     private $_cordenadaY;
     private $_fechaCreacion;    
     private $_tipoEventoId;
+    private $_hora;
     
 	/**
 	 * @return the $_id
@@ -76,6 +77,13 @@ class Application_Model_Evento
 	}
 
 	/**
+	 * @return the $_hora
+	 */
+	public function getHora() {
+		return $this->_hora;
+	}
+
+	/**
 	 * @param field_type $_id
 	 */
 	public function setId($_id) {
@@ -138,11 +146,12 @@ class Application_Model_Evento
 		$this->_tipoEventoId = $_tipoEventoId;
 	}
 
-    
-	
-    
-    
-    
+	/**
+	 * @param field_type $_hora
+	 */
+	public function setHora($_hora) {
+		$this->_hora = $_hora;
+	}
 
 }
 

@@ -1,0 +1,308 @@
+<div class="modal" id="myModalGenerico" style="width: 700px;">
+    <div class="modal-header">
+    <button class="close" data-dismiss="modal">×</button>
+    		<h3>Nuevo Evento</h3>
+    </div>
+    <div class="modal-body">
+    
+    <form id="formEvento" action="/evento/index/" method="POST">
+
+    <table style="width: 100%;">
+  	 	<tr>
+  	 		<td colspan="2">
+  	 			<a id="arriba" name="arriba"></a>
+  	 			<div id="divErroresEvento"></div>			
+  	 		</td>
+  	 	</tr>
+		<tr>
+			<td>Nombre: </td>
+			<td align="left">
+				<input type="text" id="txtNombreEvento" name="txtNombreEvento" size="50" maxlength="49">
+			</td>
+		</tr>
+		<tr>
+			<td>Descripción: </td>
+			<td align="left">
+				<textarea rows="4" class="span6" id="txtDescripcion" name="txtDescripcion"></textarea>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				 ¿Cuál es el Lugar ? &nbsp;<input type="text" id="address" name="address"/>&nbsp;&nbsp;<input type="button" value="Buscar" onclick="geocode()" class="label label-success">&nbsp;&nbsp;
+    	 		<input type="button" value="Seleccionar lugar" onclick="addMarkerAtCenter()" class="label label-success"/>
+			</td>
+		</tr>
+		<tr><td colspan="2" class="label label-warning"><div id="formatedAddress"></div></td></tr>		
+		<tr>
+			<td colspan="2" align="center">
+				 <div id="map">
+			    		<div id="map_canvas" style="width:80%; height:400px;"></div>
+			    		<div id="crosshair"></div>
+			  	</div>
+			</td>
+		</tr>
+		<tr>
+			<td>Fecha: </td>
+			<td>
+				<?
+					$fecha = time();
+				?> 
+				<input type="text" id="txtFechaEvento" name="txtFechaEvento" readonly="readonly">
+				<select id="sltHora" name="sltHora">
+					<option value="">Seleccione</option>
+					<option value="01:00">01:00</option>
+					<option value="02:00">02:00</option>
+					<option value="03:00">03:00</option>
+					<option value="04:00">04:00</option>
+					<option value="05:00">05:00</option>
+					<option value="06:00">06:00</option>
+					<option value="07:00">07:00</option>
+					<option value="08:00">08:00</option>
+					<option value="09:00">09:00</option>
+					<option value="10:00">10:00</option>
+					<option value="11:00">11:00</option>
+					<option value="12:00">12:00</option>
+					<option value="13:00">13:00</option>
+					<option value="14:00">14:00</option>
+					<option value="15:00">15:00</option>
+					<option value="16:00">16:00</option>
+					<option value="17:00">17:00</option>
+					<option value="18:00">18:00</option>
+					<option value="19:00">19:00</option>
+					<option value="20:00">20:00</option>
+					<option value="21:00">21:00</option>
+					<option value="22:00">22:00</option>
+					<option value="23:00:00">23:00</option>
+					<option value="00:00">00:00</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="radio" name="cbxTipo" value="1" checked> Público<br>
+			</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>
+				<input type="radio" name="cbxTipo" value="2"> Privado
+			</td>
+			<td></td>
+		</tr>
+  	</table>
+
+	  <table>
+	    <tr style="display: none;"><td>Lat/Lng:</td><td><div id="latlng"></div></td></tr>
+	    <tr style="display: none;"><td>Zoom Level</td><td><div id="zoom_level">2</div></td></tr>
+	  </table>
+	  
+	  <input type="hidden" id="hdnCordenadas" name="hdnCordenadas">
+	  <input type="hidden" id="hdnDireccionSeleccionada" name="hdnDireccionSeleccionada">
+	  
+	  </form>
+    	
+    </div>
+    <div class="modal-footer">
+  	    <a href="#" onclick="crearEvento();" class="btn btn-success" data-dismiss="modal">Crear Evento</a>
+    </div>
+</div>	
+
+<script type="text/javascript">
+	
+ initialize();
+	
+  var map;
+  var geocoder;
+  var centerChangedLast;
+  var reverseGeocodedLast;
+  var currentReverseGeocodeResponse;
+
+  function initialize() {
+    var latlng = new google.maps.LatLng(-33.45532014786473, -70.66714304333493);
+    var myOptions = {
+      zoom: 16,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    geocoder = new google.maps.Geocoder();
+
+    setupEvents();
+    centerChanged();
+
+  }
+
+  function setupEvents() {
+    reverseGeocodedLast = new Date();
+    centerChangedLast = new Date();
+
+    setInterval(function() {
+      if((new Date()).getSeconds() - centerChangedLast.getSeconds() > 1) {
+        if(reverseGeocodedLast.getTime() < centerChangedLast.getTime())
+          reverseGeocode();
+      }
+    }, 1000);
+
+    google.maps.event.addListener(map, 'zoom_changed', function() {
+      document.getElementById("zoom_level").innerHTML = map.getZoom();
+    });
+
+    google.maps.event.addListener(map, 'center_changed', centerChanged);
+
+    google.maps.event.addDomListener(document.getElementById('crosshair'),'dblclick', function() {
+       map.setZoom(map.getZoom() + 1);
+    });
+
+  }
+
+  function getCenterLatLngText() {
+    return '(' + map.getCenter().lat() +', '+ map.getCenter().lng() +')';
+  }
+
+  function centerChanged() {
+    centerChangedLast = new Date();
+    var latlng = getCenterLatLngText();
+    document.getElementById('latlng').innerHTML = latlng;
+    document.getElementById('hdnCordenadas').value = latlng;
+    document.getElementById('formatedAddress').innerHTML = '';
+    currentReverseGeocodeResponse = null;
+  }
+
+  function reverseGeocode() {
+    reverseGeocodedLast = new Date();
+    geocoder.geocode({latLng:map.getCenter()},reverseGeocodeResult);
+  }
+
+  function reverseGeocodeResult(results, status) {
+    currentReverseGeocodeResponse = results;
+    if(status == 'OK') {
+      if(results.length == 0) {
+        document.getElementById('formatedAddress').innerHTML = 'None';
+      } else {
+        document.getElementById('formatedAddress').innerHTML = results[0].formatted_address;
+      }
+    } else {
+      document.getElementById('formatedAddress').innerHTML = 'Error';
+    }
+  }
+
+
+  function geocode() {
+    var address = document.getElementById("address").value;
+    geocoder.geocode({
+      'address': address,
+      'partialmatch': true}, geocodeResult);
+  }
+
+  function geocodeResult(results, status) {
+    if (status == 'OK' && results.length > 0) {
+      map.fitBounds(results[0].geometry.viewport);
+    } else {
+      alert("GeoLocalización no tuvo éxito por las siguientes razones: " + status);
+    }
+  }
+
+  function addMarkerAtCenter() {
+
+	document.getElementById("hdnDireccionSeleccionada").value = "SI";
+	var cordenadaXeY = document.getElementById("hdnCordenadas").value;
+	cordenadaXeY = cordenadaXeY.replace("(","");
+	cordenadaXeY = cordenadaXeY.replace(")","");
+
+	var arrayCordenadas = cordenadaXeY.split(",");
+
+	initialize();
+
+	//GO inizialite
+   var latlng = new google.maps.LatLng(arrayCordenadas[0],arrayCordenadas[1]);
+    var myOptions = {
+      zoom: 16,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    geocoder = new google.maps.Geocoder();
+    setupEvents();
+    centerChanged(); //END inizialite
+	
+    var marker = new google.maps.Marker({
+        position: map.getCenter(),
+        map: map
+    });
+
+    var text = 'Lat/Lng: ' + getCenterLatLngText();
+    if(currentReverseGeocodeResponse) {
+      var addr = '';
+      if(currentReverseGeocodeResponse.size == 0) {
+        addr = 'None';
+      } else {
+        addr = currentReverseGeocodeResponse[0].formatted_address;
+      }
+      text = text + '<br>' + 'Dirección: <br>' + addr;
+    }
+
+    var infowindow = new google.maps.InfoWindow({ content: text });
+
+    google.maps.event.addListener(marker, 'click', function() {
+      infowindow.open(map,marker);
+    });
+  }
+
+  /*
+	END CODE MAPS
+  */
+
+  function crearEvento()
+  {
+	  var errores = false;
+	  var htmlErrores = "<ul type = square>";
+	  
+	  if(trim(document.getElementById("txtNombreEvento").value) == "")
+	  {
+		  htmlErrores = htmlErrores + "<li>Debes ingresar el nombre del evento";
+		  errores = true;
+	  }
+
+	  if(trim(document.getElementById("txtDescripcion").value) == "")
+	  {
+		  htmlErrores = htmlErrores + "<li>Debes ingresar una breve descripción";
+		  errores = true;
+	  }
+
+	  if(trim(document.getElementById("address").value) == "")
+	  {
+		  htmlErrores = htmlErrores + "<li>Debes ingresar la dirección del evento";
+		  errores = true;
+	  }
+
+	  if(trim(document.getElementById("txtFechaEvento").value) == "")
+	  {
+		  htmlErrores = htmlErrores + "<li>Debes ingresar la fecha del evento";
+		  errores = true;
+	  }
+
+	  if(trim(document.getElementById("sltHora").value) == "")
+	  {
+		  htmlErrores = htmlErrores + "<li>Debes ingresar la hora del evento";
+		  errores = true;
+	  }
+
+	  if(trim(document.getElementById("hdnDireccionSeleccionada").value) == "")
+	  {
+		  htmlErrores = htmlErrores + "<li>Debes seleccionar la ubicación específica en el mapa";
+		  errores = true;
+	  }
+
+	  htmlErrores = htmlErrores + "</ul>";
+
+	  document.getElementById("divErroresEvento").innerHTML = htmlErrores; 
+
+	  if(errores)
+	  {
+		  location.href="#arriba";
+	  }else{
+	  	  document.getElementById("formEvento").submit();
+	  }
+  }
+  
+</script>

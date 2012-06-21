@@ -31,8 +31,6 @@ class Application_Model_PublicacionGrupoDao
     
     public function obtenerPorPublicacionId($pub_id)
     {
-    	$id = (int)$id;
-    
     	$where = 'pub_id ='. $pub_id;
     	 
     	$resultado = $this->_table->fetchAll($where);

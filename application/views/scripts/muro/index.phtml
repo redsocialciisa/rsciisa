@@ -202,12 +202,13 @@
 			document.getElementById("count_display").innerHTML = "600";
 		}
 
-		$boton = $boton + "  <a href='#'' class='btn btn-danger' data-dismiss='modal'>Cerrar</a>";		
+		$boton = $boton + "<a href='#'' class='btn btn-danger' data-dismiss='modal'>Cerrar</a>";		
 		document.getElementById("divBotonera").innerHTML = $boton;
 		
 		document.getElementById("txtTexto").value = document.getElementById("hdnTextoPublicacion" + id).value; 
 		document.getElementById("idPost").value = id;
-		
+
+		document.getElementById("divLoaderCompartiendo").innerHTML = "";
 		$('#myModalPost').modal('show');		
 	}
 

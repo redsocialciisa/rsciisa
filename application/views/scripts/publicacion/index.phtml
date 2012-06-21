@@ -1,4 +1,7 @@
-<?php echo $this->publicacion->getFecha(); ?>
+<?php 
+	$objUtilidad = new Application_Model_Utilidad();
+	echo "<b><p>Publicado el: ".$objUtilidad->girarFecha($this->publicacion->getFecha())."</p></b>";
+?>
 <table>
   <tr>
     <td align="left" colspan="2">
@@ -6,16 +9,16 @@
     	<table>
     		<tr>
     			<td>
-    				<div style="width: 100%;">
+				    <div class="cont2">
+			    		<?php echo $this->publicacion->getTexto(); ?>
+			    	</div>
+    			</td>
+    			<td valign="top">
+    				<div style="width: 80%;">
 				    	 <a class="thumbnail">
 					       	<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $this->usuario->getFoto();?>">
 					     </a>
 				    </div>
-    			</td>
-    			<td valign="top">
-    				<div class="cont2">
-			    		<?php echo $this->publicacion->getTexto(); ?>
-			    	</div>
     			</td>
     		</tr>
     	</table>
@@ -27,7 +30,7 @@
  				<table>
  					<tr>
  						<td>
- 							<div style="width: 800px; height: 600px;">
+ 							<div style="width: 800px; height: 100%;">
 	 							<a class="thumbnail" href="#">
 							       	<img src="<?php echo $this->baseUrl()?>/imagenes/fotos/<?php echo $this->publicacion->getFoto();?>">
 							     </a>
@@ -38,7 +41,7 @@
  		<?php } ?>
  		<?php if($this->publicacion->getTipoId() == 3){?>
  				<iframe class="youtube-player" width="800" height="600" src="http://www.youtube.com/embed/<?php echo $this->publicacion->getVideo();?>?wmode=transparent">
-									</iframe>
+				</iframe>
  		<?php } ?>
  		<?php if($this->publicacion->getTipoId() == 4){?>
  				evento

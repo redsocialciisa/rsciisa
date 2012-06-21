@@ -2,6 +2,9 @@
 	$objUsuarioDao2 = new Application_Model_UsuarioDao();
 	$objTipPublicacion = new Application_Model_TipoPublicacionDao();
 	$objEmocionDao = new Application_Model_EmocionDao();
+	$objUtilidad = new Application_Model_Utilidad();
+	$objAmigoDao = new Application_Model_AmigoDao();
+	$aut = Zend_Auth::getInstance();
 ?>
 <table>
 	<tr style="background-color:  #46a546">
@@ -9,6 +12,11 @@
 		
 			<div style="width: 800px;">
 				<h1><?php echo $objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getNombre();?></h1>
+
+				<?php if($objAmigoDao->sonAmigos($aut->getIdentity()->usu_id, $this->Contacto->getId())){?>
+					<h5><?php echo $objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getCorreo();?></h5>
+					<h5><?php echo $objUtilidad->girarFecha($objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getFechaNacimiento());?></h5>
+				<?php } ?>
 			</div>
 		
 			<img width="50px" src="<?php echo $this->baseUrl()?>/imagenes/minicaras/<?php echo $objEmocionDao->obtenerPorId($this->Contacto->getEmocionId())->getFoto();?>">
@@ -21,8 +29,10 @@
 	</tr>
 </table>
 
-<a href="#"><img src="/imagenes/proyecto/luz.png" width="40px;" onclick="openModalPublicacion()" title="Publicar algo..."></a>
 
+<?php if($objAmigoDao->sonAmigos($aut->getIdentity()->usu_id, $this->Contacto->getId())){ ?>
+
+<a href="#"><img src="/imagenes/proyecto/luz.png" width="40px;" onclick="openModalPublicacion()" title="Publicar algo..."></a>
 <?php echo $this->listaPublicaciones;?>
 	<?php if(count($this->listaPublicaciones) > 0){ ?>
 				<?php foreach ($this->listaPublicaciones as $publicacion){?>
@@ -72,7 +82,6 @@
 											$objComentarioDao = new Application_Model_ComentarioDao();
 											$objIntegracionDao = new Application_Model_IntegracionDao();
 											
-											$aut = Zend_Auth::getInstance();
 											$tieneFacebook = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id, 1);
 											$tieneTwitter = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id, 2);
 											$tieneLinkedin = $objIntegracionDao->obtenerLlavesIntegracion($aut->getIdentity()->usu_id, 3);
@@ -226,7 +235,7 @@
 			</tr>
 			<tr>
 				<td colspan="4">
-					<textarea rows="3" id="txtTextoPublicacion" name="txtTextoPublicacion" class="span4"></textarea>
+					<textarea rows="3" id="txtTextoPublicacion" name="txtTextoPublicacion" class="span4" onKeyDown="ValidarCaracteres(this, 499);"></textarea>
 					<div id="divErrorTexto"></div>
 				</td>
 			</tr>
@@ -290,9 +299,77 @@
     	<input type="button" value="Publicar" id="btnCrearPublicacion" name="btnCrearPublicacion" onClick="validarFormPublicacion()" class="label label-success" style="height:30px; width: 80px;">
   	    <a href="#" onclick="closeModalPublicacion()" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
     </div>
+</div>
+
+<?php }else{ ?>
+		<table>
+			<tr>
+				<td>
+					<div id="divSolicitudEnviada">				
+						<?php if($objAmigoDao->solicitudPendiente($aut->getIdentity()->usu_id, $this->Contacto->getId())){?>
+									<p>La solicitud ha sido enviada, debes esperar hasta que <?php echo $this->Contacto->getNombre();?> te acepte.</p>
+						<?php }else{ ?>
+								<p>Actualmente no eres amigo de <?php echo $this->Contacto->getNombre();?>...</p>
+						 		<a href="#" onclick="openModalAgregar()" class="btn btn-danger" data-dismiss="modal">Enviar solicitud de amistad</a>
+						<?php } ?>
+					</div>
+				</td>
+			</tr>
+		</table>
+
+<?php }?>
+
+<div class="modal hide" id="myModalAgregar" style="width: 700px;">
+    <div class="modal-header">
+    <button class="close" data-dismiss="modal">×</button>
+    <img src="/imagenes/proyecto/Info.png">&nbsp;<b>Agregar nuevo contacto</b>
+    </div>
+    <div class="modal-body">
+		¿Estás seguro de enviar la solicitud de amistad a: <b> <?php echo $this->Contacto->getNombre();?> </b> ?
+    </div>
+    <div class="modal-footer">
+  	    <a href="#" onclick="agregarContacto()" class="btn btn-success" data-dismiss="modal">Si, agregar</a>
+  	    <a href="#" class="btn btn-danger" data-dismiss="modal">No</a>
+    </div>
 </div>	
 
 <script type="text/javascript">
+	function openModalAgregar(id,nombre)
+	{
+		$('#myModalAgregar').modal('show');			
+	}
+
+	function agregarContacto(){
+
+		var usuario = <?php echo $this->Contacto->getId();?>
+		
+		$.ajax(
+				{
+				async: true,
+				type: 'POST',
+				url: '<?php echo $this->baseUrl()?>/contacto/agregar',
+				data: 'usuario=' + usuario,	
+				dataTypeString: 'text',
+				
+				beforeSend: function(data){
+	                //selectDestino.html('<label>Cargando...</label>');
+			    },  
+			    success: function(requestData){
+				    		var result = requestData;
+
+				    		var divMsj = "<div class='alert alert-success'>";
+							divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+							divMsj = divMsj + "<strong>Solicitud enviada,</strong> Tú solicitud de amistad ha sido enviada satisfactoriamente...";
+							divMsj = divMsj + "</div>";
+				    		
+				    		document.getElementById("divSolicitudEnviada").innerHTML = divMsj;								
+				    		
+			    },  
+			    error: function(requestData, strError, strTipoError){          
+			    }
+			    
+				});
+	}
 
 	function validarFormPublicacion()
 	{
