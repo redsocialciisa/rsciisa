@@ -92,10 +92,9 @@ class Application_Model_UsuarioGrupo
 		$this->_eliminar = $_eliminar;
 	}
 
-    
 	
     
     
-
+    
 }
 

@@ -18,6 +18,8 @@ class GrupoController extends Zend_Controller_Action
         $objGrupo = new Application_Model_Grupo();
         $objPublicacion = new Application_Model_Publicacion();
         $objPublicacionDao = new Application_Model_PublicacionDao();
+        $objInvitacion = new Application_Model_InvitacionDao();
+        
         $fecha = new DateTime();
         
         
@@ -71,21 +73,28 @@ class GrupoController extends Zend_Controller_Action
         $this->view->form = $form;
         
         $listaGrupoUsuario = $objUsuarioGrupoDao->obtenerPorUsuarioId($aut->getIdentity()->usu_id);
-          
+        $listaInvitacionesGrupo = $objInvitacion->obtenerInvitacionGruposPorUsuario($aut->getIdentity()->usu_id);
         //Paginador
         //plantilla de paginator
         Zend_View_Helper_PaginationControl::setDefaultViewPartial ( 'paginator/items.phtml' );
         
-        $paginator = Zend_Paginator::factory($listaGrupoUsuario);
+        $paginatorGrupo = Zend_Paginator::factory($listaGrupoUsuario);
+        $paginatorGrupo->setDefaultItemCountPerPage( 5 );
         
-        $paginator->setDefaultItemCountPerPage( 5 );
+        $paginatorInvitacion = Zend_Paginator::factory($listaInvitacionesGrupo);
+        $paginatorInvitacion->setDefaultItemCountPerPage( 5 );
+        
         
         if ($this->_hasParam ( 'page' )) {
-        	$paginator->setCurrentPageNumber( $this->_getParam ( 'page' ) );
+        	$paginatorGrupo->setCurrentPageNumber( $this->_getParam ( 'page' ) );
         }
         
-        $this->view->listaGrupoUsuario = $paginator;
+        if ($this->_hasParam ( 'page' )) {
+        	$paginatorInvitacion->setCurrentPageNumber( $this->_getParam ( 'page' ) );
+        }
         
+        $this->view->listaGrupoUsuario = $paginatorGrupo;
+        $this->view->listaInvitacionesGrupo = $paginatorInvitacion;
        
         $objPublicacionDao = null;
         $listaPublicaciones = null;
@@ -173,6 +182,120 @@ class GrupoController extends Zend_Controller_Action
         $objUsuarioGrupoDao->eliminarUsuariosPorGrupo($grupoId);
         
         $this->_redirect('/grupo/contactos/grupoId/' . $grupoId);
+    }
+    
+    public function marcarInvitarAction()
+    {
+    	$this->_helper->layout()->disableLayout();
+    	$usu_id = $this->getRequest()->getParam('usuarioId');
+    	$gru_id = $this->getRequest()->getParam('grupoId');
+    	$cbx_usuario = $this->getRequest()->getParam('cbxUsuario');
+		
+    	$fecha = new DateTime();
+    	$fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
+    	$objInvitacionDao = new Application_Model_InvitacionDao();
+    	
+    	$objInvitacion = $objInvitacionDao->obtenerPorIdActividadUsuario($usu_id, $gru_id);
+    	
+    	if ($objInvitacion)
+    	{
+    	    $id =$objInvitacion->getId();
+    	    $objInvitacion->setId($id);
+    	    $objInvitacion->setFecha($fechahora);
+    	    $objInvitacion->setTipoInvitacionId(1);
+    	    $objInvitacion->setUsuarioId($usu_id);
+    	    $objInvitacion->setIdActividad($gru_id);
+    	    $objInvitacion->setEstado($cbx_usuario);
+    	    $objInvitacionDao->guardar($objInvitacion);
+    	    
+    	}    
+    	else
+    	{
+    	    $objInvitacion = new Application_Model_Invitacion();
+    	    $objInvitacion->setFecha($fechahora);
+    	    $objInvitacion->setTipoInvitacionId(1);
+    	    $objInvitacion->setUsuarioId($usu_id);
+    	    $objInvitacion->setIdActividad($gru_id);
+    	    $objInvitacion->setEstado($cbx_usuario);
+    	    $objInvitacionDao->guardar($objInvitacion);
+    	}
+
+    
+    	$this->view->ok = "ok";
+    }
+    
+    
+    public function invitarUsuarioGrupoAction()
+    {
+        
+        $grupoId = $this->getRequest()->getParam('grupoId');
+        $fecha = new DateTime();
+        $fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
+        $objInvitacionDao = new Application_Model_InvitacionDao();
+        $listaInvitacion = $objInvitacionDao->obtenerGrupoPorInvitar($grupoId);
+        
+        foreach ($listaInvitacion as $item)
+        {
+            $id = $item->getId();
+            $item->setId($id);
+            $item->setFecha($fechahora);
+            $item->setEstado(2);
+            $objInvitacionDao->guardar($item);
+    	}
+    	
+    	$this->_redirect('/grupo/contactos/grupoId/' . $grupoId);
+    	
+    }
+
+    public function aceptarInvitacionAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $invitacionId = $this->getRequest()->getParam('invitacionId');
+        
+        $fecha = new DateTime();
+        $fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
+        
+        $objInvitacionDao = new Application_Model_InvitacionDao();
+        $objInvitacion = $objInvitacionDao->obtenerPorId($invitacionId);
+        
+        $objUsuarioGrupo = new Application_Model_UsuarioGrupo();
+        $objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
+        
+        $objUsuarioGrupo->setFechaParticipa($fechahora);
+        $objUsuarioGrupo->setUsuarioId($objInvitacion->getUsuarioId());
+        $objUsuarioGrupo->setGrupoId($objInvitacion->getIdActividad());
+        $objUsuarioGrupo->setParticipa(1);
+        $objUsuarioGrupoDao->guardar($objUsuarioGrupo);
+        
+        $id = $objInvitacion->getId();
+        $objInvitacion->setId($id);
+        $objInvitacion->setFecha($fechahora);
+        $objInvitacion->setEstado(4);
+        $objInvitacionDao->guardar($objInvitacion);
+        
+        $this->view->ok = "ok"; 
+        
+    }
+    
+    public function rechazarInvitacionAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $invitacionId = $this->getRequest()->getParam('invitacionId');
+        
+        $fecha = new DateTime();
+        $fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
+        
+        $objInvitacionDao = new Application_Model_InvitacionDao();
+        $objInvitacion = $objInvitacionDao->obtenerPorId($invitacionId);
+        
+        $id = $objInvitacion->getId();
+        $objInvitacion->setId($id);
+        $objInvitacion->setFecha($fechahora);
+        $objInvitacion->setEstado(3);
+        $objInvitacionDao->guardar($objInvitacion);
+        
+        $this->view->ok = "ok";
+        
     }
     
 }

@@ -12,7 +12,6 @@
 				$cantColumna = 3;
 				$countCheck = 0;
 			?>
-			<form id="frmLoginOK" name="frmLoginOK">
 				<table width="100%" align="center">
 					<?php foreach ($this->listaGrupoUsuarios as $usuario){
 							if($columna == 0){ 
@@ -36,7 +35,11 @@
 									</tr>
 									<tr>
 										<td align="center">
-											<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $usuario->getFoto(); ?>"></img>
+											<div style='width: 80px;'>
+												<a class='thumbnail'>
+													<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $usuario->getFoto(); ?>"></img>
+												</a>
+											</div>
 											<?php 
 												$aut = Zend_Auth::getInstance();
 												if($usuario->getId() != $aut->getIdentity()->usu_id){ ?>
@@ -44,7 +47,6 @@
 											<?php 
 											} 
 											?>
-											<?php #$objUsuarioGrupoDao = null;?>
 										</td>
 									</tr>
 								</table>						
@@ -67,14 +69,86 @@
     		
     	</div>
     	<div class="tab-pane" id="GruposInvitarContactos">
-    		<p>Invitar contactos</p>
-    		<?php echo $this->listaAmigoNoInvitado;?>
     		<?php 
-		    		foreach ($this->listaAmigoNoInvitado as $item)
-		    		{
-		    		    echo $item->getNombre();
-		    		}
-    		?>
+    			echo $this->listaAmigoNoInvitado;
+				$columna = 0;
+				$cantColumna = 3;
+				$countCheck = 0;
+			?>
+				<table width="100%" align="center">
+					<?php foreach ($this->listaAmigoNoInvitado as $usuario){
+							if($columna == 0){ 
+							   echo "<tr>";
+							} 
+							echo "<td>";?> 
+							<!-- imprimir el objeto -->
+								<table align="center">
+									<tr>
+										<td align="center">
+											<?php 
+											echo $usuario->getNombre();
+											$objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
+											$flagInvitado = $objUsuarioGrupoDao->obtenerPorGrupoYUsuario($this->grupoId, $usuario->getId());
+												if($flagEliminado == 1)
+												{
+												    	$flagInvitado = "checked='checked'";
+												}
+											?>
+										</td>
+									</tr>
+									<tr>
+										<td align="center">
+											<div style='width: 80px;'>
+												<a class='thumbnail'>
+													<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $usuario->getFoto(); ?>"></img>
+												</a>
+											</div>
+											<?php 
+												$aut = Zend_Auth::getInstance();
+												$objInvitacionDao = new Application_Model_InvitacionDao();
+												$objInvitacion = $objInvitacionDao->obtenerPorIdActividadUsuario($usuario->getId(), $this->grupoId);
+												
+												if ($objInvitacion != null)
+												{
+													if($objInvitacion->getEstado() != 2){ //0;1;3?>
+														<?php if($objInvitacion->getEstado() == 3){ ?>
+															Invitación Rechazada
+														<?php }else{ ?>
+															Invitar
+														<?php } ?>
+														<input type="checkbox" <?php echo $flagInvitado; ?> id="cbx<?php echo $usuario->getId();?>" name="cbx<?php echo $usuario->getId();?>" onclick="aInvitar(<?php echo $usuario->getId();?>)">
+												<?php } ?>
+												
+												<?php 
+												if($objInvitacion->getEstado() == 2 ){ //2?>
+													Invitación enviada
+												<?php } 
+												}
+												else
+												{    
+												?>
+												Invitar
+												<input type="checkbox" <?php echo $flagInvitado; ?> id="cbx<?php echo $usuario->getId();?>" name="cbx<?php echo $usuario->getId();?>" onclick="aInvitar(<?php echo $usuario->getId();?>)">
+												<?php }?>
+										</td>
+									</tr>
+								</table>						
+							<!-- fin de imprimir el objeto -->
+							<?php 
+							echo "</td>"; 
+							$columna++;
+							 if($columna == $cantColumna){
+								 echo "</tr>";				
+								 $columna = 0;
+							 }
+						 }
+						 echo "</tr>";
+					?>
+				</table>
+				
+				<button type="button" onclick="openModalConfirmarInvitar(<?php echo $this->grupoId;?>)">
+				Invitar los contactos seleccionados
+				</button>
     	</div>
     </div>
  </div>
@@ -108,8 +182,38 @@
     <div class="modal-footer">
   	    <a href="#" class="btn btn-success" data-dismiss="modal">Aceptar</a>
     </div>
+</div>	
+ 
+ <input type="hidden" id="hdnCountInvitar" value="<?php echo $countCheck;?>">
+<div class="modal hide" id="myModalInvitarUsuarioGrupo" style="width: 700px;">
+    <div class="modal-header">
+    <button class="close" data-dismiss="modal">×</button>
+    	Invitar usuarios
+    </div>
+    <div class="modal-body">
+    	¿Esta seguro de Invitar a los usuarios? <div id="divGrupo"></div> 
+    </div>
+    <div class="modal-footer">
+    	<a class="btn btn-success" href="/grupo/invitar-usuario-grupo/grupoId/<?php echo $this->grupoId;?>">Si</a>
+  	    <a href="#" class="btn btn-success" data-dismiss="modal">No</a>
+    </div>
     
 </div>	
+ 
+<div class="modal hide" id="myModalInvitarUsuarioGrupoNoSelecionado" style="width: 700px;">
+    <div class="modal-header">
+    <button class="close" data-dismiss="modal">×</button>
+    	Invitar usuarios
+    </div>
+    <div class="modal-body">
+    	No hay usuarios seleccionados<div id="divGrupo"></div> 
+    </div>
+    <div class="modal-footer">
+  	    <a href="#" class="btn btn-success" data-dismiss="modal">Aceptar</a>
+    </div>
+</div>	
+ 
+ 
  
  
  
@@ -163,4 +267,56 @@
 			    
 				});
 	}
+
+ function openModalConfirmarInvitar(idGrupo)
+	{
+		if (document.getElementById("hdnCountInvitar").value > 0)
+		{
+			$('#myModalInvitarUsuarioGrupo').modal("show");
+		}		
+		else
+		{
+			$('#myModalInvitarUsuarioGrupoNoSelecionado').modal("show");
+		}		
+	}
+
+
+ 
+ function aInvitar(usuId)
+	{
+		var cbxUsuario = document.getElementById("cbx" + usuId).checked;
+		var check = "";		
+
+		if (cbxUsuario)
+		{
+			check = 1;
+			document.getElementById("hdnCountInvitar").value = document.getElementById("hdnCountInvitar").value + 1;
+		}
+		else		 
+		{
+			check = 0;
+			document.getElementById("hdnCountInvitar").value = document.getElementById("hdnCountInvitar").value - 1;
+		}	
+
+		$.ajax(
+				{
+				async: true,
+				type: 'POST',
+				url: '<?php echo $this->baseUrl()?>/grupo/marcar-invitar',
+				data: 'usuarioId='+usuId+'&cbxUsuario='+check+'&grupoId='+<?php echo $this->grupoId;?>,	
+				dataTypeString: 'text',
+				
+				beforeSend: function(data){
+					  //selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
+			    },  
+			    success: function(requestData){
+				    var result = requestData;
+
+			    },  
+			    error: function(requestData, strError, strTipoError){          
+			    }
+			    
+				});
+	}
+	
  </script>   		
