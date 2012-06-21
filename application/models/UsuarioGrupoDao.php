@@ -145,9 +145,6 @@ class Application_Model_UsuarioGrupoDao
     
   		return count($resultado);
     }
-    
-    
-    
-    
+        
 }
 
