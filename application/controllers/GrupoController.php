@@ -19,9 +19,10 @@ class GrupoController extends Zend_Controller_Action
         $objPublicacion = new Application_Model_Publicacion();
         $objPublicacionDao = new Application_Model_PublicacionDao();
         $objInvitacion = new Application_Model_InvitacionDao();
+        $objPublicacionGrupo = new Application_Model_PublicacionGrupo();
+        $objPublicacionGrupoDao = new Application_Model_PublicacionGrupoDao();
         
         $fecha = new DateTime();
-        
         
         if($this->getRequest()->isPost())
         {       
@@ -45,6 +46,7 @@ class GrupoController extends Zend_Controller_Action
         			copy($foto_tmp, "/var/www/rsciisa/public/imagenes/grupos/".$fechahora."_".$foto_name);
         			$objGrupo->setFoto($fechahora."_".$foto_name);
         		}
+        		$idGrupo = $objGrupoDao->guardar($objGrupo);
         		
         		$objPublicacion->setFecha($fechahora);
         		$objPublicacion->setFoto($fechahora."_".$foto_name);
@@ -53,16 +55,17 @@ class GrupoController extends Zend_Controller_Action
         		$objPublicacion->setUsuarioPara($aut->getIdentity()->usu_id);
         		$objPublicacion->setTipoId(5);
         		$objPublicacion->setUsuarioId($aut->getIdentity()->usu_id);
-        		$objPublicacionDao->guardar($objPublicacion);
-
-        		$idGrupo = $objGrupoDao->guardar($objGrupo);
+        		$idPublicacion = $objPublicacionDao->guardar($objPublicacion);
+        		
         		$objUsuarioGrupo->setParticipa(0);
         		$objUsuarioGrupo->setGrupoId($idGrupo);
         		$objUsuarioGrupo->setUsuarioId($aut->getIdentity()->usu_id);
         		$objUsuarioGrupo->setFechaParticipa($fechahora);
         		$objUsuarioGrupoDao->guardar($objUsuarioGrupo);
         		
-
+        		$objPublicacionGrupo->setGrupoId($idGrupo);
+        		$objPublicacionGrupo->setPublicacionId($idPublicacion);
+        		$objPublicacionGrupoDao->guardar($objPublicacionGrupo);
         		
         	}else{
         		$form->populate($formData);
@@ -122,7 +125,64 @@ class GrupoController extends Zend_Controller_Action
     
     public function editarAction()
     {
+        $fecha = new DateTime();
+        $objGrupoDao = new Application_Model_GrupoDao();
+        $objGrupo = new Application_Model_Grupo();
+        $form = new Application_Form_FormEditarGrupo();
         
+        if($this->getRequest()->isPost() == false)
+        {
+            $grupoId = $this->getRequest()->getParam('grupoId');
+            $objGrupo = $objGrupoDao->obtenerPorId($grupoId);
+	        $array = array(
+	                "txtNombre" => $objGrupo->getNombre(),
+	        		"txtDescripcion" => $objGrupo->getDescripcion(),
+	                "hdnIdGrupo" => $objGrupo->getId(),
+	                "MAX_FILE_SIZE" => '2097152',
+	                "enviar" => 'Editar Grupo'
+	                );
+	        $form->populate($array);
+        }
+        
+        if($this->getRequest()->isPost())
+        {
+        	$formData = $this->_request->getPost();
+        	if($form->isValid($this->_getAllParams()))
+        	{
+        	    $grupo = $objGrupoDao->obtenerPorId($this->getRequest()->getParam('hdnIdGrupo'));
+        	    $fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
+        	    $objGrupo->setId($this->getRequest()->getParam('hdnIdGrupo'));
+        	    $objGrupo->setNombre($this->getRequest()->getParam('txtNombre'));
+        	    $objGrupo->setDescripcion($this->getRequest()->getParam('txtDescripcion'));
+        	    $objGrupo->setFechaCreacion($fechahora);
+        	    $objGrupo->setTipoGrupoId($grupo->getTipoGrupoId());
+        	    $objGrupo->setUsuId($grupo->getUsuId());
+        	    
+        	    if(isset($_FILES['fileFoto']['name']) && $_FILES['fileFoto']['name'] != "")
+        	    {
+        	    	$foto_name = $_FILES['fileFoto']['name'];
+        	    	$foto_tmp 	= $_FILES['fileFoto']['tmp_name'];
+        	    	unlink("/var/www/rsciisa/public/imagenes/grupos/".$grupo->getFoto());
+        	    	copy($foto_tmp, "/var/www/rsciisa/public/imagenes/grupos/".$fechahora."_".$foto_name);
+        	    	$objGrupo->setFoto($fechahora."_".$foto_name);
+        	    } 
+        	    else
+        	    {
+        	        $objGrupo->setFoto($grupo->getFoto());
+        	    }    
+        	    
+        	    $objGrupoDao->guardar($objGrupo);
+        	    $this->_redirect('/grupo/');
+        	    
+        	}else{
+        	    //print_r($formData);
+        	    //exit();
+        		$form->populate($formData);
+        	}
+        }
+        
+        //$form->populate($array);
+        $this->view->form = $form;
     }
     
     public function contactosAction()
@@ -321,6 +381,20 @@ class GrupoController extends Zend_Controller_Action
     
     	$this->view->ok = $objGrupo;
     }
+    
+    public function dejarParticiparAction()
+    {
+    	$this->_helper->layout()->disableLayout();
+    	$objGrupoDao = new Application_Model_GrupoDao();
+    	$objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
+    	$grupoId = $this->getRequest()->getParam('grupoId');
+    
+    	$objUsuarioGrupoDao->eliminarUsuariosPorGrupoId($grupoId);
+    	$objGrupoDao->eliminar($grupoId);
+    
+    	$this->view->ok = "ok";
+    }
+    
     
 }
 
