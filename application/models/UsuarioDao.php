@@ -238,7 +238,24 @@ class Application_Model_UsuarioDao
     	return $this->_table->delete($where);
     }
     
-
+    public function obtenerNombreAmigo($usu_id)
+    {
+    	$lista = new SplObjectStorage();
+    	$where = 'usu_id = ' . $usu_id;
+    	$resultado = $this->_table->fetchAll($where);
+    
+    	if(count($resultado) > 0)
+    	{
+    		foreach ($resultado as $item)
+    		{
+    			$lista->attach($this->obtenerPorNombrePorId($item->usu_id));
+    		}
+    	}
+    
+    	return $lista;
+    }
+    
+    
 }
 
 

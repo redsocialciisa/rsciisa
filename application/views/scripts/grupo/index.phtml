@@ -1,12 +1,11 @@
  <?php 
  $aut = Zend_Auth::getInstance();
- 
  ?>
  
  <a href="#" onclick="openModalGrupo()">Crear Grupo</a>
  
  
- <div class="tabbable">
+ <div class="tabbable span9">
     <ul class="nav nav-tabs">
     	<li><a href="#misGruposParticipo" data-toggle="tab">Mis grupos en que participo</a></li>
     	<li><a href="#misGruposInvitaciones" data-toggle="tab">Invitaciones</a></li>
@@ -14,6 +13,8 @@
     <div class="tab-content">
     	<div class="tab-pane active" id="misGruposParticipo">
     		<?php echo $this->listaGrupoUsuario;?>
+    		<div id="divMensajeDejarParticipar"></div>
+    		<div id="divMensajeEliminar"></div>
     		<table>
     			<?php 
 		    		foreach ($this->listaGrupoUsuario as $item)
@@ -27,7 +28,7 @@
 					<tr id="rowDos<?php echo $item->getId();?>" style="display: block;">
 						<td>
 							<div style='width: 80px;'>
-								<a class='thumbnail'>
+								<a class='thumbnail'  href="<?php echo $this->url(array('controller'=>'muro', 'action'=>'muro-grupo', 'id'=>$item->getId())); ?>">
 									<img src="/imagenes/grupos/<?php echo $item->getFoto();?>" >
 								</a>
 							</div>
@@ -35,10 +36,14 @@
 						<td>
 							<?php if ($aut->getIdentity()->usu_id == $item->getUsuId()) {?>
 							<a href="<?php echo $this->url(array('controller'=>'grupo', 'action'=>'contactos', 'grupoId'=>$item->getId())); ?>"  class="btn btn-info"> Contactos </a>
-							<a class="btn btn-info"> Editar grupo </a>
-							<a class="btn btn-info" onclick="openModalBorrar(<?php echo $item->getId();?>)"> Borrar grupo </a>
+							<a href="<?php echo $this->url(array('controller'=>'grupo', 'action'=>'editar', 'grupoId'=>$item->getId())); ?>"  class="btn btn-info"> Editar grupo </a>
+							<a class="btn btn-info" onclick="openModalBorrar(<?php echo $item->getId();?>)"> Eliminar grupo </a>
+							<?php }
+							else 
+							{
+							?>
+							<a class="btn btn-info" onclick="openModalDejarParticipar(<?php echo $item->getId();?>)"> Dejar de participar </a>
 							<?php }?>
-							<a class="btn btn-info"> Ver grupo </a>
 						</td>			
 					</tr>  
 				<?php }?>
@@ -72,8 +77,8 @@
 							</div>
 						</td>
 						<td>
-							<a class="btn btn-info" onclick="openModalAceptarInvitacion(<?php echo $item->getId();?>)"> Aceptar invitacion </a>
-							<a class="btn btn-info" onclick="openModalRechazarInvitacion(<?php echo $item->getId();?>)"> Rechazar invitacion </a>
+							<a class="btn btn-info" onclick="openModalAceptarInvitacion(<?php echo $item->getId();?>)"> Aceptar invitación </a>
+							<a class="btn btn-info" onclick=""> Rechazar invitación </a>
 						</td>			
 					</tr>  
 				<?php }?>
@@ -109,11 +114,9 @@
 				echo $this->form->optPrivado;
 				echo $this->form->enviar;
              ?>
-             
         </form>
     </div>
 </div>	
-
 
 <div class="modal hide" id="myModalBorrar" style="width: 700px;">
     <div class="modal-header">
@@ -125,7 +128,7 @@
     	<input type="hidden" id="hdnGrupoId">
 	    </div>
 	    <div class="modal-footer">
-	    	<a href="#" onclick="eliminarGrupo()" class="btn btn-success" data-dismiss="modal">Eliminar</a>
+	    	<a href="#" onclick="eliminarGrupo()" class="btn btn-success" data-dismiss="modal">Si</a>
 	  	    <a href="#" onclick="closeModalBorrar()" class="btn btn-success" data-dismiss="modal">No</a>
 	    </div>
 </div>	
@@ -133,10 +136,10 @@
 <div class="modal hide" id="myModalAceptarInvitacion" style="width: 700px;">
     <div class="modal-header">
     <button class="close" onclick="closeModalBorrar()" data-dismiss="modal">×</button>
-    	Aceptar invitacion
+    	Aceptar invitación
     </div>
         <div class="modal-body">
-    		¿Deseas aceptar la invitacion al grupo? <div id="divGrupo"></div> 
+    		¿Deseas aceptar la invitación al grupo? <div id="divGrupo"></div> 
 	    	<input type="hidden" id="hdnInvitacionId">
 	    </div>
 	    <div class="modal-footer">
@@ -145,21 +148,20 @@
 	    </div>
 </div>	
 
-<div class="modal hide" id="myModalRechazarInvitacion" style="width: 700px;">
+<div class="modal hide" id="myModalDejarParticipar" style="width: 700px;">
     <div class="modal-header">
-    <button class="close" onclick="closeModalBorrar()" data-dismiss="modal">×</button>
-    	Rechazar invitacion
+    <button class="close" onclick="closeModalDejarParticipar()" data-dismiss="modal">×</button>
+    	Dejar de participar en grupo
     </div>
         <div class="modal-body">
-    		¿Deseas rechazar la invitacion al grupo? <div id="divGrupo"></div> 
-	    	<input type="hidden" id="hdnInvitacionId">
+    		¿Estás seguro de dejar de participar en el grupo? <div id="divGrupo"></div> 
+    	<input type="hidden" id="hdnGrupoId">
 	    </div>
 	    <div class="modal-footer">
-	    	<a href="#" onclick="rechazarInvitacionGrupo()" class="btn btn-success" data-dismiss="modal">Aceptar</a>
-	  	    <a href="#" onclick="closeModalRechazarInvitacion()" class="btn btn-success" data-dismiss="modal">Cancelar</a>
+	    	<a href="#" onclick="dejarParticiparGrupo()" class="btn btn-success" data-dismiss="modal">Si</a>
+	  	    <a href="#" onclick="closeModalDejarParticipar()" class="btn btn-success" data-dismiss="modal">No</a>
 	    </div>
 </div>	
-
 
 <script type="text/javascript">
 	function openModalGrupo()
@@ -178,6 +180,12 @@
 		$('#myModalBorrar').modal("show");	
 	}
 
+	function openModalDejarParticipar(idGrupo)
+	{
+		document.getElementById("hdnGrupoId").value = idGrupo;
+		$('#myModalDejarParticipar').modal("show");	
+	}
+	
 	function openModalAceptarInvitacion(idInvitacion)
 	{
 		document.getElementById("hdnInvitacionId").value = idInvitacion;
@@ -193,6 +201,11 @@
 	function closeModalBorrar()
 	{
 		$('#myModalBorrar').modal();	
+	}
+
+	function closeModalDejarParticipar()
+	{
+		$('#myModalDejarParticipar').modal();	
 	}
 
 	function closeModalAceptarInvitacion()
@@ -227,6 +240,13 @@
 							{
 								document.getElementById("rowUno" + grupoId).style.display = "none";
 								document.getElementById("rowDos" + grupoId).style.display = "none";
+
+								var divMsj = "<div class='alert alert-success'>";
+								divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+								divMsj = divMsj + "Se ha eliminado el grupo correctamente";
+								divMsj = divMsj + "</div>";
+
+								document.getElementById("divMensajeEliminar").innerHTML = divMsj;  
 							}
 						      
 					    },  
@@ -261,7 +281,7 @@
 
 								var divMsj = "<div class='alert alert-success'>";
 								divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
-								divMsj = divMsj + "<strong>Éxito!</strong> Ahora eres parte del grupo !!";
+								divMsj = divMsj + "Ahora eres parte del grupo.";
 								divMsj = divMsj + "</div>";
 
 								document.getElementById("divMensajeInvitacion").innerHTML = divMsj;  
@@ -300,7 +320,7 @@
 
 								var divMsj = "<div class='alert alert-success'>";
 								divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
-								divMsj = divMsj + "<strong>Éxito</strong> Has rechazado la invitacion del grupo";
+								divMsj = divMsj + "Has rechazado la invitacion del grupo";
 								divMsj = divMsj + "</div>";
 
 								document.getElementById("divMensajeInvitacion").innerHTML = divMsj;  
@@ -313,7 +333,45 @@
 						});
 	}
 	
-	
+	function dejarParticiparGrupo(){
+
+		var grupoId = document.getElementById("hdnGrupoId").value;
+
+			$.ajax(
+						{
+						async: true,
+						type: 'POST',
+						url: '<?php echo $this->baseUrl()?>/grupo/dejar-participar',
+						data: 'grupoId=' + grupoId,	
+						dataTypeString: 'text',
+						
+						beforeSend: function(data){
+							  //selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
+					    },  
+					    success: function(requestData){
+						    var result = requestData;
+
+							if(result == "ok")
+							{
+								document.getElementById("rowUno" + grupoId).style.display = "none";
+								document.getElementById("rowDos" + grupoId).style.display = "none";
+
+								var divMsj = "<div class='alert alert-success'>";
+								divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+								divMsj = divMsj + "Has dejado de participar en el grupo.";
+								divMsj = divMsj + "</div>";
+
+								document.getElementById("divMensajeDejarParticipar").innerHTML = divMsj; 
+							}
+						      
+					    },  
+					    error: function(requestData, strError, strTipoError){          
+					    }
+					    
+						});
+	}
+
+
 	function textCounter(textarea, counterID) 
 	{
 		var maxLen = document.getElementById("maximoPost").value;

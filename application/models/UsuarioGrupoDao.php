@@ -145,6 +145,14 @@ class Application_Model_UsuarioGrupoDao
     
   		return count($resultado);
     }
+    
+    
+    public function eliminarUsuarioPorGrupoYUsuario($gru_id,$usu_id)
+    {
+    	$where = 'gru_id = ' . $gru_id.' and usu_gru_eliminar = 1 and usu_id = '. $usu_id;
+    
+    	return $this->_table->delete($where);
+    }
         
 }
 

@@ -208,6 +208,31 @@ class Application_Model_AmigoDao
 	    return $lista;
 	    
 	}
+	
+	
+	public function obtenerTodosPorNombre($usu_id)
+	{
+		$lista = new SplObjectStorage();
+		 
+		$where = 'usu_id = '. $usu_id . ' AND sit_ami_id = 2';
+		$objUsuarioDao = new Application_Model_UsuarioDao();
+		$objUsuario = new Application_Model_Usuario();
+		
+		$resultado = $this->_table->fetchAll($where);
+	
+		if(count($resultado) > 0){
+	
+			foreach ($resultado as $item)
+			{
+			    echo $objUsuarioDao->obtenerPorId($usu_id)->getNombre();
+				$lista->attach($objUsuarioDao->obtenerPorId()->getNombre());
+			}
+		}
+		 
+		$objUsuarioDao = null;
+		 
+		return $lista;
+	}
     
 }
 

@@ -146,9 +146,21 @@
 					?>
 				</table>
 				
-				<button type="button" onclick="openModalConfirmarInvitar(<?php echo $this->grupoId;?>)">
-				Invitar los contactos seleccionados
-				</button>
+				<?php 
+				
+				$objAmigoDao = new Application_Model_AmigoDao();
+				$cantidad = $objAmigoDao->obtenerTodosPorUsuarioId($aut->getIdentity()->usu_id);
+				
+				if (count($cantidad) < 1)
+				{
+				    echo 'No tienes contactos agregados';
+				}
+				else{
+				?>
+					<button type="button" onclick="openModalConfirmarInvitar(<?php echo $this->grupoId;?>)">
+					Invitar los contactos seleccionados
+					</button>
+				<?php }?>
     	</div>
     </div>
  </div>
