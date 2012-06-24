@@ -249,8 +249,10 @@ class Application_Model_PublicacionDao
     	$lista = new SplObjectStorage();
     
     	$objUsuarioDao = new Application_Model_UsuarioDao();
+    	$objPublicacionGrupoDao = new Application_Model_PublicacionGrupoDao();
+    	$objGrupoDao = new Application_Model_GrupoDao();
     
-    	$where = 'tip_pub_id IN (4,5,6)';
+    	$where = 'tip_pub_id IN (4,5)';
     	$order = 'pub_fecha desc';
     	
     	$resultado = $this->_table->fetchAll($where,$order);
@@ -259,9 +261,16 @@ class Application_Model_PublicacionDao
     
     		foreach ($resultado as $item)
     		{
-    			$lista->attach($this->obtenerPorId($item->pub_id));
+    		    if($objGrupoDao->obtenerPorId($objPublicacionGrupoDao->obtenerPorPublicacionId($item->pub_id)->getGrupoId())->getTipoGrupoId() == 0)
+    		    {
+    				$lista->attach($this->obtenerPorId($item->pub_id));
+    		    }
     		}
     	}
+    	
+    	$objGrupoDao = null;
+    	$objPublicacionGrupoDao = null;
+    	$objUsuarioDao = null;
     
     	return $lista;
     

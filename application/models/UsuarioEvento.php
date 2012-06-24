@@ -7,7 +7,8 @@ class Application_Model_UsuarioEvento
 	private $_usuarioId;
 	private $_fechaAsiste;
 	private $_asiste;
-	
+  	private $_eliminar;
+  	
 	/**
 	 * @return the $_id
 	 */
@@ -41,6 +42,13 @@ class Application_Model_UsuarioEvento
 	 */
 	public function getAsiste() {
 		return $this->_asiste;
+	}
+
+	/**
+	 * @return the $_eliminar
+	 */
+	public function getEliminar() {
+		return $this->_eliminar;
 	}
 
 	/**
@@ -78,6 +86,16 @@ class Application_Model_UsuarioEvento
 		$this->_asiste = $_asiste;
 	}
 
+	/**
+	 * @param field_type $_eliminar
+	 */
+	public function setEliminar($_eliminar) {
+		$this->_eliminar = $_eliminar;
+	}
+
+  	
+  	
+	
 	
 	
 	

@@ -29,7 +29,8 @@ class Application_Model_EventoDao
     		$objEvento->setCordenadaX($resultado->current()->eve_cordenada_x);
     		$objEvento->setCordenadaY($resultado->current()->eve_cordenada_y);
     		$objEvento->setFechaCreacion($resultado->current()->eve_fecha_creacion);
-    		$objEvento->setTipoEventoId($resultado->current()->eve_tip_id);
+    		$objEvento->setFechaEvento($resultado->current()->eve_fecha_evento);
+    		$objEvento->setTipoEventoId($resultado->current()->tip_eve_id);
     		$objEvento->setHora($resultado->current()->eve_hora);
     	}
     	return $objEvento;
@@ -45,6 +46,7 @@ class Application_Model_EventoDao
     	        'eve_cordenada_x' => $evento->getCordenadaX(),
     	        'eve_cordenada_y' => $evento->getCordenadaY(),
     	        'eve_fecha_creacion' => $evento->getFechaCreacion(),
+    	        'eve_fecha_evento' => $evento->getFechaEvento(),  	        
     	        'tip_eve_id' => $evento->getTipoEventoId(),
     	        'eve_hora' => $evento->getHora()
     	);
@@ -61,7 +63,7 @@ class Application_Model_EventoDao
     public function obtenerPorUsuarioId($usu_id)
     {
     	$listaEventos = new SplObjectStorage();
-    	$where = 'usu_id > '. $usu_id;
+    	$where = 'usu_id = '. $usu_id;
     
     	$resultado = $this->_table->fetchAll($where);
     

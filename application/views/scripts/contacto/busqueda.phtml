@@ -7,6 +7,10 @@
 			<h2>Resultado de la búsqueda: </h2>
 			<div id="divSolicitudEnviada"></div>
 			<table width="100%" align="center">
+			
+			
+			<?php if($this->largoBusqueda >= 3){ ?>
+					<?php if(count($this->listaUsuarios) > 0){?>
 					<?php foreach ($this->listaUsuarios as $usuario){
 							if($columna == 0){ 
 							   echo "<tr>";
@@ -74,6 +78,13 @@
 						 echo "</tr>";
 					?>
 				</table>
+				<?php }else{?>
+					No se han encontrado resultados para tu búsqueda..
+				<?php }?>
+				
+				<?php }else{?>
+					Tu búsqueda debe contener 3 caracteres como mínimo..
+				<?php }?>
 				
 				<div class="modal hide" id="myModalAgregar" style="width: 700px;">
 				    <div class="modal-header">

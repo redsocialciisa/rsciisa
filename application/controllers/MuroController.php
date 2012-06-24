@@ -84,7 +84,7 @@ class MuroController extends Zend_Controller_Action
                     $htmlComentarios .= "<p class='label span4'>".$objUsuario->getNombre()."</p>";
                 }
                     
-				$htmlComentarios .= "<div class='cont'><p>".$comentario->getTexto()."</p></div>";
+				$htmlComentarios .= "<div class='cont4'><p>".$comentario->getTexto()."</p></div>";
                 
 				if($idCom == $comentario->getId())
 				{
@@ -180,7 +180,7 @@ class MuroController extends Zend_Controller_Action
         		
         		$objPublicacion->setUsuarioId($aut->getIdentity()->usu_id);
         		$objPublicacion->setUsuarioPara($aut->getIdentity()->usu_id);
-        		$objPublicacion->setTexto($this->getRequest()->getParam('txtTextoPublicacion'));
+        		$objPublicacion->setTexto($this->getRequest()->getParam('txtTextoPublicacion')); 
         		$objPublicacion->setTipoId($this->getRequest()->getParam('grpTipo'));
         		$objPublicacion->setPrivacidadId($tipoPrivacidad);
         		$objPublicacion->setVideo($this->getRequest()->getParam('txtVideo'));
@@ -451,6 +451,50 @@ class MuroController extends Zend_Controller_Action
         $this->view->listaPublicaciones = $paginator;
        	$this->view->formPublicacion = $formPublicacion;
     }
+    
+    public function comentariosAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $idPublicacion = $this->getRequest()->getParam('id');
+        
+        $objComentario = new Application_Model_Comentario();
+        $objComentarioDao = new Application_Model_ComentarioDao();
+        $objUsuarioDao = new Application_Model_UsuarioDao();
+        
+        $listaComentarios = $objComentarioDao->obtenerTodosPorPublicacionId($idPublicacion);
+        
+        $htmlComentarios = "<div>";
+        if(count($listaComentarios) > 0){
+        	foreach ($listaComentarios as $comentario){
+        		$objPublicacionDao = new Application_Model_PublicacionDao();
+        		$objUsuario = $objUsuarioDao->obtenerPorId($comentario->getUsuarioId());
+        
+        		$htmlComentarios .= "<table><tr><td valign='top'>";
+        
+        		$htmlComentarios .= "<div style='width: 50px;'><a class='thumbnail'>";
+        		$htmlComentarios .= "<img src='/imagenes/usuarios/".$objUsuario->getFoto()."'>";
+        		$htmlComentarios .= "</div>";
+        
+        		$htmlComentarios .= "</td><td valign='top'>";
+        
+        		$htmlComentarios .= "<p class='label span4'>".$objUsuario->getNombre()."</p>";
+        		$htmlComentarios .= "<div class='cont4'><p>".$comentario->getTexto()."</p></div>";
+        		$htmlComentarios .= "<p>".$objPublicacionDao->calcularTiempoTranscurrido($comentario->getFecha())."</p>";
+        
+        		$htmlComentarios .= "</td></tr></table>";
+        
+        		$objPublicacionDao = null;
+        
+        	}
+        }
+        
+        $htmlComentarios .= "comentarios: <span class='badge badge-info'>".$objComentarioDao->obtenerCantidadComentariosPorPublicacionId($idPublicacion)."</span>";
+        
+        $htmlComentarios .= "</div>";
+        
+        $this->view->ok = $htmlComentarios;
+    }
+    
     
     public function logoutAction()
     {

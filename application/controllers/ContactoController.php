@@ -28,6 +28,7 @@ class ContactoController extends Zend_Controller_Action
         }
         
         $this->view->listaUsuarios = $paginator;
+        $this->view->largoBusqueda = strlen(trim($nombreUsuario));
 
     }
     

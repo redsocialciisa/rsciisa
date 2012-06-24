@@ -22,11 +22,11 @@ class Application_Model_UsuarioEventoDao
     		$objUsuarioEvento = new Application_Model_UsuarioEvento();
     		 
     		$objUsuarioEvento->setId($resultado->current()->usu_eve_id);
-    		$objUsuarioEvento->setUsuarioCiisa($resultado->current()->eve_id);
-    		$objUsuarioEvento->setPassword($resultado->current()->usu_id);
-    		$objUsuarioEvento->setNombre($resultado->current()->usu_eve_asiste);
-    		$objUsuarioEvento->setNombre($resultado->current()->usu_eve_fecha_asiste);
-    
+    		$objUsuarioEvento->setEventoId($resultado->current()->eve_id);
+    		$objUsuarioEvento->setUsuarioId($resultado->current()->usu_id);
+    		$objUsuarioEvento->setAsiste($resultado->current()->usu_eve_asiste);
+    		$objUsuarioEvento->setFechaAsiste($resultado->current()->usu_eve_fecha_asiste);
+    		$objUsuarioEvento->setEliminar($resultado->current()->usu_eve_eliminar);
     	}
     	return $objUsuarioEvento;
     }
@@ -37,7 +37,8 @@ class Application_Model_UsuarioEventoDao
     			'eve_id' => $usuarioEvento->getEventoId(),
     			'usu_id' => $usuarioEvento->getUsuarioId(),
     			'usu_eve_asiste' => $usuarioEvento->getAsiste(),
-    			'usu_eve_fecha_asiste' => $usuarioEvento->getFechaAsiste()
+    			'usu_eve_fecha_asiste' => $usuarioEvento->getFechaAsiste(),
+    	        'usu_eve_eliminar' => $usuarioEvento->getEliminar()
     	);
     
     	if($usuarioEvento->getId() != null){
@@ -53,18 +54,47 @@ class Application_Model_UsuarioEventoDao
     {
     	$lista = new SplObjectStorage();
     	$where = 'usu_id ='. $usu_id;
+    	$order = 'eve_id desc';
+    	$objEventoDao = new Application_Model_EventoDao();
     	
+    	$resultado = $this->_table->fetchAll($where,$order);
+    	
+    	if(count($resultado) > 0)
+    	{
+    		foreach ($resultado as $item)
+    		{
+    		    $lista->attach($objEventoDao->obtenerPorId($this->obtenerPorId($item->usu_eve_id)->getEventoId()));
+    		}
+    	}
+    
+    	$objEventoDao = null;
+    	return $lista;
+    }
+    
+    public function obtenerPorGrupoYUsuario($eve_id,$usu_id)
+    {
+    	$where = 'eve_id ='. $eve_id.' and usu_id ='.$usu_id;
+    
     	$resultado = $this->_table->fetchAll($where);
     
     	if(count($resultado) > 0)
     	{
     		foreach ($resultado as $item)
     		{
-    			$lista->attach($this->obtenerPorId($item->usu_eve_id));
+    			return $this->obtenerPorId($item->usu_eve_id)->getEliminar();
     		}
+    	}else{
+    		return null;
     	}
+    }
     
-    	return $lista;
+    public function obtenerMarcadosEliminar($gru_id)
+    {
+    	$where = 'eve_id ='. $gru_id.' and usu_eve_eliminar = 1';
+    
+    	$resultado = $this->_table->fetchAll($where);
+    
+    	return count($resultado);
     }
     
     public function obtenerPorEventoId($eve_id)
@@ -85,6 +115,13 @@ class Application_Model_UsuarioEventoDao
     	return $lista;
     }
     
+    public function marcarEliminar($eve_id,$usu_id,$cbx_usuario)
+    {
+    	$data = array('usu_eve_eliminar' => $cbx_usuario);
+    
+    	$where = 'eve_id = '.$eve_id.' and usu_id = '. $usu_id;
+    	return $this->_table->update($data, $where);
+    }
     
     public function eliminar($usu_eve_id)
     {

@@ -22,8 +22,8 @@
 	 }
 ?>
 
-<div style="left: 0px; top:40px; width:200px; height: 100%; background-color: #62c462" class="span3">
-	
+<div class="span3 wellLateralIzq">
+
 	<a class="thumbnail" href="#">
 	       	<img alt="" src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $objUsuarioDao->obtenerPorId($aut->getIdentity()->usu_id)->getFoto();?>"></a>
         <ul>
@@ -38,48 +38,39 @@
 			</li>
 		</ul>
         
-        <ul class="nav nav-list">
-	        <li class="span1">
-					<h5>Mensajes</h5>
-					<p> Recibidos </p>
-					<p> Enviados </p>
-			</li>
-			<li class="span1">
-					<a href="/contacto">Contactos</a>
-							
-					<?php foreach ($listaAmigos as $amigo){ ?>
-						  <div style="width: 70px;">
-				          	<a class="thumbnail" href="#">
-				            	<img alt="" 
-				            	 <?php $foto = $objEmocionDao->obtenerPorId($amigo->getEmocionId())->getFoto();
-				            	 	   $nombre = $amigo->getNombre();
-				            	 	   $srcEmocion = $this->baseUrl()."/imagenes/minicaras/".$foto;	
-				            	 	   $imgEmocion = "<table><tr><td>$nombre</td><td><div style='width: 60px;'>";
-				            	 	   $imgEmocion = $imgEmocion . "<a class='thumbnail'>";
-				            	 	   $imgEmocion = $imgEmocion . "<img src='$srcEmocion'>";
-				            	 	   $imgEmocion = $imgEmocion . "</a>";
-				            	 	   $imgEmocion = $imgEmocion . "</div></td</tr></table>";
-				            	 ?>
-				            	 src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $amigo->getFoto()?>"
-				            	 data-content="<?php echo $amigo->getCorreo();?>"				            	 
-				            	 id="contacto<?php echo $amigo->getId();?>" 
-				            	 data-original-title="<?php echo $imgEmocion;?>" 
-				            	 onMouseOver="popover(<?php echo $amigo->getId();?>)">
-				          	</a>
-				          </div>
-	 				<?php } ?>
-			</li>
-			<li class="span1">
-					<h5>Álbumes</h5>					
-			</li>
-			<li class="span1">
-					<a href="/grupo">Grupos</a>
-			</li>
-			<li class="span1">
-					<h5>Eventos</h5>
+
+		<i class="icon-envelope"></i>&nbsp; <a href="/mensaje" style="color: #000;">Mensajes</a><br><br>
+		<i class="icon-camera"></i>&nbsp;<a href="/album" style="color: #000;">Álbumes</a><br><br>
+		<i class="icon-calendar"></i>&nbsp;<a href="/evento" style="color: #000;">Eventos</a><br><br>
+		<i class="icon-user"></i><i class="icon-user"></i>&nbsp;<a href="/grupo" style="color: #000;">Grupos</a><br><br>
+		<i class="icon-user"></i>&nbsp;<a href="/contacto" style="color: #000;">Mis Contactos</a><br><br>
+		
+		
+		
+ 							<?php foreach ($listaAmigos as $amigo){ ?>
+							  <div style="width: 70px;">
+					          	<a class="thumbnail" href="#">
+					            	<img alt="" 
+					            	 <?php $foto = $objEmocionDao->obtenerPorId($amigo->getEmocionId())->getFoto();
+					            	 	   $nombre = $amigo->getNombre();
+					            	 	   $srcEmocion = $this->baseUrl()."/imagenes/minicaras/".$foto;	
+					            	 	   $imgEmocion = "<table><tr><td>$nombre</td><td><div style='width: 60px;'>";
+					            	 	   $imgEmocion = $imgEmocion . "<a class='thumbnail'>";
+					            	 	   $imgEmocion = $imgEmocion . "<img src='$srcEmocion'>";
+					            	 	   $imgEmocion = $imgEmocion . "</a>";
+					            	 	   $imgEmocion = $imgEmocion . "</div></td</tr></table>";
+					            	 ?>
+					            	 src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $amigo->getFoto()?>"
+					            	 data-content="<?php echo $amigo->getCorreo();?>"				            	 
+					            	 id="contacto<?php echo $amigo->getId();?>" 
+					            	 data-original-title="<?php echo $imgEmocion;?>" 
+					            	 onMouseOver="popover(<?php echo $amigo->getId();?>)">
+						          	</a>
+						          </div>
+			 				<?php } ?>
+</div>
+
 					
-			</li>
-		</ul>
 
 <script type="text/javascript">
 	function popover(id)

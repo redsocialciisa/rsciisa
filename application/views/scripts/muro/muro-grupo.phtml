@@ -28,9 +28,19 @@
 <?php echo $this->listaPublicaciones;?>
 <?php if(count($this->listaPublicaciones) > 0){ ?>
 	<?php foreach ($this->listaPublicaciones as $publicacion){?>
-			<div id="publicacion<?php echo $publicacion->getId();?>" align="center">
+			<div id="publicacion<?php echo $publicacion->getId();?>" align="center" class="span9">
 				<table>
-					<caption style="background-color: #20a74b">Categoría:  <?php echo $objTipPublicacion->obtenerPorId($publicacion->getTipoId())->getNombre();?>  </caption>
+					<tr>
+						<td colspan="2">
+							<label class="wellPublicacionTitulo">
+							<a href="/muro/muro-contacto/id/<?php echo $publicacion->getUsuarioId();?>">
+								<b><?php
+									echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getNombre();
+								?></b>
+							</a>
+							</label>
+						</td>
+					</tr>
 					<tr>
 						<td rowspan="3" valign="top">
 							<div style='width: 100px;'>
@@ -40,15 +50,21 @@
          					</div>
 						</td>
 						<td>
-							<h5 class="cont2"><a href="/publicacion/index/id/<?php echo $publicacion->getId();?>"><?php echo $publicacion->getTexto();?></a></h5>
+							<h5 class="cont4 well"><?php echo $publicacion->getTexto();?></h5>
 							<input type="hidden" id="hdnTextoPublicacion<?php echo $publicacion->getId();?>" value="<?php echo $publicacion->getTexto();?>">
 							
 							
 							<!-- aquí se muestra la información de la publicación según... el tipo de publicación -->
 							<?php 
 							$objPublicacionAux = new Application_Model_PublicacionDao();
+							
+							$texto = $publicacion->getTexto();
+							$texto = str_replace('"',"&ldquo;",$texto);
+							$texto = str_replace("'","&lsquo;",$texto);
+							
 							if($publicacion->getTipoId() == 1){ ?>
 								<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha());?></p>
+								<a href="#" onclick="verPublicacionesConCometarios('<?php echo $publicacion->getId();?>','<?php echo $texto;?>','<?php echo $publicacion->getVideo();?>','<?php echo $publicacion->getFoto();?>','<?php echo $publicacion->getTipoId();?>','<?php echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getNombre(); ?>')" class="btn"><i class="icon-plus"></i>&nbsp; Ver más</a>  
 							<?php } ?>
 								
 							<?php
@@ -58,13 +74,15 @@
 		      							<img src="<?php echo $this->baseUrl()?>/imagenes/fotos/<?php echo $publicacion->getFoto();?>" onclick="verFoto('<?php echo $publicacion->getTexto();?>','<?php echo $publicacion->getFoto();?>')">
 	         						</a>
          						</div><br>
-         						<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha()); ?></p>  
+         						<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha()); ?></p>
+         						<a href="#" onclick="verPublicacionesConCometarios('<?php echo $publicacion->getId();?>','<?php echo $texto;?>','<?php echo $publicacion->getVideo();?>','<?php echo $publicacion->getFoto();?>','<?php echo $publicacion->getTipoId();?>','<?php echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getNombre(); ?>')" class="btn"><i class="icon-plus"></i>&nbsp; Ver más</a>    
 							<?php } ?>
 							
 							<?php if($publicacion->getTipoId() == 3){ ?>
 									<iframe class="youtube-player" width="320" height="190" src="http://www.youtube.com/embed/<?php echo $publicacion->getVideo();?>?wmode=transparent">
 									</iframe>
-									<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha()); ?></p>    
+									<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha()); ?></p>
+									<a href="#" onclick="verPublicacionesConCometarios('<?php echo $publicacion->getId();?>','<?php echo $texto;?>','<?php echo $publicacion->getVideo();?>','<?php echo $publicacion->getFoto();?>','<?php echo $publicacion->getTipoId();?>','<?php echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getNombre(); ?>')" class="btn"><i class="icon-plus"></i>&nbsp; Ver más</a>      
 							<?php } ?>
 						</td>
 					</tr>
@@ -96,7 +114,7 @@
 								    			</td>
 								    			<td valign="top">
 								    				<p class="label"><?php echo $objUsuario->getNombre(); ?></p>
-								    				<div class="cont"><p><?php echo $comentario->getTexto();?></p></div>
+								    				<div class="cont4"><p><?php echo $comentario->getTexto();?></p></div>
 								    				<p>
 								    					<?php echo $objPublicacionAux->calcularTiempoTranscurrido($comentario->getFecha());?>
 								    				</p>
@@ -175,7 +193,7 @@
     			<tr>
     				<td>
     					<input type="hidden" id="maximoPost" name="maximoPost">
-    					<textarea id="txtTexto" name="txtTexto" onKeyDown="textCounter(this, 'count_display');">
+    					<textarea id="txtTexto" name="txtTexto" onKeyDown="textCounter(this, 'count_display');" class="span5">
     					</textarea>
     					<span id="count_display" style="display:none;">140 caracteres restantes</span>
     				</td>
@@ -436,18 +454,21 @@
 			document.getElementById("divIcoRed").innerHTML = "<img src='/imagenes/proyecto/tt.png'>";
 			document.getElementById("maximoPost").value = "130";
 			document.getElementById("count_display").innerHTML = "140";
+			document.getElementById("txtTexto").value = document.getElementById("hdnTextoPublicacion" + id).value.substring(0,139); 
 		}
 		if(red == 2){//facebook
 			$boton = "<a href='#' onclick='compartirEnFacebook()' class='btn btn-success'>Compartir</a>";
 			document.getElementById("divIcoRed").innerHTML = "<img src='/imagenes/proyecto/fb.png'>";
 			document.getElementById("maximoPost").value = "500";
 			document.getElementById("count_display").innerHTML = "500";
+			document.getElementById("txtTexto").value = document.getElementById("hdnTextoPublicacion" + id).value.substring(0,499); 
 		}
 		if(red == 3){//linkedin
 			$boton = "<a href='#' onclick='compartirEnLinkedin()' class='btn btn-success'>Compartir</a>";
 			document.getElementById("divIcoRed").innerHTML = "<img src='/imagenes/proyecto/in.png'>";
 			document.getElementById("maximoPost").value = "600";
 			document.getElementById("count_display").innerHTML = "600";
+			document.getElementById("txtTexto").value = document.getElementById("hdnTextoPublicacion" + id).value.substring(0,599); 
 		}
 
 		$boton = $boton + "  <a href='#'' class='btn btn-danger' data-dismiss='modal'>Cerrar</a>";		
@@ -595,19 +616,58 @@
 		
 	}
 
-	function verFoto(titulo,foto)
+	function verPublicacionesConCometarios(idPublicacion,titulo,video,foto,tipoPublicacion,usuarioNombre)
 	{
-		var html = ""; 
-		html = html + "<div style='width: 100%;'>";
-		html = html + "<a class='thumbnail'>";
-		html = html + "<img src='<?php echo $this->baseUrl()?>/imagenes/fotos/"+foto+"'>";
-		html = html + "</a>";
-		html = html + "</div>";    
-			
-		document.getElementById("divModalGenerico").innerHTML = html;
-		document.getElementById("divModalGenericoTitulo").innerHTML = titulo;
+		todosComentarios(idPublicacion);
+
+		if(tipoPublicacion == 1)
+		{
+			var html = ""; 
+		}
 		
+		if(tipoPublicacion == 2)
+		{
+			var html = ""; 
+			html = html + "<div style='width: 100%;'>";
+			html = html + "<a class='thumbnail'>";
+			html = html + "<img src='<?php echo $this->baseUrl()?>/imagenes/fotos/"+foto+"'>";
+			html = html + "</a>";
+			html = html + "</div>";
+		} 
+
+		if(tipoPublicacion == 3)
+		{
+			html = "<iframe class='youtube-player' width='640' height='380' src='http://www.youtube.com/embed/"+video+"?wmode=transparent'></iframe>";
+		}
+
+		html = html + "<div class='cont wellLateralIzq'>" + titulo + "</div>"; 
+		document.getElementById("divModalGenericoTitulo").innerHTML = "<label>Publicado por: " + usuarioNombre + "</label>";
+		document.getElementById("divModalGenerico").innerHTML = html;
 		
 		$('#myModalGenerico').modal('show');
+	}
+	
+
+	function todosComentarios(idPublicacion){
+
+		$.ajax(
+				{
+				async: true,
+				type: 'POST',
+				url: '<?php echo $this->baseUrl()?>/muro/comentarios',
+				data: 'id=' + idPublicacion,	
+				dataTypeString: 'text',
+				
+				beforeSend: function(data){
+			    },  
+			    success: function(requestData){  
+		               		document.getElementById("divModalGenericoCometarios").innerHTML = requestData;
+			               		
+			    },  
+			    error: function(requestData, strError, strTipoError){          
+			    }
+			    
+				});
+		
 	}
 </script>

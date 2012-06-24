@@ -9,7 +9,8 @@ class Application_Model_Evento
     private $_lugar;
     private $_cordenadaX;
     private $_cordenadaY;
-    private $_fechaCreacion;    
+    private $_fechaCreacion;
+    private $_fechaEvento;
     private $_tipoEventoId;
     private $_hora;
     
@@ -67,6 +68,13 @@ class Application_Model_Evento
 	 */
 	public function getFechaCreacion() {
 		return $this->_fechaCreacion;
+	}
+
+	/**
+	 * @return the $_fechaEvento
+	 */
+	public function getFechaEvento() {
+		return $this->_fechaEvento;
 	}
 
 	/**
@@ -140,6 +148,13 @@ class Application_Model_Evento
 	}
 
 	/**
+	 * @param field_type $_fechaEvento
+	 */
+	public function setFechaEvento($_fechaEvento) {
+		$this->_fechaEvento = $_fechaEvento;
+	}
+
+	/**
 	 * @param field_type $_tipoEventoId
 	 */
 	public function setTipoEventoId($_tipoEventoId) {
@@ -153,5 +168,8 @@ class Application_Model_Evento
 		$this->_hora = $_hora;
 	}
 
+    
+
+    
 }
 

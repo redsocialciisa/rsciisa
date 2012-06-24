@@ -1,0 +1,84 @@
+ <div class="tabbable">
+    <ul class="nav nav-tabs">
+    	<li><a href="#tab1" data-toggle="tab">Contactos del Evento</a></li>
+    	<li><a href="#tab2" data-toggle="tab">Invitar Contactos</a></li>
+    </ul>
+    <div class="tab-content">
+    	<div class="tab-pane active" id="tab1">
+    		<?php //echo $this->listaUsuarios;?>
+    		
+    		<?php 
+				$columna = 0;
+				$cantColumna = 3;
+				$countCheck = 0;
+			?>
+				<table width="100%" align="center">
+					<?php foreach ($this->listaUsuarios as $usuario){
+							if($columna == 0){ 
+							   echo "<tr>";
+							} 
+							echo "<td>";?> 
+							<!-- imprimir el objeto -->
+								<table align="center">
+									<tr>
+										<td align="center">
+											<?php 
+											echo $usuario->getNombre();
+											$objUsuarioEventoDao = new Application_Model_UsuarioEventoDao();
+											$flagEliminado = $objUsuarioEventoDao->obtenerPorGrupoYUsuario($this->eventoId, $usuario->getId());
+												if($flagEliminado == 1)
+												{
+												    	$flagEliminado = "checked='checked'";
+												    	echo "<br>checked";
+												}else{
+												    echo "<br>no-checked";
+												}
+											?>
+										</td>
+									</tr>
+									<tr>
+										<td align="center">
+											<div style='width: 80px;'>
+												<a class='thumbnail'>
+													<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $usuario->getFoto(); ?>"></img>
+												</a>
+											</div>
+											<?php 
+												$aut = Zend_Auth::getInstance();
+												if($usuario->getId() != $aut->getIdentity()->usu_id){ ?>
+													<input type="checkbox" <?php echo $flagEliminado; ?> id="cbx<?php echo $usuario->getId();?>" name="cbx<?php echo $usuario->getId();?>" onclick="aEliminar(<?php echo $usuario->getId();?>)">
+											<?php 
+											} 
+											?>
+										</td>
+									</tr>
+								</table>						
+							<!-- fin de imprimir el objeto -->
+							<?php 
+							echo "</td>"; 
+							$columna++;
+							 if($columna == $cantColumna){
+								 echo "</tr>";				
+								 $columna = 0;
+							 }
+						 }
+						 echo "</tr>";
+					?>
+				</table>
+				
+				<button type="button" onclick="openModalConfirmarEliminar(<?php echo $this->eventoId;?>)">
+				Eliminar contactos seleccionados
+				</button>
+    		
+    	</div>
+    	<div class="tab-pane" id="tab2">
+    		
+    	</div>
+    </div>
+ </div>
+			
+ <script type="text/javascript">
+
+
+ </script>
+			 

@@ -9,7 +9,6 @@
     <link type="text/css" href="<?php echo $this->baseUrl()?>/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link type="text/css" href="<?php echo $this->baseUrl()?>/bootstrap/css/bootstrap-responsive.css" rel="stylesheet" />	
 	<script type="text/javascript" src="<?php echo $this->baseUrl()?>/bootstrap/js/bootstrap.js"></script>
-	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 	
 	<link type="text/css" href="<?php echo $this->baseUrl()?>/bootstrap/css/cupertino/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
 	<script type="text/javascript" src="<?php echo $this->baseUrl()?>/bootstrap/js/jquery-ui-1.8.21.custom.min.js"></script>
@@ -31,6 +30,11 @@
 			
 			.cont {
 				width: 600px;
+				word-wrap: break-word; 
+			}
+			
+			.cont4 {
+				width: 400px;
 				word-wrap: break-word; 
 			}
 			
@@ -74,7 +78,8 @@
 			         dayNames: ['Domingo','Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'],
 			         duration: 'fast',
 			         monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
-			         monthNamesShort: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'], 
+			         monthNamesShort: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+			         yearRange: "1930:2012", 
 			         firstDay: 1	
 				});
 
@@ -92,7 +97,8 @@
 			         dayNames: ['Domingo','Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'],
 			         duration: 'fast',
 			         monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
-			         monthNamesShort: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'], 
+			         monthNamesShort: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+			         yearRange: "2012:2020",  
 			         firstDay: 1	
 				});
 
@@ -124,7 +130,7 @@
 			{
 				var contenido = trim(document.getElementById("txtBuscador").value);
 
-				if(contenido.length > 3)
+				if(contenido.length > 2)
 				{
 					document.getElementById("formBusqueda").submit();
 					return;
@@ -157,7 +163,7 @@
    	    		<?php 
    	    			$datSource = "[";
    	    			$listaUsuarios = $objUsuarioDao->obtenerTodosLosNombres();
-   	    			$i = 1;
+   	    			$i = 2;
    	    			 foreach ($listaUsuarios as $item)
    	    			 {
    	    			     if($item->getNombre() !="ADMINISTRADOR")
@@ -273,6 +279,8 @@
     </div>
     <div class="modal-body">
     	<div id="divModalGenerico">
+    	</div>
+    	<div id="divModalGenericoCometarios">
     	</div>
     </div>
     <div class="modal-footer">

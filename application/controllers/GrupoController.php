@@ -19,6 +19,8 @@ class GrupoController extends Zend_Controller_Action
         $objPublicacion = new Application_Model_Publicacion();
         $objPublicacionDao = new Application_Model_PublicacionDao();
         $objInvitacion = new Application_Model_InvitacionDao();
+        $objPublicacionGrupo = new Application_Model_PublicacionGrupo();
+        $objPublicacionGrupoDao = new Application_Model_PublicacionGrupoDao();
         
         $fecha = new DateTime();
         
@@ -45,6 +47,7 @@ class GrupoController extends Zend_Controller_Action
         			copy($foto_tmp, "/var/www/rsciisa/public/imagenes/grupos/".$fechahora."_".$foto_name);
         			$objGrupo->setFoto($fechahora."_".$foto_name);
         		}
+        		$idGrupo = $objGrupoDao->guardar($objGrupo);
         		
         		$objPublicacion->setFecha($fechahora);
         		$objPublicacion->setFoto($fechahora."_".$foto_name);
@@ -53,16 +56,17 @@ class GrupoController extends Zend_Controller_Action
         		$objPublicacion->setUsuarioPara($aut->getIdentity()->usu_id);
         		$objPublicacion->setTipoId(5);
         		$objPublicacion->setUsuarioId($aut->getIdentity()->usu_id);
-        		$objPublicacionDao->guardar($objPublicacion);
-
-        		$idGrupo = $objGrupoDao->guardar($objGrupo);
+        		$idPublicacion = $objPublicacionDao->guardar($objPublicacion);
+        		
         		$objUsuarioGrupo->setParticipa(0);
         		$objUsuarioGrupo->setGrupoId($idGrupo);
         		$objUsuarioGrupo->setUsuarioId($aut->getIdentity()->usu_id);
         		$objUsuarioGrupo->setFechaParticipa($fechahora);
         		$objUsuarioGrupoDao->guardar($objUsuarioGrupo);
         		
-
+        		$objPublicacionGrupo->setGrupoId($idGrupo);
+        		$objPublicacionGrupo->setPublicacionId($idPublicacion);
+        		$objPublicacionGrupoDao->guardar($objPublicacionGrupo);
         		
         	}else{
         		$form->populate($formData);
@@ -134,7 +138,6 @@ class GrupoController extends Zend_Controller_Action
         $grupoId = $this->getRequest()->getParam('grupoId');
         $listaGrupoUsuarios = $objUsuarioGrupoDao->obtenerPorGrupoId($grupoId);
         $listaAmigoNoInvitado = $objAmigoDao->amigoNoInvitadoGrupo($grupoId,$aut->getIdentity()->usu_id);
-        
         
         //Paginador
         Zend_View_Helper_PaginationControl::setDefaultViewPartial ( 'paginator/items.phtml' );

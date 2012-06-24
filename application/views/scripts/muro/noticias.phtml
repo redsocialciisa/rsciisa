@@ -7,13 +7,23 @@
 <?php echo $this->listaPublicaciones;?>
 <?php if(count($this->listaPublicaciones) > 0){ ?>
 	<?php foreach ($this->listaPublicaciones as $publicacion){?>
-			<div id="publicacion<?php echo $publicacion->getId();?>" align="center">
+			<div id="publicacion<?php echo $publicacion->getId();?>" align="center" class="span9">
 				<table>
-					<caption style="background-color: #20a74b">Categoría:  <?php echo $objTipPublicacion->obtenerPorId($publicacion->getTipoId())->getNombre();?></caption>
+					<tr>
+						<td colspan="2">
+							<label class="wellPublicacionTitulo">
+							<a href="/muro/muro-contacto/id/<?php echo $publicacion->getUsuarioId();?>">
+								<b><?php
+									echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getNombre();
+								?></b>
+							</a>
+							</label>
+						</td>
+					</tr>
 					<tr>
 						<td rowspan="3" valign="top">
 							<div style='width: 100px;'>
-								<a class="thumbnail" href="/muro/muro-contacto/id/<?php echo $publicacion->getUsuarioId();?>">
+										<a class="thumbnail" href="/muro/muro-contacto/id/<?php echo $publicacion->getUsuarioId();?>">
 	      								<img alt="" src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getFoto();?>">
          						</a>
          					</div>
@@ -22,11 +32,16 @@
 							<!-- aquí se muestra la información de la publicación según... el tipo de publicación -->
 							<?php 
 							$objPublicacionAux = new Application_Model_PublicacionDao();
+							
+							$texto = $publicacion->getTexto();
+							$texto = str_replace('"',"&ldquo;",$texto);
+							$texto = str_replace("'","&lsquo;",$texto);
+							
 							if($publicacion->getTipoId() == 4){ ?>
 								<?php $fechaPublicacion = strtotime($publicacion->getFecha()); ?>
 								
-								<h5 class="cont2"><a href="/publicacion/index/id/<?php echo $publicacion->getId();?>"><?php echo $publicacion->getTexto();?></a></h5>
-								<input type="hidden" id="hdnTextoPublicacion<?php echo $publicacion->getId();?>" value="<?php echo $publicacion->getTexto();?>">
+								<h5 class="cont4 well"><?php echo $publicacion->getTexto();?></h5>
+								<input type="hidden" id="hdnTextoPublicacion<?php echo $publicacion->getId();?>" value="<?php echo $texto;?>">
 							
 								<table class="span2" border="2">
 									<tr>
@@ -97,8 +112,8 @@
 								$gru_id = $objPublicacionGrupoDao->obtenerPorPublicacionId($publicacion->getId())->getGrupoId();
 								$objGrupo = $objGrupoDao->obtenerPorId($gru_id);
 							?>
-								<h5 class="cont2"><a href="/muro/muro-grupo/id/<?php echo $gru_id;?>"><?php echo $publicacion->getTexto();?></a></h5>
-								<input type="hidden" id="hdnTextoPublicacion<?php echo $publicacion->getId();?>" value="<?php echo $publicacion->getTexto();?>">
+								<h5 class="cont4 well"><?php echo $publicacion->getTexto();?></h5>
+								<input type="hidden" id="hdnTextoPublicacion<?php echo $publicacion->getId();?>" value="<?php echo $texto;?>">
 							
 								<div style="width: 320px; height: 100%;">
 									<a class="thumbnail">
@@ -146,7 +161,7 @@
 								    			</td>
 								    			<td valign="top">
 								    				<p class="label"><?php echo $objUsuario->getNombre(); ?></p>
-								    				<div class="cont"><p><?php echo $comentario->getTexto();?></p></div>
+								    				<div class="cont4"><p><?php echo $comentario->getTexto();?></p></div>
 								    				<p>
 								    				<?php echo $objPublicacionAux->calcularTiempoTranscurrido($comentario->getFecha());?>
 								    				</p>
@@ -226,7 +241,7 @@
     			<tr>
     				<td>
     					<input type="hidden" id="maximoPost" name="maximoPost">
-    					<textarea id="txtTexto" name="txtTexto" onKeyDown="textCounter(this, 'count_display');">
+    					<textarea id="txtTexto" name="txtTexto" onKeyDown="textCounter(this, 'count_display');" class="span5">
     					</textarea>
     					<span id="count_display" style="display:none;">140 caracteres restantes</span>
     				</td>
@@ -304,18 +319,21 @@
 			document.getElementById("divIcoRed").innerHTML = "<img src='/imagenes/proyecto/tt.png'>";
 			document.getElementById("maximoPost").value = "130";
 			document.getElementById("count_display").innerHTML = "140";
+			document.getElementById("txtTexto").value = document.getElementById("hdnTextoPublicacion" + id).value.substring(0,139); 
 		}
 		if(red == 2){//facebook
 			$boton = "<a href='#' onclick='compartirEnFacebook()' class='btn btn-success'>Compartir</a>";
 			document.getElementById("divIcoRed").innerHTML = "<img src='/imagenes/proyecto/fb.png'>";
 			document.getElementById("maximoPost").value = "500";
 			document.getElementById("count_display").innerHTML = "500";
+			document.getElementById("txtTexto").value = document.getElementById("hdnTextoPublicacion" + id).value.substring(0,499); 
 		}
 		if(red == 3){//linkedin
 			$boton = "<a href='#' onclick='compartirEnLinkedin()' class='btn btn-success'>Compartir</a>";
 			document.getElementById("divIcoRed").innerHTML = "<img src='/imagenes/proyecto/in.png'>";
 			document.getElementById("maximoPost").value = "600";
 			document.getElementById("count_display").innerHTML = "600";
+			document.getElementById("txtTexto").value = document.getElementById("hdnTextoPublicacion" + id).value.substring(0,599); 
 		}
 	
 		$boton = $boton + "  <a href='#'' class='btn btn-danger' data-dismiss='modal'>Cerrar</a>";		

@@ -1,4 +1,108 @@
-<div class="modal" id="myModalGenerico" style="width: 700px;">
+<script type="text/javascript" src="/bootstrap/js/gmaps.js"></script>
+
+<a href="#" onclick="openModalEvento()">Crear Evento</a>
+
+    <div class="tabbable span9">
+	    <ul class="nav nav-tabs">
+		    <li class="active"><a href="#tab1" data-toggle="tab">Mis Eventos comprometidos</a></li>
+		    <li><a href="#tab2" data-toggle="tab">Invitaciones</a></li>
+	    </ul>
+	    <div class="tab-content">
+		    <div class="tab-pane active" id="tab1">
+		    	<table>
+		    <?php
+		    	echo $this->listaEventos;
+		    	foreach ($this->listaEventos as $evento){ ?>
+		    	
+		    	<tr>
+		    		<td colspan="6">
+		    			<?php echo $evento->getNombre();?>
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td>
+		    			<?php $fechaPublicacion = strtotime($evento->getFechaEvento()); ?>
+								<table class="span2 well">
+									<tr>
+										<td align="center" class='label label-success'>
+											<?php
+												switch (date("m", $fechaPublicacion))
+												{
+													case 1:
+													    echo "Ene";
+													break;
+													case 2:
+														echo "Feb";
+														break;
+													case 3:
+														echo "Mar";
+														break;
+													case 4:
+														echo "Abr";
+														break;
+													case 5:
+														echo "May";
+														break;
+													case 6:
+														echo "Jun";
+														break;
+													case 7:
+														echo "Jul";
+														break;
+													case 8:
+														echo "Ago";
+														break;
+													case 9:
+														echo "Sep";
+														break;
+													case 10:
+														echo "Oct";
+														break;
+													case 11:
+														echo "Nov";
+														break;
+													case 12:
+														echo "Dic";
+														break;
+												}
+												echo " - ";
+												echo date("Y", $fechaPublicacion);
+											?>
+										</td>
+									 </tr>
+									 <tr>
+									 	<td align="center">
+									 		<h2><?php 
+									 				echo date("d", $fechaPublicacion); 
+									 		?></h2>
+									 	</td>
+									 </tr>
+								</table>
+		    		</td>
+		    		<td>
+		    			<a class="btn btn-info" href="/evento/contactos/eventoId/<?php echo $evento->getId();?>">Contactos</a>
+		    		</td>
+		    		<td>
+						<a class="btn btn-info" href="#"> Editar </a>
+		    		</td>
+		    		<td>
+		    			<a class="btn btn-info" href="#"> Borrar </a>
+		    		</td>
+		    		<td>
+		    			<a class="btn btn-info" href="#"> Ver Evento </a>
+		    		</td>
+		    	</tr>
+		    <?php } ?>
+		    	</table>
+		    </div>
+		    <div class="tab-pane" id="tab2">
+		    
+		    </div>
+	    </div>
+    </div>
+
+
+<div class="modal hide" id="myModalEvento" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
     		<h3>Nuevo Evento</h3>
@@ -103,7 +207,7 @@
     	
     </div>
     <div class="modal-footer">
-  	    <a href="#" onclick="crearEvento();" class="btn btn-success" data-dismiss="modal">Crear Evento</a>
+  	    <a href="#" onclick="crearEvento();" class="btn btn-success">Crear Evento</a>
     </div>
 </div>	
 
@@ -304,5 +408,12 @@
 	  	  document.getElementById("formEvento").submit();
 	  }
   }
+
+	function openModalEvento()
+	{	
+		$('#myModalEvento').modal('show');
+		addMarkerAtCenter();		
+	}
+  
   
 </script>
