@@ -81,5 +81,12 @@ class Application_Model_PublicacionGrupoDao
     	return $this->_table->insert($data);
     }
 
+    public function eliminarPublicaciones($gru_id)
+    {
+        $where = 'gru_id = '.$gru_id;
+        
+        return $this->_table->delete($where);
+    }
+    
 }
 

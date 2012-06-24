@@ -115,12 +115,22 @@ class GrupoController extends Zend_Controller_Action
         $this->_helper->layout()->disableLayout();
         $objGrupoDao = new Application_Model_GrupoDao();
         $objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
+        $objPublicacionGrupoDao = new Application_Model_PublicacionGrupoDao();
         $grupoId = $this->getRequest()->getParam('grupoId');
+        $objGrupo = $objGrupoDao->obtenerPorId($grupoId);
         
+        unlink("/var/www/rsciisa/public/imagenes/grupos/".$objGrupo->getFoto());
         $objUsuarioGrupoDao->eliminarUsuariosPorGrupoId($grupoId);
+        $objPublicacionGrupoDao->eliminarPublicaciones($grupoId);
         $objGrupoDao->eliminar($grupoId);
         
+        $objGrupoDao = null;
+        $objUsuarioGrupoDao = null;
+        $objPublicacionGrupoDao = null;
+        
         $this->view->ok = "ok";
+        
+        
     }
     
     public function editarAction()
@@ -384,14 +394,14 @@ class GrupoController extends Zend_Controller_Action
     
     public function dejarParticiparAction()
     {
+        $aut = Zend_Auth::getInstance();
     	$this->_helper->layout()->disableLayout();
     	$objGrupoDao = new Application_Model_GrupoDao();
     	$objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
     	$grupoId = $this->getRequest()->getParam('grupoId');
     
-    	$objUsuarioGrupoDao->eliminarUsuariosPorGrupoId($grupoId);
-    	$objGrupoDao->eliminar($grupoId);
-    
+    	$objUsuarioGrupoDao->eliminarUsuarioPorGrupoYUsuario($grupoId,$aut->getIdentity()->usu_id);
+    	
     	$this->view->ok = "ok";
     }
     

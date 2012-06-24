@@ -6,7 +6,7 @@
  <a href="#" onclick="openModalGrupo()">Crear Grupo</a>
  
  
- <div class="tabbable">
+ <div class="tabbable span9">
     <ul class="nav nav-tabs">
     	<li><a href="#misGruposParticipo" data-toggle="tab">Mis grupos en que participo</a></li>
     	<li><a href="#misGruposInvitaciones" data-toggle="tab">Invitaciones</a></li>
@@ -14,6 +14,8 @@
     <div class="tab-content">
     	<div class="tab-pane active" id="misGruposParticipo">
     		<?php echo $this->listaGrupoUsuario;?>
+    		<div id="divMensajeDejarParticipar"></div>
+    		<div id="divMensajeEliminar"></div>
     		<table>
     			<?php 
 		    		foreach ($this->listaGrupoUsuario as $item)
@@ -36,7 +38,7 @@
 							<?php if ($aut->getIdentity()->usu_id == $item->getUsuId()) {?>
 							<a href="<?php echo $this->url(array('controller'=>'grupo', 'action'=>'contactos', 'grupoId'=>$item->getId())); ?>"  class="btn btn-info"> Contactos </a>
 							<a href="<?php echo $this->url(array('controller'=>'grupo', 'action'=>'editar', 'grupoId'=>$item->getId())); ?>"  class="btn btn-info"> Editar grupo </a>
-							<a class="btn btn-info" onclick="openModalBorrar(<?php echo $item->getId();?>)"> Borrar grupo </a>
+							<a class="btn btn-info" onclick="openModalBorrar(<?php echo $item->getId();?>)"> Eliminar grupo </a>
 							<?php }
 							else 
 							{
@@ -78,8 +80,8 @@
 							</div>
 						</td>
 						<td>
-							<a class="btn btn-info" onclick="openModalAceptarInvitacion(<?php echo $item->getId();?>)"> Aceptar invitacion </a>
-							<a class="btn btn-info" onclick=""> Rechazar invitacion </a>
+							<a class="btn btn-info" onclick="openModalAceptarInvitacion(<?php echo $item->getId();?>)"> Aceptar invitación </a>
+							<a class="btn btn-info" onclick=""> Rechazar invitación </a>
 						</td>			
 					</tr>  
 				<?php }?>
@@ -129,22 +131,7 @@
     	<input type="hidden" id="hdnGrupoId">
 	    </div>
 	    <div class="modal-footer">
-	    	<a href="#" onclick="eliminarGrupo()" class="btn btn-success" data-dismiss="modal">Eliminar</a>
-	  	    <a href="#" onclick="closeModalBorrar()" class="btn btn-success" data-dismiss="modal">No</a>
-	    </div>
-</div>	
-
-<div class="modal hide" id="myModalBorrar" style="width: 700px;">
-    <div class="modal-header">
-    <button class="close" onclick="closeModalBorrar()" data-dismiss="modal">×</button>
-    	Eliminar grupo
-    </div>
-        <div class="modal-body">
-    		¿Estás seguro de eliminar el grupo? <div id="divGrupo"></div> 
-    	<input type="hidden" id="hdnGrupoId">
-	    </div>
-	    <div class="modal-footer">
-	    	<a href="#" onclick="eliminarGrupo()" class="btn btn-success" data-dismiss="modal">Eliminar</a>
+	    	<a href="#" onclick="eliminarGrupo()" class="btn btn-success" data-dismiss="modal">Si</a>
 	  	    <a href="#" onclick="closeModalBorrar()" class="btn btn-success" data-dismiss="modal">No</a>
 	    </div>
 </div>	
@@ -152,10 +139,10 @@
 <div class="modal hide" id="myModalAceptarInvitacion" style="width: 700px;">
     <div class="modal-header">
     <button class="close" onclick="closeModalBorrar()" data-dismiss="modal">×</button>
-    	Aceptar invitacion
+    	Aceptar invitación
     </div>
         <div class="modal-body">
-    		¿Deseas aceptar la invitacion al grupo? <div id="divGrupo"></div> 
+    		¿Deseas aceptar la invitación al grupo? <div id="divGrupo"></div> 
 	    	<input type="hidden" id="hdnInvitacionId">
 	    </div>
 	    <div class="modal-footer">
@@ -256,6 +243,13 @@
 							{
 								document.getElementById("rowUno" + grupoId).style.display = "none";
 								document.getElementById("rowDos" + grupoId).style.display = "none";
+
+								var divMsj = "<div class='alert alert-success'>";
+								divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+								divMsj = divMsj + "Se ha eliminado el grupo correctamente";
+								divMsj = divMsj + "</div>";
+
+								document.getElementById("divMensajeEliminar").innerHTML = divMsj;  
 							}
 						      
 					    },  
@@ -290,7 +284,7 @@
 
 								var divMsj = "<div class='alert alert-success'>";
 								divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
-								divMsj = divMsj + "<strong>Éxito!</strong> Ahora eres parte del grupo !!";
+								divMsj = divMsj + "Ahora eres parte del grupo.";
 								divMsj = divMsj + "</div>";
 
 								document.getElementById("divMensajeInvitacion").innerHTML = divMsj;  
@@ -329,7 +323,7 @@
 
 								var divMsj = "<div class='alert alert-success'>";
 								divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
-								divMsj = divMsj + "<strong>Éxito</strong> Has rechazado la invitacion del grupo";
+								divMsj = divMsj + "Has rechazado la invitacion del grupo";
 								divMsj = divMsj + "</div>";
 
 								document.getElementById("divMensajeInvitacion").innerHTML = divMsj;  
@@ -350,7 +344,7 @@
 						{
 						async: true,
 						type: 'POST',
-						url: '<?php echo $this->baseUrl()?>/grupo/eliminar',
+						url: '<?php echo $this->baseUrl()?>/grupo/dejar-participar',
 						data: 'grupoId=' + grupoId,	
 						dataTypeString: 'text',
 						
@@ -364,6 +358,13 @@
 							{
 								document.getElementById("rowUno" + grupoId).style.display = "none";
 								document.getElementById("rowDos" + grupoId).style.display = "none";
+
+								var divMsj = "<div class='alert alert-success'>";
+								divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+								divMsj = divMsj + "Has dejado de participar en el grupo.";
+								divMsj = divMsj + "</div>";
+
+								document.getElementById("divMensajeDejarParticipar").innerHTML = divMsj; 
 							}
 						      
 					    },  
