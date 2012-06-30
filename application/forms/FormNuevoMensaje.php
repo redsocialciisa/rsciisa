@@ -5,12 +5,19 @@ class Application_Form_FormNuevoMensaje extends Zend_Form
 
     public function init()
     {
+        $aut = Zend_Auth::getInstance();
+        $objAmigoDao = new Application_Model_AmigoDao();
+        $listaUsuarios = $objAmigoDao->obtenerTodosPorNombre($aut->getIdentity()->usu_id);
+        
         $para = new Zend_Form_Element_Text('txtPara');
         $para->setLabel('Para: ')
         ->setRequired(true)
         ->setValue('')
         ->setAttrib('maxlength', '100')
-        ->setAttrib('class', 'span4')
+        ->setAttrib('data-source',json_encode($listaUsuarios))
+        ->setAttrib('data-items','10')
+        ->setAttrib('data-provide','typeahead')
+        ->setAttrib('placeholder','Buscar...')
         ->clearErrorMessages()
         ->addErrorMessage('Debes ingresar a quien enviar el mensaje');
         

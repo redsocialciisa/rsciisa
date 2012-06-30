@@ -78,7 +78,7 @@
 						</td>
 						<td>
 							<a class="btn btn-info" onclick="openModalAceptarInvitacion(<?php echo $item->getId();?>)"> Aceptar invitación </a>
-							<a class="btn btn-info" onclick=""> Rechazar invitación </a>
+							<a class="btn btn-info" onclick="openModalRechazarInvitacion(<?php echo $item->getId();?>)"> Rechazar invitacion </a>
 						</td>			
 					</tr>  
 				<?php }?>
@@ -162,6 +162,22 @@
 	  	    <a href="#" onclick="closeModalDejarParticipar()" class="btn btn-success" data-dismiss="modal">No</a>
 	    </div>
 </div>	
+
+<div class="modal hide" id="myModalRechazarInvitacion" style="width: 700px;">
+    <div class="modal-header">
+    <button class="close" onclick="closeModalBorrar()" data-dismiss="modal">×</button>
+    	Rechazar invitacion
+    </div>
+        <div class="modal-body">
+    		¿Deseas rechazar la invitacion al grupo? <div id="divGrupo"></div> 
+	    	<input type="hidden" id="hdnInvitacionId">
+	    </div>
+	    <div class="modal-footer">
+	    	<a href="#" onclick="rechazarInvitacionGrupo()" class="btn btn-success" data-dismiss="modal">Aceptar</a>
+	  	    <a href="#" onclick="closeModalRechazarInvitacion()" class="btn btn-success" data-dismiss="modal">Cancelar</a>
+	    </div>
+</div>	
+
 
 <script type="text/javascript">
 	function openModalGrupo()

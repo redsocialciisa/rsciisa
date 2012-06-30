@@ -54,7 +54,7 @@ class Application_Form_FormGrupo extends Zend_Form
         			 ->setAttrib('class', 'label label-success');
         
         
-        $grupoId= new Zend_Form_Element_Hidden('hdnIdGrupo');
+        $grupoId = new Zend_Form_Element_Hidden('hdnIdGrupo');
         
         $this->addElement($nombre);
         $this->addElement($fileFoto);

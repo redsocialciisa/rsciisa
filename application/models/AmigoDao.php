@@ -212,11 +212,10 @@ class Application_Model_AmigoDao
 	
 	public function obtenerTodosPorNombre($usu_id)
 	{
-		$lista = new SplObjectStorage();
+		$lista = array();
 		 
 		$where = 'usu_id = '. $usu_id . ' AND sit_ami_id = 2';
 		$objUsuarioDao = new Application_Model_UsuarioDao();
-		$objUsuario = new Application_Model_Usuario();
 		
 		$resultado = $this->_table->fetchAll($where);
 	
@@ -224,8 +223,7 @@ class Application_Model_AmigoDao
 	
 			foreach ($resultado as $item)
 			{
-			    echo $objUsuarioDao->obtenerPorId($usu_id)->getNombre();
-				$lista->attach($objUsuarioDao->obtenerPorId()->getNombre());
+			    array_push($lista,$objUsuarioDao->obtenerPorId($item->ami_usu_id)->getNombre());
 			}
 		}
 		 

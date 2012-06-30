@@ -1,0 +1,68 @@
+<?php 
+	$objUsuario = new Application_Model_UsuarioDao();
+	$aut = Zend_Auth::getInstance();
+?>
+
+<table>
+  <tr>
+    <th colspan="2" >Conversación</th>
+  </tr>
+  <tr>
+    <td><?php echo $objUsuario->obtenerPorId($this->id)->getNombre();?></td>
+    <td>
+    	<div style='width: 40px;'>
+			<a class='thumbnail'>
+				<img src="/imagenes/usuarios/<?php echo $objUsuario->obtenerPorId($this->id)->getFoto();?>" >
+			</a>
+		</div>
+    </td>
+  </tr>
+   <tr>
+    <td><?php echo $objUsuario->obtenerPorId($aut->getIdentity()->usu_id)->getNombre(); ?></td>
+    <td>
+    	<div style='width: 40px;'>
+			<a class='thumbnail'>
+				<img src="/imagenes/usuarios/<?php echo $objUsuario->obtenerPorId($aut->getIdentity()->usu_id)->getFoto();?>" >
+			</a>
+		</div>
+    </td>
+  </tr>
+</table>
+<hr WIDTH="50%">
+
+<table>
+  	 <?php 
+		foreach ($this->listamensajes as $item)
+		{ 
+    ?>
+  <tr>
+  	<td colspan="2">
+  		<b><?php echo $objUsuario->obtenerPorId($item->getDe())->getNombre();?></b>
+  	</td>
+  	<td rowspan="2">
+  		<?php echo $item->getTexto();?>
+  	</td>
+  </tr>
+  	<tr>
+    	<td>
+    		<?php echo $item->getFecha();?>
+    	</td>
+    </tr>
+    <tr>
+    	<td colspan="2">
+    		<hr>
+    	</td>
+    </tr>
+  	<?php }?>
+  	<tr>
+  		<td>
+  			<form action="<?php echo $this->url(array('controller'=>'mensajes', 'action'=>'ver', 'id'=>$this->id)); ?>">
+			<?php
+				echo $this->form->txtTextoResponder;	
+				echo $this->form->enviar;
+             ?>
+        </form>
+  		</td>
+  	</tr>
+  	
+</table>

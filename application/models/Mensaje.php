@@ -3,30 +3,15 @@
 class Application_Model_Mensaje
 {
     private $_id;
-    private $_fecha;
-    private $_asunto;
     private $_de;
     private $_para;
-    
+    private $_fecha;
+    private $_texto;
 	/**
 	 * @return the $_id
 	 */
 	public function getId() {
 		return $this->_id;
-	}
-
-	/**
-	 * @return the $_fecha
-	 */
-	public function getFecha() {
-		return $this->_fecha;
-	}
-
-	/**
-	 * @return the $_asunto
-	 */
-	public function getAsunto() {
-		return $this->_asunto;
 	}
 
 	/**
@@ -44,24 +29,24 @@ class Application_Model_Mensaje
 	}
 
 	/**
+	 * @return the $_fecha
+	 */
+	public function getFecha() {
+		return $this->_fecha;
+	}
+
+	/**
+	 * @return the $_texto
+	 */
+	public function getTexto() {
+		return $this->_texto;
+	}
+
+	/**
 	 * @param field_type $_id
 	 */
 	public function setId($_id) {
 		$this->_id = $_id;
-	}
-
-	/**
-	 * @param field_type $_fecha
-	 */
-	public function setFecha($_fecha) {
-		$this->_fecha = $_fecha;
-	}
-
-	/**
-	 * @param field_type $_asunto
-	 */
-	public function setAsunto($_asunto) {
-		$this->_asunto = $_asunto;
 	}
 
 	/**
@@ -78,8 +63,21 @@ class Application_Model_Mensaje
 		$this->_para = $_para;
 	}
 
-    
-    
+	/**
+	 * @param field_type $_fecha
+	 */
+	public function setFecha($_fecha) {
+		$this->_fecha = $_fecha;
+	}
 
+	/**
+	 * @param field_type $_texto
+	 */
+	public function setTexto($_texto) {
+		$this->_texto = $_texto;
+	}
+
+
+    
 }
 

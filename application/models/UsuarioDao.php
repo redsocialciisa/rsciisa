@@ -255,6 +255,20 @@ class Application_Model_UsuarioDao
     	return $lista;
     }
     
+    public function obtenerPorNombreExacto($nombre)
+    {
+    	$where = "usu_nombre = '" .$nombre . "'";
+    
+    	$resultado = $this->_table->fetchAll($where);
+    
+    	if(count($resultado) > 0)
+    	{
+    		return $this->obtenerPorId($resultado->current()->usu_id);
+    	}
+    
+    	return null;
+    }
+    
     
 }
 
