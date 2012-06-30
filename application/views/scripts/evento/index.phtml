@@ -2,29 +2,32 @@
 
 <a href="#" onclick="openModalEvento()">Crear Evento</a>
 
-    <div class="tabbable span9">
-	    <ul class="nav nav-tabs">
-		    <li class="active"><a href="#tab1" data-toggle="tab">Mis Eventos comprometidos</a></li>
-		    <li><a href="#tab2" data-toggle="tab">Invitaciones</a></li>
-	    </ul>
-	    <div class="tab-content">
-		    <div class="tab-pane active" id="tab1">
-		    	<table>
+<div class="tabbable span9">
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#tab1" data-toggle="tab">Mis Eventos
+				comprometidos</a></li>
+		<li><a href="#tab2" data-toggle="tab">Invitaciones Recibidas</a></li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane active" id="tab1">
+		
+			<div id="divMensajeEvento"></div>
+		
+			<table>
 		    <?php
 		    	echo $this->listaEventos;
 		    	foreach ($this->listaEventos as $evento){ ?>
-		    	
-		    	<tr>
-		    		<td colspan="6">
+		    	<tr id="filaEventoUno<?php echo $evento->getId();?>">
+					<td colspan="6">
 		    			<?php echo $evento->getNombre();?>
 		    		</td>
-		    	</tr>
-		    	<tr>
-		    		<td>
+				</tr>
+				<tr id="filaEventoDos<?php echo $evento->getId();?>">
+					<td>
 		    			<?php $fechaPublicacion = strtotime($evento->getFechaEvento()); ?>
-								<table class="span2 well">
-									<tr>
-										<td align="center" class='label label-success'>
+						<table class="span2 well">
+							<tr>
+								<td align="center" class='label label-success'>
 											<?php
 												switch (date("m", $fechaPublicacion))
 												{
@@ -69,150 +72,227 @@
 												echo date("Y", $fechaPublicacion);
 											?>
 										</td>
-									 </tr>
-									 <tr>
-									 	<td align="center">
-									 		<h2><?php 
+							</tr>
+							<tr>
+								<td align="center">
+									<h2><?php 
 									 				echo date("d", $fechaPublicacion); 
 									 		?></h2>
-									 	</td>
-									 </tr>
-								</table>
-		    		</td>
-		    		<td>
-		    			<a class="btn btn-info" href="/evento/contactos/eventoId/<?php echo $evento->getId();?>">Contactos</a>
-		    		</td>
-		    		<td>
-						<a class="btn btn-info" href="#"> Editar </a>
-		    		</td>
-		    		<td>
-		    			<a class="btn btn-info" href="#"> Borrar </a>
-		    		</td>
-		    		<td>
-		    			<a class="btn btn-info" href="#"> Ver Evento </a>
-		    		</td>
-		    	</tr>
+								</td>
+							</tr>
+						</table>
+					</td>
+					<td><a class="btn btn-info"
+						href="/evento/contactos/id/<?php echo $evento->getId();?>">Contactos</a>
+					</td>
+					<td><a class="btn btn-info" href="#"> Editar </a></td>
+					<td><a class="btn btn-info" onclick="openMyModalCancelarEvento('<?php echo $evento->getId();?>','<?php echo $evento->getNombre();?>')" > Cancelar </a></td>
+					<td><a class="btn btn-info" href="#"> Ver Evento </a></td>
+				</tr>
 		    <?php } ?>
 		    	</table>
-		    </div>
-		    <div class="tab-pane" id="tab2">
-		    
-		    </div>
-	    </div>
-    </div>
-
+		</div>
+		<div class="tab-pane" id="tab2">
+				<?php echo $this->listaInvitacionesEvento;
+    		$objEventoDao = new Application_Model_EventoDao();
+    		
+    		?>
+    		<div id="divMensajeInvitacion"></div>
+			<table>
+	    			<?php 
+			    		foreach ($this->listaInvitacionesEvento as $item)
+			    		{
+	    			?>
+						<tr id="rowUnoInvitacion<?php echo $item->getId();?>"
+					style="display: block;">
+					<td colspan=2>
+								<?php 
+									$objGrupo = $objEventoDao->obtenerPorId($item->getIdActividad());
+									echo $objGrupo->getNombre();
+								?>
+							</td>
+				</tr>
+				<tr id="rowDosInvitacion<?php echo $item->getId();?>"
+					style="display: block;">
+					<td>
+						<div style='width: 80px;'>
+							<a class='thumbnail'> **EVENTO** </a>
+						</div>
+					</td>
+					<td>
+						<a class="btn btn-info" onclick="openModalAceptarInvitacion(<?php echo $item->getId();?>)"> Aceptar invitación </a> 
+						<a class="btn btn-info" onclick="openMyModalRechazarEvento(<?php echo $item->getId();?>)">Rechazar invitación </a>
+					</td>
+				</tr>  
+					<?php }?>
+	    		</table>
+		</div>
+	</div>
+</div>
 
 <div class="modal hide" id="myModalEvento" style="width: 700px;">
-    <div class="modal-header">
-    <button class="close" data-dismiss="modal">×</button>
-    		<h3>Nuevo Evento</h3>
-    </div>
-    <div class="modal-body">
-    
-    <form id="formEvento" action="/evento/index/" method="POST">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">×</button>
+		<h3>Nuevo Evento</h3>
+	</div>
+	<div class="modal-body">
 
-    <table style="width: 100%;">
-  	 	<tr>
-  	 		<td colspan="2">
-  	 			<a id="arriba" name="arriba"></a>
-  	 			<div id="divErroresEvento"></div>			
-  	 		</td>
-  	 	</tr>
-		<tr>
-			<td>Nombre: </td>
-			<td align="left">
-				<input type="text" id="txtNombreEvento" name="txtNombreEvento" size="50" maxlength="49">
-			</td>
-		</tr>
-		<tr>
-			<td>Descripción: </td>
-			<td align="left">
-				<textarea rows="4" class="span6" id="txtDescripcion" name="txtDescripcion"></textarea>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				 ¿Cuál es el Lugar ? &nbsp;<input type="text" id="address" name="address"/>&nbsp;&nbsp;<input type="button" value="Buscar" onclick="geocode()" class="label label-success">&nbsp;&nbsp;
-    	 		<input type="button" value="Seleccionar lugar" onclick="addMarkerAtCenter()" class="label label-success"/>
-			</td>
-		</tr>
-		<tr><td colspan="2" class="label label-warning"><div id="formatedAddress"></div></td></tr>		
-		<tr>
-			<td colspan="2" align="center">
-				 <div id="map">
-			    		<div id="map_canvas" style="width:80%; height:400px;"></div>
-			    		<div id="crosshair"></div>
-			  	</div>
-			</td>
-		</tr>
-		<tr>
-			<td>Fecha: </td>
-			<td>
+		<form id="formEvento" action="/evento/index/" method="POST">
+
+			<table style="width: 100%;">
+				<tr>
+					<td colspan="2"><a id="arriba" name="arriba"></a>
+						<div id="divErroresEvento"></div></td>
+				</tr>
+				<tr>
+					<td>Nombre:</td>
+					<td align="left"><input type="text" id="txtNombreEvento"
+						name="txtNombreEvento" size="50" maxlength="49"></td>
+				</tr>
+				<tr>
+					<td>Descripción:</td>
+					<td align="left"><textarea rows="4" class="span6"
+							id="txtDescripcion" name="txtDescripcion"></textarea></td>
+				</tr>
+				<tr>
+					<td colspan="2">¿Cuál es el Lugar ? &nbsp;<input type="text"
+						id="address" name="address" />&nbsp;&nbsp;<input type="button"
+						value="Buscar" onclick="geocode()" class="label label-success">&nbsp;&nbsp;
+						<input type="button" value="Seleccionar lugar"
+						onclick="addMarkerAtCenter()" class="label label-success" />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="label label-warning"><div
+							id="formatedAddress"></div></td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center">
+						<div id="map">
+							<div id="map_canvas" style="width: 80%; height: 400px;"></div>
+							<div id="crosshair"></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>Fecha:</td>
+					<td>
 				<?
 					$fecha = time();
 				?> 
-				<input type="text" id="txtFechaEvento" name="txtFechaEvento" readonly="readonly">
-				<select id="sltHora" name="sltHora">
-					<option value="">Seleccione</option>
-					<option value="01:00">01:00</option>
-					<option value="02:00">02:00</option>
-					<option value="03:00">03:00</option>
-					<option value="04:00">04:00</option>
-					<option value="05:00">05:00</option>
-					<option value="06:00">06:00</option>
-					<option value="07:00">07:00</option>
-					<option value="08:00">08:00</option>
-					<option value="09:00">09:00</option>
-					<option value="10:00">10:00</option>
-					<option value="11:00">11:00</option>
-					<option value="12:00">12:00</option>
-					<option value="13:00">13:00</option>
-					<option value="14:00">14:00</option>
-					<option value="15:00">15:00</option>
-					<option value="16:00">16:00</option>
-					<option value="17:00">17:00</option>
-					<option value="18:00">18:00</option>
-					<option value="19:00">19:00</option>
-					<option value="20:00">20:00</option>
-					<option value="21:00">21:00</option>
-					<option value="22:00">22:00</option>
-					<option value="23:00:00">23:00</option>
-					<option value="00:00">00:00</option>
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<input type="radio" name="cbxTipo" value="1" checked> Público<br>
-			</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>
-				<input type="radio" name="cbxTipo" value="2"> Privado
-			</td>
-			<td></td>
-		</tr>
-  	</table>
+				<input type="text" id="txtFechaEvento" name="txtFechaEvento"
+						readonly="readonly"> <select id="sltHora" name="sltHora">
+							<option value="">Seleccione</option>
+							<option value="01:00">01:00</option>
+							<option value="02:00">02:00</option>
+							<option value="03:00">03:00</option>
+							<option value="04:00">04:00</option>
+							<option value="05:00">05:00</option>
+							<option value="06:00">06:00</option>
+							<option value="07:00">07:00</option>
+							<option value="08:00">08:00</option>
+							<option value="09:00">09:00</option>
+							<option value="10:00">10:00</option>
+							<option value="11:00">11:00</option>
+							<option value="12:00">12:00</option>
+							<option value="13:00">13:00</option>
+							<option value="14:00">14:00</option>
+							<option value="15:00">15:00</option>
+							<option value="16:00">16:00</option>
+							<option value="17:00">17:00</option>
+							<option value="18:00">18:00</option>
+							<option value="19:00">19:00</option>
+							<option value="20:00">20:00</option>
+							<option value="21:00">21:00</option>
+							<option value="22:00">22:00</option>
+							<option value="23:00:00">23:00</option>
+							<option value="00:00">00:00</option>
+					</select>
+					</td>
+				</tr>
+				<tr>
+					<td><input type="radio" name="cbxTipo" value="1" checked> Público<br>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td><input type="radio" name="cbxTipo" value="2"> Privado</td>
+					<td></td>
+				</tr>
+			</table>
 
-	  <table>
-	    <tr style="display: none;"><td>Lat/Lng:</td><td><div id="latlng"></div></td></tr>
-	    <tr style="display: none;"><td>Zoom Level</td><td><div id="zoom_level">2</div></td></tr>
-	  </table>
-	  
-	  <input type="hidden" id="hdnCordenadas" name="hdnCordenadas">
-	  <input type="hidden" id="hdnDireccionSeleccionada" name="hdnDireccionSeleccionada">
-	  
-	  </form>
-    	
-    </div>
-    <div class="modal-footer">
-  	    <a href="#" onclick="crearEvento();" class="btn btn-success">Crear Evento</a>
-    </div>
-</div>	
+			<table>
+				<tr style="display: none;">
+					<td>Lat/Lng:</td>
+					<td><div id="latlng"></div></td>
+				</tr>
+				<tr style="display: none;">
+					<td>Zoom Level</td>
+					<td><div id="zoom_level">2</div></td>
+				</tr>
+			</table>
+
+			<input type="hidden" id="hdnCordenadas" name="hdnCordenadas"> <input type="hidden" id="hdnDireccionSeleccionada" name="hdnDireccionSeleccionada">
+
+		</form>
+
+	</div>
+	<div class="modal-footer">
+		<a href="#" onclick="crearEvento();" class="btn btn-success">Crear
+			Evento</a>
+	</div>
+</div>
+
+<div class="modal hide" id="myModalAceptarInvitacion"
+	style="width: 700px;">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">×</button>
+		Aceptar invitación
+	</div>
+	<div class="modal-body">
+		¿Deseas aceptar la invitación al grupo?
+		<div id="divGrupo"></div>
+		<input type="hidden" id="hdnInvitacionId">
+	</div>
+	<div class="modal-footer">
+		<a href="#" onclick="aceptarInvitacionEvento()"
+			class="btn btn-success" data-dismiss="modal">Aceptar</a> <a href="#"
+			class="btn btn-success" data-dismiss="modal">Cancelar</a>
+	</div>
+</div>
+
+<div class="modal hide" id="myModalCancelarEvento" style="width: 700px;">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">×</button>
+		Cancelar Evento
+	</div>
+	<div class="modal-body">
+		<div id="divNombreEventoCancelar"></div> 
+		<input type="hidden" id="hdnEventoCancelarId">
+	</div>
+	<div class="modal-footer">
+		<a href="#" onclick="cancelarEvento()" class="btn btn-success" data-dismiss="modal">Cancelar Evento</a> <a
+			href="#" class="btn btn-error" data-dismiss="modal">Cerrar</a>
+	</div>
+</div>
+
+<div class="modal hide" id="myModalRechazarEvento" style="width: 700px;">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">×</button>
+		Rechazar invitación
+	</div>
+	<div class="modal-body">
+		¿Estás seguro de rechazar la invitación?
+		<input type="hidden" id="hdnEventoId">
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn btn-success" onclick="rechazarInvitacionEvento()" data-dismiss="modal">Rechazar Invitación</a>
+		<a href="#" class="btn btn-error" data-dismiss="modal">Cerrar</a>
+	</div>
+</div>
 
 <script type="text/javascript">
-	
+
  initialize();
 	
   var map;
@@ -413,6 +493,140 @@
 	{	
 		$('#myModalEvento').modal('show');
 		addMarkerAtCenter();		
+	}
+
+	   
+    function openModalAceptarInvitacion(idInvitacion)
+	{
+		document.getElementById("hdnInvitacionId").value = idInvitacion;
+		$('#myModalAceptarInvitacion').modal("show");	
+	}
+
+    function aceptarInvitacionEvento(){
+
+		var invitacionId = document.getElementById("hdnInvitacionId").value;
+
+			$.ajax(
+					{
+					async: true,
+					type: 'POST',
+					url: '<?php echo $this->baseUrl()?>/evento/aceptar-invitacion',
+					data: 'invitacionId=' + invitacionId,	
+					dataTypeString: 'text',
+					
+					beforeSend: function(data){
+						  //selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
+				    },  
+				    success: function(requestData){
+
+				    	var result = requestData;
+				    	 
+						if(result == "ok")
+						{
+							document.getElementById("rowUnoInvitacion" + invitacionId).style.display = "none";
+							document.getElementById("rowDosInvitacion" + invitacionId).style.display = "none";
+
+							var divMsj = "<div class='alert alert-success'>";
+							divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+							divMsj = divMsj + "Ahora eres parte del grupo.";
+							divMsj = divMsj + "</div>";
+
+							document.getElementById("divMensajeInvitacion").innerHTML = divMsj;  
+						}
+					      
+				    },  
+				    error: function(requestData, strError, strTipoError){          
+				    }
+				    
+					});
+	}
+
+
+    function openMyModalCancelarEvento(id,nombre)
+	{	
+		$('#myModalCancelarEvento').modal('show');
+		document.getElementById("divNombreEventoCancelar").innerHTML = '¿Estás seguro de cancelar el evento <b>' + nombre + '</b> ?';
+		document.getElementById("hdnEventoCancelarId").value = id;
+	}
+    
+    function openMyModalRechazarEvento(id)
+	{	
+		$('#myModalRechazarEvento').modal('show');
+		document.getElementById("hdnEventoId").value = id;
+	}
+
+    function cancelarEvento(){
+
+		var id = document.getElementById("hdnEventoCancelarId").value;
+
+			$.ajax(
+					{
+					async: true,
+					type: 'POST',
+					url: '<?php echo $this->baseUrl()?>/evento/cancelar-evento',
+					data: 'id=' + id,	
+					dataTypeString: 'text',
+					
+					beforeSend: function(data){
+						  //selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
+				    },  
+				    success: function(requestData){
+					    var result = requestData;
+
+						if(result == "ok")
+						{
+							document.getElementById("filaEventoUno" + id).style.display = "none";
+							document.getElementById("filaEventoDos" + id).style.display = "none";
+
+							var divMsj = "<div class='alert alert-success'>";
+							divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+							divMsj = divMsj + "Evento ha sido cancelado";
+							divMsj = divMsj + "</div>";
+
+							document.getElementById("divMensajeEvento").innerHTML = divMsj;  
+						}
+				    },  
+				    error: function(requestData, strError, strTipoError){          
+				    }
+				    
+					});
+	}
+
+    function rechazarInvitacionEvento(){
+    	
+		var id = document.getElementById("hdnEventoId").value;
+
+		$.ajax(
+				{
+				async: true,
+				type: 'POST',
+				url: '<?php echo $this->baseUrl()?>/evento/rechazar-invitacion',
+				data: 'id=' + id,	
+				dataTypeString: 'text',
+				
+				beforeSend: function(data){
+					  //selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
+			    },  
+			    success: function(requestData){
+				    var result = requestData;
+
+					if(result == "ok")
+					{
+						document.getElementById("rowUnoInvitacion" + id).style.display = "none";
+						document.getElementById("rowDosInvitacion" + id).style.display = "none";
+
+						var divMsj = "<div class='alert alert-success'>";
+						divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+						divMsj = divMsj + "Evento ha sidop rechazado";
+						divMsj = divMsj + "</div>";
+
+						document.getElementById("divMensajeInvitacion").innerHTML = divMsj;  
+					}
+			    },  
+			    error: function(requestData, strError, strTipoError){          
+			    }
+			    
+				});
 	}
   
   

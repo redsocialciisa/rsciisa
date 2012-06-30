@@ -1,3 +1,11 @@
+ <table>
+   		<tr>
+   			<td>
+   				Evento => <?php echo $this->id; ?>
+   			</td>
+  		</tr>
+  </table>
+  
  <div class="tabbable">
     <ul class="nav nav-tabs">
     	<li><a href="#tab1" data-toggle="tab">Contactos del Evento</a></li>
@@ -5,15 +13,13 @@
     </ul>
     <div class="tab-content">
     	<div class="tab-pane active" id="tab1">
-    		<?php //echo $this->listaUsuarios;?>
-    		
-    		<?php 
+				
+			<?php 
 				$columna = 0;
 				$cantColumna = 3;
-				$countCheck = 0;
 			?>
 				<table width="100%" align="center">
-					<?php foreach ($this->listaUsuarios as $usuario){
+					<?php foreach ($this->listaUsuariosEvento as $usuario){
 							if($columna == 0){ 
 							   echo "<tr>";
 							} 
@@ -22,34 +28,34 @@
 								<table align="center">
 									<tr>
 										<td align="center">
-											<?php 
-											echo $usuario->getNombre();
-											$objUsuarioEventoDao = new Application_Model_UsuarioEventoDao();
-											$flagEliminado = $objUsuarioEventoDao->obtenerPorGrupoYUsuario($this->eventoId, $usuario->getId());
-												if($flagEliminado == 1)
-												{
-												    	$flagEliminado = "checked='checked'";
-												    	echo "<br>checked";
-												}else{
-												    echo "<br>no-checked";
-												}
-											?>
+											<?php echo $usuario->getNombre();?>
 										</td>
 									</tr>
 									<tr>
 										<td align="center">
-											<div style='width: 80px;'>
-												<a class='thumbnail'>
-													<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $usuario->getFoto(); ?>"></img>
-												</a>
-											</div>
+											 <div style="width: 70px;">
+						          				<a class="thumbnail" href="#">
+													<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $usuario->getFoto(); ?>"></img>					          					
+						          				</a>
+					          				</div>
+										</td>
+									</tr>
+									<tr>
+										<td align="center">
 											<?php 
 												$aut = Zend_Auth::getInstance();
-												if($usuario->getId() != $aut->getIdentity()->usu_id){ ?>
-													<input type="checkbox" <?php echo $flagEliminado; ?> id="cbx<?php echo $usuario->getId();?>" name="cbx<?php echo $usuario->getId();?>" onclick="aEliminar(<?php echo $usuario->getId();?>)">
-											<?php 
-											} 
+												$objUsuarioEventoDao = new Application_Model_UsuarioEventoDao();
+												$flagEliminado = $objUsuarioEventoDao->obtenerPorGrupoYUsuario($this->id, $usuario->getId());
+												if($flagEliminado == 1)
+												{
+												    	$flagEliminado = "checked='checked'";
+												}
 											?>
+											<?php if($usuario->getId() != $aut->getIdentity()->usu_id){?>
+												<input type="checkbox" <?php echo $flagEliminado;?> name="cbxEliminar<?php echo $usuario->getId(); ?>" id="cbxEliminar<?php echo $usuario->getId(); ?>" onClick='aEliminar(<?php echo $usuario->getId();?>)'>
+											<?php }else{ ?>
+												Organizador
+											<?php }?>
 										</td>
 									</tr>
 								</table>						
@@ -64,21 +70,264 @@
 						 }
 						 echo "</tr>";
 					?>
-				</table>
+				</table>	
 				
-				<button type="button" onclick="openModalConfirmarEliminar(<?php echo $this->eventoId;?>)">
-				Eliminar contactos seleccionados
-				</button>
-    		
+				 	<?php 
+				 	$objUsuarioEventoDao = new Application_Model_UsuarioEventoDao();
+			    	$countCheck = $objUsuarioEventoDao->obtenerMarcadosEliminar($this->id);
+			    	?>
+					<input type="hidden" id="hdnCountEliminar" value="<?php echo $countCheck;?>">
+					
+					<input type="button" id="btnEliminarContactos" name="btnEliminarContactos" value="Eliminar Contactos del Evento" onclick="openModalConfirmarEliminar()" class="label label-warning">
+			
+				
     	</div>
     	<div class="tab-pane" id="tab2">
     		
+    		<?php 
+				$columna = 0;
+				$cantColumna = 3;
+			?>
+			<table width="100%" align="center">
+				<?php foreach ($this->listaUsuarios as $usuario){ ?>
+				    <?php
+					    $objInvitacionDao = new Application_Model_InvitacionDao();
+					    $flagInvitar = $objInvitacionDao->obtenerPorEventoYUsuario($this->id, $usuario->getId());
+					    if($flagInvitar == 1)
+					    {
+					    	$flagInvitar = "checked='checked'";
+					    }
+					    $objUsuarioEventoDao = null;
+				    ?>
+				    <?php if($flagInvitar != 4){ ?>
+				    <?php 
+						if($columna == 0){ 
+						   echo "<tr>";
+						} 
+						echo "<td>";?> 
+						<!-- imprimir el objeto -->
+							<table align="center">
+								<tr>
+									<td align="center">
+										<?php echo $usuario->getNombre();?>
+									</td>
+								</tr>
+								<tr>
+									<td align="center">
+										 <div style="width: 70px;">
+					          				<a class="thumbnail" href="#">
+												<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $usuario->getFoto(); ?>"></img>					          					
+					          				</a>
+					          			</div>
+									</td>
+								</tr>
+								<tr>
+									<td align="center">
+										<?php if($flagInvitar != 2){?>
+												<input type="checkbox" <?php echo $flagInvitar;?>name="cbx<?php echo $usuario->getId(); ?>" id="cbx<?php echo $usuario->getId(); ?>" onClick='aInvitar(<?php echo $usuario->getId(); ?>)'>
+										<?php  }else{ ?>
+											Invitación enviada
+										<?php }?>
+									</td>
+								</tr>
+							</table>	
+						<!-- fin de imprimir el objeto -->
+						<?php 
+						echo "</td>"; 
+						$columna++;
+						 if($columna == $cantColumna){
+							 echo "</tr>";				
+							 $columna = 0;
+						 }
+					   } 
+					 }
+					 echo "</tr>";
+				?>
+			</table>
+			
+			<?php 
+				$objInvitacionDao = new Application_Model_InvitacionDao();
+    			$countCheck = $objInvitacionDao->obtenerCantidadSeleccionados($this->id);
+    		?>	
+			<input type="hidden" id="hdnCountInvitar" value="<?php echo $countCheck;?>">
+			<input type="button" id="btnInvitarContactos" name="btnInvitarContactos" value="Invitar Usuarios Seleccionados" onclick="openModalConfirmarInvitar()" class="label label-warning">
+			
     	</div>
     </div>
  </div>
+ 
+ <div class="modal hide" id="myModalInvitar" style="width: 700px;">
+    <div class="modal-header">
+    <button class="close" data-dismiss="modal">×</button>
+    	Invitar usuarios
+    </div>
+    <div class="modal-body">
+    	¿Esta seguro de Invitar a los usuarios? <div id="divEvento"></div> 
+    </div>
+    <div class="modal-footer">
+    	<a class="btn btn-success" href="/evento/invitar-usuario-evento/id/<?php echo $this->id;?>">Si</a>
+  	    <a href="#" class="btn btn-success" data-dismiss="modal">No</a>
+    </div>
+</div>	
+
+<div class="modal hide" id="myModalInvitarSinUsuarios" style="width: 700px;">
+    <div class="modal-header">
+    <button class="close" data-dismiss="modal">×</button>
+    	Invitar usuarios
+    </div>
+    <div class="modal-body">
+    	No hay usuarios seleccionados<div id="divGrupo"></div> 
+    </div>
+    <div class="modal-footer">
+  	    <a href="#" class="btn btn-success" data-dismiss="modal">Aceptar</a>
+    </div>
+</div>
+
+<div class="modal hide" id="myModalEliminarUsuariosEvento" style="width: 700px;">
+    <div class="modal-header">
+    <button class="close" data-dismiss="modal">×</button>
+    	Eliminar usuarios
+    </div>
+    <div class="modal-body">
+    	¿Estas seguro de eliminar a los usuarios seleccionados?
+    </div>
+    <div class="modal-footer">
+  	    <a href="#" onclick="eliminarContactosDelEvento(<?php echo $this->id;?>)" class="btn btn-success" data-dismiss="modal">Si, Eliminar</a>
+  	    <a href="#" class="btn" data-dismiss="modal">Cerrar</a>
+    </div>
+</div>
+
+<div class="modal hide" id="myModalEliminarUsuarioGrupoNoSelecionado" style="width: 700px;">
+    <div class="modal-header">
+    <button class="close" data-dismiss="modal">×</button>
+    	No hay usuarios seleccionados
+    </div>
+    <div class="modal-body">
+    	No has seleccionado a ningún usuario para eliminar.
+    </div>
+    <div class="modal-footer">
+  	    <a href="#" class="btn btn-success" data-dismiss="modal">Aceptar</a>
+    </div>
+</div>
 			
  <script type="text/javascript">
 
+ function eliminarContactosDelEvento(id)
+	{
+		$.ajax(
+				{
+				async: true,
+				type: 'POST',
+				url: '<?php echo $this->baseUrl()?>/evento/eliminar-usuarios-evento',
+				data: 'eventoId='+id,	
+				dataTypeString: 'text',
+				
+				beforeSend: function(data){
+					  //selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
+			    },  
+			    success: function(requestData){
+				    var result = requestData;
 
- </script>
-			 
+			    },  
+			    error: function(requestData, strError, strTipoError){          
+			    }
+			    
+				});
+	}
+
+ function openModalConfirmarEliminar()
+	{
+		if (document.getElementById("hdnCountEliminar").value > 0)
+		{
+			$('#myModalEliminarUsuariosEvento').modal("show");
+		}		
+		else
+		{
+			$('#myModalEliminarUsuarioGrupoNoSelecionado').modal("show");
+		}		
+	}
+
+ function aEliminar(usuId)
+	{
+		var cbxUsuario = document.getElementById("cbxEliminar" + usuId).checked;
+		var check = "";		
+
+		if (cbxUsuario)
+		{
+			check = 1;
+			document.getElementById("hdnCountEliminar").value = document.getElementById("hdnCountEliminar").value + 1;
+		}
+		else		 
+		{
+			check = 0;
+			document.getElementById("hdnCountEliminar").value = document.getElementById("hdnCountEliminar").value - 1;
+		}	
+
+		$.ajax(
+				{
+				async: true,
+				type: 'POST',
+				url: '<?php echo $this->baseUrl()?>/evento/marcar-eliminar',
+				data: 'usuarioId='+usuId+'&cbxUsuario='+check+'&eventoId='+<?php echo $this->id;?>,	
+				dataTypeString: 'text',
+				
+				beforeSend: function(data){
+					  //selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
+			    },  
+			    success: function(requestData){
+				    var result = requestData;
+
+			    },  
+			    error: function(requestData, strError, strTipoError){          
+			    }
+			    
+				});
+	}
+
+ function openModalConfirmarInvitar()
+ {
+	if (document.getElementById("hdnCountInvitar").value > 0)
+	{
+		$('#myModalInvitar').modal("show");
+	}else{
+		$('#myModalInvitarSinUsuarios').modal("show");
+	}		
+ }
+
+ function aInvitar(usuId)
+	{
+		var cbxUsuario = document.getElementById("cbx" + usuId).checked;
+		var check = "";		
+
+		if (cbxUsuario)
+		{
+			check = 1;
+			document.getElementById("hdnCountInvitar").value = document.getElementById("hdnCountInvitar").value + 1;
+		}
+		else		 
+		{
+			check = 0;
+			document.getElementById("hdnCountInvitar").value = document.getElementById("hdnCountInvitar").value - 1;
+		}	
+
+		$.ajax(
+				{
+				async: true,
+				type: 'POST',
+				url: '<?php echo $this->baseUrl()?>/evento/marcar-invitar',
+				data: 'usuarioId='+usuId+'&cbxUsuario='+check+'&eventoId='+<?php echo $this->id;?>,	
+				dataTypeString: 'text',
+				
+				beforeSend: function(data){
+					  //selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
+			    },  
+			    success: function(requestData){
+				    var result = requestData;
+			    },  
+			    error: function(requestData, strError, strTipoError){          
+			    }
+			    
+				});
+	}
+
+ </script>			 

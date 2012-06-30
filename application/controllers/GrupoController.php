@@ -31,7 +31,6 @@ class GrupoController extends Zend_Controller_Action
         	{
         	    
         	    $fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
-        	    
         		
         		$objGrupo->setNombre($this->getRequest()->getParam('txtNombre'));
         		$objGrupo->setDescripcion($this->getRequest()->getParam('txtDescripcion'));
@@ -106,7 +105,6 @@ class GrupoController extends Zend_Controller_Action
         $objGrupo = null;
         $objUsuarioGrupo = null;
         $formData = null;
-     
         
     }
     
@@ -129,7 +127,6 @@ class GrupoController extends Zend_Controller_Action
         $objPublicacionGrupoDao = null;
         
         $this->view->ok = "ok";
-        
         
     }
     

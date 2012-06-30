@@ -32,6 +32,7 @@ class Application_Model_EventoDao
     		$objEvento->setFechaEvento($resultado->current()->eve_fecha_evento);
     		$objEvento->setTipoEventoId($resultado->current()->tip_eve_id);
     		$objEvento->setHora($resultado->current()->eve_hora);
+    		$objEvento->setCancelado($resultado->current()->eve_cancelado);
     	}
     	return $objEvento;
     }
@@ -48,7 +49,8 @@ class Application_Model_EventoDao
     	        'eve_fecha_creacion' => $evento->getFechaCreacion(),
     	        'eve_fecha_evento' => $evento->getFechaEvento(),  	        
     	        'tip_eve_id' => $evento->getTipoEventoId(),
-    	        'eve_hora' => $evento->getHora()
+    	        'eve_hora' => $evento->getHora(),
+    	        'eve_cancelado' => $evento->getCancelado()
     	);
     
     	if($evento->getId() != null){
@@ -102,6 +104,20 @@ class Application_Model_EventoDao
     	$where = 'eve_id = ' . $eve_id;
     
     	return $this->_table->delete($where);
+    }
+    
+    public function cancelarEvento(Application_Model_Evento $evento)
+    {
+    	$data = array('eve_id' => $evento->getId(),
+    			  	  'eve_cancelado' => '1'
+    	);
+    
+    	if($evento->getId() != null){
+    		$where = 'eve_id = ' . $evento->getId();
+    		 
+    		return $this->_table->update($data, $where);
+    	}
+    
     }
 
 }

@@ -22,6 +22,29 @@
 		 }
 	 }
 ?>
+			<?php if ( $aut->getIdentity()->facebookNombre != null) {?>
+			<div class="span3 well">
+						<table>
+						  	 <tr>
+						  		<td align="center" colspan="2" class="label label-info" style="width: 200px;"><img src="/imagenes/proyecto/facebook.png">Facebook</td>
+						  	</tr>
+							<tr>
+								<td colspan="2">
+									<?php echo $aut->getIdentity()->facebookNombre;?>
+								</td>
+							</tr>
+						  	<tr>
+							<td>
+								<img src="<?php echo $aut->getIdentity()->facebookFoto; ?>">
+							</td>
+							<td>
+								<a href="<?php echo $aut->getIdentity()->facebookLink;?>" class="btn">Ver Perfil</a>
+							</td>
+						</tr>
+						  
+						</table>
+			</div> 				
+			<?php }?>	
 
 		<?php if ( $aut->getIdentity()->linkedinNombre != null ) {?>
 			<div class="span3 well">
@@ -118,30 +141,6 @@
 					echo "</table></div>";
 					}
 					?>
-					
-	<?php if ( $aut->getIdentity()->facebookNombre != null) {?>
-	<div class="span3 well">
-				<table>
-				  	 <tr>
-				  		<td align="center" colspan="2" class="label label-info" style="width: 200px;"><img src="/imagenes/proyecto/facebook.png">Facebook</td>
-				  	</tr>
-					<tr>
-						<td colspan="2">
-							<?php echo $aut->getIdentity()->facebookNombre;?>
-						</td>
-					</tr>
-				  	<tr>
-					<td>
-						<img src="<?php echo $aut->getIdentity()->facebookFoto; ?>">
-					</td>
-					<td>
-						<a href="<?php echo $aut->getIdentity()->facebookLink;?>" class="btn">Ver Perfil</a>
-					</td>
-				</tr>
-				  
-				</table>
-	</div> 				
-	<?php }?>				
 					
 <?php 
 	$objIntegracionDao = null;

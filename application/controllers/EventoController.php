@@ -31,6 +31,7 @@ class EventoController extends Zend_Controller_Action
 	    	$objEvento->setLugar($this->getRequest()->getParam('address'));
 	    	$objEvento->setFechaEvento($objUtilidad->devolverFechaParaBD($this->getRequest()->getParam('txtFechaEvento')));
 	    	$objEvento->setHora($this->getRequest()->getParam('sltHora'));
+	    	$objEvento->setCancelado(0);
 	    	$objEvento->setTipoEventoId($this->getRequest()->getParam('cbxTipo'));
 	    	
 	    	$fecha = new DateTime();
@@ -73,19 +74,37 @@ class EventoController extends Zend_Controller_Action
         	$paginator->setCurrentPageNumber( $this->_getParam ( 'page' ) );
         }
         
+        $objInvitacionDao = new Application_Model_InvitacionDao();
+        $listaInvitacionesEvento = $objInvitacionDao->obtenerInvitacionEventosPorUsuario($aut->getIdentity()->usu_id);
+        
+        Zend_View_Helper_PaginationControl::setDefaultViewPartial ( 'paginator/items.phtml' );
+        
+        $paginatorInvitacion = Zend_Paginator::factory($listaInvitacionesEvento);
+        $paginatorInvitacion->setDefaultItemCountPerPage( 5 );
+        
+        if ($this->_hasParam ( 'page' )) {
+        	$paginatorInvitacion->setCurrentPageNumber( $this->_getParam ( 'page' ) );
+        }
+        
+        $this->view->listaInvitacionesEvento = $paginatorInvitacion;
         $this->view->listaEventos = $paginator;
     }
     
     public function contactosAction()
     {
         $aut = Zend_Auth::getInstance();
-        $eventoId = $this->getRequest()->getParam('eventoId');
+        $eventoId = $this->getRequest()->getParam('id');
         
         $objAmigoDao = new Application_Model_AmigoDao();
         $listaAmigos = $objAmigoDao->obtenerTodosUsuariosPorUsuarioId($aut->getIdentity()->usu_id);
         
-        $this->view->eventoId = $eventoId; 
+        $objUsuarioEventoDao = new Application_Model_UsuarioEventoDao();
+        
+        $listaUsuariosEvento = $objUsuarioEventoDao->obtenerUsuariosPorEventoId($eventoId);
+        
+        $this->view->id = $eventoId; 
         $this->view->listaUsuarios = $listaAmigos;
+        $this->view->listaUsuariosEvento = $listaUsuariosEvento; 
     }
     
     public function marcarInvitarAction()
@@ -99,25 +118,24 @@ class EventoController extends Zend_Controller_Action
     	$fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
     	$objInvitacionDao = new Application_Model_InvitacionDao();
     	 
-    	$objInvitacion = $objInvitacionDao->obtenerPorIdActividadUsuario($usu_id, $eve_id);
+    	$objInvitacion = $objInvitacionDao->obtenerPorIdActividadUsuarioEvento($usu_id, $eve_id);
     	 
     	if ($objInvitacion)
     	{
     		$id =$objInvitacion->getId();
     		$objInvitacion->setId($id);
     		$objInvitacion->setFecha($fechahora);
-    		$objInvitacion->setTipoInvitacionId(1);
+    		$objInvitacion->setTipoInvitacionId(2);
     		$objInvitacion->setUsuarioId($usu_id);
     		$objInvitacion->setIdActividad($eve_id);
     		$objInvitacion->setEstado($cbx_usuario);
     		$objInvitacionDao->guardar($objInvitacion);
-    			
     	}
     	else
     	{
     		$objInvitacion = new Application_Model_Invitacion();
     		$objInvitacion->setFecha($fechahora);
-    		$objInvitacion->setTipoInvitacionId(1);
+    		$objInvitacion->setTipoInvitacionId(2);
     		$objInvitacion->setUsuarioId($usu_id);
     		$objInvitacion->setIdActividad($eve_id);
     		$objInvitacion->setEstado($cbx_usuario);
@@ -139,5 +157,113 @@ class EventoController extends Zend_Controller_Action
     
     	$this->view->ok = "ok";
     }
+    
+    public function invitarUsuarioEventoAction()
+    {
+    
+    	$eventoId = $this->getRequest()->getParam('id');
+    	$fecha = new DateTime();
+    	$fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
+    	$objInvitacionDao = new Application_Model_InvitacionDao();
+    	$listaInvitacion = $objInvitacionDao->obtenerEventoPorInvitar($eventoId);
+    
+    	foreach ($listaInvitacion as $item)
+    	{
+    		$id = $item->getId();
+    		$item->setId($id);
+    		$item->setFecha($fechahora);
+    		$item->setEstado(2);
+    		$objInvitacionDao->guardar($item);
+    	}
+    	 
+    	$this->_redirect('/evento/contactos/id/' . $eventoId);
+    	 
+    }
+    
+    public function aceptarInvitacionAction()
+    {
+    	$this->_helper->layout()->disableLayout();
+    	$invitacionId = $this->getRequest()->getParam('invitacionId');
+    
+    	$fecha = new DateTime();
+    	$fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
+    
+    	$objInvitacionDao = new Application_Model_InvitacionDao();
+    	$objInvitacion = $objInvitacionDao->obtenerPorId($invitacionId);
+    	
+    	$objUsuarioEvento = new Application_Model_UsuarioEvento();
+    	$objUsuarioEventoDao = new Application_Model_UsuarioEventoDao();
+    
+    	$objUsuarioEvento->setFechaAsiste($fechahora);
+    	$objUsuarioEvento->setUsuarioId($objInvitacion->getUsuarioId());
+    	$objUsuarioEvento->setEventoId($objInvitacion->getIdActividad());
+    	$objUsuarioEvento->setAsiste(1);
+    	$objUsuarioEventoDao->guardar($objUsuarioEvento); 
+    
+    	$id = $objInvitacion->getId();
+    	$objInvitacion->setId($id);
+    	$objInvitacion->setIdActividad($objInvitacion->getIdActividad());
+    	$objInvitacion->setFecha($fechahora);
+    	$objInvitacion->setEstado(4);
+    	$objInvitacionDao->guardar($objInvitacion);
+    
+    	$this->view->ok = "ok";
+    
+    }
+    
+    public function cancelarEventoAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $id = $this->getRequest()->getParam('id');
+        
+        $objEventoDao = new Application_Model_EventoDao();
+        $objEvento = new Application_Model_Evento();
+        
+        $objEvento->setId($id);
+        $objEvento->setCancelado(1);
+        
+        $objEventoDao->cancelarEvento($objEvento);
+        
+        $this->view->ok = "ok";
+    }
+    
+    public function rechazarInvitacionAction()
+    {
+    	$this->_helper->layout()->disableLayout();
+    	$invitacionId = $this->getRequest()->getParam('id');
+    
+    	$fecha = new DateTime();
+    	$fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
+    
+    	$objInvitacionDao = new Application_Model_InvitacionDao();
+    	$objInvitacion = $objInvitacionDao->obtenerPorId($invitacionId);
+    
+    	$id = $objInvitacion->getId();
+    	$objInvitacion->setId($id);
+    	$objInvitacion->setFecha($fechahora);
+    	$objInvitacion->setEstado(3);
+    	$objInvitacionDao->guardar($objInvitacion);
+    
+    	$this->view->ok = "ok";
+    }
+    
+    public function eliminarUsuariosEventoAction()
+    {
+        $this->_helper->layout()->disableLayout();
+    	$eventoId = $this->getRequest()->getParam('eventoId');
+    	$usuarioId = $this->getRequest()->getParam('usuarioId');
+    	
+    	$objInvitacionDao = new Application_Model_InvitacionDao();
+    	$objInvitacionDao->eliminarPorEvento($eventoId, $usuarioId);
+    	
+    	$objUsuarioEventoDao = new Application_Model_UsuarioEventoDao();
+    	$objUsuarioEventoDao->eliminarUsuariosPorEvento($eventoId);
+    	
+    	$this->_redirect('/evento/contactos');
+    	
+    }
 
 }
+
+
+

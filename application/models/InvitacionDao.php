@@ -58,6 +58,12 @@ class Application_Model_InvitacionDao
     	return $this->_table->delete($where);
     }
     
+    public function eliminarPorEvento($eve_id)
+    {
+        
+        
+        
+    }
     
     public function obtenerPorIdActividadUsuario($usuarioID,$actividadId)
     {
@@ -81,7 +87,28 @@ class Application_Model_InvitacionDao
         return $objInvitacion;
     }
     
-	
+    public function obtenerPorIdActividadUsuarioEvento($usuarioID,$actividadId)
+    {
+    	$where = 'usu_id ='. $usuarioID.' and tip_inv_id = 2 and id_actividad = '.$actividadId;
+    	$resultado = $this->_table->fetchall($where);
+    
+    	$objInvitacion = null;
+    
+    	if(count($resultado) > 0){
+    
+    		$objInvitacion = new Application_Model_Invitacion();
+    
+    		$objInvitacion->setId($resultado->current()->inv_id);
+    		$objInvitacion->setFecha($resultado->current()->inv_fecha);
+    		$objInvitacion->setUsuarioId($resultado->current()->usu_id);
+    		$objInvitacion->setTipoInvitacionId($resultado->current()->tip_inv_id);
+    		$objInvitacion->setIdActividad($resultado->current()->id_actividad);
+    		$objInvitacion->setEstado($resultado->current()->inv_estado);
+    
+    	}
+    	return $objInvitacion;
+    }
+    
 	public function obtenerGrupoPorInvitar($grupoId)
 	{
 	    $lista = new SplObjectStorage();
@@ -98,10 +125,25 @@ class Application_Model_InvitacionDao
 		}
 		
 		return $lista;
-	
-		
 	}
 	
+	public function obtenerEventoPorInvitar($eventoId)
+	{
+		$lista = new SplObjectStorage();
+		$objInvitacion = new Application_Model_Invitacion();
+		$where = 'tip_inv_id = 2 and inv_estado = 1  and id_actividad = '.$eventoId;
+		$resultado = $this->_table->fetchall($where);
+	
+		if(count($resultado) > 0)
+		{
+			foreach ($resultado as $item)
+			{
+				$lista->attach($this->obtenerPorId($item->inv_id));
+			}
+		}
+	
+		return $lista;
+	}
 	
 	public function obtenerInvitacionGruposPorUsuario($usuId)
 	{
@@ -120,7 +162,48 @@ class Application_Model_InvitacionDao
 	    
 	    return $lista;
 	}
-    
-    
+	
+	public function obtenerInvitacionEventosPorUsuario($usuId)
+	{
+		$lista = new SplObjectStorage();
+		$objInvitacion = new Application_Model_Invitacion();
+		$where = 'tip_inv_id = 2 and inv_estado = 2  and usu_id = '.$usuId;
+		$resultado = $this->_table->fetchall($where);
+		 
+		if(count($resultado) > 0)
+		{
+			foreach ($resultado as $item)
+			{
+				$lista->attach($this->obtenerPorId($item->inv_id));
+			}
+		}
+		 
+		return $lista;
+	}
+	
+	public function obtenerPorEventoYUsuario($eve_id,$usu_id)
+	{
+		$where = 'tip_inv_id = 2 and id_actividad ='. $eve_id.' and usu_id ='.$usu_id;
+	
+		$resultado = $this->_table->fetchAll($where);
+	
+		if(count($resultado) > 0)
+		{
+			foreach ($resultado as $item)
+			{
+				return $this->obtenerPorId($item->inv_id)->getEstado();
+			}
+		}else{
+			return null;
+		}
+	}
+	
+	public function obtenerCantidadSeleccionados($evento_id)
+	{
+		$where = 'tip_inv_id = 2 and inv_estado = 1 and id_actividad = '.$evento_id;
+		$resultado = $this->_table->fetchall($where);
+		 
+		return count($resultado);
+	}
     
 }

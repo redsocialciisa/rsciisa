@@ -63,7 +63,12 @@ class Application_Model_UsuarioEventoDao
     	{
     		foreach ($resultado as $item)
     		{
-    		    $lista->attach($objEventoDao->obtenerPorId($this->obtenerPorId($item->usu_eve_id)->getEventoId()));
+    		    $objEvento = $objEventoDao->obtenerPorId($this->obtenerPorId($item->usu_eve_id)->getEventoId());
+
+    		    if($objEvento->getCancelado() == 0)
+    		    {
+    		        $lista->attach($objEvento);
+    		    }
     		}
     	}
     
@@ -88,9 +93,9 @@ class Application_Model_UsuarioEventoDao
     	}
     }
     
-    public function obtenerMarcadosEliminar($gru_id)
+    public function obtenerMarcadosEliminar($eve_id)
     {
-    	$where = 'eve_id ='. $gru_id.' and usu_eve_eliminar = 1';
+    	$where = 'eve_id ='. $eve_id.' and usu_eve_eliminar = 1';
     
     	$resultado = $this->_table->fetchAll($where);
     
@@ -115,6 +120,43 @@ class Application_Model_UsuarioEventoDao
     	return $lista;
     }
     
+    public function obtenerUsuariosPorEventoId($eve_id)
+    {
+    	$lista = new SplObjectStorage();
+    	$where = 'eve_id ='. $eve_id;
+    	$objUsuarioDao = new Application_Model_UsuarioDao();
+    	
+    	$resultado = $this->_table->fetchAll($where);
+    
+    	if(count($resultado) > 0)
+    	{
+    		foreach ($resultado as $item)
+    		{
+    			$lista->attach($objUsuarioDao->obtenerPorId($this->obtenerPorId($item->usu_eve_id)->getUsuarioId()));
+    		}
+    	}
+    
+    	return $lista;
+    }
+    
+    public function obtenerUsuariosAEliminar($eve_id)
+    {
+    	$lista = new SplObjectStorage();
+    	$where = 'eve_id ='. $eve_id. ' and usu_eve_eliminar = 1';
+    	 
+    	$resultado = $this->_table->fetchAll($where);
+    
+    	if(count($resultado) > 0)
+    	{
+    		foreach ($resultado as $item)
+    		{
+    			$lista->attach($this->obtenerPorId($item->usu_eve_id)->getUsuarioId());
+    		}
+    	}
+    
+    	return $lista;
+    }
+    
     public function marcarEliminar($eve_id,$usu_id,$cbx_usuario)
     {
     	$data = array('usu_eve_eliminar' => $cbx_usuario);
@@ -126,6 +168,14 @@ class Application_Model_UsuarioEventoDao
     public function eliminar($usu_eve_id)
     {
     	$where = 'usu_eve_id = ' . $usu_eve_id;
+    
+    	return $this->_table->delete($where);
+    }
+    
+    
+    public function eliminarUsuariosPorEvento($eve_id)
+    {
+    	$where = 'eve_id = ' . $eve_id.' and usu_eve_eliminar = 1';
     
     	return $this->_table->delete($where);
     }

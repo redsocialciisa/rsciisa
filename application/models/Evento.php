@@ -13,6 +13,7 @@ class Application_Model_Evento
     private $_fechaEvento;
     private $_tipoEventoId;
     private $_hora;
+    private $_cancelado;
     
 	/**
 	 * @return the $_id
@@ -92,6 +93,13 @@ class Application_Model_Evento
 	}
 
 	/**
+	 * @return the $_cancelado
+	 */
+	public function getCancelado() {
+		return $this->_cancelado;
+	}
+
+	/**
 	 * @param field_type $_id
 	 */
 	public function setId($_id) {
@@ -168,8 +176,10 @@ class Application_Model_Evento
 		$this->_hora = $_hora;
 	}
 
-    
-
-    
+	/**
+	 * @param field_type $_cancelado
+	 */
+	public function setCancelado($_cancelado) {
+		$this->_cancelado = $_cancelado;
+	}
 }
-
