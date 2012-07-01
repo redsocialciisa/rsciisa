@@ -39,14 +39,17 @@
 		  		<b><?php echo $objUsuario->obtenerPorId($item->getDe())->getNombre();?></b>
 		  	</td>
 		  	<td rowspan="2">
-		  		<div class="cont4">
-		  			<?php echo $item->getTexto();?>
-		  		</div>
+		  		<?php 
+		    		$objPublicacionDao = new Application_Model_PublicacionDao();
+		    		echo $objPublicacionDao->calcularTiempoTranscurrido($item->getFecha());
+		    	?>
 		  	</td>
 		  </tr>
 		  <tr>
 		    <td>
-		    	<?php echo $item->getFecha();?>
+		  		<div class="cont4">
+		  			<?php echo $item->getTexto();?>
+		  		</div>
 		    </td>
 		   </tr>
 		   <tr>
