@@ -66,6 +66,8 @@ class GrupoController extends Zend_Controller_Action
         		$objPublicacionGrupo->setPublicacionId($idPublicacion);
         		$objPublicacionGrupoDao->guardar($objPublicacionGrupo);
         		
+        		$this->view->mensaje_ok = "ok";
+        		
         	}else{
         		$form->populate($formData);
         		$this->view->error = "error";

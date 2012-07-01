@@ -4,49 +4,71 @@
  
  <a href="#" onclick="openModalNuevoMensaje()">Nuevo Mensaje</a>
  
+ <?php if($this->mensaje_ok == "ok"){
+ 		echo "<div id='divMensajeDejarParticipar'><div class='alert alert-success'><button class='close' data-dismiss='alert'>×</button>Mensaje enviado exitosamente</div></div>";
+ }?>
  
- 
- 
- 
-
+<div class="tabbable span9">
+    <ul class="nav nav-tabs">
+    	<li><a href="#misMensajes" data-toggle="tab">Mis Mensajes</a></li>
+    </ul>
+    <div class="tab-content">
+    	<div class="tab-pane active" id="misMensajes">
+    	<table>
+    	<?php
+    		foreach ($this->listaUsuarios as $item)
+		    {
+		?>
+			<tr id="rowUno<?php echo $item->getId();?>" style="display: block;">
+				<td colspan=2>
+					<?php echo $item->getNombre();?>
+				</td>			
+			</tr>
+			<tr id="rowDos<?php echo $item->getId();?>" style="display: block;">
+				<td>
+					<div style='width: 80px;'>
+						<a class='thumbnail'>
+							<img src="/imagenes/usuarios/<?php echo $item->getFoto();?>" >
+						</a>
+					</div>
+				</td>
+			<td>
+				<?php 
+					$objMensajeDao = new Application_Model_MensajeDao();
+					$cantMensajes = $objMensajeDao->contarMensajes($aut->getIdentity()->usu_id, $item->getId());
+					
+					if ($cantMensajes % 10 == 0)
+					{
+					    $pagina = $cantMensajes/10;
+					}
+					else
+					{
+					    $pagina = floor($cantMensajes/10)+1;
+					}
+				?>
+			
+			
+				<a class="btn btn-info" href="<?php echo $this->url(array('controller'=>'mensajes', 'action'=>'ver', 'id'=>$item->getId(),'page'=>$pagina)); ?>"> Ver mensaje </a>
+			</td>	
+    	<?php }?>
+    	</table>
+    	</div>
+    </div>
+</div>
  
  <div class="modal hide" id="myModalNuevoMensaje" style="width: 700px;">
     <div class="modal-header">
-    <button class="close" onclick="closeModalNuevoMensaje()" data-dismiss="modal">×</button>
-    		<h3>Crear mensaje</h3>
+    	<button class="close" onclick="closeModalNuevoMensaje()" data-dismiss="modal">×</button>
+    	<h3>Crear mensaje</h3>
     </div>
     <div class="modal-body">
  		<form action="/mensajes/index/" method="post" enctype="<?php echo $this->form->getEnctype(); ?>">
+			<div class="Para">
+				<div class="ui-widget">
+					<?php echo $this->form->txtPara; ?>
+				</div>
+			</div>
 			<?php
-                
-            	$objAmigoDao = new Application_Model_AmigoDao(); 
-				
-			
-			
-                $datSource = "[";
-                
-                $listaUsuarios = $objAmigoDao->obtenerTodosUsuariosPorUsuarioId($aut->getIdentity()->usu_id);
-                #$listaUsuarios = $objAmigoDao->obtenerTodosPorNombre($aut->getIdentity()->usu_id);
-                echo json_encode($listaUsuarios);
-                
-                $i = 1;
-                foreach ($listaUsuarios as $item)
-                {
-                	if($item->getNombre() !="ADMINISTRADOR")
-                	{
-                		$datSource .= "&quot;".$item->getNombre()."&quot;";
-                		 
-                		if(count($listaUsuarios) != $i){
-                			$datSource .= ",";
-                		}
-                	}
-                	$i++;
-                }
-                $datSource .= "]";
-                
-                #echo $datSource;
-			
-				echo $this->form->txtPara;
 				echo $this->form->txtTextoMensaje;	
 				echo $this->form->enviar;
              ?>
@@ -65,5 +87,17 @@
 		$('#myModalNuevoMensaje').modal();	
 	}
 
+	$(function() {
+		<?php 
+			$aut = Zend_Auth::getInstance();
+			$objAmigoDao = new Application_Model_AmigoDao();
+			$listaUsuarios = $objAmigoDao->obtenerTodosPorNombre($aut->getIdentity()->usu_id);
+		?>
+		$( "#txtPara" ).autocomplete({
+			source: <?php echo json_encode($listaUsuarios); ?>
+		});
+	});
+
+	
  
  </script>
