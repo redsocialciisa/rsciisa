@@ -4,6 +4,9 @@
  
  <a href="#" onclick="openModalGrupo()">Crear Grupo</a>
  
+ <?php if($this->mensaje_ok == "ok"){
+ 		echo "<div id='divMensajeDejarParticipar'><div class='alert alert-success'><button class='close' data-dismiss='alert'>×</button>Grupo creado exitosamente</div></div>";
+ }?>
  
  <div class="tabbable span9">
     <ul class="nav nav-tabs">

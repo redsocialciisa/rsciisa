@@ -33,6 +33,7 @@ class Application_Form_FormGrupo extends Zend_Form
 		$descripcion->setLabel('Descripcion del grupo: ')
 					->setRequired(true)
 					->setAttrib('row', 2)
+					->setAttrib('onkeypress','ValidarCaracteres(this, 499)')
 					->clearErrorMessages()
 					->addErrorMessage('Debes ingresar una descripcion');
 		

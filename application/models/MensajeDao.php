@@ -114,6 +114,17 @@ class Application_Model_MensajeDao
         return $lista;
     }
     
+    public function contarMensajes($usu_id,$usu_id_menu)
+    {
+    	$lista = new SplObjectStorage();
+    	$where = "usu_id_de = ".$usu_id." and usu_id_para = ".$usu_id_menu." or usu_id_de = ".$usu_id_menu." and usu_id_para = ".$usu_id;
+    
+    	$resultado = $this->_table->fetchAll($where);
+    
+    	return count($resultado);
+    }
+    
+    
 
 }
 

@@ -14,19 +14,18 @@ class Application_Form_FormNuevoMensaje extends Zend_Form
         ->setRequired(true)
         ->setValue('')
         ->setAttrib('maxlength', '100')
-        ->setAttrib('data-source',json_encode($listaUsuarios))
-        ->setAttrib('data-items','10')
-        ->setAttrib('data-provide','typeahead')
         ->setAttrib('placeholder','Buscar...')
         ->clearErrorMessages()
         ->addErrorMessage('Debes ingresar a quien enviar el mensaje');
         
-        $textoMensaje = new Zend_Form_Element_Text('txtTextoMensaje');
+        $textoMensaje = new Zend_Form_Element_Textarea('txtTextoMensaje');
         $textoMensaje->setLabel('Texto: ')
         ->setRequired(true)
         ->setValue('')
         ->setAttrib('maxlength', '500')
         ->setAttrib('class', 'span6')
+        ->setAttrib('rows', 2)
+        ->setAttrib('onkeypress','ValidarCaracteres(this, 499)')
         ->clearErrorMessages()
         ->addErrorMessage('Debes ingresar a quien enviar el mensaje');
         

@@ -29,34 +29,46 @@
   </tr>
 </table>
 <hr WIDTH="50%">
-
 <table>
-  	 <?php 
-		foreach ($this->listamensajes as $item)
-		{ 
-    ?>
-  <tr>
-  	<td colspan="2">
-  		<b><?php echo $objUsuario->obtenerPorId($item->getDe())->getNombre();?></b>
-  	</td>
-  	<td rowspan="2">
-  		<?php echo $item->getTexto();?>
-  	</td>
-  </tr>
-  	<tr>
-    	<td>
-    		<?php echo $item->getFecha();?>
-    	</td>
-    </tr>
-    <tr>
-    	<td colspan="2">
-    		<hr>
-    	</td>
-    </tr>
-  	<?php }?>
+		  <?php 
+				foreach ($this->listamensajes as $item)
+				{ 
+		  ?>
+		  <tr>
+		  	<td colspan="2">
+		  		<b><?php echo $objUsuario->obtenerPorId($item->getDe())->getNombre();?></b>
+		  	</td>
+		  	<td rowspan="2">
+		  		<div class="cont4">
+		  			<?php echo $item->getTexto();?>
+		  		</div>
+		  	</td>
+		  </tr>
+		  <tr>
+		    <td>
+		    	<?php echo $item->getFecha();?>
+		    </td>
+		   </tr>
+		   <tr>
+		   	<td colspan="2">
+		    	<hr>
+		   	</td>
+		   </tr>
+		  		<?php }?>
+		  	<tr>
+		  		<td>
+		  			<div class="pagination-centered">
+						<?php echo $this->listamensajes;?>
+					</div>
+		  		</td>
+		  	</tr>	
+ 
+</table>
+<br>
+<table> 	
   	<tr>
   		<td>
-  			<form action="<?php echo $this->url(array('controller'=>'mensajes', 'action'=>'ver', 'id'=>$this->id)); ?>">
+  			<form method="post" action="<?php echo $this->url(array('controller'=>'mensajes', 'action'=>'ver', 'id'=>$this->id)); ?>">
 			<?php
 				echo $this->form->txtTextoResponder;	
 				echo $this->form->enviar;
@@ -64,5 +76,4 @@
         </form>
   		</td>
   	</tr>
-  	
 </table>
