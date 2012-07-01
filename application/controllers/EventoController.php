@@ -11,6 +11,9 @@ class EventoController extends Zend_Controller_Action
     {
         $aut = Zend_Auth::getInstance();
         
+        $succesEliminarUsuarios = $this->getRequest()->getParam('se');
+        $succesInvitarUsuarios = $this->getRequest()->getParam('si');
+        
         if ($this->getRequest()->isPost()) 
         {
 	    	$objEvento = new Application_Model_Evento();
@@ -85,6 +88,9 @@ class EventoController extends Zend_Controller_Action
         if ($this->_hasParam ( 'page' )) {
         	$paginatorInvitacion->setCurrentPageNumber( $this->_getParam ( 'page' ) );
         }
+        
+        $this->view->succesEliminarUsuarios = $succesEliminarUsuarios;
+        $this->view->succesInvitarUsuarios = $succesInvitarUsuarios;
         
         $this->view->listaInvitacionesEvento = $paginatorInvitacion;
         $this->view->listaEventos = $paginator;
@@ -176,7 +182,7 @@ class EventoController extends Zend_Controller_Action
     		$objInvitacionDao->guardar($item);
     	}
     	 
-    	$this->_redirect('/evento/contactos/id/' . $eventoId);
+    	$this->_redirect('/evento/index/si/ok');
     	 
     }
     
@@ -227,6 +233,21 @@ class EventoController extends Zend_Controller_Action
         $this->view->ok = "ok";
     }
     
+    public function noAsistirAction()
+    {
+    	$this->_helper->layout()->disableLayout();
+    	$aut = Zend_Auth::getInstance();
+    	$id = $this->getRequest()->getParam('id');
+    
+    	$objUsuarioEventoDao = new Application_Model_UsuarioEventoDao();
+    	$objInvitacionDao = new Application_Model_InvitacionDao();
+
+    	$objUsuarioEventoDao->eliminarUsuarioDelEvento($id,$aut->getIdentity()->usu_id);
+    	$objInvitacionDao->eliminarUsuarioPorEvento($id, $aut->getIdentity()->usu_id);
+    
+    	$this->view->ok = "ok";
+    }
+    
     public function rechazarInvitacionAction()
     {
     	$this->_helper->layout()->disableLayout();
@@ -253,13 +274,21 @@ class EventoController extends Zend_Controller_Action
     	$eventoId = $this->getRequest()->getParam('eventoId');
     	$usuarioId = $this->getRequest()->getParam('usuarioId');
     	
-    	$objInvitacionDao = new Application_Model_InvitacionDao();
-    	$objInvitacionDao->eliminarPorEvento($eventoId, $usuarioId);
-    	
     	$objUsuarioEventoDao = new Application_Model_UsuarioEventoDao();
-    	$objUsuarioEventoDao->eliminarUsuariosPorEvento($eventoId);
+    	$objInvitacionDao = new Application_Model_InvitacionDao();
     	
-    	$this->_redirect('/evento/contactos');
+    	$listaEliminar = $objUsuarioEventoDao->obtenerUsuariosAEliminar(8);
+    	
+    	foreach ($listaEliminar as $item)
+    	{
+    		$objInvitacionDao->eliminarUsuarioPorEvento($eventoId, $item->getUsuarioId());
+    	}
+    	
+    	$objUsuarioEventoDao->eliminarUsuariosPorEvento($eventoId);
+    
+    	$listaEliminar = null;
+    	$objUsuarioEventoDao = null;
+    	$objInvitacionDao = null;
     	
     }
 

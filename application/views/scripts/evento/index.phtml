@@ -1,8 +1,33 @@
-<script type="text/javascript" src="/bootstrap/js/gmaps.js"></script>
+<script type="text/javascript" src="/bootstrap/js/maps.js"></script>
 
-<a href="#" onclick="openModalEvento()">Crear Evento</a>
+<br>
+<a href="#" onclick="openModalEvento()" class="btn"><i class="icon-calendar"></i> Crear Evento </a><br><br>
 
-<div class="tabbable span9">
+  <?php 
+ 		if($this->succesEliminarUsuarios == "ok")
+		{
+			$msj = "";
+			$msj .= "<div class='alert alert-success'>";
+			$msj .= "<button class='close' data-dismiss='alert'>×</button>";
+			$msj .= "<strong>Éxito!</strong> Usuarios han sido eliminados del evento!!";
+			$msj .= "</div>";
+			
+			echo $msj;	
+  		}
+  		
+  		if($this->succesInvitarUsuarios == "ok")
+  		{
+  			$msj = "";
+  			$msj .= "<div class='alert alert-success'>";
+  			$msj .= "<button class='close' data-dismiss='alert'>×</button>";
+  			$msj .= "<strong>Éxito!</strong> Usuarios han sido invitados al evento!!";
+  			$msj .= "</div>";
+  				
+  			echo $msj;
+  		}
+  ?>
+
+<div class="tabbable span9 well">
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="#tab1" data-toggle="tab">Mis Eventos
 				comprometidos</a></li>
@@ -75,19 +100,23 @@
 							</tr>
 							<tr>
 								<td align="center">
-									<h2><?php 
-									 				echo date("d", $fechaPublicacion); 
-									 		?></h2>
+									<h2><?php echo date("d", $fechaPublicacion); ?></h2>
 								</td>
 							</tr>
 						</table>
 					</td>
 					<td><a class="btn btn-info"
-						href="/evento/contactos/id/<?php echo $evento->getId();?>">Contactos</a>
+						href="/evento/contactos/id/<?php echo $evento->getId();?>">Ver Evento</a>
 					</td>
-					<td><a class="btn btn-info" href="#"> Editar </a></td>
-					<td><a class="btn btn-info" onclick="openMyModalCancelarEvento('<?php echo $evento->getId();?>','<?php echo $evento->getNombre();?>')" > Cancelar </a></td>
-					<td><a class="btn btn-info" href="#"> Ver Evento </a></td>
+					
+					<?php
+					$aut = Zend_Auth::getInstance();
+					if($aut->getIdentity()->usu_id == $evento->getUsuarioId()){?>
+						<td><a class="btn btn-info" href="#"> Editar </a></td>
+						<td><a class="btn btn-info" onclick="openMyModalCancelarEvento('<?php echo $evento->getId();?>','<?php echo $evento->getNombre();?>')" > Cancelar </a></td>
+					<?php }else{ ?>
+						<td><a class="btn btn-info" onclick="noAsistire(<?php echo $evento->getId();?>)"> No asistiré </a></td>
+					<?php }?>
 				</tr>
 		    <?php } ?>
 		    	</table>
@@ -233,6 +262,7 @@
 			</table>
 
 			<input type="hidden" id="hdnCordenadas" name="hdnCordenadas"> <input type="hidden" id="hdnDireccionSeleccionada" name="hdnDireccionSeleccionada">
+			<input type="hidden" id="hdnIdEvento" value="<?php echo $this->id;?>">
 
 		</form>
 
@@ -553,6 +583,41 @@
 	{	
 		$('#myModalRechazarEvento').modal('show');
 		document.getElementById("hdnEventoId").value = id;
+	}
+
+    function noAsistire(id){
+
+		$.ajax(
+				{
+				async: true,
+				type: 'POST',
+				url: '<?php echo $this->baseUrl()?>/evento/no-asistir',
+				data: 'id=' + id,	
+				dataTypeString: 'text',
+				
+				beforeSend: function(data){
+					  //selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
+			    },  
+			    success: function(requestData){
+				    var result = requestData;
+
+					if(result == "ok")
+					{
+						document.getElementById("filaEventoUno" + id).style.display = "none";
+						document.getElementById("filaEventoDos" + id).style.display = "none";
+
+						var divMsj = "<div class='alert alert-success'>";
+						divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+						divMsj = divMsj + "Has indicado que no asistirás al evento";
+						divMsj = divMsj + "</div>";
+
+						document.getElementById("divMensajeEvento").innerHTML = divMsj;  
+					}
+			    },  
+			    error: function(requestData, strError, strTipoError){          
+			    }
+			    
+				});
 	}
 
     function cancelarEvento(){

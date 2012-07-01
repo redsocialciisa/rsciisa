@@ -150,7 +150,25 @@ class Application_Model_UsuarioEventoDao
     	{
     		foreach ($resultado as $item)
     		{
-    			$lista->attach($this->obtenerPorId($item->usu_eve_id)->getUsuarioId());
+    			$lista->attach($this->obtenerPorId($item->usu_eve_id));
+    		}
+    	} 
+    
+    	return $lista;
+    }
+    
+    public function obtenerUsuariosAEliminarTwo($eve_id)
+    {
+    	$lista = new SplObjectStorage();
+    	$where = 'eve_id ='. $eve_id. ' and usu_eve_eliminar = 1';
+    
+    	$resultado = $this->_table->fetchAll($where);
+    
+    	if(count($resultado) > 0)
+    	{
+    		foreach ($resultado as $item)
+    		{
+    			$lista->attach($this->obtenerPorId($item->usu_eve_id));
     		}
     	}
     
@@ -172,10 +190,16 @@ class Application_Model_UsuarioEventoDao
     	return $this->_table->delete($where);
     }
     
-    
     public function eliminarUsuariosPorEvento($eve_id)
     {
     	$where = 'eve_id = ' . $eve_id.' and usu_eve_eliminar = 1';
+    
+    	return $this->_table->delete($where);
+    }
+    
+    public function eliminarUsuarioDelEvento($eve_id,$usu_id)
+    {
+    	$where = 'eve_id = '.$eve_id.' and usu_id ='.$usu_id;
     
     	return $this->_table->delete($where);
     }
