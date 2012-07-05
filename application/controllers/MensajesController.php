@@ -24,14 +24,21 @@ class MensajesController extends Zend_Controller_Action
         	{
         	    $usuPara = $usuarioDao->obtenerPorNombreExacto($this->getRequest()->getParam('txtPara'));
         	    
-        	    $fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
-        	    $objMensaje->setDe($aut->getIdentity()->usu_id);
-        	    $objMensaje->setPara($usuPara->getId());
-        	    $objMensaje->setFecha($fechahora);
-        	    $objMensaje->setTexto($this->getRequest()->getParam('txtTextoMensaje'));
-        	    $objMensajeDao->guardar($objMensaje);
-        	    
-        	    $this->view->mensaje_ok = "ok";
+        	    if ($usuPara != null)
+        	    {
+	        	    $fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
+	        	    $objMensaje->setDe($aut->getIdentity()->usu_id);
+	        	    $objMensaje->setPara($usuPara->getId());
+	        	    $objMensaje->setFecha($fechahora);
+	        	    $objMensaje->setTexto($this->getRequest()->getParam('txtTextoMensaje'));
+	        	    $objMensajeDao->guardar($objMensaje);
+	        	    
+	        	    $this->view->mensaje_ok = "ok";
+        	    }
+        	    else
+        	    {
+        	        $this->view->mensaje_ok = "error";
+        	    }    
         	}
         }
         

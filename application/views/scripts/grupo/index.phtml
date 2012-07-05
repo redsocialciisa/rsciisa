@@ -1,11 +1,42 @@
  <?php 
  $aut = Zend_Auth::getInstance();
  ?>
+ <br>
+ <a href="#" onclick="openModalGrupo()" class="btn"><i class="icon-user"></i><i class="icon-user"></i> Crear Grupo</a><br><br>
  
+ <?php 
+ 
+ if($this->mensaje_ok == "ok"){
+ 		echo "<div id='divMensajeCrearGrupo'><div class='alert alert-success'><button class='close' data-dismiss='alert'>×</button>Grupo creado exitosamente</div></div>";
+ }
+ 
+ if($this->successInvitarUsuarios == "ok")
+ {
+ 	$msj = "";
+ 	$msj .= "<div class='alert alert-success'>";
+ 	$msj .= "<button class='close' data-dismiss='alert'>×</button>";
+ 	$msj .= "Los usuarios han sido invitados al Grupo";
+ 	$msj .= "</div>";
+ 
+ 	echo $msj;
+ }
+ ?>
  <br><h1> GRUPOS </h1><br>
  <a href="#" onclick="openModalGrupo()" class="btn"><i class="icon-user"></i><i class="icon-user"></i> Crear Grupo </a><br><br>
  
- <?php if($this->mensaje_ok == "ok"){
+ <?php 
+ if($this->successEliminarUsuarios == "ok")
+ {
+ 	$msj = "";
+ 	$msj .= "<div class='alert alert-success'>";
+ 	$msj .= "<button class='close' data-dismiss='alert'>×</button>";
+ 	$msj .= "Los usuarios han sido eliminados del Grupo";
+ 	$msj .= "</div>";
+ 
+ 	echo $msj;
+ }
+ 
+if($this->mensaje_ok == "ok"){
  		echo "<div id='divMensajeDejarParticipar'><div class='alert alert-success'><button class='close' data-dismiss='alert'>×</button>Grupo creado exitosamente</div></div>";
  }?>
  
@@ -111,9 +142,7 @@
 			<?php
                 echo $this->form->txtNombre;
 				echo $this->form->fileFoto;
-			?>	
-				<textarea id="txtDescripcion" name="txtDescripcion" onKeyDown="ValidarCaracteres(this, 499);"></textarea>
-			<?php 	
+				echo $this->form->txtDescripcion;
 				echo $this->form->optPublico;
 				echo $this->form->optPrivado;
 				echo $this->form->enviar;

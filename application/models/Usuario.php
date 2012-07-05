@@ -16,6 +16,7 @@ class Application_Model_Usuario
     private $_privacidadPublicacionId;
     private $_bloqueado;
     
+
 	/**
 	 * @return the $_id
 	 */
@@ -190,6 +191,7 @@ class Application_Model_Usuario
 	public function setPrivacidadPublicacionId($_privacidadPublicacionId) {
 		$this->_privacidadPublicacionId = $_privacidadPublicacionId;
 	}
+
 
 	/**
 	 * @param field_type $_bloqueado
