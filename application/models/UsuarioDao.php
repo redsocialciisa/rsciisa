@@ -26,7 +26,6 @@ class Application_Model_UsuarioDao
     		$objUsuario->setPassword($resultado->current()->usu_password);
     		$objUsuario->setNombre($resultado->current()->usu_nombre);
     		$objUsuario->setCorreo($resultado->current()->usu_correo);
-    		$objUsuario->setCv($resultado->current()->usu_cv);
     		$objUsuario->setFechaNacimiento($resultado->current()->usu_fecha_nacimiento);
     		$objUsuario->setEmocionId($resultado->current()->emo_id);
     		$objUsuario->setAcepta($resultado->current()->usu_acepta);
@@ -96,7 +95,6 @@ class Application_Model_UsuarioDao
     			'usu_nombre' => $usuario->getNombre(),
     			'usu_correo' => $usuario->getCorreo(),
     			'usu_fecha_nacimiento' => $usuario->getFechaNacimiento(),
-    	        'usu_cv' => $usuario->getCv(),
     			'usu_foto' => $usuario->getFoto(),
     			'pri_pub_id' => $usuario->getPrivacidadPublicacionId(),
     	        'emo_id' => $usuario->getPrivacidadPublicacionId()

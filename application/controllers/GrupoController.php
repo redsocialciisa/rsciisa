@@ -9,7 +9,11 @@ class GrupoController extends Zend_Controller_Action
     }
 
     public function indexAction()
-    {	
+    {
+
+        $successEliminarUsuarios = $this->getRequest()->getParam('se');
+        $successInvitarUsuarios = $this->getRequest()->getParam('si');
+        
         $form = new Application_Form_FormGrupo();
         $aut = Zend_Auth::getInstance();
         $objGrupoDao = new Application_Model_GrupoDao();
@@ -99,6 +103,8 @@ class GrupoController extends Zend_Controller_Action
         
         $this->view->listaGrupoUsuario = $paginatorGrupo;
         $this->view->listaInvitacionesGrupo = $paginatorInvitacion;
+        $this->view->successEliminarUsuarios = $successEliminarUsuarios;
+        $this->view->successInvitarUsuarios = $successInvitarUsuarios;
        
         $objPublicacionDao = null;
         $listaPublicaciones = null;
@@ -116,17 +122,20 @@ class GrupoController extends Zend_Controller_Action
         $objGrupoDao = new Application_Model_GrupoDao();
         $objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
         $objPublicacionGrupoDao = new Application_Model_PublicacionGrupoDao();
+        $objInvitacionDao = new Application_Model_InvitacionDao();
+        
         $grupoId = $this->getRequest()->getParam('grupoId');
         $objGrupo = $objGrupoDao->obtenerPorId($grupoId);
-        
         unlink("/var/www/rsciisa/public/imagenes/grupos/".$objGrupo->getFoto());
         $objUsuarioGrupoDao->eliminarUsuariosPorGrupoId($grupoId);
         $objPublicacionGrupoDao->eliminarPublicaciones($grupoId);
+        $objInvitacionDao->eliminarPorGrupo($grupoId);
         $objGrupoDao->eliminar($grupoId);
         
         $objGrupoDao = null;
         $objUsuarioGrupoDao = null;
         $objPublicacionGrupoDao = null;
+        $objInvitacionDao = null;
         
         $this->view->ok = "ok";
         
@@ -249,7 +258,9 @@ class GrupoController extends Zend_Controller_Action
         
         $objUsuarioGrupoDao->eliminarUsuariosPorGrupo($grupoId);
         
-        $this->_redirect('/grupo/contactos/grupoId/' . $grupoId);
+        #$this->_redirect('/grupo/contactos/grupoId/' . $grupoId);
+        $this->_redirect('/grupo/index/se/ok');
+        
     }
     
     public function marcarInvitarAction()
@@ -311,7 +322,7 @@ class GrupoController extends Zend_Controller_Action
             $objInvitacionDao->guardar($item);
     	}
     	
-    	$this->_redirect('/grupo/contactos/grupoId/' . $grupoId);
+    	$this->_redirect('/grupo/index/si/ok');
     	
     }
 

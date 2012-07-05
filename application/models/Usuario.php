@@ -6,7 +6,6 @@ class Application_Model_Usuario
     private $_usuarioCiisa;
     private $_nombre;
     private $_correo;
-    private $_cv;
     private $_fechaNacimiento;
     private $_emocionId;
     private $_password;
@@ -15,7 +14,6 @@ class Application_Model_Usuario
     private $_sexo;
     private $_foto;
     private $_privacidadPublicacionId;
-    
 	/**
 	 * @return the $_id
 	 */
@@ -42,13 +40,6 @@ class Application_Model_Usuario
 	 */
 	public function getCorreo() {
 		return $this->_correo;
-	}
-
-	/**
-	 * @return the $_cv
-	 */
-	public function getCv() {
-		return $this->_cv;
 	}
 
 	/**
@@ -136,13 +127,6 @@ class Application_Model_Usuario
 	}
 
 	/**
-	 * @param field_type $_cv
-	 */
-	public function setCv($_cv) {
-		$this->_cv = $_cv;
-	}
-
-	/**
 	 * @param field_type $_fechaNacimiento
 	 */
 	public function setFechaNacimiento($_fechaNacimiento) {
@@ -197,24 +181,6 @@ class Application_Model_Usuario
 	public function setPrivacidadPublicacionId($_privacidadPublicacionId) {
 		$this->_privacidadPublicacionId = $_privacidadPublicacionId;
 	}
-
-    
-    
-    
-
-    
-    
-	    
-    
-
-    
-    
-    
-	
-    
-	
-    
-    
 
 }
 

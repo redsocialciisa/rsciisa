@@ -65,6 +65,21 @@ class Application_Model_InvitacionDao
         return $this->_table->delete($where);
     }
     
+    public function eliminarUsuarioPorGrupo($gru_id,$usu_id)
+    {
+    	$where = 'id_actividad  =' . $gru_id. ' and tip_inv_id = 1 and usu_id ='. $usu_id;
+    
+    	return $this->_table->delete($where);
+    }
+    
+    public function eliminarPorGrupo($gru_id)
+    {
+    	$where = 'id_actividad  = ' . $gru_id. ' and tip_inv_id = 1';
+    
+    	return $this->_table->delete($where);
+    }
+    
+    
     public function obtenerPorIdActividadUsuario($usuarioID,$actividadId)
     {
         $where = 'usu_id ='. $usuarioID.' and tip_inv_id = 1 and id_actividad = '.$actividadId;

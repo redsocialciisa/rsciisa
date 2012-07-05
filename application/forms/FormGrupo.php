@@ -16,7 +16,7 @@ class Application_Form_FormGrupo extends Zend_Form
         ->setRequired(true)
         ->setValue('')
         ->setAttrib('maxlength', '49')
-        ->setAttrib('class', 'span4')
+        ->setAttrib('class', 'span6')
         ->clearErrorMessages()
         ->addErrorMessage('Debes ingresar el nombre del grupo');
         
@@ -32,7 +32,8 @@ class Application_Form_FormGrupo extends Zend_Form
 		$descripcion = new Zend_Form_Element_Textarea('txtDescripcion');
 		$descripcion->setLabel('Descripcion del grupo: ')
 					->setRequired(true)
-					->setAttrib('row', 2)
+					->setAttrib('class', 'span6')
+					->setAttrib('rows', 2)
 					->setAttrib('onkeypress','ValidarCaracteres(this, 499)')
 					->clearErrorMessages()
 					->addErrorMessage('Debes ingresar una descripcion');
