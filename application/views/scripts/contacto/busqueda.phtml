@@ -4,10 +4,11 @@
 				$columna = 0;
 				$cantColumna = 3;
 			?>
-			<h2>Resultado de la búsqueda: </h2>
-			<div id="divSolicitudEnviada"></div>
-			<table width="100%" align="center">
+
+			<br><h3> RESULTADO DE LA BÚSQUEDA:  </h3><br>
 			
+			<div id="divSolicitudEnviada"></div>
+			<table width="100%" align="center" class="span9">
 			
 			<?php if($this->largoBusqueda >= 3){ ?>
 					<?php if(count($this->listaUsuarios) > 0){?>
@@ -34,7 +35,7 @@
 														</div>
 													</td>
 													<td valign="top" class="contMini">
-														<p><?php echo $usuario->getNombre();?></p>
+														<p><a href="/muro/muro-contacto/id/<?php echo $usuario->getId();?>"><?php echo $usuario->getNombre();?></a></p>
 													</td>
 												</tr>
 												<tr>
@@ -89,7 +90,7 @@
 				<div class="modal hide" id="myModalAgregar" style="width: 700px;">
 				    <div class="modal-header">
 				    <button class="close" onclick="closeModalAgregar()" data-dismiss="modal">×</button>
-				    <img src="/imagenes/proyecto/Info.png">&nbsp;<b>Agregar nuevo contacto</b>
+				    <h2><img src="/imagenes/proyecto/Info.png">&nbsp;Agregar nuevo contacto</h2>
 				    </div>
 				    <div class="modal-body">
 				    <div id="divNombreUsuario"></div>
@@ -97,7 +98,7 @@
 				    </div>
 				    <div class="modal-footer">
 				  	    <a href="#" onclick="agregarContacto()" class="btn btn-success" data-dismiss="modal">Si, agregar</a>
-				  	    <a href="#" onclick="closeModalAgregar()" class="btn btn-danger" data-dismiss="modal">No</a>
+				  	    <a href="#" onclick="closeModalAgregar()" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
 				    </div>
 				</div>		
 				

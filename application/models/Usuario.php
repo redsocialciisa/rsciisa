@@ -6,7 +6,6 @@ class Application_Model_Usuario
     private $_usuarioCiisa;
     private $_nombre;
     private $_correo;
-    private $_cv;
     private $_fechaNacimiento;
     private $_emocionId;
     private $_password;
@@ -15,6 +14,7 @@ class Application_Model_Usuario
     private $_sexo;
     private $_foto;
     private $_privacidadPublicacionId;
+    private $_bloqueado;
     
 	/**
 	 * @return the $_id
@@ -42,13 +42,6 @@ class Application_Model_Usuario
 	 */
 	public function getCorreo() {
 		return $this->_correo;
-	}
-
-	/**
-	 * @return the $_cv
-	 */
-	public function getCv() {
-		return $this->_cv;
 	}
 
 	/**
@@ -108,6 +101,13 @@ class Application_Model_Usuario
 	}
 
 	/**
+	 * @return the $_bloqueado
+	 */
+	public function getBloqueado() {
+		return $this->_bloqueado;
+	}
+
+	/**
 	 * @param field_type $_id
 	 */
 	public function setId($_id) {
@@ -133,13 +133,6 @@ class Application_Model_Usuario
 	 */
 	public function setCorreo($_correo) {
 		$this->_correo = $_correo;
-	}
-
-	/**
-	 * @param field_type $_cv
-	 */
-	public function setCv($_cv) {
-		$this->_cv = $_cv;
 	}
 
 	/**
@@ -198,23 +191,15 @@ class Application_Model_Usuario
 		$this->_privacidadPublicacionId = $_privacidadPublicacionId;
 	}
 
-    
-    
-    
+	/**
+	 * @param field_type $_bloqueado
+	 */
+	public function setBloqueado($_bloqueado) {
+		$this->_bloqueado = $_bloqueado;
+	}
 
     
-    
-	    
-    
-
-    
-    
-    
 	
-    
-	
-    
-    
 
 }
 

@@ -2,13 +2,15 @@
  $aut = Zend_Auth::getInstance();
  ?>
  
- <a href="#" onclick="openModalNuevoMensaje()">Nuevo Mensaje</a>
+<br><h1>MENSAJES</h1><br>
+  
+<a href="#" onclick="openModalNuevoMensaje()" class="btn"><i class="icon-envelope"></i> Nuevo Mensaje </a><br><br>
  
  <?php if($this->mensaje_ok == "ok"){
  		echo "<div id='divMensajeDejarParticipar'><div class='alert alert-success'><button class='close' data-dismiss='alert'>×</button>Mensaje enviado exitosamente</div></div>";
  }?>
  
-<div class="tabbable span9">
+<div class="tabbable span9 well">
     <ul class="nav nav-tabs">
     	<li><a href="#misMensajes" data-toggle="tab">Mis Mensajes</a></li>
     </ul>
@@ -59,7 +61,7 @@
  <div class="modal hide" id="myModalNuevoMensaje" style="width: 700px;">
     <div class="modal-header">
     	<button class="close" onclick="closeModalNuevoMensaje()" data-dismiss="modal">×</button>
-    	<h3>Crear mensaje</h3>
+    <h2><img src="/imagenes/proyecto/add.png">&nbsp;&nbsp;&nbsp;Nuevo Mensaje</h2>
     </div>
     <div class="modal-body">
  		<form action="/mensajes/index/" method="post" enctype="<?php echo $this->form->getEnctype(); ?>">

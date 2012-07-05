@@ -4,9 +4,17 @@
 	$objGrupoDao = new Application_Model_GrupoDao();
 ?>
 
-<a href="#"><img src="/imagenes/proyecto/luz.png" width="40px;" onclick="openModalPublicacion()" title="Publicar algo..."></a>
+<table>
+  <tr>
+    <td><h1>MURO GRUPO</h1></td>
+    <td>
+    	<br>
+		&nbsp;&nbsp;<a href="#" id="tooltipLapiz" rel="popover" data-original-title="Publica algo aquí.." onMouseOver="tooltipLapiz()"><img src="/imagenes/proyecto/luz.png" width="40px;" onclick="openModalPublicacion()"></a></div>
+    </td>
+  </tr>
+</table>
 
-<table align="center">
+<table align="center" class="span9">
 	<tr>
 		<td>
 			<div style='width: 500px;'>
@@ -34,9 +42,7 @@
 						<td colspan="2">
 							<label class="wellPublicacionTitulo">
 							<a href="/muro/muro-contacto/id/<?php echo $publicacion->getUsuarioId();?>">
-								<b><?php
-									echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getNombre();
-								?></b>
+								<b><?php echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getNombre(); ?></b>
 							</a>
 							</label>
 						</td>
@@ -223,7 +229,7 @@
 <div class="<?php echo $flagModal;?>" id="myModalPublicacion" style="width: 700px;">
     <div class="modal-header">
     <button class="close" onclick="closeModalPublicacion()" data-dismiss="modal">×</button>
-			Publicación
+	<img src="/imagenes/proyecto/luz.png" width="40px;">&nbsp;&nbsp;&nbsp;<b>Nueva Publicación</b>
     </div>
     <div class="modal-body">
 		
@@ -259,6 +265,7 @@
 									</td>
 									<td>
 										<?php echo $this->formPublicacion->fileFoto;?>
+										&nbsp;&nbsp; <b>sólo se aceptan:</b> jpg, jpeg, png, gif
 										<div id="divErrorSinFoto"></div>
 									</td>
 								</tr>
@@ -449,6 +456,8 @@
 
 	function openModalPost(id,red)
 	{	
+		document.getElementById("divLoaderCompartiendo").innerHTML = "";
+		
 		if(red == 1){//twitter
 			$boton = "<a href='#' onclick='compartirEnTwitter()' class='btn btn-success'>Compartir</a>";
 			document.getElementById("divIcoRed").innerHTML = "<img src='/imagenes/proyecto/tt.png'>";
@@ -669,5 +678,10 @@
 			    
 				});
 		
+	}
+
+	function tooltipLapiz()
+	{
+		$('#tooltipLapiz').popover('show');	
 	}
 </script>

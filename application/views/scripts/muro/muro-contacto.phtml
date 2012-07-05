@@ -6,7 +6,7 @@
 	$objAmigoDao = new Application_Model_AmigoDao();
 	$aut = Zend_Auth::getInstance();
 ?>
-<table>
+<table class="span9">
 	<tr style="background-color:  #46a546">
 		<td align="right">
 		
@@ -29,10 +29,10 @@
 	</tr>
 </table>
 
-
 <?php if($objAmigoDao->sonAmigos($aut->getIdentity()->usu_id, $this->Contacto->getId())){ ?>
 
-<a href="#"><img src="/imagenes/proyecto/luz.png" width="40px;" onclick="openModalPublicacion()" title="Publicar algo..."></a>
+<a href="#" id="tooltipLapiz" rel="popover" data-original-title="Publica algo aquí.." onMouseOver="tooltipLapiz()"><img src="/imagenes/proyecto/luz.png" width="40px;" onclick="openModalPublicacion()"></a></div>
+
 <?php echo $this->listaPublicaciones;?>
 	<?php if(count($this->listaPublicaciones) > 0){ ?>
 				<?php foreach ($this->listaPublicaciones as $publicacion){?>
@@ -231,7 +231,7 @@
 <div class="<?php echo $flagModal;?>" id="myModalPublicacion" style="width: 700px;">
     <div class="modal-header">
     <button class="close" onclick="closeModalPublicacion()" data-dismiss="modal">×</button>
-			Publicación
+	<img src="/imagenes/proyecto/luz.png" width="40px;">&nbsp;&nbsp;&nbsp;<b>Nueva Publicación</b>
     </div>
     <div class="modal-body">
 		
@@ -340,7 +340,7 @@
 <div class="modal hide" id="myModalAgregar" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
-    <img src="/imagenes/proyecto/Info.png">&nbsp;<b>Agregar nuevo contacto</b>
+    <img src="/imagenes/proyecto/Info.png">&nbsp;<b>Agregar Contacto</b>
     </div>
     <div class="modal-body">
 		¿Estás seguro de enviar la solicitud de amistad a: <b> <?php echo $this->Contacto->getNombre();?> </b> ?
@@ -767,6 +767,11 @@
 			    
 				});
 		
+	}
+
+	function tooltipLapiz()
+	{
+		$('#tooltipLapiz').popover('show');	
 	}
 	
 </script>

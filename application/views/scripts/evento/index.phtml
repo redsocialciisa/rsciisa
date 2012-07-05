@@ -1,6 +1,7 @@
-<script type="text/javascript" src="/bootstrap/js/maps.js"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 
-<br>
+<br><h1> EVENTOS </h1><br>
+
 <a href="#" onclick="openModalEvento()" class="btn"><i class="icon-calendar"></i> Crear Evento </a><br><br>
 
   <?php 
@@ -162,7 +163,7 @@
 <div class="modal hide" id="myModalEvento" style="width: 700px;">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">×</button>
-		<h3>Nuevo Evento</h3>
+		<img src="/imagenes/proyecto/add.png">&nbsp;&nbsp;&nbsp;<b>Nuevo Evento</b>
 	</div>
 	<div class="modal-body">
 
@@ -277,7 +278,7 @@
 	style="width: 700px;">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">×</button>
-		Aceptar invitación
+		<h2><img src="/imagenes/proyecto/Info.png">&nbsp;&nbsp;&nbsp;Aceptar Invitación</h2>
 	</div>
 	<div class="modal-body">
 		¿Deseas aceptar la invitación al grupo?
@@ -286,38 +287,38 @@
 	</div>
 	<div class="modal-footer">
 		<a href="#" onclick="aceptarInvitacionEvento()"
-			class="btn btn-success" data-dismiss="modal">Aceptar</a> <a href="#"
-			class="btn btn-success" data-dismiss="modal">Cancelar</a>
+			class="btn btn-success" data-dismiss="modal">Aceptar</a> 
+			<a href="#" class="btn btn-danger" data-dismiss="modal">Rechazar</a>
 	</div>
 </div>
 
 <div class="modal hide" id="myModalCancelarEvento" style="width: 700px;">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">×</button>
-		Cancelar Evento
+		<h2><img src="/imagenes/proyecto/Info.png">&nbsp;&nbsp;&nbsp;Cancelar Evento</h2>
 	</div>
 	<div class="modal-body">
 		<div id="divNombreEventoCancelar"></div> 
 		<input type="hidden" id="hdnEventoCancelarId">
 	</div>
 	<div class="modal-footer">
-		<a href="#" onclick="cancelarEvento()" class="btn btn-success" data-dismiss="modal">Cancelar Evento</a> <a
-			href="#" class="btn btn-error" data-dismiss="modal">Cerrar</a>
+		<a href="#" onclick="cancelarEvento()" class="btn btn-success" data-dismiss="modal">Si, cancelar</a> 
+		<a href="#" class="btn btn-danger" data-dismiss="modal">Cerrar</a>
 	</div>
 </div>
 
 <div class="modal hide" id="myModalRechazarEvento" style="width: 700px;">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">×</button>
-		Rechazar invitación
+		<h2><img src="/imagenes/proyecto/Info.png">&nbsp;&nbsp;&nbsp;Rechazar Invitación</h2>
 	</div>
 	<div class="modal-body">
 		¿Estás seguro de rechazar la invitación?
 		<input type="hidden" id="hdnEventoId">
 	</div>
 	<div class="modal-footer">
-		<a href="#" class="btn btn-success" onclick="rechazarInvitacionEvento()" data-dismiss="modal">Rechazar Invitación</a>
-		<a href="#" class="btn btn-error" data-dismiss="modal">Cerrar</a>
+		<a href="#" class="btn btn-success" onclick="rechazarInvitacionEvento()" data-dismiss="modal">Si, rechazar</a>
+		<a href="#" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
 	</div>
 </div>
 
@@ -473,37 +474,37 @@
 	  
 	  if(trim(document.getElementById("txtNombreEvento").value) == "")
 	  {
-		  htmlErrores = htmlErrores + "<li>Debes ingresar el nombre del evento";
+		  htmlErrores = htmlErrores + "<li><font color='red'>Debes ingresar el nombre del evento</font>";
 		  errores = true;
 	  }
 
 	  if(trim(document.getElementById("txtDescripcion").value) == "")
 	  {
-		  htmlErrores = htmlErrores + "<li>Debes ingresar una breve descripción";
+		  htmlErrores = htmlErrores + "<li><font color='red'>Debes ingresar una breve descripción</font>";
 		  errores = true;
 	  }
 
 	  if(trim(document.getElementById("address").value) == "")
 	  {
-		  htmlErrores = htmlErrores + "<li>Debes ingresar la dirección del evento";
+		  htmlErrores = htmlErrores + "<li><font color='red'>Debes ingresar la dirección del evento</font>";
 		  errores = true;
 	  }
 
 	  if(trim(document.getElementById("txtFechaEvento").value) == "")
 	  {
-		  htmlErrores = htmlErrores + "<li>Debes ingresar la fecha del evento";
+		  htmlErrores = htmlErrores + "<li><font color='red'>Debes ingresar la fecha del evento</font>";
 		  errores = true;
 	  }
 
 	  if(trim(document.getElementById("sltHora").value) == "")
 	  {
-		  htmlErrores = htmlErrores + "<li>Debes ingresar la hora del evento";
+		  htmlErrores = htmlErrores + "<li><font color='red'>Debes ingresar la hora del evento</font>";
 		  errores = true;
 	  }
 
 	  if(trim(document.getElementById("hdnDireccionSeleccionada").value) == "")
 	  {
-		  htmlErrores = htmlErrores + "<li>Debes seleccionar la ubicación específica en el mapa";
+		  htmlErrores = htmlErrores + "<li><font color='red'>Debes seleccionar la ubicación específica en el mapa!</font>";
 		  errores = true;
 	  }
 

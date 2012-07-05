@@ -32,10 +32,66 @@ class AuthController extends Zend_Controller_Action
 	        {
 	        	$objUsuario = $objUsuarioDao->obtenerPorUsuarioCiisa($usuario);
 	        	
-	        	$this->view->estadoAcepta = $objUsuario->getAcepta();
+	        	if($objUsuario->getBloqueado() == 1) //PRIMERO SE VALIDA SI ESTA BLOQUEADO O NO.
+	        	{
+	        	    $this->view->estadoAcepta = 4;
+	        	}else{
+	        		$this->view->estadoAcepta = $objUsuario->getAcepta();
+	        	}
+	        	
 	        }
         }else{ //no existe en ciisa
-            $this->view->estadoAcepta = 2;
+            
+            //VALIDACIÓN ACCESO ADMINISTRADOR
+            $objUsuario = $objUsuarioDao->validarAdministrador($usuario, $password);
+            
+            if($objUsuario != null)
+            {
+                //DEFINICION DATA ADAPTER (1)
+                $autAdapter = new Zend_Auth_Adapter_DbTable(Zend_Db_Table::getDefaultAdapter());
+                $autAdapter->setTableName('rsc_usuarios');
+                $autAdapter->setIdentityColumn('usu_id');
+                $autAdapter->setCredentialColumn('usu_ciisa');
+                
+                //SETEO DE DATA ADAPTER (2)
+                $autAdapter->setIdentity($objUsuario->getId());
+                $autAdapter->setCredential($objUsuario->getUsuarioCiisa());
+                $aut = Zend_Auth::getInstance();
+                $result = $aut->authenticate($autAdapter);
+                
+                //(3)
+                switch ($result->getCode())
+                {
+                	case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
+                		throw new Exception($this->_messages[self::NOT_IDENTITY]);
+                		break;
+                	case Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID:
+                		throw new Exception($this->_messages[self::INVALID_CREDENTIAL]);
+                		break;
+                	case Zend_Auth_Result::SUCCESS:
+                		if ($result->isValid()) {
+                			$data = $autAdapter->getResultRowObject();
+                			$aut->getStorage()->write($data);
+                		} else {
+                			throw new Exception($this->_messages[self::INVALID_USER]);
+                		}
+                		break;
+                	default:
+                		throw new Exception($this->_messages[self::INVALID_LOGIN]);
+                		break;
+                }
+                
+                //se agrega un nuevo campo extra a la session del usuario
+                $aut->getIdentity()->perfil_ciisa = "admin";
+                $aut->getIdentity()->carrera = "";
+                $aut->getIdentity()->twitterArregloDatos = null;
+                $aut->getIdentity()->facebookNombre = null;
+                $aut->getIdentity()->linkedinNombre = null;
+                
+            	$this->view->estadoAcepta = 3;
+            }else{
+            	$this->view->estadoAcepta = 2;
+            }
         }       
        	
     }
@@ -114,7 +170,7 @@ class AuthController extends Zend_Controller_Action
         			$objUsuario->setFoto("user.png");
         			$objUsuario->setAcepta(1);
         			$objUsuario->setEmocionId(1);
-        			$objUsuario->setPerfilId(2);
+        			$objUsuario->setPerfilId(1);
         			$objUsuario->setPrivacidadPublicacionId(7); //por defecto 7 - 'todos'
         			$objUsuario->setId($objUsuarioDao->guardar($objUsuario));
         		}
@@ -129,7 +185,7 @@ class AuthController extends Zend_Controller_Action
         			$objUsuario->setFoto("user.png");
         			$objUsuario->setAcepta(1);
         			$objUsuario->setEmocionId(1);
-        			$objUsuario->setPerfilId(2);
+        			$objUsuario->setPerfilId(1);
         			$objUsuario->setPrivacidadPublicacionId(7); //por defecto 7 - 'todos'
         			$objUsuario->setId($objUsuarioDao->guardar($objUsuario));
         		}
@@ -267,9 +323,6 @@ class AuthController extends Zend_Controller_Action
         	{
         	    $aut->getIdentity()->twitterArregloDatos = null;
         	}    
-        	
-        	
-        	
         	//IMPRIMIR UN DATO
         	//$aut = Zend_Auth::getInstance();
         	//echo $aut->getIdentity()->usu_id; exit;
@@ -285,7 +338,6 @@ class AuthController extends Zend_Controller_Action
         		$this->_redirect('/index/index');
         	}*/
         }
-        
        
     }
     

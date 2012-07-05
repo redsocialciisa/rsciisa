@@ -2,7 +2,7 @@
 <div id="view-content">
 	<div id="divLogin" align="center">
 	
-	<table>
+	<table class="span9">
 		<tr>
 			<td>
 				<img src="/imagenes/proyecto/rsc.png">
@@ -133,8 +133,20 @@
 	  	    <a href="#" onclick="aceptarCondiciones()" class="btn btn-success" data-dismiss="modal">Acepto</a>
 		    <a href="#" onclick="cerrarPopupAceptacion()" class="btn btn-danger"  data-dismiss="modal">No Acepto</a>
 	    </div>
-	</div>	    
+	</div>
 	
+	<div class="modal hide" id="myModalBloqueado">
+	    <div class="modal-header">
+	    <button class="close" data-dismiss="modal">×</button>
+	    <img src="/imagenes/proyecto/block.png">&nbsp;<b>Tu cuenta está bloqueada</b>
+	    </div>
+	    <div class="modal-body">
+			"Estimado usuario, tu cuenta ha sido bloqueada por el Administardor del Sistema. Para mas antecedentes, comunícate directamente a admin@ipciisa.cl"
+	    </div>
+	    <div class="modal-footer">
+	  	    <a href="#" class="btn btn-success" data-dismiss="modal">Cerrar</a>
+	    </div>
+	</div>	    
 </div>
 
 <script type="text/javascript">
@@ -196,6 +208,16 @@
 				            			divError = divError + "</div>";
 
 				            			document.getElementById("error").innerHTML = divError;  	
+				               		}
+
+				               		if(result == 3)
+				               		{
+				               			location.href = '/admin';
+				               		}
+
+				               		if(result == 4)
+				               		{
+				               			$('#myModalBloqueado').modal('show');	
 				               		}
 					              
 					    },  

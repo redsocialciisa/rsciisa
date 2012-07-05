@@ -1,3 +1,6 @@
+ 
+ <br><h1>GRUPOS</h1><br>
+ 
  <div class="tabbable">
     <ul class="nav nav-tabs">
     	<li><a href="#GruposContacto" data-toggle="tab">Contactos del grupo</a></li>
@@ -12,7 +15,7 @@
 				$cantColumna = 3;
 				$countCheck = 0;
 			?>
-				<table width="100%" align="center">
+				<table width="100%" align="center" class="span9">
 					<?php foreach ($this->listaGrupoUsuarios as $usuario){
 							if($columna == 0){ 
 							   echo "<tr>";
@@ -171,14 +174,14 @@
 <div class="modal hide" id="myModalEliminarUsuarioGrupo" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
-    	Eliminar usuarios
+    <h2><img src="/imagenes/proyecto/Info.png">&nbsp;&nbsp;&nbsp;Eliminar Usuarios</h2>
     </div>
     <div class="modal-body">
     	¿Estás seguro de eliminar los usuarios? <div id="divGrupo"></div> 
     </div>
     <div class="modal-footer">
-    	<a class="btn btn-success" href="/grupo/eliminar-usuario-grupo/grupoId/<?php echo $this->grupoId;?>">Si</a>
-  	    <a href="#" class="btn btn-success" data-dismiss="modal">No</a>
+    	<a class="btn btn-success" href="/grupo/eliminar-usuario-grupo/grupoId/<?php echo $this->grupoId;?>">Si, eliminar</a>
+  	    <a href="#" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
     </div>
     
 </div>	
@@ -186,7 +189,7 @@
 <div class="modal hide" id="myModalEliminarUsuarioGrupoNoSelecionado" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
-    	Eliminar usuarios
+    <h2><img src="/imagenes/proyecto/cancel.png">&nbsp;&nbsp;&nbsp;Eliminar Usuarios</h2>
     </div>
     <div class="modal-body">
     	No hay usuarios seleccionados<div id="divGrupo"></div> 
@@ -197,10 +200,10 @@
 </div>	
  
  <input type="hidden" id="hdnCountInvitar" value="<?php echo $countCheck;?>">
-<div class="modal hide" id="myModalInvitarUsuarioGrupo" style="width: 700px;">
+	<div class="modal hide" id="myModalInvitarUsuarioGrupo" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
-    	Invitar usuarios
+    <h2><img src="/imagenes/proyecto/Info.png">&nbsp;&nbsp;&nbsp;Invitar Usuarios</h2>
     </div>
     <div class="modal-body">
     	¿Esta seguro de Invitar a los usuarios? <div id="divGrupo"></div> 
@@ -215,7 +218,7 @@
 <div class="modal hide" id="myModalInvitarUsuarioGrupoNoSelecionado" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
-    	Invitar usuarios
+    <h2><img src="/imagenes/proyecto/Info.png">&nbsp;&nbsp;&nbsp;Invitar Usuarios</h2>
     </div>
     <div class="modal-body">
     	No hay usuarios seleccionados<div id="divGrupo"></div> 
@@ -224,10 +227,6 @@
   	    <a href="#" class="btn btn-success" data-dismiss="modal">Aceptar</a>
     </div>
 </div>	
- 
- 
- 
- 
  
  <script type="text/javascript">
  

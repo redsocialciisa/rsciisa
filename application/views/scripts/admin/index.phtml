@@ -1,0 +1,63 @@
+
+<br><h1> BLOQUEAR/ACTIVAR USUARIOS </h1><br>
+			
+<table class="span9">
+	<tr>
+		<td class="well">
+			<br>
+			<form action="/admin/index" method="post">
+				<?php
+					echo $this->estado; 
+				?>
+				Usuario: &nbsp;&nbsp;
+				<input type="text" size="11" maxlength="10" id="txtUsuario" name="txtUsuario">
+				<br><br>
+				<input type="radio" name="rbtBloquearActivar" value="0"> Activar &nbsp;&nbsp;
+				<input type="radio" name="rbtBloquearActivar" value="1" checked="checked"> Bloquear &nbsp;&nbsp;
+				<br><br>
+				<input type="submit" name="actualizar" value="Actualizar" class="btn btn-success">
+			</form>
+		</td>
+		<td class="well">
+			<?php if($this->usuario != null){ ?>
+				<table>
+					<tr>
+						<td colspan="2" align="center">
+       						    <ul class="thumbnails">
+								    <li class="span3">
+								    <a href="#" class="thumbnail">
+								    	<img src="/imagenes/usuarios/<?php echo $this->usuario->getFoto();?>">
+								    </a>
+								    </li>
+							    </ul>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Usuario: 
+						</td>
+						<td>
+							<?php echo $this->usuario->getUsuarioCiisa();?>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Nombre:
+						</td>
+						<td>
+							<?php echo $this->usuario->getNombre();?>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							correo:
+						</td>
+						<td>
+							<?php echo $this->usuario->getCorreo();?>
+						</td>
+					</tr>
+				</table>
+			<?php } ?>
+		</td>
+	</tr>
+</table>

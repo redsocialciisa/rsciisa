@@ -1,4 +1,4 @@
-<h5>Contactos</h5>
+ <br><h1> CONTACTOS </h1><br>
 
 <div class="tabbable span9">
     <ul class="nav nav-tabs">
@@ -19,14 +19,14 @@
 							if($columna == 0){ 
 							   echo "<tr>";
 							} 
-							echo "<td>";?> 
+							echo "<td valign='top'>";?> 
 							<!-- imprimir el objeto -->
 								<table align="center">
 									<tr>
-										<td align="center">
+										<td>
 											<table>
 												<tr>
-													<td>
+													<td valign="top">
 														<div class="btn-group">
 												          <a href="#" class="btn btn-primary"><i class="icon-user icon-white"></i>Contacto</a>
 												          <a href="#" data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="caret"></span></a>
@@ -46,7 +46,7 @@
 														</div>
 													</td>
 													<td valign="top" class="contMini">
-														<p><?php echo $usuario->getNombre();?></p>
+														<p><a href="/muro/muro-contacto/id/<?php echo $usuario->getId();?>"><?php echo $usuario->getNombre();?></a></p>
 													</td>
 												</tr>
 											</table>
@@ -101,7 +101,7 @@
 <div class="modal hide" id="myModalEliminarContacto" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
-    <img src="/imagenes/proyecto/Info.png">&nbsp;<b>Eliminar contacto</b>
+    <h2><img src="/imagenes/proyecto/Info.png">&nbsp;Eliminar Contacto</h2>
     </div>
     <div class="modal-body">
     <div id="divNombreUsuario"></div>
@@ -116,7 +116,7 @@
 <div class="modal hide" id="myModalRechazarContacto" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
-    <img src="/imagenes/proyecto/Info.png">&nbsp;<b>Rechazar solicitud de contacto</b>
+    <h2><img src="/imagenes/proyecto/Info.png">&nbsp;Rechazar Solicitud De Contacto</h2>
     </div>
     <div class="modal-body">
     <div id="divNombreUsuarioRechazo"></div>

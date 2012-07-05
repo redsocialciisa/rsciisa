@@ -2,9 +2,16 @@
 	$objUsuarioDao2 = new Application_Model_UsuarioDao();
 	$objTipPublicacion = new Application_Model_TipoPublicacionDao();
 ?>
-<center><h1>Mi Muro</h1></center>
 
-<a href="#"><img src="/imagenes/proyecto/luz.png" width="40px;" onclick="openModalPublicacion()" title="Publicar algo..."></a>
+<table>
+  <tr>
+    <td><h1>MI MURO</h1></td>
+    <td>
+    	<br>
+		&nbsp;&nbsp;<a href="#" id="tooltipLapiz" rel="popover" data-original-title="Publica algo aquí.." onMouseOver="tooltipLapiz()"><img src="/imagenes/proyecto/luz.png" width="40px;" onclick="openModalPublicacion()"></a></div>
+    </td>
+  </tr>
+</table>
 
 <?php echo $this->listaPublicaciones;?>
 <?php if(count($this->listaPublicaciones) > 0){ ?>
@@ -89,7 +96,7 @@
 								    			<td valign="top">
 								    				<?php $objUsuario = $objUsuarioDao->obtenerPorId($comentario->getUsuarioId());?>
 								    				<div style='width: 50px;'>
-														<a class="thumbnail"href="/muro/muro-contacto/id/<?php echo $objUsuario->getId();?>">
+														<a class="thumbnail" href="/muro/muro-contacto/id/<?php echo $objUsuario->getId();?>">
 							      							<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $objUsuario->getFoto();?>"></a>
 						         					</div>
 								    			</td>
@@ -205,7 +212,7 @@
 <div class="<?php echo $flagModal;?>" id="myModalPublicacion" style="width: 700px;">
     <div class="modal-header">
     <button class="close" onclick="closeModalPublicacion()" data-dismiss="modal">×</button>
-			Publicación
+	<img src="/imagenes/proyecto/luz.png" width="40px;">&nbsp;&nbsp;&nbsp;<b>Nueva Publicación</b>
     </div>
     <div class="modal-body">
 		
@@ -241,6 +248,7 @@
 									</td>
 									<td>
 										<?php echo $this->formPublicacion->fileFoto;?>
+										&nbsp;&nbsp; <b>sólo se aceptan:</b> jpg, jpeg, png, gif
 										<div id="divErrorSinFoto"></div>
 									</td>
 								</tr>
@@ -403,35 +411,6 @@
 
 	function ValidaUrlYouTube(youTubeID)
 	{
-		if(youTubeID != '') {
-				$.ajax(
-						{
-						async: true,
-						type: 'POST',
-						url: '<?php echo $this->baseUrl()?>/muro/valida-youtube',
-						data: 'youtube=' + youTubeID,	
-						dataTypeString: 'text',
-						
-						beforeSend: function(data){
-			                //selectDestino.html('<label>Cargando...</label>');
-					    },  
-					    success: function(requestData){  
-					               //selectDestino.html(requestData);
-				               		var result = requestData;
-							    	if(result == "error")
-							    	{
-								    	document.getElementById("divErrorVideo").innerHTML =  "<ul type='square'><li>El ID de Youtube no existe :( </ul>";
-								    	document.getElementById("hdnFlagErrorVideo").value = "error";
-							    	}else{
-							    		document.getElementById("divErrorVideo").innerHTML = "";
-							    		document.getElementById("hdnFlagErrorVideo").value = "";
-							    	}
-					    },  
-					    error: function(requestData, strError, strTipoError){          
-					    }
-					    
-						});
-		}
 		
 	}
 
@@ -452,6 +431,8 @@
 
 	function openModalPost(id,red)
 	{	
+		document.getElementById("divLoaderCompartiendo").innerHTML = "";
+		
 		if(red == 1){//twitter
 			$boton = "<a href='#' onclick='compartirEnTwitter()' class='btn btn-success'>Compartir</a>";
 			document.getElementById("divIcoRed").innerHTML = "<img src='/imagenes/proyecto/tt.png'>";
@@ -674,6 +655,11 @@
 			    
 				});
 		
+	}
+
+	function tooltipLapiz()
+	{
+		$('#tooltipLapiz').popover('show');	
 	}
 	
 </script>

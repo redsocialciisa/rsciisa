@@ -2,13 +2,13 @@
 	$objUsuarioDao2 = new Application_Model_UsuarioDao();
 	$objTipPublicacion = new Application_Model_TipoPublicacionDao();
 ?>
-<center><h1>Noticias</h1></center>
+<br><h1> NOTICIAS </h1><br>
  
 <?php echo $this->listaPublicaciones;?>
 <?php if(count($this->listaPublicaciones) > 0){ ?>
 	<?php foreach ($this->listaPublicaciones as $publicacion){?>
 			<div id="publicacion<?php echo $publicacion->getId();?>" align="center" class="span9">
-				<table>
+				<table class="span9">
 					<tr>
 						<td colspan="2">
 							<label class="wellPublicacionTitulo">
@@ -217,7 +217,7 @@
   	<?php } ?>
   	
 <?php } else{ ?>
-			<h4>No se han encontrado publicaciones</h4>
+			<h4>No se han encontrado noticias...</h4>
 <?php }?>
 
 <div class="modal hide" id="myModalPost">
@@ -262,7 +262,7 @@
 <div class="modal hide" id="myModalUnirseGrupo" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
-    		<img src="/imagenes/proyecto/Info.png">&nbsp;<b>Unirse al grupo</b>
+    <img src="/imagenes/proyecto/Info.png">&nbsp;<b>Unirse al Grupo</b>
     </div>
     <div class="modal-body">
 	

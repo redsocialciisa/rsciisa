@@ -70,7 +70,7 @@
 
 				// Datepicker
 				$('#txtFechaNacimiento').datepicker({
-					inline: true,
+					 inline: true,
 			         dateFormat: 'dd-mm-yy',
 			         changeMonth: true,
 			         changeYear: true,
@@ -80,7 +80,10 @@
 			         monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
 			         monthNamesShort: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
 			         yearRange: "1930:2012", 
-			         firstDay: 1	
+			         firstDay: 1,	
+			         showOn: "button",
+					 buttonImage: "/imagenes/proyecto/calendar_zi.png",
+					 buttonImageOnly: true
 				});
 
 			});
@@ -99,7 +102,10 @@
 			         monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
 			         monthNamesShort: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
 			         yearRange: "2012:2020",  
-			         firstDay: 1	
+			         firstDay: 1,	
+			         showOn: "button",
+					 buttonImage: "/imagenes/proyecto/calendar_zi.png",
+					 buttonImageOnly: true
 				});
 
 			});
@@ -159,7 +165,7 @@
     	    <div class="nav-collapse">
 			   			
    	    	<?php if($aut->hasIdentity()){ ?>
-
+				<?php if($aut->getIdentity()->per_id == 1){  ?>
    	    		<?php 
    	    			$datSource = "[";
    	    			$listaUsuarios = $objUsuarioDao->obtenerTodosLosNombres();
@@ -182,8 +188,10 @@
    	    			//$datSource = "[&quot;Claudio Derby&quot;]";
    	    		?>
    	    		
-   	    		<input id="txtBuscador" name="txtBuscador" type="text" data-source="<?php echo $datSource;?>" data-items="10" data-provide="typeahead" style="margin: 0 auto;" class="search-query span2"  placeholder="Buscar..">
+   	    		<input id="txtBuscador" name="txtBuscador" type="text" autocomplete="off" data-source="<?php echo $datSource;?>" data-items="10" data-provide="typeahead" style="margin: 0 auto;" class="search-query span2"  placeholder="Buscar..">
    	    		<button type="button" class="btn" onclick="validarBusqueda()">Ir..</button>
+   	    		
+   	    		<?php } ?>
    	    		
    	    		<ul class="nav">
    	    		<li>
@@ -192,6 +200,8 @@
    	    		<li>
 			  	    <img src="/imagenes/proyecto/logo4.png" width="50%">
 			    </li>
+			    
+			    <?php if($aut->getIdentity()->per_id == 1){  ?>
 			    <li>
 			    <a href="/muro/index/">Muro</a>
 			    </li>
@@ -204,8 +214,10 @@
 	       						<img alt="" src="<?php echo $this->baseUrl()?>/imagenes/minicaras/<?php echo $objEmocionDao->obtenerPorId($aut->getIdentity()->emo_id)->getFoto();?>">
          				</div>
 			    </li>
+			     <?php } ?>
 			    
 			    </ul>
+			   
    	    	
 	    	    <ul class="nav secondary-nav pull-right">
 	    	    	
@@ -219,8 +231,10 @@
 		              </a>
 		              
 		              <ul class="dropdown-menu">
+		              	<?php if($aut->getIdentity()->per_id == 1){  ?>
 		                <li><a href="/perfil/">Mi Perfil</a></li>
 		                <li class="divider"></li>
+		                <?php } ?>
 		                <li><a href="/muro/logout/">Cerrar Sesión</a></li>
 		              </ul>
 		            </li>
@@ -240,9 +254,12 @@
 			<tr>
 				<td valign="top"><!-- style="background-color: #999" -->
 					<div class="col1">
-						<?php if($aut->hasIdentity()){ 
-								echo $this->render('lateral_izquierda.phtml');			
-							   } 
+						<?php 
+							 if($aut->hasIdentity()){
+							      if($aut->getIdentity()->per_id == 1){ 
+									echo $this->render('lateral_izquierda.phtml');
+							      }
+							 }
 						?>
 					</div>
 					<br>
@@ -255,9 +272,11 @@
 				<td valign="top" align="rigth">
 					<div class="col3" align="center">
 						<br>
-						<?php if($aut->hasIdentity()){ 
-								echo $this->render('lateral_derecha.phtml');			
-							   } 
+						<?php if($aut->hasIdentity()){
+						    	 if($aut->getIdentity()->per_id == 1){
+									echo $this->render('lateral_derecha.phtml');
+						    	 }	
+							  } 
 						?>
 						<br>
 					</div>

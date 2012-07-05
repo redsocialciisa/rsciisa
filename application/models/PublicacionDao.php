@@ -250,7 +250,10 @@ class Application_Model_PublicacionDao
     
     	$objUsuarioDao = new Application_Model_UsuarioDao();
     	$objPublicacionGrupoDao = new Application_Model_PublicacionGrupoDao();
+    	$objPublicacionEventoDao = new Application_Model_PublicacionEventoDao();
+    	
     	$objGrupoDao = new Application_Model_GrupoDao();
+    	$objEventoDao = new Application_Model_EventoDao();
     
     	$where = 'tip_pub_id IN (4,5)';
     	$order = 'pub_fecha desc';
@@ -261,10 +264,22 @@ class Application_Model_PublicacionDao
     
     		foreach ($resultado as $item)
     		{
-    		    if($objGrupoDao->obtenerPorId($objPublicacionGrupoDao->obtenerPorPublicacionId($item->pub_id)->getGrupoId())->getTipoGrupoId() == 0)
+    		    if($item->tip_pub_id == 5)
     		    {
-    				$lista->attach($this->obtenerPorId($item->pub_id));
+    		    	if($objGrupoDao->obtenerPorId($objPublicacionGrupoDao->obtenerPorPublicacionId($item->pub_id)->getGrupoId())->getTipoGrupoId() == 0)
+    		    	{
+    					$lista->attach($this->obtenerPorId($item->pub_id));
+    		    	}
     		    }
+    		    
+    		    if($item->tip_pub_id == 4)
+    		    {
+    		        if($objEventoDao->obtenerPorId($objPublicacionEventoDao->obtenerPorPublicacionId($item->pub_id)->getEventoId())->getTipoEventoId() == 0)
+    		    	{
+    		    		$lista->attach($this->obtenerPorId($item->pub_id));
+    		    	}
+    		    }
+    		    
     		}
     	}
     	

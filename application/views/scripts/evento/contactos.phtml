@@ -1,8 +1,11 @@
-<script type="text/javascript" src="/bootstrap/js/maps.js"></script>
+<script type="text/javascript" src="/bootstrap/js/gmaps.js"></script>
  
  <?php
  	$aut = Zend_Auth::getInstance();
  ?>
+ 
+<br><h1> EVENTO </h1><br>
+ 
  <table class="span9" style="width: 100%">
    		<tr>
    			<td>
@@ -268,21 +271,21 @@
  <div class="modal hide" id="myModalInvitar" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
-    	Invitar usuarios
+    <h2><img src="/imagenes/proyecto/Info.png">&nbsp;&nbsp;&nbsp;Invitar Usuarios</h2>
     </div>
     <div class="modal-body">
     	¿Esta seguro de Invitar a los usuarios? <div id="divEvento"></div> 
     </div>
     <div class="modal-footer">
-    	<a class="btn btn-success" href="/evento/invitar-usuario-evento/id/<?php echo $this->id;?>">Si</a>
-  	    <a href="#" class="btn btn-success" data-dismiss="modal">No</a>
+    	<a class="btn btn-success" href="/evento/invitar-usuario-evento/id/<?php echo $this->id;?>">Si, invitar</a>
+  	    <a href="#" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
     </div>
 </div>	
 
 <div class="modal hide" id="myModalInvitarSinUsuarios" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
-    	Invitar usuarios
+    <h2><img src="/imagenes/proyecto/cancel.png">&nbsp;&nbsp;&nbsp;Ningún Usuario Seleccionado</h2>
     </div>
     <div class="modal-body">
     	No hay usuarios seleccionados<div id="divGrupo"></div> 
@@ -295,21 +298,21 @@
 <div class="modal hide" id="myModalEliminarUsuariosEvento" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
-    	Eliminar usuarios
+    <h2><img src="/imagenes/proyecto/Info.png">&nbsp;&nbsp;&nbsp;Eliminar Usuarios</h2>
     </div>
     <div class="modal-body">
     	¿Estas seguro de eliminar a los usuarios seleccionados?
     </div>
     <div class="modal-footer">
-  	    <a href="#" onclick="eliminarContactosDelEvento(<?php echo $this->id;?>)" class="btn btn-success" data-dismiss="modal">Si, Eliminar</a>
-  	    <a href="#" class="btn" data-dismiss="modal">Cerrar</a>
+  	    <a href="#" onclick="eliminarContactosDelEvento(<?php echo $this->id;?>)" class="btn btn-success" data-dismiss="modal">Si, eliminar</a>
+  	    <a href="#" class="btn btn-danger" data-dismiss="modal">Cerrar</a>
     </div>
 </div>
 
 <div class="modal hide" id="myModalEliminarUsuarioGrupoNoSelecionado" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
-    	No hay usuarios seleccionados
+    <h2><img src="/imagenes/proyecto/cancel.png">&nbsp;&nbsp;&nbsp;Ningún Usuario Seleccionado</h2>
     </div>
     <div class="modal-body">
     	No has seleccionado a ningún usuario para eliminar.

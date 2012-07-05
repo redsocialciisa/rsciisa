@@ -41,7 +41,7 @@ class Application_Model_PublicacionEventoDao
     
     		$publicacionEvento = new Application_Model_PublicacionEvento();
     		 
-    		$$publicacionEvento->setId($resultado->current()->pub_eve_id);
+    		$publicacionEvento->setId($resultado->current()->pub_eve_id);
     		$publicacionEvento->setPublicacionId($resultado->current()->pub_id);
     		$publicacionEvento->setEventoId($resultado->current()->eve_id);
     

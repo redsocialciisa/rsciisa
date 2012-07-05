@@ -14,7 +14,7 @@ class Application_Form_FormPerfil extends Zend_Form
         $listaPrivacidad = $objPrivacidadPublicacion->obtenerTodos();
         
         $fileFoto = new Zend_Form_Element_File('fileFoto');
-        $fileFoto->setLabel('Foto Perfil: ')
+        $fileFoto->setLabel('Foto Perfil: (jpg, jpeg, png, gif)')
 		        ->addValidator('IsImage')
 		        ->setAttrib('class', 'span4')
 		        ->setMaxFileSize(2097152) // 2mb

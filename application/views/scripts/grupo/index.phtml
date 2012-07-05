@@ -2,13 +2,14 @@
  $aut = Zend_Auth::getInstance();
  ?>
  
- <a href="#" onclick="openModalGrupo()">Crear Grupo</a>
+ <br><h1> GRUPOS </h1><br>
+ <a href="#" onclick="openModalGrupo()" class="btn"><i class="icon-user"></i><i class="icon-user"></i> Crear Grupo </a><br><br>
  
  <?php if($this->mensaje_ok == "ok"){
  		echo "<div id='divMensajeDejarParticipar'><div class='alert alert-success'><button class='close' data-dismiss='alert'>×</button>Grupo creado exitosamente</div></div>";
  }?>
  
- <div class="tabbable span9">
+ <div class="tabbable span9 well">
     <ul class="nav nav-tabs">
     	<li><a href="#misGruposParticipo" data-toggle="tab">Mis grupos en que participo</a></li>
     	<li><a href="#misGruposInvitaciones" data-toggle="tab">Invitaciones</a></li>
@@ -103,7 +104,7 @@
 <div class="<?php echo $flag;?>" id="myModalGrupo" style="width: 700px;">
     <div class="modal-header">
     <button class="close" onclick="closeModalGrupo()" data-dismiss="modal">×</button>
-    		<h3>Crear Grupo</h3>
+    <img src="/imagenes/proyecto/add.png">&nbsp;&nbsp;&nbsp;<b>Nuevo Grupo</b>
     </div>
     <div class="modal-body">
     	<form action="/grupo/index/" method="post" enctype="<?php echo $this->form->getEnctype(); ?>">
@@ -124,63 +125,62 @@
 <div class="modal hide" id="myModalBorrar" style="width: 700px;">
     <div class="modal-header">
     <button class="close" onclick="closeModalBorrar()" data-dismiss="modal">×</button>
-    	Eliminar grupo
+    <h2><img src="/imagenes/proyecto/Info.png">&nbsp;&nbsp;&nbsp;Eliminar Grupo</h2>
     </div>
         <div class="modal-body">
     		¿Estás seguro de eliminar el grupo? <div id="divGrupo"></div> 
     	<input type="hidden" id="hdnGrupoId">
 	    </div>
 	    <div class="modal-footer">
-	    	<a href="#" onclick="eliminarGrupo()" class="btn btn-success" data-dismiss="modal">Si</a>
-	  	    <a href="#" onclick="closeModalBorrar()" class="btn btn-success" data-dismiss="modal">No</a>
+	    	<a href="#" onclick="eliminarGrupo()" class="btn btn-success" data-dismiss="modal">Si, eliminar</a>
+	  	    <a href="#" onclick="closeModalBorrar()" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
 	    </div>
 </div>	
 
 <div class="modal hide" id="myModalAceptarInvitacion" style="width: 700px;">
     <div class="modal-header">
     <button class="close" onclick="closeModalBorrar()" data-dismiss="modal">×</button>
-    	Aceptar invitación
+    <h2><img src="/imagenes/proyecto/Info.png">&nbsp;&nbsp;&nbsp;Aceptar Invitación</h2>
     </div>
         <div class="modal-body">
     		¿Deseas aceptar la invitación al grupo? <div id="divGrupo"></div> 
 	    	<input type="hidden" id="hdnInvitacionId">
 	    </div>
 	    <div class="modal-footer">
-	    	<a href="#" onclick="aceptarInvitacionGrupo()" class="btn btn-success" data-dismiss="modal">Aceptar</a>
-	  	    <a href="#" onclick="closeModalAceptarInvitacion()" class="btn btn-success" data-dismiss="modal">Cancelar</a>
+	    	<a href="#" onclick="aceptarInvitacionGrupo()" class="btn btn-success" data-dismiss="modal">Si, aceptar</a>
+	  	    <a href="#" onclick="closeModalAceptarInvitacion()" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
 	    </div>
 </div>	
 
 <div class="modal hide" id="myModalDejarParticipar" style="width: 700px;">
     <div class="modal-header">
     <button class="close" onclick="closeModalDejarParticipar()" data-dismiss="modal">×</button>
-    	Dejar de participar en grupo
+    <img src="/imagenes/proyecto/Info.png">&nbsp;&nbsp;&nbsp;<b>Dejar el Grupo</b>
     </div>
         <div class="modal-body">
     		¿Estás seguro de dejar de participar en el grupo? <div id="divGrupo"></div> 
     	<input type="hidden" id="hdnGrupoId">
 	    </div>
 	    <div class="modal-footer">
-	    	<a href="#" onclick="dejarParticiparGrupo()" class="btn btn-success" data-dismiss="modal">Si</a>
-	  	    <a href="#" onclick="closeModalDejarParticipar()" class="btn btn-success" data-dismiss="modal">No</a>
+	    	<a href="#" onclick="dejarParticiparGrupo()" class="btn btn-success" data-dismiss="modal">Si, dejar</a>
+	  	    <a href="#" onclick="closeModalDejarParticipar()" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
 	    </div>
 </div>	
 
 <div class="modal hide" id="myModalRechazarInvitacion" style="width: 700px;">
     <div class="modal-header">
     <button class="close" onclick="closeModalBorrar()" data-dismiss="modal">×</button>
-    	Rechazar invitacion
+    <img src="/imagenes/proyecto/Info.png">&nbsp;&nbsp;&nbsp;<b>Rechazar Invitacion</b>
     </div>
         <div class="modal-body">
     		¿Deseas rechazar la invitacion al grupo? <div id="divGrupo"></div> 
 	    	<input type="hidden" id="hdnInvitacionId">
 	    </div>
 	    <div class="modal-footer">
-	    	<a href="#" onclick="rechazarInvitacionGrupo()" class="btn btn-success" data-dismiss="modal">Aceptar</a>
-	  	    <a href="#" onclick="closeModalRechazarInvitacion()" class="btn btn-success" data-dismiss="modal">Cancelar</a>
+	    	<a href="#" onclick="rechazarInvitacionGrupo()" class="btn btn-success" data-dismiss="modal">Si, rechazar</a>
+	  	    <a href="#" onclick="closeModalRechazarInvitacion()" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
 	    </div>
 </div>	
-
 
 <script type="text/javascript">
 	function openModalGrupo()
