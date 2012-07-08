@@ -37,6 +37,9 @@ class ContactoController extends Zend_Controller_Action
         $this->_helper->layout()->disableLayout();
         $objAmigoDao = new Application_Model_AmigoDao();
         $objAmigo = new Application_Model_Amigo();
+        $objNotificacion = new Application_Model_Notificacion();
+        $objNotificacionDao = new Application_Model_NotificacionDao();
+        
         
         $aut = Zend_Auth::getInstance();
         $idContacto = $this->getRequest()->getParam('usuario'); //id del contacto
@@ -47,7 +50,13 @@ class ContactoController extends Zend_Controller_Action
         $objAmigo->setFechaSolicitud($now->format('Y-m-d H:i:s'));
         $objAmigo->setEstadoAmistad(1);//pendiente
         $objAmigo->setUsuarioId($aut->getIdentity()->usu_id);
-        
+        $textoInv = $aut->getIdentity()->usu_nombre. ' te ha enviado una solicitud de amistad';
+        $objNotificacion->setTipoNotificacionId(3);
+        $objNotificacion->setVista(0);
+        $objNotificacion->setFecha($now->format('Y-m-d H:i:s'));
+        $objNotificacion->setUsuarioId($idContacto);
+        $objNotificacion->setTexto($textoInv);
+        $objNotificacionDao->guardar($objNotificacion);
         $objAmigoDao->guardarSolicitud($objAmigo);
         
         $this->view->ok = "ok";
@@ -69,19 +78,30 @@ class ContactoController extends Zend_Controller_Action
     public function aceptarAction()
     {
     	$this->_helper->layout()->disableLayout();
+    	$now = new DateTime();
     	$objAmigoDao = new Application_Model_AmigoDao();
     	$objAmigo = new Application_Model_Amigo();
-    
+    	$objNotificacion = new Application_Model_Notificacion();
+    	$objNotificacionDao = new Application_Model_NotificacionDao();
+    	$objUsuarioDao = new Application_Model_UsuarioDao();
+    	
+    	
     	$aut = Zend_Auth::getInstance();
     	$idContacto = $this->getRequest()->getParam('usuario'); //id del contacto
-    	$now = new DateTime();
+    	#$objUsuario = $objUsuarioDao->obtenerPorId($idContacto);
     	
     	//1
     	$objAmigo->setFechaAmistad($now->format('Y-m-d H:i:s'));
     	$objAmigo->setEstadoAmistad(2);
     	$objAmigo->setAmigoUsuarioId($aut->getIdentity()->usu_id);
     	$objAmigo->setUsuarioId($idContacto);
-    	
+    	$textoInv = $aut->getIdentity()->usu_nombre. ' ha aceptado tu solicitud de amistad';
+    	$objNotificacion->setTipoNotificacionId(4);
+    	$objNotificacion->setVista(0);
+    	$objNotificacion->setFecha($now->format('Y-m-d H:i:s'));
+    	$objNotificacion->setUsuarioId($idContacto);
+    	$objNotificacion->setTexto($textoInv);
+    	$objNotificacionDao->guardar($objNotificacion);
     	$objAmigoDao->confirmarAmistad($objAmigo);
     	
     	//2: automatica

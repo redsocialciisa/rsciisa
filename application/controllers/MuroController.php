@@ -50,8 +50,13 @@ class MuroController extends Zend_Controller_Action
         $objComentario = new Application_Model_Comentario();
         $objComentarioDao = new Application_Model_ComentarioDao();
         $objUsuarioDao = new Application_Model_UsuarioDao();
+        $objNotificacion = new Application_Model_Notificacion();
+        $objNotificacionDao = new Application_Model_NotificacionDao();
+        $objPublicacionDao1 = new Application_Model_PublicacionDao();
         
-        //se registra el omentario
+        $objPublicacion = $objPublicacionDao1->obtenerPorId($idPublicacion);
+        
+        //se registra el comentario
         $objComentario->setPublicacionId($idPublicacion);
         $objComentario->setTexto($texto);
         $objComentario->setUsuarioId($aut->getIdentity()->usu_id);
@@ -59,8 +64,17 @@ class MuroController extends Zend_Controller_Action
         $now = new DateTime();
         $objComentario->setFecha($now->format('Y-m-d H:i:s'));     
         
+        if ($objPublicacion->getUsuarioId() != $aut->getIdentity()->usu_id)
+        {
+	        $textoInv = $aut->getIdentity()->usu_nombre. ' ha comentado tu publicación';
+	        $objNotificacion->setTipoNotificacionId(0);
+	        $objNotificacion->setVista(0);
+	        $objNotificacion->setFecha($now->format('Y-m-d H:i:s'));
+	        $objNotificacion->setUsuarioId($objPublicacion->getUsuarioId());
+	        $objNotificacion->setTexto($textoInv);
+	        $objNotificacionDao->guardar($objNotificacion);
+        }
         $idCom = $objComentarioDao->guardar($objComentario);
-        
         $listaComentarios = $objComentarioDao->obtenerPorPublicacionId($idPublicacion);
         
         $htmlComentarios = "<div id='divComentariosPublicacion$idPublicacion'>";
@@ -253,6 +267,8 @@ class MuroController extends Zend_Controller_Action
     		{
 				$objPublicacion = new Application_Model_Publicacion();
         	    $objPublicacionDao = new Application_Model_PublicacionDao();
+        	    $objNotificacion = new Application_Model_Notificacion();
+        	    $objNotificacionDao = new Application_Model_NotificacionDao();
         	    
         		$aut = Zend_Auth::getInstance();
         		
@@ -316,8 +332,15 @@ class MuroController extends Zend_Controller_Action
 	        		copy($foto_tmp, "/var/www/rsciisa/public/imagenes/fotos/".$fechahora."_".$foto_name);
         		}
         		
+        		$textoInv = $aut->getIdentity()->usu_nombre. ' ha publicado en tu muro';
+        		$objNotificacion->setTipoNotificacionId(6);
+        		$objNotificacion->setVista(0);
+        		$objNotificacion->setFecha($fechahora);
+        		$objNotificacion->setUsuarioId($idUsuario);
+        		$objNotificacion->setTexto($textoInv);
         		$objPublicacionDao->guardar($objPublicacion);
-				    		    
+        		$objNotificacionDao->guardar($objNotificacion);
+        		
     		    $this->view->success = "success";
     		    $this->_redirect('/muro/muro-contacto/id/'.$idUsuario);
     		}else{

@@ -156,6 +156,8 @@
 	$aut = Zend_Auth::getInstance();
 	$objEmocionDao = new Application_Model_EmocionDao();
 	$objUsuarioDao = new Application_Model_UsuarioDao();
+	$objNotificacionDao = new Application_Model_NotificacionDao();
+	
 ?>
 
 <form action="/contacto/busqueda/" id="formBusqueda" method="post">
@@ -224,7 +226,18 @@
 			   
    	    	
 	    	    <ul class="nav secondary-nav pull-right">
-	    	    	
+			   		<li>
+			    		<a href="/notificacion/" >Notificaciones: 
+			    			<?php 
+			    				if ($objNotificacionDao->cantidadNotificacionesNuevas($aut->getIdentity()->usu_id) == 0)
+			    				{    
+			    			?>
+			    				<span class="badge"><?php echo $objNotificacionDao->cantidadNotificacionesNuevas($aut->getIdentity()->usu_id); ?></span>
+			    			<?php } else {?>
+				    			<span class="badge badge-important"><?php echo $objNotificacionDao->cantidadNotificacionesNuevas($aut->getIdentity()->usu_id); ?></span>
+				    		<?php }?>	
+			    		</a>
+			    	</li>	    	    	
 					<li class="dropdown">
 		              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
 		              			<i class="icon-user icon-white"></i>
@@ -273,7 +286,7 @@
 						<?php echo $this->layout()->content; ?>
 					</div>
 				</td>
-				<td valign="top" align="rigth">
+				<td valign="top" align="right">
 					<div class="col3" align="center">
 						<br>
 						<?php if($aut->hasIdentity()){

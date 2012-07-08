@@ -166,19 +166,32 @@ class EventoController extends Zend_Controller_Action
     public function invitarUsuarioEventoAction()
     {
     
-    	$eventoId = $this->getRequest()->getParam('id');
+        $aut = Zend_Auth::getInstance();
+        $eventoId = $this->getRequest()->getParam('id');
     	$fecha = new DateTime();
     	$fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
+    	$objEventoDao = new Application_Model_EventoDao();
     	$objInvitacionDao = new Application_Model_InvitacionDao();
+    	$objNotificacion = new Application_Model_Notificacion();
+    	$objNotificacionDao = new Application_Model_NotificacionDao();
     	$listaInvitacion = $objInvitacionDao->obtenerEventoPorInvitar($eventoId);
     
     	foreach ($listaInvitacion as $item)
     	{
-    		$id = $item->getId();
+    		$objEvento = $objEventoDao->obtenerPorId($eventoId);
+    	    
+    	    $id = $item->getId();
     		$item->setId($id);
     		$item->setFecha($fechahora);
     		$item->setEstado(2);
+    		$textoInv = 'Has sido invidado al evento '.$objEvento->getNombre().' por '.$aut->getIdentity()->usu_nombre;
+    		$objNotificacion->setTipoNotificacionId(1);
+    		$objNotificacion->setVista(0);
+    		$objNotificacion->setFecha($fechahora);
+    		$objNotificacion->setUsuarioId($item->getUsuarioId());
+    		$objNotificacion->setTexto($textoInv);
     		$objInvitacionDao->guardar($item);
+    		$objNotificacionDao->guardar($objNotificacion);
     	}
     	 
     	$this->_redirect('/evento/index/si/ok');

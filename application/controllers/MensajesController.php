@@ -22,6 +22,9 @@ class MensajesController extends Zend_Controller_Action
         	$formData = $this->_request->getPost();
         	if($form->isValid($this->_getAllParams()))
         	{
+        	    $objNotificacion = new Application_Model_Notificacion();
+        	    $objNotificacionDao = new Application_Model_NotificacionDao();
+        	    
         	    $usuPara = $usuarioDao->obtenerPorNombreExacto($this->getRequest()->getParam('txtPara'));
         	    
         	    if ($usuPara != null)
@@ -31,7 +34,14 @@ class MensajesController extends Zend_Controller_Action
 	        	    $objMensaje->setPara($usuPara->getId());
 	        	    $objMensaje->setFecha($fechahora);
 	        	    $objMensaje->setTexto($this->getRequest()->getParam('txtTextoMensaje'));
+	        	    $textoInv = $aut->getIdentity()->usu_nombre.' te ha enviado un mensaje';
+	        	    $objNotificacion->setTipoNotificacionId(5);
+	        	    $objNotificacion->setVista(0);
+	        	    $objNotificacion->setFecha($fechahora);
+	        	    $objNotificacion->setUsuarioId($usuPara->getId());
+	        	    $objNotificacion->setTexto($textoInv);
 	        	    $objMensajeDao->guardar($objMensaje);
+	        	    $objNotificacionDao->guardar($objNotificacion);
 	        	    
 	        	    $this->view->mensaje_ok = "ok";
         	    }
@@ -69,6 +79,9 @@ class MensajesController extends Zend_Controller_Action
         
         if($this->getRequest()->isPost())
         {
+            $objNotificacion = new Application_Model_Notificacion();
+            $objNotificacionDao = new Application_Model_NotificacionDao();
+            
         	$formData = $this->_request->getPost();
         	if($form->isValid($this->_getAllParams()))
         	{
@@ -77,7 +90,14 @@ class MensajesController extends Zend_Controller_Action
         		$objMensaje->setPara($usu_id_menu);
         		$objMensaje->setFecha($fechahora);
         		$objMensaje->setTexto($this->getRequest()->getParam('txtTextoResponder'));
+        		$textoInv = $aut->getIdentity()->usu_nombre.' te ha enviado un mensaje';
+        		$objNotificacion->setTipoNotificacionId(5);
+        		$objNotificacion->setVista(0);
+        		$objNotificacion->setFecha($fechahora);
+        		$objNotificacion->setUsuarioId($usu_id_menu);
+        		$objNotificacion->setTexto($textoInv);
         		$objMensajeDao->guardar($objMensaje);
+        		$objNotificacionDao->guardar($objNotificacion);
         	}
         }
         
