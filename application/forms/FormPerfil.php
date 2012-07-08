@@ -14,11 +14,11 @@ class Application_Form_FormPerfil extends Zend_Form
         $listaPrivacidad = $objPrivacidadPublicacion->obtenerTodos();
         
         $fileFoto = new Zend_Form_Element_File('fileFoto');
-        $fileFoto->setLabel('Foto Perfil: (jpg, jpeg, png, gif)')
+        $fileFoto->setLabel('Foto Perfil: (jpg, jpeg, png)')
 		        ->addValidator('IsImage')
 		        ->setAttrib('class', 'span4')
-		        ->setMaxFileSize(2097152) // 2mb
-		        ->addValidator('Extension',false,array('jpg','jpeg','png','gif'));
+		        ->setMaxFileSize(7097152) // 2mb
+		        ->addValidator('Extension',false,array('jpg','jpeg','png'));
         
         $nombre = new Zend_Form_Element_Text('txtNombre');
         $nombre->setLabel('Nombre: ')
@@ -29,6 +29,13 @@ class Application_Form_FormPerfil extends Zend_Form
         	   ->setAttrib('readonly', true)
         	   ->clearErrorMessages()
                ->addErrorMessage('Debes ingresar el nombre de usuario');
+        
+        $biografia = new Zend_Form_Element_Textarea('txtBiografia');
+        $biografia->setLabel('Biografía breve: ')
+	        ->setValue($objUsuario->getBiografia())
+	        ->setAttrib('onkeypress','ValidarCaracteres(this, 119)')
+	        ->setAttrib('class', 'span4')
+	        ->setAttrib('rows', '3');
         
         $carrera = new Zend_Form_Element_Text('txtCarrera');
         $carrera->setLabel('Carrera: ')
@@ -76,10 +83,11 @@ class Application_Form_FormPerfil extends Zend_Form
         
         $buttonEnviar = $this->createElement('submit', 'enviar');
         $buttonEnviar->setLabel('Actualizar mis datos')
-        			 ->setAttrib('class', 'label label-success');
+        			 ->setAttrib('class', 'btn btn-success');
         
         $this->addElement($fileFoto);
         $this->addElement($nombre);
+        $this->addElement($biografia);
         if($aut->getIdentity()->perfil_ciisa == "ALUMNO" || $aut->getIdentity()->perfil_ciisa == "EX-ALUMNO")
         {
         	$this->addElement($carrera);

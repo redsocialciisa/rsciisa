@@ -58,7 +58,6 @@ class EventoController extends Zend_Controller_Action
 	    	$objUsuarioEvento->setUsuarioId($aut->getIdentity()->usu_id);
 	    	$objUsuarioEvento->setEventoId($idEvento);
 	    	$objUsuarioEvento->setEliminar(0);
-	    	$objUsuarioEvento->setFechaAsiste($fechahora);
 	    	$objUsuarioEventoDao->guardar($objUsuarioEvento);#GRABA
 	    	
 	    	$objPublicacionEvento->setPublicacionId($idPublicacion);
@@ -200,10 +199,8 @@ class EventoController extends Zend_Controller_Action
     	$objUsuarioEvento = new Application_Model_UsuarioEvento();
     	$objUsuarioEventoDao = new Application_Model_UsuarioEventoDao();
     
-    	$objUsuarioEvento->setFechaAsiste($fechahora);
     	$objUsuarioEvento->setUsuarioId($objInvitacion->getUsuarioId());
     	$objUsuarioEvento->setEventoId($objInvitacion->getIdActividad());
-    	$objUsuarioEvento->setAsiste(1);
     	$objUsuarioEventoDao->guardar($objUsuarioEvento); 
     
     	$id = $objInvitacion->getId();

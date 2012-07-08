@@ -72,7 +72,7 @@ class MuroController extends Zend_Controller_Action
                 $htmlComentarios .= "<table><tr><td valign='top'>";
                 
                 $htmlComentarios .= "<div style='width: 50px;'><a class='thumbnail'>";  
-                $htmlComentarios .= "<img src='/imagenes/usuarios/".$objUsuario->getFoto()."'>";
+                $htmlComentarios .= "<img src='/imagenes/usuarios/icono/".$objUsuario->getFoto()."'>";
                 $htmlComentarios .= "</div>";
                 
                 $htmlComentarios .= "</td><td valign='top'>";
@@ -472,7 +472,7 @@ class MuroController extends Zend_Controller_Action
         		$htmlComentarios .= "<table><tr><td valign='top'>";
         
         		$htmlComentarios .= "<div style='width: 50px;'><a class='thumbnail'>";
-        		$htmlComentarios .= "<img src='/imagenes/usuarios/".$objUsuario->getFoto()."'>";
+        		$htmlComentarios .= "<img src='/imagenes/usuarios/icono/".$objUsuario->getFoto()."'>";
         		$htmlComentarios .= "</div>";
         
         		$htmlComentarios .= "</td><td valign='top'>";

@@ -33,6 +33,7 @@ class Application_Model_UsuarioDao
     		$objUsuario->setFoto($resultado->current()->usu_foto);
     		$objUsuario->setPrivacidadPublicacionId($resultado->current()->pri_pub_id);
     		$objUsuario->setBloqueado($resultado->current()->usu_bloqueado);
+    		$objUsuario->setBiografia($resultado->current()->usu_biografia);
     	}
     	return $objUsuario;
     }
@@ -98,6 +99,7 @@ class Application_Model_UsuarioDao
     			'usu_fecha_nacimiento' => $usuario->getFechaNacimiento(),
     			'usu_foto' => $usuario->getFoto(),
     			'pri_pub_id' => $usuario->getPrivacidadPublicacionId(),
+    	        'usu_biografia' => $usuario->getBiografia(),
     	        'emo_id' => $usuario->getPrivacidadPublicacionId()
     	);
     

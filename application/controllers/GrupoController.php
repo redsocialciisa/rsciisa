@@ -54,16 +54,14 @@ class GrupoController extends Zend_Controller_Action
         		$objPublicacion->setFecha($fechahora);
         		$objPublicacion->setFoto($fechahora."_".$foto_name);
         		$objPublicacion->setPrivacidadId(7);
-        		$objPublicacion->setTexto($this->getRequest()->getParam('txtDescripcion'));
+        		$objPublicacion->setTexto($this->getRequest()->getParam('txtNombre'));
         		$objPublicacion->setUsuarioPara($aut->getIdentity()->usu_id);
         		$objPublicacion->setTipoId(5);
         		$objPublicacion->setUsuarioId($aut->getIdentity()->usu_id);
         		$idPublicacion = $objPublicacionDao->guardar($objPublicacion);
         		
-        		$objUsuarioGrupo->setParticipa(0);
         		$objUsuarioGrupo->setGrupoId($idGrupo);
         		$objUsuarioGrupo->setUsuarioId($aut->getIdentity()->usu_id);
-        		$objUsuarioGrupo->setFechaParticipa($fechahora);
         		$objUsuarioGrupoDao->guardar($objUsuarioGrupo);
         		
         		$objPublicacionGrupo->setGrupoId($idGrupo);
@@ -340,10 +338,8 @@ class GrupoController extends Zend_Controller_Action
         $objUsuarioGrupo = new Application_Model_UsuarioGrupo();
         $objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
         
-        $objUsuarioGrupo->setFechaParticipa($fechahora);
         $objUsuarioGrupo->setUsuarioId($objInvitacion->getUsuarioId());
         $objUsuarioGrupo->setGrupoId($objInvitacion->getIdActividad());
-        $objUsuarioGrupo->setParticipa(1);
         $objUsuarioGrupoDao->guardar($objUsuarioGrupo);
         
         $id = $objInvitacion->getId();
@@ -391,10 +387,6 @@ class GrupoController extends Zend_Controller_Action
     	$objUsuarioGrupo->setParticipa(1);
     	$objUsuarioGrupo->setGrupoId($objGrupo);
     	$objUsuarioGrupo->setUsuarioId($aut->getIdentity()->usu_id);
-    
-    	$fecha = new DateTime();
-    	$fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
-    	$objUsuarioGrupo->setFechaParticipa($fechahora);
     
     	$objUsuarioGrupoDao->guardar($objUsuarioGrupo);
     

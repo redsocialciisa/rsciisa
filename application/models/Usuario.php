@@ -15,8 +15,8 @@ class Application_Model_Usuario
     private $_foto;
     private $_privacidadPublicacionId;
     private $_bloqueado;
+    private $_biografia;
     
-
 	/**
 	 * @return the $_id
 	 */
@@ -109,6 +109,13 @@ class Application_Model_Usuario
 	}
 
 	/**
+	 * @return the $_biografia
+	 */
+	public function getBiografia() {
+		return $this->_biografia;
+	}
+
+	/**
 	 * @param field_type $_id
 	 */
 	public function setId($_id) {
@@ -192,7 +199,6 @@ class Application_Model_Usuario
 		$this->_privacidadPublicacionId = $_privacidadPublicacionId;
 	}
 
-
 	/**
 	 * @param field_type $_bloqueado
 	 */
@@ -200,8 +206,15 @@ class Application_Model_Usuario
 		$this->_bloqueado = $_bloqueado;
 	}
 
-    
-	
+	/**
+	 * @param field_type $_biografia
+	 */
+	public function setBiografia($_biografia) {
+		$this->_biografia = $_biografia;
+	}
 
+	
+    
+    
 }
 

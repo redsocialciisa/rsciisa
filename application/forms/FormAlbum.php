@@ -1,6 +1,6 @@
 <?php
 
-class Application_Form_FormEditarGrupo extends Zend_Form
+class Application_Form_FormAlbum extends Zend_Form
 {
 
     public function init()
@@ -13,40 +13,46 @@ class Application_Form_FormEditarGrupo extends Zend_Form
         
         $nombre = new Zend_Form_Element_Text('txtNombre');
         $nombre->setLabel('Nombre: ')
-        ->setRequired(true)
-        ->setValue('')
-        ->setAttrib('maxlength', '49')
-        ->setAttrib('class', 'span4')
-        ->clearErrorMessages()
-        ->addErrorMessage('Debes ingresar el nombre del grupo');
+	        ->setRequired(true)
+	        ->setValue('')
+	        ->setAttrib('maxlength', '49')
+	        ->setAttrib('class', 'span6')
+	        ->clearErrorMessages()
+	        ->addErrorMessage('Debes ingresar el nombre del álbum');
+        
+        $fotoDesc1 = new Zend_Form_Element_Textarea('fotoDesc1');
+        $fotoDesc1->setLabel('Descripción: ')
+	        ->setAttrib('rows','2')
+	        ->setAttrib('onkeypress','ValidarCaracteres(this, 44)')
+	        ->setAttrib('class','span3');
         
         $this->setEnctype(Zend_Form::ENCTYPE_MULTIPART);
-        $fileFoto = new Zend_Form_Element_File('fileFoto');
-        $fileFoto->setLabel('Foto Grupo: ')
+        $fileFoto1 = new Zend_Form_Element_File('fileFoto1');
+        $fileFoto1->setLabel(' ')
         		->setRequired(false)
 		        ->addValidator('IsImage')
 		        ->setAttrib('class', 'span4')
-		        ->setMaxFileSize(2097152) // 2mb
-		        ->addValidator('Extension',false,array('jpg','jpeg','png','gif'));
+		        ->setMaxFileSize(5097152)
+		        ->addValidator('Extension',false,array('jpg','jpeg','png'));
         
 		$descripcion = new Zend_Form_Element_Textarea('txtDescripcion');
 		$descripcion->setLabel('Descripcion del grupo: ')
-					->setRequired(true)
+					->setRequired(false)
+					->setAttrib('class', 'span6')
 					->setAttrib('rows', 2)
+					->setAttrib('onkeypress','ValidarCaracteres(this, 499)')
 					->clearErrorMessages()
 					->addErrorMessage('Debes ingresar una descripcion');
 		
         $buttonEnviar = $this->createElement('submit', 'enviar');
-        $buttonEnviar->setLabel('Editar Grupo')
+        $buttonEnviar->setLabel('Crear Grupo')
         			 ->setAttrib('class', 'btn btn-success');
         
         
-        $grupoId= new Zend_Form_Element_Hidden('hdnIdGrupo');
-        
         $this->addElement($nombre);
-        $this->addElement($fileFoto);
+        $this->addElement($fotoDesc1);
+        $this->addElement($fileFoto1);
         $this->addElement($descripcion);
-        $this->addElement($grupoId);
         $this->addElement($buttonEnviar);
         
         

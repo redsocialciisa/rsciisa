@@ -40,7 +40,16 @@
 							if($publicacion->getTipoId() == 4){ ?>
 								<?php $fechaPublicacion = strtotime($publicacion->getFecha()); ?>
 								
-								<h5 class="cont4 well"><?php echo $publicacion->getTexto();?></h5>
+								<h5 class="cont4 well">
+								
+								<?php
+									$objPublicacionEventoAuxDao = new Application_Model_PublicacionEventoDao();
+								?>
+								
+								<a href="/evento/contactos/id/<?php echo $objPublicacionEventoAuxDao->obtenerPorPublicacionId($publicacion->getId())->getEventoId();?>"><?php echo $publicacion->getTexto();?></a>
+								<?php $objPublicacionEventoAuxDao = null; ?>
+								
+								</h5>
 								<input type="hidden" id="hdnTextoPublicacion<?php echo $publicacion->getId();?>" value="<?php echo $texto;?>">
 							
 								<table class="span2" border="2">
@@ -112,7 +121,9 @@
 								$gru_id = $objPublicacionGrupoDao->obtenerPorPublicacionId($publicacion->getId())->getGrupoId();
 								$objGrupo = $objGrupoDao->obtenerPorId($gru_id);
 							?>
-								<h5 class="cont4 well"><?php echo $publicacion->getTexto();?></h5>
+								<h5 class="cont4 well">
+								<a href="/muro/muro-grupo/id/<?php echo $objGrupo->getId();?>"><?php echo $publicacion->getTexto();?></a>
+								</h5>
 								<input type="hidden" id="hdnTextoPublicacion<?php echo $publicacion->getId();?>" value="<?php echo $texto;?>">
 							
 								<div style="width: 320px; height: 100%;">
@@ -156,7 +167,7 @@
 								    				<?php $objUsuario = $objUsuarioDao->obtenerPorId($comentario->getUsuarioId());?>
 								    				<div style='width: 50px;'>
 														<a class="thumbnail" href="/muro/muro-contacto/id/<?php echo $objUsuario->getId();?>">
-							      							<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $objUsuario->getFoto();?>"></a>
+							      							<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/icono/<?php echo $objUsuario->getFoto();?>"></a>
 						         					</div>
 								    			</td>
 								    			<td valign="top">

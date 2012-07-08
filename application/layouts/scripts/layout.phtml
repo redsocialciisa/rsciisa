@@ -142,7 +142,7 @@
 					return;
 				}
 				
-				document.getElementById("divModalGenerico").innerHTML = "Tu búsqueda debe contener 4 caracteres como mínimo.";
+				document.getElementById("divModalGenerico").innerHTML = "Tu búsqueda debe contener 3 caracteres como mínimo.";
 				$('#myModalGenerico').modal('show');			
 			}
 
@@ -169,7 +169,7 @@
    	    		<?php 
    	    			$datSource = "[";
    	    			$listaUsuarios = $objUsuarioDao->obtenerTodosLosNombres();
-   	    			$i = 2;
+   	    			$i = 1;
    	    			 foreach ($listaUsuarios as $item)
    	    			 {
    	    			     if($item->getNombre() !="ADMINISTRADOR")
@@ -189,7 +189,7 @@
    	    		?>
    	    		
    	    		<input id="txtBuscador" name="txtBuscador" type="text" autocomplete="off" data-source="<?php echo $datSource;?>" data-items="10" data-provide="typeahead" style="margin: 0 auto;" class="search-query span2"  placeholder="Buscar..">
-   	    		<button type="button" class="btn" onclick="validarBusqueda()">Ir..</button>
+   	    		<button type="button" class="btn" onclick="validarBusqueda()"><i class="icon-search"></i></button>
    	    		
    	    		<?php } ?>
    	    		
@@ -203,15 +203,19 @@
 			    
 			    <?php if($aut->getIdentity()->per_id == 1){  ?>
 			    <li>
-			    <a href="/muro/index/">Muro</a>
+			    <a href="/muro/index/">MURO</a>
 			    </li>
 			    <li>
-			    <a href="/muro/noticias/">Noticias</a>
+			    <a href="/muro/noticias/">NOTICIAS</a>
 			    </li>
-			    <li><a href="/muro/mi-muro/">Mi Muro</a></li>
+			    <li><a href="/muro/mi-muro/">MI MURO</a></li>
 			    <li>
 			    		<div style="width: 40px;">
-	       						<img alt="" src="<?php echo $this->baseUrl()?>/imagenes/minicaras/<?php echo $objEmocionDao->obtenerPorId($aut->getIdentity()->emo_id)->getFoto();?>">
+			    				<?php $objEmocion = $objEmocionDao->obtenerPorId($aut->getIdentity()->emo_id);?>
+	       						<img src="<?php echo $this->baseUrl()?>/imagenes/minicaras/<?php echo $objEmocion->getFoto();?>" title="<?php echo $objEmocion->getNombre();?>">
+	       						<?php $objEmocion = null;
+	       							  $objEmocionDao = null;
+	       						?>
          				</div>
 			    </li>
 			     <?php } ?>

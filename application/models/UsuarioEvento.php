@@ -5,8 +5,6 @@ class Application_Model_UsuarioEvento
 	private $_id;
 	private $_eventoId;
 	private $_usuarioId;
-	private $_fechaAsiste;
-	private $_asiste;
   	private $_eliminar;
   	
 	/**
@@ -28,20 +26,6 @@ class Application_Model_UsuarioEvento
 	 */
 	public function getUsuarioId() {
 		return $this->_usuarioId;
-	}
-
-	/**
-	 * @return the $_fechaAsiste
-	 */
-	public function getFechaAsiste() {
-		return $this->_fechaAsiste;
-	}
-
-	/**
-	 * @return the $_asiste
-	 */
-	public function getAsiste() {
-		return $this->_asiste;
 	}
 
 	/**
@@ -73,20 +57,6 @@ class Application_Model_UsuarioEvento
 	}
 
 	/**
-	 * @param field_type $_fechaAsiste
-	 */
-	public function setFechaAsiste($_fechaAsiste) {
-		$this->_fechaAsiste = $_fechaAsiste;
-	}
-
-	/**
-	 * @param field_type $_asiste
-	 */
-	public function setAsiste($_asiste) {
-		$this->_asiste = $_asiste;
-	}
-
-	/**
 	 * @param field_type $_eliminar
 	 */
 	public function setEliminar($_eliminar) {
@@ -94,15 +64,6 @@ class Application_Model_UsuarioEvento
 	}
 
   	
-  	
 	
-	
-	
-	
-	
-
-	
-	
-
 }
 

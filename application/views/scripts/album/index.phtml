@@ -1,0 +1,192 @@
+    <?php
+    	$aut = Zend_Auth::getInstance();
+    ?>
+    <br>
+   	<p><a href="#" class="btn" onclick="openModalAlbum()"><i class="icon-folder-open"></i>&nbsp;&nbsp;Nuevo Álbum</a></p>
+   	<br>
+   	
+   	<?php 
+	if($this->error == "ok")
+	{
+		$msj = "";
+		$msj .= "<div class='alert alert-success' id='divCreado'>";
+		$msj .= "<button class='close' data-dismiss='alert'>×</button>";
+		$msj .= "<strong>Éxito!</strong> Álbum creado correctamente !!";
+		$msj .= "</div>";
+		echo $msj;
+	}
+	?>
+	
+	<div id="divMensaje"></div>
+    	 
+    <div class="tabbable hero-unit span9">
+	    <ul class="nav nav-tabs">
+	   		<li class="active"><a href="#tab1" data-toggle="tab"><i class="icon-folder-open"></i>&nbsp;&nbsp;Mis Álbumes</a></li>
+	    </ul>
+	    <div class="tab-content">
+		    <div class="tab-pane active" id="tab1">
+		
+			<?php 
+				$columna = 0;
+				$cantColumna = 4;
+			?>
+				<table width="100%" align="center">
+					<?php foreach ($this->listaAlbumes as $album){
+							if($columna == 0){ 
+							   echo "<tr>";
+							} 
+							echo "<td>";?> 
+							<!-- imprimir el objeto -->
+								<table align="center" id="rowUno<?php echo $album->getId();?>">
+									<tr>
+										<td align="left">									
+											<i class="icon-folder-open"></i>&nbsp;&nbsp;<a href="/album/contenido/id/<?php echo $album->getId();?>"><?php echo $album->getNombre();?></a>
+										</td>
+									</tr>
+									<tr>
+										<td align="center">
+											<img src="<?php echo $this->baseUrl()?>/imagenes/fotos/icono/<?php echo $album->getPortada(); ?>"></img>
+										</td>
+									</tr>
+									<tr>
+										<td align="left">
+											<a href="#" onclick="openEliminarAlbum('<?php echo $album->getId();?>')"><i class="icon-remove"></i></a>&nbsp;Eliminar
+										</td>
+									</tr>
+								</table>						
+							<!-- fin de imprimir el objeto -->
+							<?php 
+							echo "</td>"; 
+							$columna++;
+							 if($columna == $cantColumna){
+								 echo "</tr>";				
+								 $columna = 0;
+							 }
+						 }
+						 echo "</tr>";
+					?>
+				</table>	
+		   		 
+		    </div>
+	    </div>
+    </div>
+    
+<?php 
+	$flag = "modal hide";
+	if($this->error == "error")
+	{
+	    $flag = "modal";
+	}else{
+	    $flag = "modal hide";
+	}
+?>
+
+<div class="<?php echo $flag;?>" id="myModalAlbum" style="width: 700px;">
+    <div class="modal-header">
+    <button class="close" data-dismiss="modal" onclick="closeModalAlbum();">×</button>
+    <h2><img src="/imagenes/proyecto/add.png">&nbsp;&nbsp;&nbsp;Nuevo Álbum</h2>
+    </div>
+    <div class="modal-body">
+    	<form action="/album/index/" method="post" enctype="<?php echo $this->form->getEnctype(); ?>" id="formAlbum">
+			<?php
+                echo $this->form->txtNombre;
+				echo $this->form->txtDescripcion;
+				
+				echo "Portada: ";
+				
+				echo $this->form->fileFoto1;
+				echo $this->form->fotoDesc1;
+				
+	        ?>
+        </form>
+    </div>
+    <div class="modal-footer">
+    		<input type="button" value="Crear" id="btnCrearAlbum" name="btnCrearAlbum" onClick="guardarAlbum()" class="btn btn-success">
+    		<input type="button" value="Cancelar" data-dismiss="modal" onClick="closeModalAlbum()" class="btn btn-danger">
+    </div>
+</div>	
+
+
+<div class="modal hide" id="myModalEliminarAlbum" style="width: 700px;">
+    <div class="modal-header">
+    <button class="close" data-dismiss="modal" onclick="closeEliminarAlbum();">×</button>
+    <h2><img src="/imagenes/proyecto/add.png">&nbsp;&nbsp;&nbsp;Eliminar Álbum</h2>
+    </div>
+    <div class="modal-body">
+    	¿Estás seguro de eliminar el álbum y todas sus fotos?
+    	<input type="hidden" id="idAlbumAEliminar" name="idAlbumAEliminar">
+    </div>
+    <div class="modal-footer">
+    		<input type="button" value="Si, eliminar" data-dismiss="modal" onClick="eliminarAlbum();" class="btn btn-success">
+    		<input type="button" value="Cerrar" data-dismiss="modal" onClick="closeEliminarAlbum()" class="btn btn-danger">
+    </div>
+</div>	
+
+
+
+<script type="text/javascript">
+	function openModalAlbum()
+	{
+		$('#myModalAlbum').modal("show");	
+	}
+
+	function closeModalAlbum()
+	{
+		$('#myModalAlbum').modal();	
+	}
+
+	function guardarAlbum()
+	{
+		document.getElementById("formAlbum").submit();
+	}
+
+	function openEliminarAlbum(id)
+	{
+		document.getElementById("idAlbumAEliminar").value = id;
+		$('#myModalEliminarAlbum').modal("show");	
+	}
+
+	function closeEliminarAlbum()
+	{
+		$('#myModalEliminarAlbum').modal();	
+	}
+
+	function eliminarAlbum(){
+
+		var idAlbum = document.getElementById("idAlbumAEliminar").value;
+		
+		$.ajax(
+				{
+				async: true,
+				type: 'POST',
+				url: '<?php echo $this->baseUrl()?>/album/eliminar-album',
+				data: 'idAlbum='+idAlbum,	
+				dataTypeString: 'text',
+				
+				beforeSend: function(data){
+					//loader
+			    },  
+			    success: function(requestData){
+		               		if(requestData == "ok")
+		               		{	
+		               			document.getElementById("rowUno"+idAlbum).style.display = "none";
+
+		               			var divMsj= "<div class='alert alert-success'>";
+		               			divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+		               			divMsj = divMsj + "<strong>Éxito!</strong> Álbum eliminado correctamente !!";
+		               			divMsj = divMsj + "</div>";
+
+		               			document.getElementById("divMensaje").innerHTML = divMsj;
+		               			document.getElementById("divCreado").innerHTML = "";
+		               		} 
+			    },  
+			    error: function(requestData, strError, strTipoError){          
+			    }
+			    
+				});
+			
+		}
+	
+
+</script>
+	

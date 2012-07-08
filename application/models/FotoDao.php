@@ -73,6 +73,13 @@ class Application_Model_FotoDao
     
     	return $this->_table->delete($where);
     }
+    
+    public function eliminarFotosPorAlbumId($alb_id)
+    {
+    	$where = 'alb_id = ' . $alb_id;
+    
+    	return $this->_table->delete($where);
+    }
 
 }
 

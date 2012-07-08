@@ -97,7 +97,7 @@
 								    				<?php $objUsuario = $objUsuarioDao->obtenerPorId($comentario->getUsuarioId());?>
 								    				<div style='width: 50px;'>
 														<a class="thumbnail" href="/muro/muro-contacto/id/<?php echo $objUsuario->getId();?>">
-							      							<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $objUsuario->getFoto();?>"></a>
+							      							<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/icono/<?php echo $objUsuario->getFoto();?>"></a>
 						         					</div>
 								    			</td>
 								    			<td valign="top">
@@ -212,7 +212,7 @@
 <div class="<?php echo $flagModal;?>" id="myModalPublicacion" style="width: 700px;">
     <div class="modal-header">
     <button class="close" onclick="closeModalPublicacion()" data-dismiss="modal">×</button>
-	<img src="/imagenes/proyecto/luz.png" width="40px;">&nbsp;&nbsp;&nbsp;<b>Nueva Publicación</b>
+	<h2><img src="/imagenes/proyecto/luz.png" width="40px;">&nbsp;&nbsp;&nbsp;Nueva Publicación</h2>
     </div>
     <div class="modal-body">
 		
@@ -244,7 +244,7 @@
 							<table>
 								<tr>
 									<td>
-										Imagen: 
+										imagen: 
 									</td>
 									<td>
 										<?php echo $this->formPublicacion->fileFoto;?>
@@ -295,7 +295,7 @@
 		
     </div>
     <div class="modal-footer">
-    	<input type="button" value="Publicar" id="btnCrearPublicacion" name="btnCrearPublicacion" onClick="validarFormPublicacion()" class="label label-success" style="height:30px; width: 80px;">
+    	<input type="button" value="Publicar" id="btnCrearPublicacion" name="btnCrearPublicacion" onClick="validarFormPublicacion()" class="btn btn-success" style="height:30px; width: 80px;">
   	    <a href="#" onclick="closeModalPublicacion()" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
     </div>
 </div>	

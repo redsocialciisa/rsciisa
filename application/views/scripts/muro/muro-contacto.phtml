@@ -6,32 +6,35 @@
 	$objAmigoDao = new Application_Model_AmigoDao();
 	$aut = Zend_Auth::getInstance();
 ?>
-<table class="span9">
-	<tr style="background-color:  #46a546">
-		<td align="right">
-		
-			<div style="width: 800px;">
-				<h1><?php echo $objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getNombre();?></h1>
 
-				<?php if($objAmigoDao->sonAmigos($aut->getIdentity()->usu_id, $this->Contacto->getId())){?>
-					<h5><?php echo $objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getCorreo();?></h5>
-					<h5><?php echo $objUtilidad->girarFecha($objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getFechaNacimiento());?></h5>
-				<?php } ?>
-			</div>
+<div class="hero-unit">
+		<h2><?php if($objAmigoDao->sonAmigos($aut->getIdentity()->usu_id, $this->Contacto->getId())){ ?>
+				<a href="#" id="tooltipLapiz" rel="popover" data-original-title="Publica algo aquí.." onMouseOver="tooltipLapiz()"><img src="/imagenes/proyecto/luz.png" width="40px;" onclick="openModalPublicacion()"></a>
+			<?php } ?> 
+			<u><?php echo $objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getNombre();?></u>
+		</h2>
 		
-			<img width="50px" src="<?php echo $this->baseUrl()?>/imagenes/minicaras/<?php echo $objEmocionDao->obtenerPorId($this->Contacto->getEmocionId())->getFoto();?>">
-		</td>
-		<td align="right">
-				<a class="thumbnail">
-	      			<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getFoto();?>">
-         		</a>
-		</td>
-	</tr>
-</table>
+        <table>
+        	<tr>
+        		<td valign="top">
+        			<br>
+        			<p class="cont4"><?php echo $objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getBiografia();?></p>
+			        <?php if($objAmigoDao->sonAmigos($aut->getIdentity()->usu_id, $this->Contacto->getId())){?>
+								<p><i class="icon-envelope"></i>&nbsp;&nbsp;<?php echo $objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getCorreo();?></p>
+								<p><i class="icon-gift"></i>&nbsp;&nbsp;<?php echo $objUtilidad->girarFecha($objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getFechaNacimiento());?></p>
+					<?php } ?>
+        		</td>
+        		<td valign="top">
+        			<a class="thumbnail span4">
+		      			<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getFoto();?>">
+         			</a>
+         		</td>
+        	</tr>
+        </table>
+</div>
+
 
 <?php if($objAmigoDao->sonAmigos($aut->getIdentity()->usu_id, $this->Contacto->getId())){ ?>
-
-<a href="#" id="tooltipLapiz" rel="popover" data-original-title="Publica algo aquí.." onMouseOver="tooltipLapiz()"><img src="/imagenes/proyecto/luz.png" width="40px;" onclick="openModalPublicacion()"></a></div>
 
 <?php echo $this->listaPublicaciones;?>
 	<?php if(count($this->listaPublicaciones) > 0){ ?>
@@ -115,7 +118,7 @@
 											    				<?php $objUsuario = $objUsuarioDao->obtenerPorId($comentario->getUsuarioId());?>
 											    				<div style='width: 50px;'>
 																	<a class="thumbnail" a href="/muro/muro-contacto/id/<?php echo $objUsuario->getId();?>">
-										      							<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $objUsuario->getFoto();?>"></a>
+										      							<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/icono/<?php echo $objUsuario->getFoto();?>"></a>
 									         					</div>
 											    			</td>
 											    			<td valign="top">
@@ -231,7 +234,7 @@
 <div class="<?php echo $flagModal;?>" id="myModalPublicacion" style="width: 700px;">
     <div class="modal-header">
     <button class="close" onclick="closeModalPublicacion()" data-dismiss="modal">×</button>
-	<img src="/imagenes/proyecto/luz.png" width="40px;">&nbsp;&nbsp;&nbsp;<b>Nueva Publicación</b>
+	<h2><img src="/imagenes/proyecto/luz.png" width="40px;">&nbsp;&nbsp;&nbsp;Nueva Publicación</h2>
     </div>
     <div class="modal-body">
 		
@@ -314,7 +317,7 @@
 		
     </div>
     <div class="modal-footer">
-    	<input type="button" value="Publicar" id="btnCrearPublicacion" name="btnCrearPublicacion" onClick="validarFormPublicacion()" class="label label-success" style="height:30px; width: 80px;">
+    	<input type="button" value="Publicar" id="btnCrearPublicacion" name="btnCrearPublicacion" onClick="validarFormPublicacion()" class="btn btn-success" style="height:30px; width: 80px;">
   	    <a href="#" onclick="closeModalPublicacion()" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
     </div>
 </div>
@@ -328,7 +331,7 @@
 									<p>La solicitud ha sido enviada, debes esperar hasta que <?php echo $this->Contacto->getNombre();?> te acepte.</p>
 						<?php }else{ ?>
 								<p>Actualmente no eres amigo de <?php echo $this->Contacto->getNombre();?>...</p>
-						 		<a href="#" onclick="openModalAgregar()" class="btn btn-danger" data-dismiss="modal">Enviar solicitud de amistad</a>
+						 		<a href="#" onclick="openModalAgregar()" class="btn btn-danger" data-dismiss="modal">Enviar Solicitud</a>
 						<?php } ?>
 					</div>
 				</td>

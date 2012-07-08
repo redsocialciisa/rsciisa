@@ -6,7 +6,7 @@
 
 <table>
   <tr>
-    <td><h1>MURO GRUPO</h1></td>
+    <td><h1>MURO GRUPO "<?php echo $objGrupoDao->obtenerPorId($this->Grupo)->getNombre(); ?>"</h1></td>
     <td>
     	<br>
 		&nbsp;&nbsp;<a href="#" id="tooltipLapiz" rel="popover" data-original-title="Publica algo aquí.." onMouseOver="tooltipLapiz()"><img src="/imagenes/proyecto/luz.png" width="40px;" onclick="openModalPublicacion()"></a></div>
@@ -16,22 +16,39 @@
 
 <table align="center" class="span9">
 	<tr>
-		<td>
+		<td align="center">
 			<div style='width: 500px;'>
 				<a class="thumbnail">
-						<center><h1><?php echo $objGrupoDao->obtenerPorId($this->Grupo)->getNombre(); ?></h1></center>
    						<img src="<?php echo $this->baseUrl()?>/imagenes/grupos/<?php echo $objGrupoDao->obtenerPorId($this->Grupo)->getFoto();?>">
 				</a>
 			</div>
 		</td>
 	</tr>
 	<tr>
-		<td>
-			<div id="divDescripcionGrupo" class="cont"><?php echo $objGrupoDao->obtenerPorId($this->Grupo)->getDescripcion(); ?></div>
+		<td align="center">
+			<div id="divDescripcionGrupo" class="cont well"><?php echo $objGrupoDao->obtenerPorId($this->Grupo)->getDescripcion(); ?></div>
+		</td>
+	</tr>
+	<tr>
+		<td align="center">
+			<?php 
+				$objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
+				$listaUsuarios = $objUsuarioGrupoDao->obtenerPorGrupoId($this->Grupo);
+			?>
+			<table>
+				<tr>
+					<?php foreach ($listaUsuarios as $usuario){?>
+						<td>
+						  <div class="span1">
+							<img src="/imagenes/usuarios/<?php echo $usuario->getFoto();?>">
+						  </div>
+						</td>
+					<?php }?>
+				</tr>
+			</table>
 		</td>
 	</tr>
 </table>
-
 
 <?php echo $this->listaPublicaciones;?>
 <?php if(count($this->listaPublicaciones) > 0){ ?>
@@ -115,7 +132,7 @@
 								    				<?php $objUsuario = $objUsuarioDao->obtenerPorId($comentario->getUsuarioId());?>
 								    				<div style='width: 50px;'>
 														<a class="thumbnail"href="/muro/muro-contacto/id/<?php echo $objUsuario->getId();?>">
-							      							<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $objUsuario->getFoto();?>"></a>
+							      							<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/icono/<?php echo $objUsuario->getFoto();?>"></a>
 						         					</div>
 								    			</td>
 								    			<td valign="top">
@@ -229,7 +246,7 @@
 <div class="<?php echo $flagModal;?>" id="myModalPublicacion" style="width: 700px;">
     <div class="modal-header">
     <button class="close" onclick="closeModalPublicacion()" data-dismiss="modal">×</button>
-	<img src="/imagenes/proyecto/luz.png" width="40px;">&nbsp;&nbsp;&nbsp;<b>Nueva Publicación</b>
+	<h2><img src="/imagenes/proyecto/luz.png" width="40px;">&nbsp;&nbsp;&nbsp;Nueva Publicación</h2>
     </div>
     <div class="modal-body">
 		
@@ -297,7 +314,7 @@
 		
     </div>
     <div class="modal-footer">
-    	<input type="button" value="Publicar" id="btnCrearPublicacion" name="btnCrearPublicacion" onClick="validarFormPublicacion()" class="label label-success" style="height:30px; width: 80px;">
+    	<input type="button" value="Publicar" id="btnCrearPublicacion" name="btnCrearPublicacion" onClick="validarFormPublicacion()" class="btn btn-success" style="height:30px; width: 80px;">
   	    <a href="#" onclick="closeModalPublicacion()" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
     </div>
 </div>	

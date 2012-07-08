@@ -22,10 +22,8 @@ class Application_Model_UsuarioGrupoDao
     		$objUsuarioGrupo = new Application_Model_UsuarioGrupo();
     		 
     		$objUsuarioGrupo->setId($resultado->current()->usu_gru_id);
-    		$objUsuarioGrupo->setParticipa($resultado->current()->usu_gru_unido);
     		$objUsuarioGrupo->setGrupoId($resultado->current()->gru_id);
     		$objUsuarioGrupo->setUsuarioId($resultado->current()->usu_id);
-    		$objUsuarioGrupo->setFechaParticipa($resultado->current()->usu_gru_fecha_une);
     		$objUsuarioGrupo->setEliminar($resultado->current()->usu_gru_eliminar);
     
     	}
@@ -35,10 +33,8 @@ class Application_Model_UsuarioGrupoDao
     public function guardar(Application_Model_UsuarioGrupo $usuarioGrupo)
     {
     	$data = array('usu_gru_id' => $usuarioGrupo->getId(),
-    			'usu_gru_unido' => $usuarioGrupo->getParticipa(),
     			'gru_id' => $usuarioGrupo->getGrupoId(),
-    			'usu_id' => $usuarioGrupo->getUsuarioId(),
-    			'usu_gru_fecha_une' => $usuarioGrupo->getFechaParticipa()
+    			'usu_id' => $usuarioGrupo->getUsuarioId()
     	);
     
     	if($usuarioGrupo->getId() != null){

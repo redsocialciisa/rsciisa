@@ -24,8 +24,6 @@ class Application_Model_UsuarioEventoDao
     		$objUsuarioEvento->setId($resultado->current()->usu_eve_id);
     		$objUsuarioEvento->setEventoId($resultado->current()->eve_id);
     		$objUsuarioEvento->setUsuarioId($resultado->current()->usu_id);
-    		$objUsuarioEvento->setAsiste($resultado->current()->usu_eve_asiste);
-    		$objUsuarioEvento->setFechaAsiste($resultado->current()->usu_eve_fecha_asiste);
     		$objUsuarioEvento->setEliminar($resultado->current()->usu_eve_eliminar);
     	}
     	return $objUsuarioEvento;
@@ -36,8 +34,6 @@ class Application_Model_UsuarioEventoDao
     	$data = array('usu_eve_id' => $usuarioEvento->getId(),
     			'eve_id' => $usuarioEvento->getEventoId(),
     			'usu_id' => $usuarioEvento->getUsuarioId(),
-    			'usu_eve_asiste' => $usuarioEvento->getAsiste(),
-    			'usu_eve_fecha_asiste' => $usuarioEvento->getFechaAsiste(),
     	        'usu_eve_eliminar' => $usuarioEvento->getEliminar()
     	);
     

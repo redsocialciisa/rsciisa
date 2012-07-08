@@ -53,7 +53,7 @@ class Application_Form_FormGrupo extends Zend_Form
 				
         $buttonEnviar = $this->createElement('submit', 'enviar');
         $buttonEnviar->setLabel('Crear Grupo')
-        			 ->setAttrib('class', 'label label-success');
+        			 ->setAttrib('class', 'btn btn-success');
         
         
         $grupoId = new Zend_Form_Element_Hidden('hdnIdGrupo');

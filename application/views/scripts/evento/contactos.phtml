@@ -12,85 +12,66 @@
    				<?php 
 			   			$objEventoDao = new Application_Model_EventoDao();
 						$objEvento = $objEventoDao->obtenerPorId($this->id); ?>
-								
-						<h2><?php  echo $objEvento->getNombre(); ?></h2>
+						
+						<?php $fechaPublicacion = strtotime($objEvento->getFechaEvento()); ?>	
+						<?php
+							switch (date("m", $fechaPublicacion))
+							{
+								case 1:
+								    $ano = "Enero";
+								break;
+								case 2:
+									$ano = "Febrero";
+									break;
+								case 3:
+									$ano = "Marzo";
+									break;
+								case 4:
+									$ano = "Abril";
+									break;
+								case 5:
+									$ano = "Mayo";
+									break;
+								case 6:
+									$ano = "Junio";
+									break;
+								case 7:
+									$ano = "Julio";
+									break;
+								case 8:
+									$ano = "Agosto";
+									break;
+								case 9:
+									$ano = "Septiembre";
+									break;
+								case 10:
+									$ano = "Octubre";
+									break;
+								case 11:
+									$ano = "Noviembre";
+									break;
+								case 12:
+									$ano = "Diciembre";
+									break;
+							}
+							$mes = date("Y", $fechaPublicacion);
+							$dia = date("d", $fechaPublicacion);
+							$hora = $objEvento->getHora();
+						?>		
+							
+						<h2>"<?php echo $objEvento->getNombre();?>" <h3>Se celebrará el <?php echo $dia."-".$ano."-".$mes." a las ".$hora." hrs.";?></h3></h2>
    				<table>
    					<tr>
    						<td valign="top">
-							<div class="cont">
+							<div class="cont well">
    								<?php  echo $objEvento->getDescripcion(); ?>
    							</div>
-   						</td>
-   						<td valign="top">
-   							<b>Será celebrado el: </b>
-								<?php $fechaPublicacion = strtotime($objEvento->getFechaEvento()); ?>
-										<table class="span2 well">
-											<tr>
-												<td align="center" class='label label-success'>
-															<?php
-																switch (date("m", $fechaPublicacion))
-																{
-																	case 1:
-																	    echo "Enero";
-																	break;
-																	case 2:
-																		echo "Febrero";
-																		break;
-																	case 3:
-																		echo "Marzo";
-																		break;
-																	case 4:
-																		echo "Abril";
-																		break;
-																	case 5:
-																		echo "Mayo";
-																		break;
-																	case 6:
-																		echo "Junio";
-																		break;
-																	case 7:
-																		echo "Julio";
-																		break;
-																	case 8:
-																		echo "Agosto";
-																		break;
-																	case 9:
-																		echo "Septiembre";
-																		break;
-																	case 10:
-																		echo "Octubre";
-																		break;
-																	case 11:
-																		echo "Noviembre";
-																		break;
-																	case 12:
-																		echo "Diciembre";
-																		break;
-																}
-																echo " - ";
-																echo date("Y", $fechaPublicacion);
-															?>
-														</td>
-											</tr>
-											<tr>
-												<td align="center">
-													<h2><?php echo date("d", $fechaPublicacion); ?></h2>
-												</td>
-											</tr>
-											<tr>
-												<td align="center" class='label label-success'>
-														Hora: <?php  echo $objEvento->getHora(); ?>
-												</td>
-											</tr>
-										</table>
    						</td>
    					</tr>
    				</table>
    			</td>
   		</tr>
   </table>
-  
-  <hr>
   
  <div class="tabbable well">
     <ul class="nav nav-tabs">
@@ -113,8 +94,8 @@
 			?>
 				<table width="100%" align="center">
 				
-					<?php foreach ($this->listaUsuariosEvento as $usuario){
-					    if($usuario->getId() != $aut->getIdentity()->usu_id) {
+					<?php foreach ($this->listaUsuariosEvento as $usuario){					    
+					    
 							if($columna == 0){ 
 							   echo "<tr>";
 							} 
@@ -146,8 +127,10 @@
 												}
 											?>
 												
-											<?php if($objEvento->getUsuarioId() == $aut->getIdentity()->usu_id){?>						
-												<input type="checkbox" <?php echo $flagEliminado;?> name="cbxEliminar<?php echo $usuario->getId(); ?>" id="cbxEliminar<?php echo $usuario->getId(); ?>" onClick='aEliminar(<?php echo $usuario->getId();?>)'></a>
+											<?php if($objEvento->getUsuarioId() == $aut->getIdentity()->usu_id){?>	
+												    <?php if($usuario->getId() != $objEvento->getUsuarioId()){?>					
+														<input type="checkbox" <?php echo $flagEliminado;?> name="cbxEliminar<?php echo $usuario->getId(); ?>" id="cbxEliminar<?php echo $usuario->getId(); ?>" onClick='aEliminar(<?php echo $usuario->getId();?>)'></a>
+													<?php } ?>
 											<?php } ?>											
 										</td>
 									</tr>
@@ -159,8 +142,7 @@
 							 if($columna == $cantColumna){
 								 echo "</tr>";				
 								 $columna = 0;
-							 }
-						 }
+							 }						 
 					}
 						 echo "</tr>";
 					?>
@@ -180,7 +162,6 @@
 					  </center>
 					<?php }
 					?>
-			
 				
     	</div>
     	<div class="tab-pane" id="tab2">

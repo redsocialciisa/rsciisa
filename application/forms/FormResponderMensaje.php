@@ -18,7 +18,7 @@ class Application_Form_FormResponderMensaje extends Zend_Form
         
         $buttonEnviar = $this->createElement('submit', 'enviar');
         $buttonEnviar->setLabel('Responder Mensaje')
-        ->setAttrib('class', 'label label-success');
+        ->setAttrib('class', 'btn btn-success');
         
         
         $this->addElement($textoMensaje);

@@ -49,14 +49,14 @@ class Application_Form_FormPublicacion extends Zend_Form
         
         $tipoTexto = new Zend_Form_Element_Radio('optTexto');
         $tipoTexto->addMultiOptions(array(
-        		'1' => 'Texto',
+        		'1' => '¿Texto?',
         ))
         ->setAttrib('onclick', 'desabilitarFotoVideo()')
         ->setAttrib('name', 'grpTipo');
         
         $tipoFoto = new Zend_Form_Element_Radio('optFoto');
         $tipoFoto->addMultiOptions(array(
-        		'2' => 'Foto',
+        		'2' => '¿Foto?',
         ))
         ->setAttrib('checked',true)
         ->setAttrib('onclick', 'desabilitarVideo()')
@@ -64,7 +64,7 @@ class Application_Form_FormPublicacion extends Zend_Form
         
         $tipoVideo = new Zend_Form_Element_Radio('optVideo');
         $tipoVideo->addMultiOptions(array(
-        		'3' => 'Video',
+        		'3' => '¿Video?',
         ))
         ->setAttrib('onclick', 'desabilitarFoto()')
         ->setAttrib('name', 'grpTipo');

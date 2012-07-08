@@ -14,6 +14,7 @@ class Application_Form_FormNuevoMensaje extends Zend_Form
         ->setRequired(true)
         ->setValue('')
         ->setAttrib('maxlength', '100')
+        ->setAttrib('autocomplete', 'off')  
         ->setAttrib('placeholder','Buscar...')
         ->clearErrorMessages()
         ->addErrorMessage('Debes ingresar a quien enviar el mensaje');
@@ -31,7 +32,7 @@ class Application_Form_FormNuevoMensaje extends Zend_Form
         
         $buttonEnviar = $this->createElement('submit', 'enviar');
         $buttonEnviar->setLabel('Enviar Mensaje')
-        ->setAttrib('class', 'label label-success');
+        ->setAttrib('class', 'btn btn-success');
         
         $this->addElement($para);
         $this->addElement($textoMensaje);

@@ -2,11 +2,12 @@
 
 class Application_Model_Album
 {
-
     private $_id;
     private $_nombre;
     private $_fechaCreacion;
     private $_usuario;
+    private $_descripcion;
+    private $_portada;
     
 	/**
 	 * @return the $_id
@@ -37,6 +38,20 @@ class Application_Model_Album
 	}
 
 	/**
+	 * @return the $_descripcion
+	 */
+	public function getDescripcion() {
+		return $this->_descripcion;
+	}
+
+	/**
+	 * @return the $_portada
+	 */
+	public function getPortada() {
+		return $this->_portada;
+	}
+
+	/**
 	 * @param field_type $_id
 	 */
 	public function setId($_id) {
@@ -64,11 +79,19 @@ class Application_Model_Album
 		$this->_usuario = $_usuario;
 	}
 
-    
+	/**
+	 * @param field_type $_descripcion
+	 */
+	public function setDescripcion($_descripcion) {
+		$this->_descripcion = $_descripcion;
+	}
 
-    
-    
-    
-
+	/**
+	 * @param field_type $_portada
+	 */
+	public function setPortada($_portada) {
+		$this->_portada = $_portada;
+	}
+	
 }
 

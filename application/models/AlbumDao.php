@@ -26,17 +26,21 @@ class Application_Model_AlbumDao
         	$album->setNombre($resultado->current()->alb_nombre);
         	$album->setFechaCreacion($resultado->current()->alb_fecha_creacion);
         	$album->setUsuario($resultado->current()->usu_id);
+        	$album->setDescripcion($resultado->current()->alb_descripcion);
+        	$album->setPortada($resultado->current()->alb_portada);
         
         }        
     	   return $album;
     }
     
     
-    public function obtenerTodos()
+    public function obtenerTodosPorUsuarioId($usu_id)
     {
     	$lista = new SplObjectStorage();
     
-    	$resultado = $this->_table->fetchAll();
+    	$where = "usu_id =".$usu_id;
+    	
+    	$resultado = $this->_table->fetchAll($where);
     
     	if(count($resultado) > 0){
     
@@ -54,7 +58,9 @@ class Application_Model_AlbumDao
     	$data = array('alb_id' => $album->getId(),
     	        'alb_fecha_creacion' => $album->getFechaCreacion(),
     			'alb_nombre' => $album->getNombre(),    			
-    	        'usu_id' => $album->getUsuario()    	        
+    	        'usu_id' => $album->getUsuario(),
+    	        'alb_descripcion' => $album->getDescripcion(),
+    	        'alb_portada' => $album->getPortada()
     	);
     
     	if($album->getId() != null){
