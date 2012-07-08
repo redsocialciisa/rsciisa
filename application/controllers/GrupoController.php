@@ -307,25 +307,48 @@ class GrupoController extends Zend_Controller_Action
     public function invitarUsuarioGrupoAction()
     {
         
+        $aut = Zend_Auth::getInstance();
         $grupoId = $this->getRequest()->getParam('grupoId');
         $fecha = new DateTime();
         $fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
         $objInvitacionDao = new Application_Model_InvitacionDao();
+        $objGrupoDao = new Application_Model_GrupoDao();
+        $objNotificacion = new Application_Model_Notificacion();
+        $objNotificacionDao = new Application_Model_NotificacionDao();
         $listaInvitacion = $objInvitacionDao->obtenerGrupoPorInvitar($grupoId);
         
         foreach ($listaInvitacion as $item)
         {
+            $objGrupo = $objGrupoDao->obtenerPorId($grupoId);
+            
             $id = $item->getId();
             $item->setId($id);
             $item->setFecha($fechahora);
             $item->setEstado(2);
+            $textoInv = 'Has sido invidado al grupo '.$objGrupo->getNombre().' por '.$aut->getIdentity()->usu_nombre;
+            $objNotificacion->setTipoNotificacionId(0);
+            $objNotificacion->setVista(0);
+            $objNotificacion->setFecha($fechahora);
+            $objNotificacion->setUsuarioId($item->getUsuarioId());
+            $objNotificacion->setTexto($textoInv);
             $objInvitacionDao->guardar($item);
+            $objNotificacionDao->guardar($objNotificacion);
     	}
+    	
+    	$aut = null;
+    	$grupoId = null;
+    	$fecha = null;
+    	$fechahora = null;
+    	$objInvitacionDao = null;
+    	$objGrupoDao = null;
+    	$objNotificacion = null;
+    	$objNotificacionDao = null;
+    	$listaInvitacion = null;
     	
     	$this->_redirect('/grupo/index/si/ok');
     	
     }
-
+    
     public function aceptarInvitacionAction()
     {
         $this->_helper->layout()->disableLayout();

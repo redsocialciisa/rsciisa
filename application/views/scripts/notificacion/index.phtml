@@ -1,0 +1,26 @@
+<?php 
+$objPublicacionDao = new Application_Model_PublicacionDao();
+?>
+<table>
+  <tr>
+    <th colspan="2" >Notificaciones</th>
+  </tr>
+  <tr>
+  	<td><br></td>
+  </tr>
+	<?php 
+		foreach ($this->listaNotificaciones as $item)
+		{  
+	?>
+  <tr>
+    <td><?php echo $item->getTexto();?></td>
+  </tr>
+  <tr>
+    <td><h5><?php echo $objPublicacionDao->calcularTiempoTranscurrido($item->getFecha());?></h5><hr></td>
+  </tr>
+  <?php }?>
+</table>
+
+<?php
+echo $this->listaNotificaciones;
+?>

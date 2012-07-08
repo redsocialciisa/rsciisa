@@ -165,7 +165,7 @@ class IntegracionController extends Zend_Controller_Action
         // Verifica si ya esta autorizada la aplicacion, si no esta procede a solicitarla
         if (empty($_GET['oauth_token']) || empty($_GET['oauth_verifier']) || $_GET['oauth_token']!=$_SESSION['linkedin_oauth_token']) {
         	$params = array(
-        			'oauth_callback'=>"http://of.novadvice.com/integracion/linkedin",
+        			'oauth_callback'=>"http://redsocial.ipciisa.cl/integracion/linkedin",
         			'oauth_consumer_key'=>LINKEDIN_KEY,
         			'oauth_nonce'=>sha1(microtime()),
         			'oauth_signature_method'=>'HMAC-SHA1',

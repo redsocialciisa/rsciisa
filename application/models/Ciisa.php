@@ -72,8 +72,7 @@ class Application_Model_Ciisa
     	{
     	    $objUsuario = new Application_Model_Usuario();
     	    $row = mssql_fetch_array($result);
-    	        	        	    
-    	    $objUsuario->setUsuarioCiisa(trim($row['ALU_RUT']));
+    	    $objUsuario->setUsuarioCiisa(trim(iconv("CP850", "ISO-8859-1//TRANSLIT", $row["ALU_NOMBRE"])));
     	    $objUsuario->setNombre(trim($row['ALU_NOMBRE']));
     	    $objUsuario->setCorreo(trim($row['ALU_EMAIL']));
     	    $objUsuario->setFechaNacimiento($row['ALU_FECNAC']);
@@ -107,7 +106,7 @@ class Application_Model_Ciisa
     		$row = mssql_fetch_array($result);
     			
     		$objUsuario->setUsuarioCiisa(trim($row['PFE_SIGLA']));
-    		$objUsuario->setNombre(trim($row['PFE_NOMBRE']));
+    		$objUsuario->setNombre(trim(iconv("CP850", "ISO-8859-1//TRANSLIT", $row["PFE_NOMBRE"])));
     		$objUsuario->setCorreo(trim($row['PFE_EMAIL']));
     
     		return $objUsuario;
@@ -166,7 +165,7 @@ class Application_Model_Ciisa
     		$objUsuario = new Application_Model_Usuario();
     		$row = mssql_fetch_array($result);
     
-    		return trim($row['CAR_NOMBRE']);
+    		return trim(iconv("CP850", "ISO-8859-1//TRANSLIT", $row["CAR_NOMBRE"]));
     	}else{
     	    return "";
     	}

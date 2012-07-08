@@ -24,10 +24,9 @@ class Application_Model_NotificacionDao
     		$objNotificacion->setId($resultado->current()->not_id);
     		$objNotificacion->setTexto($resultado->current()->not_texto);
     		$objNotificacion->setFecha($resultado->current()->not_fecha);
+    		$objNotificacion->setVista($resultado->current()->not_vista);
     		$objNotificacion->setUsuarioId($resultado->current()->usu_id);
     		$objNotificacion->setTipoNotificacionId($resultado->current()->tip_not_id);
-    		$objNotificacion->setUsuarioIdPara($resultado->current()->usu_id_para);
-    		$objNotificacion->setLeido($resultado->current()->usu_leido);
     
     	}
     	return $objNotificacion;
@@ -38,10 +37,9 @@ class Application_Model_NotificacionDao
     	$data = array('not_id' => $notificacion->getId(),
     			'not_texto' => $notificacion->getTexto(),
     			'not_fecha' => $notificacion->getFecha(),
+    	        'not_vista' => $notificacion->getVista(),
     			'usu_id' => $notificacion->getUsuarioId(),
     			'tip_not_id' => $notificacion->getTipoNotificacionId(),
-    	        'usu_id_para' => $notificacion->getUsuarioIdPara(),
-    	        'usu_leido' => $notificacion->getLeido()
     	);
     
     	if($notificacion->getId() != null){
@@ -57,8 +55,9 @@ class Application_Model_NotificacionDao
     {
     	$lista = new SplObjectStorage();
     	$where = 'usu_id ='. $usu_id;
+    	$order = "not_fecha desc";
     
-    	$resultado = $this->_table->fetchAll($where);
+    	$resultado = $this->_table->fetchAll($where,$order);
     
     	if(count($resultado) > 0)
     	{
@@ -78,5 +77,26 @@ class Application_Model_NotificacionDao
     	return $this->_table->delete($where);
     }
 
+    
+    public function cantidadNotificacionesNuevas($usu_id)
+    {
+        $where = 'usu_id ='. $usu_id .' and not_vista = 0';
+        
+        $resultado = $this->_table->fetchAll($where);
+        
+        return count($resultado);
+        
+    }
+    
+    public function marcarComoLeido($usu_id)
+    {
+        $data = array(
+        		'not_vista' => '1'
+        );
+        
+        $where = 'usu_id ='. $usu_id .' and not_vista = 0';
+        return $this->_table->update($data, $where);
+    }
+    
 }
 
