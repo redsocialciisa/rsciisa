@@ -4,8 +4,8 @@
 <br><br><br>
 <div class="tabbable span9 well">
     <ul class="nav nav-tabs">
-    	<li><a href="#GruposContacto" data-toggle="tab">Contactos del grupo</a></li>
-    	<li><a href="#GruposInvitarContactos" data-toggle="tab">Invitar contactos</a></li>
+    	<li><a href="#GruposContacto" data-toggle="tab"><img src="/imagenes/proyecto/minuscontacto.png">&nbsp;&nbsp;Contactos del grupo</a></li>
+    	<li><a href="#GruposInvitarContactos" data-toggle="tab"><img src="/imagenes/proyecto/addcontacto.png">&nbsp;&nbsp;Invitar contactos</a></li>
     </ul>
     <div class="tab-content">
     	<div class="tab-pane active" id="GruposContacto">
@@ -39,11 +39,9 @@
 									</tr>
 									<tr>
 										<td align="center">
-											<div style='width: 80px;'>
 												<a class='thumbnail'>
-													<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $usuario->getFoto(); ?>"></img>
+													<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/icono/<?php echo $usuario->getFoto(); ?>"></img>
 												</a>
-											</div>
 											<?php 
 												$aut = Zend_Auth::getInstance();
 												if($usuario->getId() != $aut->getIdentity()->usu_id){ ?>
@@ -67,7 +65,7 @@
 					?>
 				</table>
 				
-				<button type="button" onclick="openModalConfirmarEliminar(<?php echo $this->grupoId;?>)">
+				<button type="button" class="btn btn-success" onclick="openModalConfirmarEliminar(<?php echo $this->grupoId;?>)">
 				Eliminar contactos seleccionados
 				</button>
     		
@@ -102,11 +100,9 @@
 									</tr>
 									<tr>
 										<td align="center">
-											<div style='width: 80px;'>
-												<a class='thumbnail'>
-													<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $usuario->getFoto(); ?>"></img>
-												</a>
-											</div>
+											<a class='thumbnail'>
+												<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/icono/<?php echo $usuario->getFoto(); ?>"></img>
+											</a>
 											<?php 
 												$aut = Zend_Auth::getInstance();
 												$objInvitacionDao = new Application_Model_InvitacionDao();
@@ -161,7 +157,7 @@
 				}
 				else{
 				?>
-					<button type="button" onclick="openModalConfirmarInvitar(<?php echo $this->grupoId;?>)">
+					<button type="button" class="btn btn-success" onclick="openModalConfirmarInvitar(<?php echo $this->grupoId;?>)">
 					Invitar los contactos seleccionados
 					</button>
 				<?php }?>
@@ -190,7 +186,7 @@
 <div class="modal hide" id="myModalEliminarUsuarioGrupoNoSelecionado" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
-    <h2><img src="/imagenes/proyecto/cancel.png">&nbsp;&nbsp;&nbsp;Eliminar Usuarios</h2>
+    <h2><img src="/imagenes/proyecto/cruz.png">&nbsp;&nbsp;&nbsp;Eliminar Usuarios</h2>
     </div>
     <div class="modal-body">
     	No hay usuarios seleccionados<div id="divGrupo"></div> 

@@ -2,7 +2,7 @@
  $aut = Zend_Auth::getInstance();
  
  if($this->mensaje_ok == "ok"){
- 		echo "<div id='divMensajeCrearGrupo'><div class='alert alert-success'><button class='close' data-dismiss='alert'>×</button>Grupo creado exitosamente</div></div>";
+ 		echo "<div id='divMensajeCrearGrupo'><div class='alert alert-success'><button class='close' data-dismiss='alert'>×</button><strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong>Grupo creado exitosamente</div></div>";
  }
  
  if($this->successInvitarUsuarios == "ok")
@@ -10,6 +10,7 @@
  	$msj = "";
  	$msj .= "<div class='alert alert-success'>";
  	$msj .= "<button class='close' data-dismiss='alert'>×</button>";
+ 	$msj .=  "<strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong>";
  	$msj .= "Los usuarios han sido invitados al Grupo";
  	$msj .= "</div>";
  
@@ -17,7 +18,7 @@
  }
  ?>
  <br><h1> GRUPOS </h1><br>
- <a href="#" onclick="openModalGrupo()" class="btn"><i class="icon-user"></i><i class="icon-user"></i> Crear Grupo </a><br><br>
+ <a href="#" onclick="openModalGrupo()" class="btn"><img src="/imagenes/proyecto/grupo.png">&nbsp;&nbsp; Crear Grupo </a><br><br>
  
  <?php 
  if($this->successEliminarUsuarios == "ok")
@@ -25,6 +26,7 @@
  	$msj = "";
  	$msj .= "<div class='alert alert-success'>";
  	$msj .= "<button class='close' data-dismiss='alert'>×</button>";
+ 	$msj .=  "<strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong>";
  	$msj .= "Los usuarios han sido eliminados del Grupo";
  	$msj .= "</div>";
  
@@ -32,19 +34,22 @@
  }
  
 if($this->mensaje_ok == "ok"){
- 		echo "<div id='divMensajeDejarParticipar'><div class='alert alert-success'><button class='close' data-dismiss='alert'>×</button>Grupo creado exitosamente</div></div>";
+ 		echo "<div id='divMensajeDejarParticipar'><div class='alert alert-success'><button class='close' data-dismiss='alert'>×</button><strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong>Grupo creado exitosamente</div></div>";
  }?>
  
  <div class="tabbable span9 well">
     <ul class="nav nav-tabs">
-    	<li><a href="#misGruposParticipo" data-toggle="tab">Mis grupos en que participo</a></li>
-    	<li><a href="#misGruposInvitaciones" data-toggle="tab">Invitaciones</a></li>
+    	<li><a href="#misGruposParticipo" data-toggle="tab"><img src="/imagenes/proyecto/grupo.png">&nbsp;&nbsp;Mis grupos en que participo</a></li>
+    	<li><a href="#misGruposInvitaciones" data-toggle="tab"><img src="/imagenes/proyecto/hoja.png">&nbsp;&nbsp;Invitaciones</a></li>
     </ul>
     <div class="tab-content">
     	<div class="tab-pane active" id="misGruposParticipo">
     		<?php echo $this->listaGrupoUsuario;?>
     		<div id="divMensajeDejarParticipar"></div>
     		<div id="divMensajeEliminar"></div>
+    		
+    		<?php if(count($this->listaGrupoUsuario) > 0){?>
+    		
     		<table>
     			<?php 
 		    		foreach ($this->listaGrupoUsuario as $item)
@@ -78,6 +83,9 @@ if($this->mensaje_ok == "ok"){
 					</tr>  
 				<?php }?>
     		</table>
+    		<?php }else{?>
+    			No participas de ningún grupo aún..
+    		<?php } ?>
     	</div>
     	<div class="tab-pane" id="misGruposInvitaciones">
     		<?php echo $this->listaInvitacionesGrupo;
@@ -85,6 +93,8 @@ if($this->mensaje_ok == "ok"){
     		
     		?>
     		<div id="divMensajeInvitacion"></div>
+    		
+    		<?php if(count($this->listaInvitacionesGrupo) > 0){?>
     		<table>
     			<?php 
 		    		foreach ($this->listaInvitacionesGrupo as $item)
@@ -107,12 +117,16 @@ if($this->mensaje_ok == "ok"){
 							</div>
 						</td>
 						<td>
-							<a class="btn btn-info" onclick="openModalAceptarInvitacion(<?php echo $item->getId();?>)"> Aceptar invitación </a>
-							<a class="btn btn-info" onclick="openModalRechazarInvitacion(<?php echo $item->getId();?>)"> Rechazar invitacion </a>
+							<a class="btn btn-success" onclick="openModalAceptarInvitacion(<?php echo $item->getId();?>)"><img src="/imagenes/proyecto/ok.png" width="15px;">&nbsp;Aceptar Invitación </a>
+							<a class="btn btn-danger" onclick="openModalRechazarInvitacion(<?php echo $item->getId();?>)"><img src="/imagenes/proyecto/cruz.png" width="15px;">&nbsp;Rechazar Invitación </a>
 						</td>			
 					</tr>  
 				<?php }?>
     		</table>
+    		
+    		<?php }else{?>
+    			No tienen ninguna invitación recibida de grupos aún..
+    		<?php }?>
     	</div>
     </div>
 </div>
@@ -130,7 +144,7 @@ if($this->mensaje_ok == "ok"){
 <div class="<?php echo $flag;?>" id="myModalGrupo" style="width: 700px;">
     <div class="modal-header">
     <button class="close" onclick="closeModalGrupo()" data-dismiss="modal">×</button>
-    <h2><img src="/imagenes/proyecto/add.png">&nbsp;&nbsp;&nbsp;Nuevo Grupo</h2>
+    <h2><img src="/imagenes/proyecto/grupo.png">&nbsp;&nbsp;Nuevo Grupo</h2>
     </div>
     <div class="modal-body">
     	<form action="/grupo/index/" method="post" enctype="<?php echo $this->form->getEnctype(); ?>">
@@ -179,7 +193,7 @@ if($this->mensaje_ok == "ok"){
 <div class="modal hide" id="myModalDejarParticipar" style="width: 700px;">
     <div class="modal-header">
     <button class="close" onclick="closeModalDejarParticipar()" data-dismiss="modal">×</button>
-    <img src="/imagenes/proyecto/Info.png">&nbsp;&nbsp;&nbsp;<b>Dejar el Grupo</b>
+    <h2><img src="/imagenes/proyecto/Info.png">&nbsp;&nbsp;Dejar el Grupo</h2>
     </div>
         <div class="modal-body">
     		¿Estás seguro de dejar de participar en el grupo? <div id="divGrupo"></div> 
@@ -194,7 +208,7 @@ if($this->mensaje_ok == "ok"){
 <div class="modal hide" id="myModalRechazarInvitacion" style="width: 700px;">
     <div class="modal-header">
     <button class="close" onclick="closeModalBorrar()" data-dismiss="modal">×</button>
-    <img src="/imagenes/proyecto/Info.png">&nbsp;&nbsp;&nbsp;<b>Rechazar Invitacion</b>
+    <h2><img src="/imagenes/proyecto/Info.png">&nbsp;&nbsp;Rechazar Invitacion</h2>
     </div>
         <div class="modal-body">
     		¿Deseas rechazar la invitacion al grupo? <div id="divGrupo"></div> 
@@ -286,6 +300,7 @@ if($this->mensaje_ok == "ok"){
 
 								var divMsj = "<div class='alert alert-success'>";
 								divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+								divMsj = divMsj + "<strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong>";
 								divMsj = divMsj + "Se ha eliminado el grupo correctamente";
 								divMsj = divMsj + "</div>";
 
@@ -324,6 +339,7 @@ if($this->mensaje_ok == "ok"){
 
 								var divMsj = "<div class='alert alert-success'>";
 								divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+								divMsj = divMsj + "<strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong>";
 								divMsj = divMsj + "Ahora eres parte del grupo.";
 								divMsj = divMsj + "</div>";
 
@@ -363,6 +379,7 @@ if($this->mensaje_ok == "ok"){
 
 								var divMsj = "<div class='alert alert-success'>";
 								divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+								divMsj = divMsj + "<strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong>";
 								divMsj = divMsj + "Has rechazado la invitacion del grupo";
 								divMsj = divMsj + "</div>";
 
@@ -401,6 +418,7 @@ if($this->mensaje_ok == "ok"){
 
 								var divMsj = "<div class='alert alert-success'>";
 								divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+								divMsj = divMsj + "<strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong>";
 								divMsj = divMsj + "Has dejado de participar en el grupo.";
 								divMsj = divMsj + "</div>";
 

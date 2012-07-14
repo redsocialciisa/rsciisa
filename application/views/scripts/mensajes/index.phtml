@@ -1,51 +1,45 @@
  <?php 
 	 $aut = Zend_Auth::getInstance();
- 
-	 if($this->mensaje_ok == "ok")
-	 {
-	 	echo "<div id='divMensaje'><div class='alert alert-success'><button class='close' data-dismiss='alert'>×</button>Mensaje enviado exitosamente</div></div>";
-	 }
- 
-	 if($this->mensaje_ok == "error")
-	 {
-	 	echo "<div id='divMensajeError'><div class='alert alert-success'><button class='close' data-dismiss='alert'>×</button>El usuario destinatario del mensaje no existe</div></div>";
-	 }
-	 
  ?>
- 
-<br><h1>MENSAJES</h1><br>
-  
-<a href="#" onclick="openModalNuevoMensaje()" class="btn"><i class="icon-envelope"></i> Nuevo Mensaje </a><br><br>
- 
- <?php if($this->mensaje_ok == "ok"){
- 		echo "<div id='divMensajeDejarParticipar'><div class='alert alert-success'><button class='close' data-dismiss='alert'>×</button>Mensaje enviado exitosamente</div></div>";
+
+<br>
+<h1>MENSAJES</h1>
+<br>
+
+<a href="#" onclick="openModalNuevoMensaje()" class="btn"><img src="/imagenes/proyecto/addmsj.png">&nbsp;&nbsp;Nuevo Mensaje </a>
+<br>
+<br>
+
+<?php if($this->mensaje_ok == "ok"){
+ 		echo "<div id='divMensajeMsj'><div class='alert alert-success'><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;<button class='close' data-dismiss='alert'>×</button>Tu mensaje ha sido enviado</div></div>";
  }?>
- 
+
 <div class="tabbable span9 well">
-    <ul class="nav nav-tabs">
-    	<li><a href="#misMensajes" data-toggle="tab">Mis Mensajes</a></li>
-    </ul>
-    <div class="tab-content">
-    	<div class="tab-pane active" id="misMensajes">
-    	<table>
+	<ul class="nav nav-tabs">
+		<li><a href="#misMensajes" data-toggle="tab"><img src="/imagenes/proyecto/msj.png">&nbsp; Mis Mensajes</a></li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane active" id="misMensajes">
+			<table>
     	<?php
+    		if(count($this->listaUsuarios) > 0){
     		foreach ($this->listaUsuarios as $item)
 		    {
 		?>
 			<tr id="rowUno<?php echo $item->getId();?>" style="display: block;">
-				<td colspan=2>
+					<td colspan=2>
 					<?php echo $item->getNombre();?>
-				</td>			
-			</tr>
-			<tr id="rowDos<?php echo $item->getId();?>" style="display: block;">
-				<td>
-					<div style='width: 80px;'>
-						<a class='thumbnail'>
-							<img src="/imagenes/usuarios/<?php echo $item->getFoto();?>" >
-						</a>
-					</div>
 				</td>
-			<td>
+				</tr>
+				<tr id="rowDos<?php echo $item->getId();?>" style="display: block;">
+					<td>
+						<div style='width: 80px;'>
+							<a class='thumbnail'> <img
+								src="/imagenes/usuarios/icono/<?php echo $item->getFoto();?>">
+							</a>
+						</div>
+					</td>
+					<td>
 				<?php 
 					$objMensajeDao = new Application_Model_MensajeDao();
 					$cantMensajes = $objMensajeDao->contarMensajes($aut->getIdentity()->usu_id, $item->getId());
@@ -60,36 +54,162 @@
 					}
 				?>
 			
-			
-				<a class="btn btn-info" href="<?php echo $this->url(array('controller'=>'mensajes', 'action'=>'ver', 'id'=>$item->getId(),'page'=>$pagina)); ?>"> Ver mensaje </a>
-			</td>	
+				<a class="btn btn-info"
+						href="<?php echo $this->url(array('controller'=>'mensajes', 'action'=>'ver', 'id'=>$item->getId(),'page'=>$pagina)); ?>">
+							Ver mensaje </a>
+					</td>
+				</tr>	
+    	<?php }?>
+    	<?php }else{?>
+    			No tienes ningún mensaje aún..
     	<?php }?>
     	</table>
-    	</div>
-    </div>
+		</div>
+	</div>
 </div>
- 
- <div class="modal hide" id="myModalNuevoMensaje" style="width: 700px;">
-    <div class="modal-header">
-    	<button class="close" onclick="closeModalNuevoMensaje()" data-dismiss="modal">×</button>
-    <h2><img src="/imagenes/proyecto/add.png">&nbsp;&nbsp;&nbsp;Nuevo Mensaje</h2>
-    </div>
-    <div class="modal-body">
- 		<form action="/mensajes/index/" method="post" enctype="<?php echo $this->form->getEnctype(); ?>">
+
+<?php 
+	$flag = "modal hide";
+	if($this->error == "error")
+	{
+	    $flag = "modal";
+	}else{
+	    $flag = "modal hide";
+	}
+?>
+<div class="<?php echo $flag;?>" id="myModalNuevoMensaje"
+	style="width: 700px;">
+	<div class="modal-header">
+		<button class="close" onclick="closeModalNuevoMensaje()"
+			data-dismiss="modal">×</button>
+		<h2>
+			<img src="/imagenes/proyecto/addmsj.png">&nbsp;&nbsp;&nbsp;Nuevo Mensaje
+		</h2>
+	</div>
+	<div class="modal-body">
+		<form action="/mensajes/index/" method="post"
+			enctype="<?php echo $this->form->getEnctype(); ?>" id="formMensaje">
 			<div class="Para">
-				<div class="ui-widget">
-					<?php echo $this->form->txtPara; ?>
-				</div>
+				<div class="ui-widget"></div>
 			</div>
-			<?php
-				echo $this->form->txtTextoMensaje;	
-				echo $this->form->enviar;
-             ?>
-        </form>
-    </div>
+			<table>
+				<tr>
+					<td><a href="#" class="btn btn-success"
+						onclick="openModalDestinatario()"><img
+							src="/imagenes/proyecto/addcontacto.png">&nbsp;&nbsp; Seleccionar
+							el destinatario
+					</a> <br>
+					<br>
+						<div id="divNombreDelUsuario"></div>
+						<div id="divErrorDestinatario"></div></td>
+				</tr>
+				<tr>
+					<td><input type="hidden" id="hdnDestinarioSeleccionado"
+						name="hdnDestinarioSeleccionado">
+             			<?php
+							echo $this->form->txtTextoMensaje;
+             			?>
+             			<div id="divErrorTextoMensaje"></div></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<br> <a href="#" class="btn btn-success" onclick="validarMensaje()">Enviar</a>
+		<a href="#" class="btn btn-danger" onclick="limpiarSeleccionado()"
+			data-dismiss="modal">Cancelar</a>
+	</div>
 </div>
+
+<div class="modal hide" id="myModalDestinatario" style="width: 700px;">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">×</button>
+		<h2>
+			<img src="/imagenes/proyecto/addcontacto.png">&nbsp;&nbsp;Seleccionar
+			destinatario
+		</h2>
+	</div>
+	<div class="modal-body">
+
+		<div id="divListadoUsuarios"></div>
+		<div id="divLoaderMensaje"></div>
+
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn btn-success" data-dismiss="modal">Seleccionar</a>
+		<a href="#" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+ 	function limpiarSeleccionado()
+ 	{
+ 		document.getElementById("hdnDestinarioSeleccionado").value = "";
+ 		document.getElementById("divNombreDelUsuario").innerHTML = "";
+ 	}
+
+ 	function validarMensaje()
+ 	{
+ 	 	var errores = false;
+ 	 	if(document.getElementById("hdnDestinarioSeleccionado").value == "")
+ 	 	{
+ 	 		document.getElementById("divErrorDestinatario").innerHTML = "<ul type = square><li><font color='red'>Debes ingresar el destinarario del mensaje</font></ul>";
+ 	 		errores = true;
+ 	 	}
+
+ 	 	if(document.getElementById("txtTextoMensaje").value == "")
+ 	 	{
+ 	 		document.getElementById("divErrorTextoMensaje").innerHTML = "<ul type = square><li><font color='red'>Debes ingresar el texto del mensaje</font></ul>";
+ 	 		errores = true;
+ 	 	}
+
+ 	 	if(errores)
+ 	 	{
+ 	 	 	return;
+ 	 	}else{
+ 	 		document.getElementById("formMensaje").submit();
+ 	 	}
+ 	 	
+ 	}
+
+ 	function elDestinatario(id)
+ 	{
+ 		document.getElementById("divNombreDelUsuario").innerHTML = "<p><b><font color='blue'> Para: " +document.getElementById("hdnNomUsr"+id).value + "</font></b></p>";
+ 		document.getElementById("hdnDestinarioSeleccionado").value = id;
+ 	}
+
+	function openModalDestinatario()
+	{
+ 		$('#myModalDestinatario').modal("show");	
+		
+		var divLoader = "divLoaderMensaje";
+		
+		selectDestino = $('#' + divLoader);
+			$.ajax(
+					{
+					async: true,
+					type: 'POST',
+					url: '<?php echo $this->baseUrl()?>/mensajes/obtener-contactos',
+					data: 'nada=nada',	
+					dataTypeString: 'text',
+					
+					beforeSend: function(data){
+		                selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
+				    },  
+				    success: function(requestData){
+			               		result = requestData;
+
+			               		document.getElementById("divListadoUsuarios").innerHTML = result;
+				               	document.getElementById(divLoader).innerHTML = "";
+				    },  
+				    error: function(requestData, strError, strTipoError){          
+				    }
+				    
+					});
+		
+	}
  
- <script type="text/javascript">
 	function openModalNuevoMensaje()
 	{
 		$('#myModalNuevoMensaje').modal("show");	
@@ -100,17 +220,4 @@
 		$('#myModalNuevoMensaje').modal();	
 	}
 
-	$(function() {
-		<?php 
-			$aut = Zend_Auth::getInstance();
-			$objAmigoDao = new Application_Model_AmigoDao();
-			$listaUsuarios = $objAmigoDao->obtenerTodosPorNombre($aut->getIdentity()->usu_id);
-		?>
-		$( "#txtPara" ).autocomplete({
-			source: <?php echo json_encode($listaUsuarios); ?>
-		});
-	});
-
-	
- 
  </script>

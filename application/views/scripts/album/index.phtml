@@ -1,8 +1,10 @@
     <?php
     	$aut = Zend_Auth::getInstance();
     ?>
-    <br>
-   	<p><a href="#" class="btn" onclick="openModalAlbum()"><i class="icon-folder-open"></i>&nbsp;&nbsp;Nuevo Álbum</a></p>
+    
+    <br><h1>ÁLBUMES</h1><br>
+    
+   	<p><a href="#" class="btn" onclick="openModalAlbum()"><img src="/imagenes/proyecto/addfolder.png">&nbsp;&nbsp;&nbsp;&nbsp;Nuevo Álbum</a></p>
    	<br>
    	
    	<?php 
@@ -11,7 +13,7 @@
 		$msj = "";
 		$msj .= "<div class='alert alert-success' id='divCreado'>";
 		$msj .= "<button class='close' data-dismiss='alert'>×</button>";
-		$msj .= "<strong>Éxito!</strong> Álbum creado correctamente !!";
+		$msj .= "<strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong> Tu álbum ha sido creado con éxito !!";
 		$msj .= "</div>";
 		echo $msj;
 	}
@@ -19,14 +21,15 @@
 	
 	<div id="divMensaje"></div>
     	 
-    <div class="tabbable hero-unit span9">
+    <div class="tabbable well span9">
 	    <ul class="nav nav-tabs">
-	   		<li class="active"><a href="#tab1" data-toggle="tab"><i class="icon-folder-open"></i>&nbsp;&nbsp;Mis Álbumes</a></li>
+	   		<li class="active"><a href="#tab1" data-toggle="tab"><img src="/imagenes/proyecto/folder.png">&nbsp;&nbsp;&nbsp;&nbsp;Mis Álbumes</a></li>
 	    </ul>
 	    <div class="tab-content">
 		    <div class="tab-pane active" id="tab1">
 		
-			<?php 
+		<?php if(count($this->listaAlbumes) > 0){?>
+		    <?php 
 				$columna = 0;
 				$cantColumna = 4;
 			?>
@@ -40,7 +43,7 @@
 								<table align="center" id="rowUno<?php echo $album->getId();?>">
 									<tr>
 										<td align="left">									
-											<i class="icon-folder-open"></i>&nbsp;&nbsp;<a href="/album/contenido/id/<?php echo $album->getId();?>"><?php echo $album->getNombre();?></a>
+											<img src="/imagenes/proyecto/folder.png">&nbsp;&nbsp;<a href="/album/contenido/id/<?php echo $album->getId();?>"><?php echo $album->getNombre();?></a>
 										</td>
 									</tr>
 									<tr>
@@ -50,7 +53,7 @@
 									</tr>
 									<tr>
 										<td align="left">
-											<a href="#" onclick="openEliminarAlbum('<?php echo $album->getId();?>')"><i class="icon-remove"></i></a>&nbsp;Eliminar
+											<a href="#" onclick="openEliminarAlbum('<?php echo $album->getId();?>')"><img src="/imagenes/proyecto/cruz.png" width="20px;">&nbsp;&nbsp;</a>&nbsp;Eliminar
 										</td>
 									</tr>
 								</table>						
@@ -65,7 +68,10 @@
 						 }
 						 echo "</tr>";
 					?>
-				</table>	
+				</table>
+			<?php }else{?>
+				No tienen ningún álbum aún..
+			<?php }?>	
 		   		 
 		    </div>
 	    </div>
@@ -84,7 +90,7 @@
 <div class="<?php echo $flag;?>" id="myModalAlbum" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal" onclick="closeModalAlbum();">×</button>
-    <h2><img src="/imagenes/proyecto/add.png">&nbsp;&nbsp;&nbsp;Nuevo Álbum</h2>
+    <h2><img src="/imagenes/proyecto/addfolder.png">&nbsp;&nbsp;&nbsp;Nuevo Álbum</h2>
     </div>
     <div class="modal-body">
     	<form action="/album/index/" method="post" enctype="<?php echo $this->form->getEnctype(); ?>" id="formAlbum">
@@ -110,7 +116,7 @@
 <div class="modal hide" id="myModalEliminarAlbum" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal" onclick="closeEliminarAlbum();">×</button>
-    <h2><img src="/imagenes/proyecto/add.png">&nbsp;&nbsp;&nbsp;Eliminar Álbum</h2>
+    <h2><img src="/imagenes/proyecto/papelera.png">&nbsp;&nbsp;&nbsp;Eliminar Álbum</h2>
     </div>
     <div class="modal-body">
     	¿Estás seguro de eliminar el álbum y todas sus fotos?
@@ -173,7 +179,7 @@
 
 		               			var divMsj= "<div class='alert alert-success'>";
 		               			divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
-		               			divMsj = divMsj + "<strong>Éxito!</strong> Álbum eliminado correctamente !!";
+		               			divMsj = divMsj + "<strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong> Álbum eliminado correctamente !!";
 		               			divMsj = divMsj + "</div>";
 
 		               			document.getElementById("divMensaje").innerHTML = divMsj;

@@ -10,7 +10,7 @@
 				    $msj = "";
 					$msj .= "<div class='alert alert-success' id='divFotosCargadas'>";
 					$msj .= "<button class='close' data-dismiss='alert'>×</button>";
-					$msj .= "<strong>Éxito!</strong> Fotos cargadas correctamente !!";
+					$msj .= "<strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong> Fotos cargadas correctamente !!";
 					$msj .= "</div>";
 					echo $msj;	
 		    }
@@ -18,12 +18,12 @@
 	
 	<div id="divMensaje"></div>
 	
-	<p><a href="#" class="btn" onclick="openModalAgregarFoto()"><i class="icon-camera"></i>&nbsp;&nbsp;Agregar Fotos</a></p>
+	<p><a href="#" class="btn" onclick="openModalAgregarFoto()"><img src="/imagenes/proyecto/foto.png">&nbsp;&nbsp;Agregar Fotos</a></p>
    	<br>
     
-    <div class="tabbable hero-unit well">
+    <div class="tabbable well span9">
 	    <ul class="nav nav-tabs">
-		    <li class="active"><a href="#tab1" data-toggle="tab"><i class="icon-camera"></i>&nbsp;&nbsp;Fotos</a></li>
+		    <li class="active"><a href="#tab1" data-toggle="tab"><img src="/imagenes/proyecto/foto.png">&nbsp;&nbsp;Fotos</a></li>
 	    </ul>
 	    <div class="tab-content">
 		    <div class="tab-pane active" id="tab1">
@@ -43,12 +43,12 @@
 								<table align="center" id="rowUno<?php echo $foto->getId();?>">
 									<tr>
 										<td align="center">
-											<a href="#"><img src="<?php echo $this->baseUrl()?>/imagenes/fotos/icono/<?php echo $foto->getFoto(); ?>" width="160px;" height="100px;" onclick="openModalCarrucel('<?php echo $foto->getFoto(); ?>')"></img></a>
+											<a href="#"><img src="<?php echo $this->baseUrl()?>/imagenes/fotos/icono/<?php echo $foto->getFoto(); ?>" onclick="openModalCarrucel('<?php echo $foto->getFoto(); ?>')"></img></a>
 										</td>
 									</tr>
 									<tr>
 										<td align="left">
-											<a href="#" onclick="openEliminarFoto('<?php echo $foto->getId();?>')"><i class="icon-remove"></i></a>&nbsp;Eliminar
+											<a href="#" onclick="openEliminarFoto('<?php echo $foto->getId();?>')"><img src="/imagenes/proyecto/cruz.png" width="20px;">&nbsp;&nbsp;</a>&nbsp;Eliminar
 										</td>
 									</tr>
 								</table>						
@@ -72,7 +72,7 @@
 <div class="modal hide" id="myModalCarrucel" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal" onclick="closeModalCarrucel();">×</button>
-    <h2><img src="/imagenes/proyecto/add.png">&nbsp;&nbsp;&nbsp;Fotos del álbum</h2>
+    <h2><img src="/imagenes/proyecto/foto.png">&nbsp;&nbsp;&nbsp;Fotos del álbum</h2>
     </div>
     <div class="modal-body">
     	
@@ -83,11 +83,11 @@
 		    </div>
 		    
 		    <!-- Carousel nav -->
-		    <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-		    <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+			<div id='html2' style="position:absolute; overflow:hidden; left:0px; top: 0px; width:650px; height:100px;"><a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a></div>
+			<div id='html2' style="position:absolute; overflow:hidden; left:0px; top: 0px; width:650px; height:100px;"><a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a></div>
 		    
 		</div>
-    	
+    	 
     </div>
     <div class="modal-footer">
     		<input type="button" value="Cerrar" data-dismiss="modal" onClick="closeModalCarrucel()" class="btn btn-danger">
@@ -106,7 +106,7 @@
 <div class="<?php echo $flag;?>" id="myModalAgregarFoto" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal" onclick="closeModalAgregarFoto();">×</button>
-    <h2><img src="/imagenes/proyecto/add.png">&nbsp;&nbsp;&nbsp;Agregar Fotos</h2>
+    <h2><img src="/imagenes/proyecto/foto.png">&nbsp;&nbsp;Agregar Fotos</h2>
     </div>
     <div class="modal-body">
     
@@ -126,14 +126,14 @@
 <div class="modal hide" id="myModalEliminarFoto" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal" onclick="closeEliminarFoto();">×</button>
-    <h2><img src="/imagenes/proyecto/add.png">&nbsp;&nbsp;&nbsp;Eliminar Foto</h2>
+    <h2><img src="/imagenes/proyecto/papelera.png">&nbsp;&nbsp;&nbsp;Eliminar Foto</h2>
     </div>
     <div class="modal-body">
     	¿Estás seguro de eliminar la foto?
     	<input type="hidden" id="idFotoAEliminar" name="idFotoAEliminar">
     </div>
     <div class="modal-footer">
-    		<input type="button" value="Si, eliminar" data-dismiss="modal" onClick="eliminarFoto();" class="btn btn-success">
+    		<input type="button" value="Si, eliminar" data-dismiss="modal" onClick="eliminarFoto();" class="btn btn-success"> 
     		<input type="button" value="Cerrar" data-dismiss="modal" onClick="closeEliminarFoto()" class="btn btn-danger">
     </div>
 </div>	
@@ -142,15 +142,96 @@
     
     function openModalCarrucel(foto)
 	{
-		var htmlGaleria = "<div class='active item'><img src='/imagenes/fotos/"+foto+"'></div>";
-    	
+	//	var htmlGaleria = "<div class='active item'><img src='/imagenes/fotos/"+foto+"'></div>";
+    	var htmlGaleria = "";
     	<?php foreach ($this->listaFotos as $foto){ ?>
-		    	htmlGaleria = htmlGaleria + "<div class='item'><img src='/imagenes/fotos/<?php echo $foto->getFoto();?>'></div>";
-    	<?php } ?>
 
+    			if("<?php echo $foto->getFoto();?>" == foto){
+	    			htmlGaleria = htmlGaleria + "<div class='active item'><img src='/imagenes/fotos/<?php echo $foto->getFoto();?>'>";
+    			}else{
+    				htmlGaleria = htmlGaleria + "<div class='item'><img src='/imagenes/fotos/<?php echo $foto->getFoto();?>'>";
+    			}
+
+    			htmlGaleria = htmlGaleria + "<div class='cont2'><?php echo $foto->getNombre();?></div>";
+	    		htmlGaleria = htmlGaleria + "<br> Ingresa un comentario:<br>";   
+	    		htmlGaleria = htmlGaleria + "<textarea rows='2' placeholder='Comenta algo aquí...' id='txtComentario<?php echo $foto->getId();?>' class='span4' onkeypress='ValidarCaracteres(this, 249)'></textarea>&nbsp;&nbsp;";
+	    		htmlGaleria = htmlGaleria + "<input type='button' id='btnComentar<?php echo $foto->getId();?>' onclick='generarComentario(<?php echo $foto->getId();?>)' class='btn btn-success' value='Comentar'>";
+	    		htmlGaleria = htmlGaleria + "<div class='cont' id='divComennt<?php echo $foto->getId();?>'></div>";
+	    		htmlGaleria = htmlGaleria + "</div>";
+				
+	    		comentariosFotos(<?php echo $foto->getId();?>);
+		    	
+    	<?php } ?>
+    	
     	document.getElementById("divCarouselInner").innerHTML = htmlGaleria;
-		$('#myModalCarrucel').modal("show");	
+		$('#myModalCarrucel').modal("show");
+
+			
 	}
+
+    $('.carousel').carousel({
+        interval: 999999999
+	})
+
+	function generarComentario(id){
+
+		var texto = document.getElementById("txtComentario"+id).value;
+
+		if(trim(texto) == "")
+		{
+			return;
+		}
+
+		$.ajax(
+				{
+				async: true,
+				type: 'POST',
+				url: '<?php echo $this->baseUrl()?>/album/guardar-comentario',
+				data: 'texto='+texto+'&id='+id,	//ID FOTO
+				dataTypeString: 'text',
+				
+				beforeSend: function(data){
+					//loader
+			    },  
+			    success: function(requestData){
+
+			    	result  = requestData;
+			    	document.getElementById("divComennt"+id).innerHTML = "";
+			    	document.getElementById("divComennt"+id).innerHTML = result;
+			    	document.getElementById("txtComentario"+id).value = "";
+			    },  
+			    error: function(requestData, strError, strTipoError){          
+			    }
+			    
+				});
+			
+		}
+
+	function comentariosFotos(id){
+
+		$.ajax(
+				{
+				async: true,
+				type: 'POST',
+				url: '<?php echo $this->baseUrl()?>/album/obtener-comentarios-foto',
+				data: 'id='+id,	//ID FOTO
+				dataTypeString: 'text',
+				
+				beforeSend: function(data){
+					//loader
+			    },  
+			    success: function(requestData){
+
+			    	result  = requestData;
+			    	document.getElementById("divComennt"+id).innerHTML = result; 
+				    
+			    },  
+			    error: function(requestData, strError, strTipoError){          
+			    }
+			    
+				});
+			
+		}
 
     function closeModalCarrucel()
 	{
@@ -210,7 +291,7 @@
 
 		               			var divMsj= "<div class='alert alert-success'>";
 		               			divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
-		               			divMsj = divMsj + "<strong>Éxito!</strong> Foto eliminada correctamente !!";
+		               			divMsj = divMsj + "<strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong> Foto eliminada correctamente !!";
 		               			divMsj = divMsj + "</div>";
 
 		               			document.getElementById("divMensaje").innerHTML = divMsj;
@@ -223,6 +304,9 @@
 				});
 			
 		}
+
+
+	
 	
 </script>
     

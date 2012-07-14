@@ -22,7 +22,7 @@ class Application_Model_FotoDao
     		$objFoto = new Application_Model_Foto();
     		 
     		$objFoto->setId($resultado->current()->fot_id);
-    		$objFoto->setNombre($resultado->current()->fot_nombre);
+    		$objFoto->setNombre($resultado->current()->fot_descripcion);
     		$objFoto->setFoto($resultado->current()->fot_foto);
     		$objFoto->setFecha($resultado->current()->fot_fecha_subida);
     		$objFoto->setAlbumId($resultado->current()->alb_id);
@@ -34,7 +34,7 @@ class Application_Model_FotoDao
     public function guardar(Application_Model_Foto $foto)
     {
     	$data = array('fot_id' => $foto->getId(),
-    			'fot_nombre' => $foto->getNombre(),
+    			'fot_descripcion' => $foto->getNombre(),
     			'fot_foto' => $foto->getFoto(),
     			'fot_fecha_subida' => $foto->getFecha(),
     			'alb_id' => $foto->getAlbumId()

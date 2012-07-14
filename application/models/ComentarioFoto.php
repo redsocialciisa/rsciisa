@@ -6,6 +6,7 @@ class Application_Model_ComentarioFoto
     private $_texto;
     private $_fecha;
     private $_fotoId;
+    private $_usuId;
     
 	/**
 	 * @return the $_id
@@ -36,6 +37,13 @@ class Application_Model_ComentarioFoto
 	}
 
 	/**
+	 * @return the $_usuId
+	 */
+	public function getUsuId() {
+		return $this->_usuId;
+	}
+
+	/**
 	 * @param field_type $_id
 	 */
 	public function setId($_id) {
@@ -63,8 +71,12 @@ class Application_Model_ComentarioFoto
 		$this->_fotoId = $_fotoId;
 	}
 
-    
-	
+	/**
+	 * @param field_type $_usuId
+	 */
+	public function setUsuId($_usuId) {
+		$this->_usuId = $_usuId;
+	}
 
 }
 

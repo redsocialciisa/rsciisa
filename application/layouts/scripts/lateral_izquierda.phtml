@@ -29,7 +29,7 @@
 	    </a>
         <ul>
         	<h5><?php echo $objUsuarioDao->obtenerPorId($aut->getIdentity()->usu_id)->getNombre();?></h5>
-				<p><i class="icon-gift"></i>
+				<p><img src="/imagenes/proyecto/torta.png" width="15px;">&nbsp;&nbsp;
 					<?php
 						$utilidad = new Application_Model_Utilidad();
 						echo $utilidad->girarFecha($objUsuarioDao->obtenerPorId($aut->getIdentity()->usu_id)->getFechaNacimiento());
@@ -39,11 +39,11 @@
 				<p><?php echo $aut->getIdentity()->perfil_ciisa;?></p>
 		</ul>
         
-		<i class="icon-envelope"></i>&nbsp; <a href="/mensajes" style="color: #000;">Mensajes</a><br><br>
-		<i class="icon-camera"></i>&nbsp;<a href="/album" style="color: #000;">Álbumes</a><br><br>
-		<i class="icon-calendar"></i>&nbsp;<a href="/evento" style="color: #000;">Eventos</a><br><br>
-		<i class="icon-user"></i><i class="icon-user"></i>&nbsp;<a href="/grupo" style="color: #000;">Grupos</a><br><br>
-		<i class="icon-user"></i>&nbsp;<a href="/contacto" style="color: #000;">Mis Contactos</a><br><br>
+		<img src="/imagenes/proyecto/msj.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/mensajes" style="color: #000;">Mensajes</a><br><br>
+		<img src="/imagenes/proyecto/album.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/album/index/id/<?php echo $aut->getIdentity()->usu_id;?>" style="color: #000;">Álbumes</a><br><br>
+		<img src="/imagenes/proyecto/calendario.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/evento" style="color: #000;">Eventos</a><br><br>
+		<img src="/imagenes/proyecto/group.png">&nbsp;&nbsp;<a href="/grupo" style="color: #000;">Grupos</a><br><br>
+		<img src="/imagenes/proyecto/contactos.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/contacto" style="color: #000;">Mis Contactos</a><br><br>
 		
  							<?php foreach ($listaAmigos as $amigo){ ?>
 							  <div style="width: 70px;">
@@ -58,8 +58,12 @@
 					            	 	   $imgEmocion = $imgEmocion . "</a>";
 					            	 	   $imgEmocion = $imgEmocion . "</div></td</tr></table>";
 					            	 ?>
-					            	 src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $amigo->getFoto()?>"
-					            	 data-content="<?php echo $amigo->getCorreo();?>"				            	 
+					            	 src="<?php echo $this->baseUrl()?>/imagenes/usuarios/icono/<?php echo $amigo->getFoto()?>"
+					            	 data-content="<?php 
+					            	 				$objPerfilRedSocialDao = new Application_Model_PerfilRedSocialDao();
+					            	 				echo $amigo->getCorreo()." - <b>".$objPerfilRedSocialDao->obtenerPorUsuarioId($amigo->getId())->getNombre()."</b>";
+					            	 				$objPerfilRedSocialDao = null;
+					            	 				?>"				            	 
 					            	 id="contacto<?php echo $amigo->getId();?>" 
 					            	 data-original-title="<?php echo $imgEmocion;?>" 
 					            	 onMouseOver="popover(<?php echo $amigo->getId();?>)">

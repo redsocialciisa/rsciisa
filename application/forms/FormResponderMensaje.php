@@ -11,7 +11,7 @@ class Application_Form_FormResponderMensaje extends Zend_Form
         ->setValue('')
         ->setAttrib('maxlength', '500')
         ->setAttrib('onkeypress','ValidarCaracteres(this, 499)')
-        ->setAttrib('class', 'span3')
+        ->setAttrib('class', 'span6')
         ->setAttrib('rows', 2)
         ->clearErrorMessages()
         ->addErrorMessage('Debes ingresar el texto del mensaje');

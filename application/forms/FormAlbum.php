@@ -15,28 +15,30 @@ class Application_Form_FormAlbum extends Zend_Form
         $nombre->setLabel('Nombre: ')
 	        ->setRequired(true)
 	        ->setValue('')
-	        ->setAttrib('maxlength', '49')
-	        ->setAttrib('class', 'span6')
+	        ->setAttrib('maxlength', '24')
+	        ->setAttrib('class', 'span3')
 	        ->clearErrorMessages()
 	        ->addErrorMessage('Debes ingresar el nombre del álbum');
         
         $fotoDesc1 = new Zend_Form_Element_Textarea('fotoDesc1');
-        $fotoDesc1->setLabel('Descripción: ')
-	        ->setAttrib('rows','2')
-	        ->setAttrib('onkeypress','ValidarCaracteres(this, 44)')
-	        ->setAttrib('class','span3');
+        $fotoDesc1->setLabel('Descripción foto portada: ')
+	        ->setAttrib('rows','3')
+	        ->setAttrib('onkeypress','ValidarCaracteres(this, 249)')
+	        ->setAttrib('class','span6');
         
         $this->setEnctype(Zend_Form::ENCTYPE_MULTIPART);
         $fileFoto1 = new Zend_Form_Element_File('fileFoto1');
         $fileFoto1->setLabel(' ')
-        		->setRequired(false)
+        		->setRequired(true)
 		        ->addValidator('IsImage')
 		        ->setAttrib('class', 'span4')
 		        ->setMaxFileSize(5097152)
-		        ->addValidator('Extension',false,array('jpg','jpeg','png'));
+		        ->addValidator('Extension',false,array('jpg','jpeg','png'))
+        		->clearErrorMessages()
+        		->addErrorMessage('Debes ingresar el nombre del álbum');
         
 		$descripcion = new Zend_Form_Element_Textarea('txtDescripcion');
-		$descripcion->setLabel('Descripcion del grupo: ')
+		$descripcion->setLabel('Descripcion del álbum: ')
 					->setRequired(false)
 					->setAttrib('class', 'span6')
 					->setAttrib('rows', 2)

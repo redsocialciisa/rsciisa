@@ -1,14 +1,16 @@
  <br><h1> CONTACTOS </h1><br>
 
-<div class="tabbable span9">
+<div class="tabbable span9 well">
     <ul class="nav nav-tabs">
-    <li class="active"><a href="#tab1" data-toggle="tab">Mis Contactos</a></li>
-    <li><a href="#tab2" data-toggle="tab">Mis Solicitudes Pendientes</a></li>
+    <li class="active"><a href="#tab1" data-toggle="tab"><img src="/imagenes/proyecto/contacto2.png">&nbsp;&nbsp;Mis Contactos</a></li>
+    <li><a href="#tab2" data-toggle="tab"><img src="/imagenes/proyecto/hoja.png">&nbsp;&nbsp;Mis Solicitudes Pendientes</a></li>
     </ul>
     <div class="tab-content">
     <div class="tab-pane active" id="tab1">
     
-    	<table width="100%" align="center" class="well">
+    <?php if(count($this->listaContactos) > 0){?>
+    
+    	<table width="100%" align="center">
     				<?php 
 						$aut = Zend_Auth::getInstance();
 						$objAmigoDao = new Application_Model_AmigoDao();
@@ -26,27 +28,24 @@
 										<td>
 											<table>
 												<tr>
-													<td valign="top">
-														<div class="btn-group">
-												          <a href="#" class="btn btn-primary"><i class="icon-user icon-white"></i>Contacto</a>
-												          <a href="#" data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="caret"></span></a>
-												          <ul class="dropdown-menu">
-												            <li><a href="#"><i class="icon-pencil"></i> Mensaje </a></li>
-												            <li><a href="#" onclick="openMyModalEliminarContacto(<?php echo $usuario->getId();?>,'<?php echo $usuario->getNombre();?>')"><i class="icon-trash"></i> Eliminar </a></li>
-												          </ul>
-												        </div>
-													</td>
-												</tr>
-												<tr>
-													<td>
+													<td valign="top" class="contMini">
 														<div style='width: 100px;'>
 		            	 	   								<a class='thumbnail'>
-																<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $usuario->getFoto(); ?>"></img>
+																<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/icono/<?php echo $usuario->getFoto(); ?>"></img>
 															</a>
 														</div>
 													</td>
-													<td valign="top" class="contMini">
-														<p><a href="/muro/muro-contacto/id/<?php echo $usuario->getId();?>"><?php echo $usuario->getNombre();?></a></p>
+													<td valign="top">
+														<div class="cont100"><p><a href="/muro/muro-contacto/id/<?php echo $usuario->getId();?>"><?php echo $usuario->getNombre();?></a></p></div>
+														<?php 
+    														$objPerfilRedSocialDao = new Application_Model_PerfilRedSocialDao();
+    														echo "<h6>".$objPerfilRedSocialDao->obtenerPorUsuarioId($usuario->getId())->getNombre()."</h6>";
+    														$objPerfilRedSocialDao = null;?>
+													</td>
+												</tr>
+												<tr>
+													<td colspan="2">
+														<a href="#" onclick="openMyModalEliminarContacto(<?php echo $usuario->getId();?>,'<?php echo $usuario->getNombre();?>')"><img src="/imagenes/proyecto/cruz.png" width="15px;">&nbsp;Eliminar</a>
 													</td>
 												</tr>
 											</table>
@@ -65,10 +64,15 @@
 						 echo "</tr>";
 					?>
 				</table>
+				
+			<?php }else{?>
+				No tienes ningún contacto aún..
+			<?php }?>
     
     </div>
     <div class="tab-pane" id="tab2">
 
+    <?php if(count($this->listaPendientes) > 0){ ?>
     	<table>
     	<?php foreach ($this->listaPendientes as $usuarioPendiente){?>
     				<tr>
@@ -87,12 +91,15 @@
 							</div>
     					</td>
     					<td>
-							<button href="#" class="btn btn-success" onclick="aceptarContacto(<?php echo $usuarioPendiente->getId();?>)">Aceptar</button>
-							<button href="#" class="btn btn-danger" onclick="openMyModalRechazarContacto(<?php echo $usuarioPendiente->getId();?>,'<?php echo $usuarioPendiente->getNombre();?>')">Rechazar</button>	
+							<button href="#" class="btn btn-success" onclick="aceptarContacto(<?php echo $usuarioPendiente->getId();?>)"><img src="/imagenes/proyecto/ok.png" width="15px;">&nbsp;Aceptar</button>
+							<button href="#" class="btn btn-danger" onclick="openMyModalRechazarContacto(<?php echo $usuarioPendiente->getId();?>,'<?php echo $usuarioPendiente->getNombre();?>')" ><img src="/imagenes/proyecto/cruz.png" width="15px;">&nbsp;Rechazar</button>	
     					</td>
     				</tr>
     	<?php } ?>
     	</table>
+    	<?php }else{?>
+    		No tienes ninguna solicitud de amistad recibida aún..
+    	<?php }?>
     
     </div>
     </div>
@@ -148,7 +155,7 @@ function aceptarContacto(id)
 
 						var divMsj = "<div class='alert alert-success'>";
 						divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
-						divMsj = divMsj + "<strong>Felicidades !!</strong> Ahora son amigos !!";
+						divMsj = divMsj + "<strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong> Ahora son amigos !!";
 						divMsj = divMsj + "</div>";
 			    		
 			    		document.getElementById("rowDos" + id).style.display = "none";
@@ -182,7 +189,7 @@ function rechazarContacto()
 
 			    		var divMsj = "<div class='alert alert-success'>";
 						divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
-						divMsj = divMsj + "<strong>Solicitud Rechazada,</strong> Se ha rechazado la solicitud...";
+						divMsj = divMsj + "<strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong> Se ha rechazado la solicitud...";
 						divMsj = divMsj + "</div>";
 			    		
 						document.getElementById("rowDos" + id).style.display = "none";

@@ -12,6 +12,7 @@
 				<a href="#" id="tooltipLapiz" rel="popover" data-original-title="Publica algo aquí.." onMouseOver="tooltipLapiz()"><img src="/imagenes/proyecto/luz.png" width="40px;" onclick="openModalPublicacion()"></a>
 			<?php } ?> 
 			<u><?php echo $objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getNombre();?></u>
+			
 		</h2>
 		
         <table>
@@ -20,8 +21,14 @@
         			<br>
         			<p class="cont4"><?php echo $objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getBiografia();?></p>
 			        <?php if($objAmigoDao->sonAmigos($aut->getIdentity()->usu_id, $this->Contacto->getId())){?>
-								<p><i class="icon-envelope"></i>&nbsp;&nbsp;<?php echo $objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getCorreo();?></p>
-								<p><i class="icon-gift"></i>&nbsp;&nbsp;<?php echo $objUtilidad->girarFecha($objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getFechaNacimiento());?></p>
+								<p><img src="/imagenes/proyecto/msj.png">&nbsp;&nbsp;<?php echo $objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getCorreo();?></p>
+								<p><img src="/imagenes/proyecto/torta.png">&nbsp;&nbsp;<?php echo $objUtilidad->girarFecha($objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getFechaNacimiento())."</p>";?>
+								<?php 
+								 $objPerfilRedSocialDao = new Application_Model_PerfilRedSocialDao();
+								 echo "<p><img src='/imagenes/proyecto/user.png'>&nbsp;&nbsp;".$objPerfilRedSocialDao->obtenerPorUsuarioId($this->Contacto->getId())->getNombre()."</p>";
+					 			 $objPerfilRedSocialDao = null;
+								?>
+								<p><img src="/imagenes/proyecto/album.png">&nbsp;&nbsp;<a href="/album/index/id/<?php echo $this->Contacto->getId();?>" style="color: #000;">Álbumes</a></p>
 					<?php } ?>
         		</td>
         		<td valign="top">
@@ -297,7 +304,7 @@
 			</tr>
 			<tr>
 				<td colspan="4">
-					<b>Quienes podrán visualizar tu publicación ?</b>
+					<b>¿Quiénes podrán visualizar tu publicación ?</b>
 				</td>
 			</tr>
 			<tr>
@@ -331,7 +338,7 @@
 									<p>La solicitud ha sido enviada, debes esperar hasta que <?php echo $this->Contacto->getNombre();?> te acepte.</p>
 						<?php }else{ ?>
 								<p>Actualmente no eres amigo de <?php echo $this->Contacto->getNombre();?>...</p>
-						 		<a href="#" onclick="openModalAgregar()" class="btn btn-danger" data-dismiss="modal">Enviar Solicitud</a>
+						 		<a href="#" onclick="openModalAgregar()" class="btn btn-success" data-dismiss="modal"><img src="/imagenes/proyecto/addcontacto.png">&nbsp;&nbsp;Enviar Solicitud</a>
 						<?php } ?>
 					</div>
 				</td>
@@ -343,7 +350,7 @@
 <div class="modal hide" id="myModalAgregar" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
-    <img src="/imagenes/proyecto/Info.png">&nbsp;<b>Agregar Contacto</b>
+    <h2><img src="/imagenes/proyecto/Info.png">&nbsp;&nbsp;&nbsp;Agregar Contacto</h2>
     </div>
     <div class="modal-body">
 		¿Estás seguro de enviar la solicitud de amistad a: <b> <?php echo $this->Contacto->getNombre();?> </b> ?
@@ -397,7 +404,7 @@
 	
 		if(document.getElementById("cbxAlumno").checked == false && document.getElementById("cbxProfesor").checked == false && document.getElementById("cbxAcademico").checked == false)
 		{
-			document.getElementById("divErrorPrivacidadPublicacion").innerHTML = "<ul type='square'><li> Debes seleccionar al menos una privacidad de publicación.... </ul>";
+			document.getElementById("divErrorPrivacidadPublicacion").innerHTML = "<ul type='square'><li><font color='red'>Debes seleccionar al menos una privacidad de publicación....</font></ul>";
 			return;
 		}  
 		
@@ -406,7 +413,7 @@
 		{
 			if(document.getElementById("txtTextoPublicacion").value == "")
 			{
-				document.getElementById("divErrorTexto").innerHTML =  "<ul type='square'><li> Escribe algo aquí... </ul>";
+				document.getElementById("divErrorTexto").innerHTML =  "<ul type='square'><li><font color='red'>Escribe algo aquí...</font></ul>";
 				return;
 			}else{
 				document.getElementById("divErrorTexto").innerHTML = "";
@@ -414,7 +421,7 @@
 	
 			if(document.getElementById("fileFoto").value == "")
 			{
-				document.getElementById("divErrorSinFoto").innerHTML =  "<ul type='square'><li> Tienes que subir una foto... recuerda menor a 2 MB.. </ul>";
+				document.getElementById("divErrorSinFoto").innerHTML =  "<ul type='square'><li><font color='red'>Tienes que subir una foto... recuerda menor a 4 MB.. </font></ul>";
 				return;
 			}else{
 				document.getElementById("divErrorSinFoto").innerHTML = "";
@@ -426,7 +433,7 @@
 		{
 			if(document.getElementById("txtTextoPublicacion").value == "")
 			{
-				document.getElementById("divErrorTexto").innerHTML =  "<ul type='square'><li> Escribe algo aquí... </ul>";
+				document.getElementById("divErrorTexto").innerHTML =  "<ul type='square'><li><font color='red'>Escribe algo aquí...</font></ul>";
 				return;
 			}else{
 				document.getElementById("divErrorTexto").innerHTML = "";
@@ -438,7 +445,7 @@
 		{
 			if(document.getElementById("txtTextoPublicacion").value == "")
 			{
-				document.getElementById("divErrorTexto").innerHTML =  "<ul type='square'><li> Escribe algo aquí... </ul>";
+				document.getElementById("divErrorTexto").innerHTML =  "<ul type='square'><li><font color='red'>Escribe algo aquí...</font></ul>";
 				return;
 			}else{
 				document.getElementById("divErrorTexto").innerHTML = "";
@@ -446,13 +453,13 @@
 			
 			if(document.getElementById("txtVideo").value == "")
 			{
-				document.getElementById("divErrorVideo").innerHTML =  "<ul type='square'><li> Debes ingresar el ID de un video YouTube </ul>";
+				document.getElementById("divErrorVideo").innerHTML =  "<ul type='square'><li><font color='red'>Debes ingresar el ID de un video YouTube</font></ul>";
 				return;
 			}
 	
 			if(document.getElementById("hdnFlagErrorVideo").value == "error")
 			{
-				document.getElementById("divErrorVideo").innerHTML =  "<ul type='square'><li> El ID de YouTube no existe... </ul>";
+				document.getElementById("divErrorVideo").innerHTML =  "<ul type='square'><li><font color='red'>El ID de YouTube no existe...</font></ul>";
 				return;
 			}else{
 				document.getElementById("divErrorVideo").innerHTML = "";

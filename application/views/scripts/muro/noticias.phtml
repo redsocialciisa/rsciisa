@@ -24,7 +24,7 @@
 						<td rowspan="3" valign="top">
 							<div style='width: 100px;'>
 										<a class="thumbnail" href="/muro/muro-contacto/id/<?php echo $publicacion->getUsuarioId();?>">
-	      								<img alt="" src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getFoto();?>">
+	      								<img alt="" src="<?php echo $this->baseUrl()?>/imagenes/usuarios/icono/<?php echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getFoto();?>">
          						</a>
          					</div>
 						</td>
@@ -228,7 +228,7 @@
   	<?php } ?>
   	
 <?php } else{ ?>
-			<h4>No se han encontrado noticias...</h4>
+			<h2>No se han encontrado noticias</h2>
 <?php }?>
 
 <div class="modal hide" id="myModalPost">

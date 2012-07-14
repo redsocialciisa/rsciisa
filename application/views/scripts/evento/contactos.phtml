@@ -78,12 +78,12 @@
     	
     	<?php
 			if($aut->getIdentity()->usu_id == $objEvento->getUsuarioId()){?>
-				<li><a href="#tab1" data-toggle="tab"><i class="icon-user"></i> Quitar Contactos </a></li>
-				<li><a href="#tab2" data-toggle="tab"><i class="icon-user"></i> Invitar Contactos </a></li>
+				<li><a href="#tab1" data-toggle="tab"><img src="/imagenes/proyecto/minuscontacto.png">&nbsp;&nbsp; Quitar Contactos </a></li>
+				<li><a href="#tab2" data-toggle="tab"><img src="/imagenes/proyecto/addcontacto.png">&nbsp;&nbsp; Invitar Contactos </a></li>
 		  <?php }else{ ?>
-		      	<li><a href="#tab1" data-toggle="tab"><i class="icon-user"></i> Contactos </a></li>
+		      	<li><a href="#tab1" data-toggle="tab"><img src="/imagenes/proyecto/user.png">&nbsp;&nbsp; Contactos </a></li>
 		  <?php } ?>
-		  		<li><a href="#tab3" data-toggle="tab"><i class="icon-globe"></i> Mapa </a></li>
+		  		<li><a href="#tab3" data-toggle="tab"><img src="/imagenes/proyecto/tierra.png">&nbsp;&nbsp; Mapa </a></li>
     </ul>
     <div class="tab-content">
     	<div class="tab-pane active" id="tab1">
@@ -109,11 +109,9 @@
 									</tr>
 									<tr>
 										<td align="center">
-											 <div style="width: 70px;">
-						          				<a class="thumbnail" href="#">
-													<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $usuario->getFoto(); ?>"></img>					          					
-						          				</a>
-					          				</div>
+				          				<a class="thumbnail" href="#">
+											<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/icono/<?php echo $usuario->getFoto(); ?>"></img>					          					
+				          				</a>
 										</td>
 									</tr>
 									<tr>
@@ -196,11 +194,9 @@
 								</tr>
 								<tr>
 									<td align="center">
-										 <div style="width: 70px;">
-					          				<a class="thumbnail" href="#">
-												<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $usuario->getFoto(); ?>"></img>					          					
-					          				</a>
-					          			</div>
+			          				<a class="thumbnail" href="#">
+										<img src="<?php echo $this->baseUrl()?>/imagenes/usuarios/icono/<?php echo $usuario->getFoto(); ?>"></img>					          					
+			          				</a>
 									</td>
 								</tr>
 								<tr>
@@ -266,7 +262,7 @@
 <div class="modal hide" id="myModalInvitarSinUsuarios" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
-    <h2><img src="/imagenes/proyecto/cancel.png">&nbsp;&nbsp;&nbsp;Ningún Usuario Seleccionado</h2>
+    <h2><img src="/imagenes/proyecto/cruz.png">&nbsp;&nbsp;&nbsp;Ningún Usuario Seleccionado</h2>
     </div>
     <div class="modal-body">
     	No hay usuarios seleccionados<div id="divGrupo"></div> 
@@ -293,7 +289,7 @@
 <div class="modal hide" id="myModalEliminarUsuarioGrupoNoSelecionado" style="width: 700px;">
     <div class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
-    <h2><img src="/imagenes/proyecto/cancel.png">&nbsp;&nbsp;&nbsp;Ningún Usuario Seleccionado</h2>
+    <h2><img src="/imagenes/proyecto/cruz.png">&nbsp;&nbsp;&nbsp;Ningún Usuario Seleccionado</h2>
     </div>
     <div class="modal-body">
     	No has seleccionado a ningún usuario para eliminar.

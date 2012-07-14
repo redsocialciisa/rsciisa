@@ -2,7 +2,7 @@
 
 <br><h1> EVENTOS </h1><br>
 
-<a href="#" onclick="openModalEvento()" class="btn"><i class="icon-calendar"></i> Crear Evento </a><br><br>
+<a href="#" onclick="openModalEvento()" class="btn"><img src="/imagenes/proyecto/calendario.png">&nbsp;&nbsp; Crear Evento </a><br><br>
 
   <?php 
  		if($this->succesEliminarUsuarios == "ok")
@@ -10,7 +10,7 @@
 			$msj = "";
 			$msj .= "<div class='alert alert-success'>";
 			$msj .= "<button class='close' data-dismiss='alert'>×</button>";
-			$msj .= "<strong>Éxito!</strong> Usuarios han sido eliminados del evento!!";
+			$msj .= "<strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong> Usuarios han sido eliminados del evento!!";
 			$msj .= "</div>";
 			
 			echo $msj;	
@@ -21,7 +21,7 @@
   			$msj = "";
   			$msj .= "<div class='alert alert-success'>";
   			$msj .= "<button class='close' data-dismiss='alert'>×</button>";
-  			$msj .= "<strong>Éxito!</strong> Usuarios han sido invitados al evento!!";
+  			$msj .= "<strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong> Usuarios han sido invitados al evento!!";
   			$msj .= "</div>";
   				
   			echo $msj;
@@ -30,15 +30,16 @@
 
 <div class="tabbable span9 well">
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="#tab1" data-toggle="tab">Mis Eventos
-				comprometidos</a></li>
-		<li><a href="#tab2" data-toggle="tab">Invitaciones Recibidas</a></li>
+		<li class="active"><a href="#tab1" data-toggle="tab"><img src="/imagenes/proyecto/calendario.png">&nbsp;&nbsp;Mis Eventos Comprometidos</a></li>
+		<li><a href="#tab2" data-toggle="tab"><img src="/imagenes/proyecto/hoja.png">&nbsp;&nbsp;Invitaciones Recibidas</a></li>
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane active" id="tab1">
 		
 			<div id="divMensajeEvento"></div>
-		
+
+			<?php if(count($this->listaEventos) > 0){?>
+			
 			<table>
 		    <?php
 		    	echo $this->listaEventos;
@@ -121,6 +122,10 @@
 				</tr>
 		    <?php } ?>
 		    	</table>
+		    	
+		    	<?php }else{?>
+		    		No tienen ningún evento aún...
+		    	<?php }?>
 		</div>
 		<div class="tab-pane" id="tab2">
 				<?php echo $this->listaInvitacionesEvento;
@@ -128,6 +133,9 @@
     		
     		?>
     		<div id="divMensajeInvitacion"></div>
+    		
+    		<?php if(count($this->listaInvitacionesEvento) > 0){ ?>
+    		
 			<table>
 	    			<?php 
 			    		foreach ($this->listaInvitacionesEvento as $item)
@@ -145,17 +153,74 @@
 				<tr id="rowDosInvitacion<?php echo $item->getId();?>"
 					style="display: block;">
 					<td>
-						<div style='width: 80px;'>
-							<a class='thumbnail'> **EVENTO** </a>
-						</div>
+						<?php $fechaPublicacion = strtotime($objGrupo->getFechaEvento()); ?>
+						<table class="span2 well">
+							<tr>
+								<td align="center" class='label label-success'>
+											<?php
+												switch (date("m", $fechaPublicacion))
+												{
+													case 1:
+													    echo "Ene";
+													break;
+													case 2:
+														echo "Feb";
+														break;
+													case 3:
+														echo "Mar";
+														break;
+													case 4:
+														echo "Abr";
+														break;
+													case 5:
+														echo "May";
+														break;
+													case 6:
+														echo "Jun";
+														break;
+													case 7:
+														echo "Jul";
+														break;
+													case 8:
+														echo "Ago";
+														break;
+													case 9:
+														echo "Sep";
+														break;
+													case 10:
+														echo "Oct";
+														break;
+													case 11:
+														echo "Nov";
+														break;
+													case 12:
+														echo "Dic";
+														break;
+												}
+												echo " - ";
+												echo date("Y", $fechaPublicacion);
+											?>
+										</td>
+							</tr>
+							<tr>
+								<td align="center">
+									<h2><?php echo date("d", $fechaPublicacion); ?></h2>
+								</td>
+							</tr>
+						</table>
+						
 					</td>
 					<td>
-						<a class="btn btn-info" onclick="openModalAceptarInvitacion(<?php echo $item->getId();?>)"> Aceptar invitación </a> 
-						<a class="btn btn-info" onclick="openMyModalRechazarEvento(<?php echo $item->getId();?>)">Rechazar invitación </a>
+						<a class="btn btn-success" onclick="openModalAceptarInvitacion(<?php echo $item->getId();?>)"><img src="/imagenes/proyecto/ok.png" width="15px;">&nbsp;Aceptar invitación </a> 
+						<a class="btn btn-danger" onclick="openMyModalRechazarEvento(<?php echo $item->getId();?>)"><img src="/imagenes/proyecto/cruz.png" width="15px;">&nbsp;Rechazar invitación </a>
 					</td>
 				</tr>  
 					<?php }?>
 	    		</table>
+	    		
+	    		<?php }else{?>
+	    			No tienen ninguna invitación recibida aún..
+	    		<?php } ?>
 		</div>
 	</div>
 </div>
@@ -163,7 +228,7 @@
 <div class="modal hide" id="myModalEvento" style="width: 700px;">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">×</button>
-		<h2><img src="/imagenes/proyecto/add.png">&nbsp;&nbsp;&nbsp;Nuevo Evento</h2>
+		<h2><img src="/imagenes/proyecto/calendario.png">&nbsp;&nbsp;Nuevo Evento</h2>
 	</div>
 	<div class="modal-body">
 
@@ -558,6 +623,7 @@
 
 							var divMsj = "<div class='alert alert-success'>";
 							divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+							divMsj = divMsj + "<strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong>";
 							divMsj = divMsj + "Ahora eres parte del grupo.";
 							divMsj = divMsj + "</div>";
 
@@ -608,6 +674,7 @@
 
 						var divMsj = "<div class='alert alert-success'>";
 						divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+						divMsj = divMsj + "<strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong>";
 						divMsj = divMsj + "Has indicado que no asistirás al evento";
 						divMsj = divMsj + "</div>";
 
@@ -645,6 +712,7 @@
 
 							var divMsj = "<div class='alert alert-success'>";
 							divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+							divMsj = divMsj + "<strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong>";
 							divMsj = divMsj + "Evento ha sido cancelado";
 							divMsj = divMsj + "</div>";
 
@@ -682,6 +750,7 @@
 
 						var divMsj = "<div class='alert alert-success'>";
 						divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+						divMsj = divMsj + "<strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong>";
 						divMsj = divMsj + "Evento ha sidop rechazado";
 						divMsj = divMsj + "</div>";
 

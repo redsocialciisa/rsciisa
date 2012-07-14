@@ -14,13 +14,13 @@ class Application_Form_FormFotos extends Zend_Form
         $this->setAttrib('name', 'formFotos');
         
         $fotoDesc1 = new Zend_Form_Element_Textarea('fotoDesc1');
-        $fotoDesc1->setLabel(' ')
+        $fotoDesc1->setLabel('Descripción: ')
 		        ->setAttrib('rows','1')
 		        ->setAttrib('onkeypress','ValidarCaracteres(this, 44)')
 		        ->setAttrib('class','span6');
         
         $fileFoto1 = new Zend_Form_Element_File('fileFoto1');
-        $fileFoto1->setLabel(' ')
+        $fileFoto1->setLabel('Foto: ')
         		->setRequired(false)
 		        ->addValidator('IsImage')
 		        ->setAttrib('class', 'span4')
@@ -28,13 +28,13 @@ class Application_Form_FormFotos extends Zend_Form
 		        ->addValidator('Extension',false,array('jpg','jpeg','png'));
         
         $fotoDesc2 = new Zend_Form_Element_Textarea('fotoDesc2');
-        $fotoDesc2->setLabel(' ')
+        $fotoDesc2->setLabel('Descripción: ')
 		        ->setAttrib('rows','1')
 		        ->setAttrib('onkeypress','ValidarCaracteres(this, 44)')
 		        ->setAttrib('class','span6');
         
         $fileFoto2 = new Zend_Form_Element_File('fileFoto2');
-        $fileFoto2->setLabel(' ')
+        $fileFoto2->setLabel('Foto: ')
 		        ->setRequired(false)
 		        ->addValidator('IsImage')
 		        ->setAttrib('class', 'span4')
@@ -42,13 +42,13 @@ class Application_Form_FormFotos extends Zend_Form
 		        ->addValidator('Extension',false,array('jpg','jpeg','png'));
         
         $fotoDesc3 = new Zend_Form_Element_Textarea('fotoDesc3');
-        $fotoDesc3->setLabel(' ')
+        $fotoDesc3->setLabel('Descripción: ')
 		        ->setAttrib('rows','1')
 		        ->setAttrib('onkeypress','ValidarCaracteres(this, 44)')
 		        ->setAttrib('class','span6');
         
         $fileFoto3 = new Zend_Form_Element_File('fileFoto3');
-        $fileFoto3->setLabel(' ')
+        $fileFoto3->setLabel('Foto: ')
 		        ->setRequired(false)
 		        ->addValidator('IsImage')
 		        ->setAttrib('class', 'span4')
@@ -92,11 +92,11 @@ class Application_Form_FormFotos extends Zend_Form
         $this->addElement($fileFoto3);
         $this->addElement($fotoDesc3);
         
-        $this->addElement($fileFoto4);
+      /*  $this->addElement($fileFoto4);
         $this->addElement($fotoDesc4);
         
         $this->addElement($fileFoto5);
-        $this->addElement($fotoDesc5);
+        $this->addElement($fotoDesc5);*/
         
     }
 

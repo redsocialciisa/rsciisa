@@ -29,25 +29,6 @@
 			<div id="divDescripcionGrupo" class="cont well"><?php echo $objGrupoDao->obtenerPorId($this->Grupo)->getDescripcion(); ?></div>
 		</td>
 	</tr>
-	<tr>
-		<td align="center">
-			<?php 
-				$objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
-				$listaUsuarios = $objUsuarioGrupoDao->obtenerPorGrupoId($this->Grupo);
-			?>
-			<table>
-				<tr>
-					<?php foreach ($listaUsuarios as $usuario){?>
-						<td>
-						  <div class="span1">
-							<img src="/imagenes/usuarios/<?php echo $usuario->getFoto();?>">
-						  </div>
-						</td>
-					<?php }?>
-				</tr>
-			</table>
-		</td>
-	</tr>
 </table>
 
 <?php echo $this->listaPublicaciones;?>
@@ -68,7 +49,7 @@
 						<td rowspan="3" valign="top">
 							<div style='width: 100px;'>
 								<a class="thumbnail" href="/muro/muro-contacto/id/<?php echo $publicacion->getUsuarioId();?>">
-	      							<img alt="" src="<?php echo $this->baseUrl()?>/imagenes/usuarios/<?php echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getFoto();?>">
+	      							<img alt="" src="<?php echo $this->baseUrl()?>/imagenes/usuarios/icono/<?php echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getFoto();?>">
          						</a>
          					</div>
 						</td>
@@ -192,7 +173,7 @@
 	<?php $objComentarioDao = null; ?>
   	<?php } ?>
 <?php } else{ ?>
-			<h4>No se han encontrado publicaciones</h4>
+			<h2>No se han encontrado publicaciones</h2>
 <?php }?>
 
 <div class="modal hide" id="myModalPost">
@@ -329,7 +310,7 @@
 		{
 			if(document.getElementById("txtTextoPublicacion").value == "")
 			{
-				document.getElementById("divErrorTexto").innerHTML =  "<ul type='square'><li> Escribe algo aquí... </ul>";
+				document.getElementById("divErrorTexto").innerHTML =  "<ul type='square'><li><font color='red'>Escribe algo aquí... </font></ul>";
 				return;
 			}else{
 				document.getElementById("divErrorTexto").innerHTML = "";
@@ -337,7 +318,7 @@
 
 			if(document.getElementById("fileFoto").value == "")
 			{
-				document.getElementById("divErrorSinFoto").innerHTML =  "<ul type='square'><li> Tienes que subir una foto... recuerda menor a 2 MB.. </ul>";
+				document.getElementById("divErrorSinFoto").innerHTML =  "<ul type='square'><li><font color='red'>Tienes que subir una foto... recuerda menor a 4 MB..</font></ul>";
 				return;
 			}else{
 				document.getElementById("divErrorSinFoto").innerHTML = "";
@@ -349,7 +330,7 @@
 		{
 			if(document.getElementById("txtTextoPublicacion").value == "")
 			{
-				document.getElementById("divErrorTexto").innerHTML =  "<ul type='square'><li> Escribe algo aquí... </ul>";
+				document.getElementById("divErrorTexto").innerHTML =  "<ul type='square'><li><font color='red'>Escribe algo aquí...</font></ul>";
 				return;
 			}else{
 				document.getElementById("divErrorTexto").innerHTML = "";
@@ -361,7 +342,7 @@
 		{
 			if(document.getElementById("txtTextoPublicacion").value == "")
 			{
-				document.getElementById("divErrorTexto").innerHTML =  "<ul type='square'><li> Escribe algo aquí... </ul>";
+				document.getElementById("divErrorTexto").innerHTML =  "<ul type='square'><li><font color='red'>Escribe algo aquí...</font></ul>";
 				return;
 			}else{
 				document.getElementById("divErrorTexto").innerHTML = "";
@@ -369,13 +350,13 @@
 			
 			if(document.getElementById("txtVideo").value == "")
 			{
-				document.getElementById("divErrorVideo").innerHTML =  "<ul type='square'><li> Debes ingresar el ID de un video YouTube </ul>";
+				document.getElementById("divErrorVideo").innerHTML =  "<ul type='square'><li><font color='red'>Debes ingresar el ID de un video YouTube</font></ul>";
 				return;
 			}
 
 			if(document.getElementById("hdnFlagErrorVideo").value == "error")
 			{
-				document.getElementById("divErrorVideo").innerHTML =  "<ul type='square'><li> El ID de YouTube no existe... </ul>";
+				document.getElementById("divErrorVideo").innerHTML =  "<ul type='square'><li><font color='red'>El ID de YouTube no existe...</font></ul>";
 				return;
 			}else{
 				document.getElementById("divErrorVideo").innerHTML = "";

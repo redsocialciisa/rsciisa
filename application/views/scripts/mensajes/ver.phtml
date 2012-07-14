@@ -3,70 +3,48 @@
 	$aut = Zend_Auth::getInstance();
 ?>
 
-<table class="span9">
-  <tr>
-    <th colspan="2" >Conversación</th>
-  </tr>
-  <tr>
-    <td><?php echo $objUsuario->obtenerPorId($this->id)->getNombre();?></td>
-    <td>
-    	<div style='width: 40px;'>
-			<a class='thumbnail'>
-				<img src="/imagenes/usuarios/<?php echo $objUsuario->obtenerPorId($this->id)->getFoto();?>" >
-			</a>
-		</div>
-    </td>
-  </tr>
-   <tr>
-    <td><?php echo $objUsuario->obtenerPorId($aut->getIdentity()->usu_id)->getNombre(); ?></td>
-    <td>
-    	<div style='width: 40px;'>
-			<a class='thumbnail'>
-				<img src="/imagenes/usuarios/<?php echo $objUsuario->obtenerPorId($aut->getIdentity()->usu_id)->getFoto();?>" >
-			</a>
-		</div>
-    </td>
-  </tr>
-</table>
-<hr WIDTH="50%">
-<table>
-		  <?php 
-				foreach ($this->listamensajes as $item)
-				{ 
-		  ?>
-		  <tr>
-		  	<td colspan="2">
-		  		<b><?php echo $objUsuario->obtenerPorId($item->getDe())->getNombre();?></b>
-		  	</td>
-		  	<td rowspan="2">
-		  		<?php 
+<br><h1>CONVERSACIÓN</h1><br>
+
+Participantes:<br>
+<b><font color='green'><img src="/imagenes/proyecto/notificacion2.png">&nbsp;<?php echo $objUsuario->obtenerPorId($aut->getIdentity()->usu_id)->getNombre(); ?></font></b><br> 
+<b><font color='green'><img src="/imagenes/proyecto/notificacion2.png">&nbsp;<?php echo $objUsuario->obtenerPorId($this->id)->getNombre();?></font></b>
+
+<hr>
+<table class="span6">
+		<?php 
+		foreach ($this->listamensajes as $mensaje)
+		{ ?>
+		<tr>
+			<td rowspan="2" valign="top">
+				<img src="/imagenes/usuarios/icono/<?php echo $objUsuario->obtenerPorId($mensaje->getDe())->getFoto();?>">
+			</td>
+			<td valign="top">
+				&nbsp;&nbsp;<b><font color='green'><?php echo $objUsuario->obtenerPorId($mensaje->getDe())->getNombre();?></font></b>
+			</td>
+			<td valign="top" rowspan="2">
+				<?php 
 		    		$objPublicacionDao = new Application_Model_PublicacionDao();
-		    		echo $objPublicacionDao->calcularTiempoTranscurrido($item->getFecha());
+		    		echo $objPublicacionDao->calcularTiempoTranscurrido($mensaje->getFecha());
+		    		$objPublicacionDao = null;
 		    	?>
-		  	</td>
-		  </tr>
-		  <tr>
-		    <td>
-		  		<div class="cont4">
-		  			<?php echo $item->getTexto();?>
-		  		</div>
-		    </td>
-		   </tr>
-		   <tr>
-		   	<td colspan="2">
-		    	<hr>
-		   	</td>
-		   </tr>
-		  		<?php }?>
-		  	<tr>
-		  		<td>
-		  			<div class="pagination-centered">
-						<?php echo $this->listamensajes;?>
-					</div>
-		  		</td>
-		  	</tr>	
- 
+			</td>
+		</tr>
+		<tr>
+			<td valign="top">	
+				<div class="cont4">
+		  			<?php echo $mensaje->getTexto();?>
+		  		</div></td>
+			<td>
+			</td>
+			<td></td>
+		</tr>
+		<?php } ?>
 </table>
+
+			<div class="pagination-centered">
+				<?php echo $this->listamensajes;?>
+			</div>
+
 <br>
 <table> 	
   	<tr>

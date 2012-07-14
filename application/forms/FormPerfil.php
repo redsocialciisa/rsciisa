@@ -22,7 +22,6 @@ class Application_Form_FormPerfil extends Zend_Form
         
         $nombre = new Zend_Form_Element_Text('txtNombre');
         $nombre->setLabel('Nombre: ')
-        	   ->setRequired(true)
         	   ->setValue($objUsuario->getNombre())
         	   ->setAttrib('class', 'span4')
         	   ->setAttrib('onkeypress', 'return soloLetras(event)')

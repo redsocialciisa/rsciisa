@@ -28,6 +28,11 @@
 				word-wrap: break-word; 
 			}
 			
+			.cont100 {
+				width: 100px;
+				word-wrap: break-word; 
+			}
+			
 			.cont {
 				width: 600px;
 				word-wrap: break-word; 
@@ -59,7 +64,7 @@
 			    left: 50%;
 			    margin-left: -8px;
 			    display: block;
-			    background: url(<?php echo $this->baseUrl()?>/imagenes/proyecto/flag2_16x16.gif);
+			    background: url(<?php echo $this->baseUrl()?>/imagenes/proyecto/selector.png);
 			    background-position: center center;
 			    background-repeat: no-repeat;
 			}
@@ -249,10 +254,10 @@
 		              
 		              <ul class="dropdown-menu">
 		              	<?php if($aut->getIdentity()->per_id == 1){  ?>
-		                <li><a href="/perfil/">Mi Perfil</a></li>
+		                <li><a href="/perfil/"><img src="/imagenes/proyecto/notas.png" width="12px;">&nbsp;&nbsp;Mi Perfil</a></li>
 		                <li class="divider"></li>
 		                <?php } ?>
-		                <li><a href="/muro/logout/">Cerrar Sesión</a></li>
+		                <li><a href="/muro/logout/"><img src="/imagenes/proyecto/apagado.png" width="12px;">&nbsp;&nbsp;Cerrar Sesión</a></li>
 		              </ul>
 		            </li>
 			    </ul>
@@ -304,7 +309,6 @@
 		</div>
 	</div>
 </div>
-
 
 <div class="modal hide" id="myModalGenerico" style="width: 700px;">
     <div class="modal-header">
