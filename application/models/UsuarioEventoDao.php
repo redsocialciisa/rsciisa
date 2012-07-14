@@ -200,5 +200,19 @@ class Application_Model_UsuarioEventoDao
     	return $this->_table->delete($where);
     }
 
+    public function usuarioExisteEnGrupo($eve_id,$usu_id)
+    {
+    	$where = 'eve_id = '.$eve_id.' and usu_id = '. $usu_id;
+    	$resultado = $this->_table->fetchAll($where);
+    
+    	if(count($resultado) > 0)
+    	{
+    		return true;
+    	}else{
+    		return false;
+    	}
+    
+    }
+    
 }
 

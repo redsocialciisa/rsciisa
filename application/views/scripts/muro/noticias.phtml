@@ -131,7 +131,7 @@
 											<img src="/imagenes/grupos/<?php echo $publicacion->getFoto();?>">
 											<br>
 											<?php if($objUsuarioGrupoDao->obtenerPorGrupoYUsuario($gru_id, $aut->getIdentity()->usu_id) == null){?>
-												<button href="#" onclick="openMyModalUnirseGrupo(<?php echo $publicacion->getId();?>,'<?php echo $objGrupo->getNombre();?>');" class="btn btn-success">Unete</button>
+												<button id="btnUnirse<?php echo $publicacion->getId();?>" href="#" onclick="openMyModalUnirseGrupo(<?php echo $publicacion->getId();?>,'<?php echo $objGrupo->getNombre();?>');" class="btn btn-success">Unete</button>
 											<?php } 
 											$objPublicacionGrupoDao = null;
 											$objUsuarioGrupoDao = null;
@@ -314,7 +314,8 @@
 			                //selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
 					    },  
 					    success: function(requestData){  
-							    	alert(requestData);
+							    	document.getElementById("btnUnirse"+idPublicacion).style.display = "none";
+							    	
 					    },  
 					    error: function(requestData, strError, strTipoError){          
 					    }

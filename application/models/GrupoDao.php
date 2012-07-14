@@ -74,7 +74,7 @@ class Application_Model_GrupoDao
 	public function obtenerPorNombre($nombre)
     {   //NOTE: Solo obtiene los grupos publicos
     	$lista = new SplObjectStorage();
-    	$where = 'gru_nombre like %'. $nombre .'% AND tip_gru_id = 1';
+    	$where = "gru_nombre like '%". $nombre ."%' AND tip_gru_id = 0";
     	$order = 'gru_nombre';
     
     	$resultado = $this->_table->fetchAll($where, $order);
@@ -96,6 +96,24 @@ class Application_Model_GrupoDao
     
     	return $this->_table->delete($where);
     }
-
+    
+    public function obtenerPublicos()
+    {
+        $lista = new SplObjectStorage();
+        $where = 'tip_gru_id = 0';
+        $order = 'gru_fecha_creacion desc';
+        
+        $resultado = $this->_table->fetchAll($where, $order);
+        
+        if(count($resultado) > 0)
+        {
+        	foreach ($resultado as $item)
+        	{
+        		$lista->attach($this->obtenerPorId($item->gru_id));
+        	}
+        }
+        return $lista;
+    }
+    
 }
 

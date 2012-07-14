@@ -205,22 +205,35 @@ class EventoController extends Zend_Controller_Action
     
     	$fecha = new DateTime();
     	$fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
-    
+    	
+    	$objEventoDao = new Application_Model_EventoDao();
+    	$objUsuarioDao = new Application_Model_UsuarioDao();
     	$objInvitacionDao = new Application_Model_InvitacionDao();
     	$objInvitacion = $objInvitacionDao->obtenerPorId($invitacionId);
-    	
+    	$objNotificacion = new Application_Model_Notificacion();
+    	$objNotificacionDao = new Application_Model_NotificacionDao();
     	$objUsuarioEvento = new Application_Model_UsuarioEvento();
     	$objUsuarioEventoDao = new Application_Model_UsuarioEventoDao();
     
     	$objUsuarioEvento->setUsuarioId($objInvitacion->getUsuarioId());
     	$objUsuarioEvento->setEventoId($objInvitacion->getIdActividad());
-    	$objUsuarioEventoDao->guardar($objUsuarioEvento); 
-    
+    	$objUsuarioEventoDao->guardar($objUsuarioEvento);
+    	$objEvento = $objEventoDao->obtenerPorId($objInvitacion->getIdActividad());
+    	$objUsuario =  $objUsuarioDao->obtenerPorId($objInvitacion->getUsuarioId());
+    	
     	$id = $objInvitacion->getId();
     	$objInvitacion->setId($id);
     	$objInvitacion->setIdActividad($objInvitacion->getIdActividad());
     	$objInvitacion->setFecha($fechahora);
     	$objInvitacion->setEstado(4);
+    	$textoInv = $objUsuario->getNombre().' ha aceptado tu invitación al evento '.$objEvento->getNombre();
+    	
+    	$objNotificacion->setTipoNotificacionId(1);
+    	$objNotificacion->setVista(0);
+    	$objNotificacion->setFecha($fechahora);
+    	$objNotificacion->setUsuarioId($objEvento->getUsuarioId());
+    	$objNotificacion->setTexto($textoInv);
+    	$objNotificacionDao->guardar($objNotificacion);
     	$objInvitacionDao->guardar($objInvitacion);
     
     	$this->view->ok = "ok";
@@ -300,6 +313,50 @@ class EventoController extends Zend_Controller_Action
     	$objUsuarioEventoDao = null;
     	$objInvitacionDao = null;
     	
+    }
+    
+    public function buscarAction()
+    {
+    	$objEventoDao = new Application_Model_EventoDao();
+    	$formBuscar = new Application_Form_FormBuscarEvento();
+    
+    	$listaPublicos = $objEventoDao->obtenerPublicos();
+    
+    	if($this->getRequest()->isPost())
+    	{
+    		$formData = $this->_request->getPost();
+    		if($formBuscar->isValid($this->_getAllParams()))
+    		{
+    			$listaPublicos = $objEventoDao->obtenerPorNombre($this->getRequest()->getParam('txtBuscar'));
+    		}
+    	}
+    
+    	Zend_View_Helper_PaginationControl::setDefaultViewPartial ( 'paginator/itemsv2.phtml' );
+    	$paginatorBusqueda = Zend_Paginator::factory($listaPublicos);
+    	$paginatorBusqueda->setDefaultItemCountPerPage(10);
+    
+    	if ($this->_hasParam ( 'page' )) {
+    		$paginatorBusqueda->setCurrentPageNumber( $this->_getParam ( 'page' ) );
+    	}
+    
+    	$this->view->formBuscar = $formBuscar;
+    	$this->view->listaPublicos =  $paginatorBusqueda;
+    }
+    
+    
+    public function unirse2Action()
+    {
+    	$aut = Zend_Auth::getInstance();
+    	$this->_helper->layout()->disableLayout();
+    	$eventoId = $this->getRequest()->getParam('idEvento');
+    	$objUsuarioEventoDao = new Application_Model_UsuarioEventoDao();
+    	$objUsuarioEvento = new Application_Model_UsuarioEvento();
+    
+    	$objUsuarioEvento->setEventoId($eventoId);
+    	$objUsuarioEvento->setUsuarioId($aut->getIdentity()->usu_id);
+    	$objUsuarioEventoDao->guardar($objUsuarioEvento);
+    
+    	$this->view->ok = $eventoId;
     }
 
 }

@@ -4,7 +4,7 @@ class Application_Model_TipoNotificacion
 {
     private $_id;
     private $_nombre;
-    
+    private $_url;
 	/**
 	 * @return the $_id
 	 */
@@ -17,6 +17,13 @@ class Application_Model_TipoNotificacion
 	 */
 	public function getNombre() {
 		return $this->_nombre;
+	}
+
+	/**
+	 * @return the $_url
+	 */
+	public function getUrl() {
+		return $this->_url;
 	}
 
 	/**
@@ -33,8 +40,11 @@ class Application_Model_TipoNotificacion
 		$this->_nombre = $_nombre;
 	}
 
-    
-    
-
+	/**
+	 * @param field_type $_url
+	 */
+	public function setUrl($_url) {
+		$this->_url = $_url;
+	}
 }
 

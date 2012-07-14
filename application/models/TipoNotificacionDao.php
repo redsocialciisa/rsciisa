@@ -23,6 +23,7 @@ class Application_Model_TipoNotificacionDao
     		 
     		$objTipoNotificacion->setId($resultado->current()->tip_not_id);
     		$objTipoNotificacion->setNombre($resultado->current()->tip_not_nombre);
+    		$objTipoNotificacion->setUrl($resultado->current()->tip_not_url);
     
     	}
     	return $objTipoNotificacion;
@@ -31,7 +32,8 @@ class Application_Model_TipoNotificacionDao
     public function guardar(Application_Model_TipoNotificacion $tipoNotificacion)
     {
     	$data = array('tip_not_id' => $tipoNotificacion->getId(),
-    			'tip_not_nombre' => $tipoNotificacion->getNombre()
+    			'tip_not_nombre' => $tipoNotificacion->getNombre(),
+    	        'tip_not_url' => $tipoNotificacion->getUrl()
     	);
     
     	if($tipoNotificacion->getId() != null){

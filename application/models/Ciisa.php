@@ -27,7 +27,7 @@ class Application_Model_Ciisa
     {
         $this->_myServer = "127.0.0.1";
         $this->_myUser = "sa";
-        $this->_myPass = "qwerty";
+        $this->_myPass = "180376";
         $this->_myDB = "[RC RCA 2007]";
         $this->_con = @mssql_connect($this->_myServer, $this->_myUser, $this->_myPass) or die("Couldn't connect to SQL Server on $this->_myServer");
         $this->_d = @mssql_select_db($this->_myDB, $this->_con) or die("Couldn't open database $this->_myDB");        
@@ -72,8 +72,9 @@ class Application_Model_Ciisa
     	{
     	    $objUsuario = new Application_Model_Usuario();
     	    $row = mssql_fetch_array($result);
-    	    $objUsuario->setUsuarioCiisa(trim(iconv("CP850", "ISO-8859-1//TRANSLIT", $row["ALU_NOMBRE"])));
-    	    $objUsuario->setNombre(trim($row['ALU_NOMBRE']));
+    	        	        	    
+    	    $objUsuario->setUsuarioCiisa(trim($row['ALU_RUT']));
+    	    $objUsuario->setNombre(trim(iconv("CP850", "UTF-8", $row["ALU_NOMBRE"])));
     	    $objUsuario->setCorreo(trim($row['ALU_EMAIL']));
     	    $objUsuario->setFechaNacimiento($row['ALU_FECNAC']);
     	    			
@@ -106,7 +107,7 @@ class Application_Model_Ciisa
     		$row = mssql_fetch_array($result);
     			
     		$objUsuario->setUsuarioCiisa(trim($row['PFE_SIGLA']));
-    		$objUsuario->setNombre(trim(iconv("CP850", "ISO-8859-1//TRANSLIT", $row["PFE_NOMBRE"])));
+    		$objUsuario->setNombre(trim(iconv("CP850", "UTF-8", $row["PFE_NOMBRE"])));
     		$objUsuario->setCorreo(trim($row['PFE_EMAIL']));
     
     		return $objUsuario;
@@ -165,7 +166,7 @@ class Application_Model_Ciisa
     		$objUsuario = new Application_Model_Usuario();
     		$row = mssql_fetch_array($result);
     
-    		return trim(iconv("CP850", "ISO-8859-1//TRANSLIT", $row["CAR_NOMBRE"]));
+    		return trim(iconv("CP850", "UTF-8", $row["CAR_NOMBRE"]));
     	}else{
     	    return "";
     	}

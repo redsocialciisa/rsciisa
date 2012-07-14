@@ -1,10 +1,6 @@
  <?php 
  $aut = Zend_Auth::getInstance();
  
- if($this->mensaje_ok == "ok"){
- 		echo "<div id='divMensajeCrearGrupo'><div class='alert alert-success'><button class='close' data-dismiss='alert'>×</button>Grupo creado exitosamente</div></div>";
- }
- 
  if($this->successInvitarUsuarios == "ok")
  {
  	$msj = "";
@@ -17,7 +13,8 @@
  }
  ?>
  <br><h1> GRUPOS </h1><br>
- <a href="#" onclick="openModalGrupo()" class="btn"><i class="icon-user"></i><i class="icon-user"></i> Crear Grupo </a><br><br>
+ <a href="#" onclick="openModalGrupo()" class="btn"><i class="icon-user"></i><i class="icon-user"></i> Crear Grupo </a>&nbsp;&nbsp;&nbsp;
+ <a href="/grupo/buscar" class="btn"><i class="icon-search"></i> Buscar grupo </a><br><br>
  
  <?php 
  if($this->successEliminarUsuarios == "ok")
@@ -186,8 +183,8 @@ if($this->mensaje_ok == "ok"){
     	<input type="hidden" id="hdnGrupoId">
 	    </div>
 	    <div class="modal-footer">
-	    	<a href="#" onclick="dejarParticiparGrupo()" class="btn btn-success" data-dismiss="modal">Si, dejar</a>
-	  	    <a href="#" onclick="closeModalDejarParticipar()" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
+	    	<a href="#" onclick="dejarParticiparGrupo()" class="btn btn-success" data-dismiss="modal">Si</a>
+	  	    <a href="#" onclick="closeModalDejarParticipar()" class="btn btn-danger" data-dismiss="modal">No</a>
 	    </div>
 </div>	
 
@@ -426,5 +423,5 @@ if($this->mensaje_ok == "ok"){
 			textarea.value = textarea.value.substring(0,maxLen);
 		}
 		cnt.innerHTML = (maxLen - textarea.value.length) + ' Caracteres Restantes';
-	}
+	}	
 </script>

@@ -1,0 +1,168 @@
+<?php 
+	$aut = Zend_Auth::getInstance();
+	$objUsuarioEventoDao = new Application_Model_UsuarioEventoDao();
+
+?>
+
+<form action="/evento/buscar/" method="post" enctype="<?php echo $this->formBuscar->getEnctype(); ?>">
+<table>
+	<tr>
+	    <th colspan=2>Buscar eventos</th>
+	</tr>
+	<tr>
+		    <td><?php echo $this->formBuscar->txtBuscar;?> </td>
+		    <td><?php echo $this->formBuscar->enviar;?></td>
+	</tr>
+</table>
+</form>
+
+
+<table>
+		<?php
+			if (count($this->listaPublicos) > 0)
+			{
+				foreach ($this->listaPublicos as $evento)
+				{
+		?>	    
+			
+			<tr id="filaEventoUno<?php echo $evento->getId();?>">
+				<td colspan="6">
+		    		<?php echo $evento->getNombre();?>
+		    	</td>
+			</tr>
+				<tr id="filaEventoDos<?php echo $evento->getId();?>">
+					<td>
+		    			<?php $fechaPublicacion = strtotime($evento->getFechaEvento()); ?>
+						<table class="span2 well">
+							<tr>
+								<td align="center" class='label label-success'>
+											<?php
+												switch (date("m", $fechaPublicacion))
+												{
+													case 1:
+													    echo "Ene";
+													break;
+													case 2:
+														echo "Feb";
+														break;
+													case 3:
+														echo "Mar";
+														break;
+													case 4:
+														echo "Abr";
+														break;
+													case 5:
+														echo "May";
+														break;
+													case 6:
+														echo "Jun";
+														break;
+													case 7:
+														echo "Jul";
+														break;
+													case 8:
+														echo "Ago";
+														break;
+													case 9:
+														echo "Sep";
+														break;
+													case 10:
+														echo "Oct";
+														break;
+													case 11:
+														echo "Nov";
+														break;
+													case 12:
+														echo "Dic";
+														break;
+												}
+												echo " - ";
+												echo date("Y", $fechaPublicacion);
+											?>
+										</td>
+							</tr>
+							<tr>
+								<td align="center">
+									<h2><?php echo date("d", $fechaPublicacion); ?></h2>
+								</td>
+							</tr>
+						</table>
+					</td>
+					<?php if ($objUsuarioEventoDao->usuarioExisteEnGrupo($evento->getId(), $aut->getIdentity()->usu_id) == false) {?>
+						<td>
+							<a id="btnUnirse<?php echo $evento->getId();?>" href="#" onclick="openMyModalUnirseEvento(<?php echo $evento->getId();?>);" class="btn"> Unirse al Evento </a>
+						</td>
+					<?php }?>
+				</tr>
+		    <?php } ?>
+		    	</table>
+		<?php 
+				}
+			
+			else
+			{    	
+		?>
+<table>		
+		<tr>
+			<td>
+				No hay resultados para la busqueda
+			</td>
+		</tr>
+</table>		
+		<?php }?>
+
+<?php echo $this->listaPublicos;?>
+
+<div class="modal hide" id="myModalUnirseEvento" style="width: 700px;">
+    <div class="modal-header">
+    <button class="close" data-dismiss="modal">×</button>
+    <img src="/imagenes/proyecto/Info.png">&nbsp;<b>Unirse al Evento</b>
+    </div>
+    <div class="modal-body">
+	    <div id="divUnirseEvento"></div>
+	    ¿Deseas unirte al evento? <div id="divEvento"></div> 
+	    <input type="hidden" id="hdnIdEvento">
+    </div>
+    <div class="modal-footer">
+  	    <a href="#" onclick="unirseAlEvento()" class="btn btn-success" data-dismiss="modal">Unirse</a>
+  	    <a href="#" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
+    </div>
+</div>	
+
+<script type="text/javascript">
+
+	function unirseAlEvento(){
+	
+		var idEvento = document.getElementById("hdnIdEvento").value;
+		
+				$.ajax(
+						{
+						async: true,
+						type: 'POST',
+						url: '<?php echo $this->baseUrl()?>/evento/unirse2',
+						data: 'idEvento=' + idEvento,	
+						dataTypeString: 'text',
+						
+						beforeSend: function(data){
+			                //selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
+					    },  
+					    success: function(requestData){  
+							    	document.getElementById("btnUnirse"+idEvento).style.display = "none";
+							    	
+					    },  
+					    error: function(requestData, strError, strTipoError){          
+					    }
+					    
+						});
+			
+	}
+		
+
+	function openMyModalUnirseEvento(id)
+	{
+		document.getElementById("hdnIdEvento").value = id;
+		$('#myModalUnirseEvento').modal('show');		
+	}
+
+		
+</script>
