@@ -120,6 +120,43 @@ class Application_Model_EventoDao
     
     }
 
+    public function obtenerPublicos()
+    {
+    	$lista = new SplObjectStorage();
+    	$where = 'tip_eve_id = 1';
+    	$order = 'eve_fecha_creacion desc';
+    
+    	$resultado = $this->_table->fetchAll($where, $order);
+    
+    	if(count($resultado) > 0)
+    	{
+    		foreach ($resultado as $item)
+    		{
+    			$lista->attach($this->obtenerPorId($item->eve_id));
+    		}
+    	}
+    	return $lista;
+    }
+    
+    public function obtenerPorNombre($nombre)
+    {   //NOTE: Solo obtiene los eventos publicos
+    $lista = new SplObjectStorage();
+    $where = "eve_nombre like '%". $nombre ."%' AND tip_eve_id = 1";
+    $order = 'eve_nombre';
+    
+    $resultado = $this->_table->fetchAll($where, $order);
+    
+    if(count($resultado) > 0)
+    {
+    	foreach ($resultado as $item)
+    	{
+    		$lista->attach($this->obtenerPorId($item->eve_id));
+    	}
+    }
+    
+    return $lista;
+    }
+    
 }
 
 

@@ -24,9 +24,6 @@ class NotificacionController extends Zend_Controller_Action
         }
         
         $this->view->listaNotificaciones = $paginatorNotificaciones;
-        
-        
-        $objNotificacionDao->marcarComoLeido($aut->getIdentity()->usu_id);
 
     }
 }

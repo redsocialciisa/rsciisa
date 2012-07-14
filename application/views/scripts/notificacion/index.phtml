@@ -1,26 +1,63 @@
 <?php 
 $objPublicacionDao = new Application_Model_PublicacionDao();
 ?>
-
- <br><h1> NOTIFICACIONES </h1><br>
-
-<?php if(count($this->listaNotificaciones) > 0){?>
-<table class="span9">
-<?php 
-	foreach ($this->listaNotificaciones as $item)
-	{  
-?>
+<table>
   <tr>
-    <td><?php echo $item->getTexto();?></td>
+    <th colspan="2" >Notificaciones</th>
   </tr>
   <tr>
-    <td><h5><?php echo $objPublicacionDao->calcularTiempoTranscurrido($item->getFecha());?></h5><hr></td>
+  	<td><br></td>
   </tr>
-  <?php }?>
+	<?php 
+		foreach ($this->listaNotificaciones as $item)
+		{  
+			if ($item->getVista() == 0)
+			{    
+	?>
+				  <tr class="alert alert-success">
+				    <td><?php echo $item->getTexto();?></td>
+				  </tr>
+				  <tr>
+				    <td>
+				    	<h5><?php echo $objPublicacionDao->calcularTiempoTranscurrido($item->getFecha());?></h5>
+				    	<?php 
+			    			$objTipoNotificacionDao = new Application_Model_TipoNotificacionDao();
+			    			$objTipoNotificacion = $objTipoNotificacionDao->obtenerPorId($item->getTipoNotificacionId());
+			    		?>
+			    		<a href="<?php echo $objTipoNotificacion->getUrl();?>" >Ver notificación</a>
+				    <hr>
+				    </td>
+
+  	<?php 
+			}
+			else
+			{
+	?>
+				<tr>
+			    	<td><?php echo $item->getTexto();?></td>
+			  	</tr>
+			  	<tr>
+			    	<td>
+			    		<h5><?php echo $objPublicacionDao->calcularTiempoTranscurrido($item->getFecha());?></h5>
+			    		<?php 
+			    			$objTipoNotificacionDao = new Application_Model_TipoNotificacionDao();
+			    			$objTipoNotificacion = $objTipoNotificacionDao->obtenerPorId($item->getTipoNotificacionId());
+			    		?>
+			    		
+			    		<a href="<?php echo $objTipoNotificacion->getUrl();?>" >Ver notificación</a>
+			    		<hr>
+			    	</td>
+			  	</tr>
+	<?php 
+			}
+		}
+	?>
 </table>
-<?php }else{?>
-	No tienes notificaciones aún..
-<?php }?>
+
 <?php
-echo $this->listaNotificaciones;
+	$aut = Zend_Auth::getInstance();
+	$objNotificacionDao = new Application_Model_NotificacionDao();
+	
+	echo $this->listaNotificaciones;
+	$objNotificacionDao->marcarComoLeido($aut->getIdentity()->usu_id);
 ?>

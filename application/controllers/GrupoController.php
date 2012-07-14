@@ -355,20 +355,34 @@ class GrupoController extends Zend_Controller_Action
         $fecha = new DateTime();
         $fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
         
+        
+        $objGrupoDao = new Application_Model_GrupoDao();
+        $objUsuarioDao = new Application_Model_UsuarioDao();
         $objInvitacionDao = new Application_Model_InvitacionDao();
         $objInvitacion = $objInvitacionDao->obtenerPorId($invitacionId);
-        
+        $objNotificacion = new Application_Model_Notificacion();
+        $objNotificacionDao = new Application_Model_NotificacionDao();
         $objUsuarioGrupo = new Application_Model_UsuarioGrupo();
         $objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
-        
+
         $objUsuarioGrupo->setUsuarioId($objInvitacion->getUsuarioId());
         $objUsuarioGrupo->setGrupoId($objInvitacion->getIdActividad());
         $objUsuarioGrupoDao->guardar($objUsuarioGrupo);
+        $objGrupo = $objGrupoDao->obtenerPorId($objInvitacion->getIdActividad());
+        $objUsuario =  $objUsuarioDao->obtenerPorId($objInvitacion->getUsuarioId());
         
         $id = $objInvitacion->getId();
         $objInvitacion->setId($id);
         $objInvitacion->setFecha($fechahora);
         $objInvitacion->setEstado(4);
+        $textoInv = $objUsuario->getNombre().' ha aceptado tu invitación al grupo '.$objGrupo->getNombre();
+        
+        $objNotificacion->setTipoNotificacionId(0);
+        $objNotificacion->setVista(0);
+        $objNotificacion->setFecha($fechahora);
+        $objNotificacion->setUsuarioId($objGrupo->getUsuId());
+        $objNotificacion->setTexto($textoInv);
+        $objNotificacionDao->guardar($objNotificacion);
         $objInvitacionDao->guardar($objInvitacion);
         
         $this->view->ok = "ok"; 
@@ -405,16 +419,29 @@ class GrupoController extends Zend_Controller_Action
     	$objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
     	$objUsuarioGrupo = new Application_Model_UsuarioGrupo();
     
-    	$objGrupo = $objPublicacionGrupoDao->obtenerPorPublicacionId($pub_id)->getGrupoId();
-    
-    	$objUsuarioGrupo->setParticipa(1);
-    	$objUsuarioGrupo->setGrupoId($objGrupo);
+    	$objGrupoId = $objPublicacionGrupoDao->obtenerPorPublicacionId($pub_id)->getGrupoId();
+    	$objUsuarioGrupo->setGrupoId($objGrupoId);
     	$objUsuarioGrupo->setUsuarioId($aut->getIdentity()->usu_id);
-    
     	$objUsuarioGrupoDao->guardar($objUsuarioGrupo);
     
-    	$this->view->ok = $objGrupo;
+    	$this->view->ok = $objGrupoId;
     }
+
+    public function unirse2Action()
+    {
+        $aut = Zend_Auth::getInstance();
+        $this->_helper->layout()->disableLayout();
+        $grupoId = $this->getRequest()->getParam('idGrupo');
+        $objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
+        $objUsuarioGrupo = new Application_Model_UsuarioGrupo();
+        
+        $objUsuarioGrupo->setGrupoId($grupoId);
+        $objUsuarioGrupo->setUsuarioId($aut->getIdentity()->usu_id);
+        $objUsuarioGrupoDao->guardar($objUsuarioGrupo);
+        
+        $this->view->ok = $grupoId;
+    }
+    
     
     public function dejarParticiparAction()
     {
@@ -424,11 +451,37 @@ class GrupoController extends Zend_Controller_Action
     	$objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
     	$grupoId = $this->getRequest()->getParam('grupoId');
     
-    	$objUsuarioGrupoDao->eliminarUsuarioPorGrupoYUsuario($grupoId,$aut->getIdentity()->usu_id);
+    	$objUsuarioGrupoDao->eliminarUsuarioPorGrupoYUsuario2($grupoId,$aut->getIdentity()->usu_id);
     	
     	$this->view->ok = "ok";
     }
     
+    public function buscarAction()
+    {
+        $objGrupoDao = new Application_Model_GrupoDao();
+        $formBuscar = new Application_Form_FormBuscarGrupo();
+        
+        $listaPublicos = $objGrupoDao->obtenerPublicos();
+        
+        if($this->getRequest()->isPost())
+        {
+        	$formData = $this->_request->getPost();
+        	if($formBuscar->isValid($this->_getAllParams()))
+        	{
+        	    $listaPublicos = $objGrupoDao->obtenerPorNombre($this->getRequest()->getParam('txtBuscar'));
+        	}
+        }
+
+        Zend_View_Helper_PaginationControl::setDefaultViewPartial ( 'paginator/itemsv2.phtml' );
+        $paginatorBusqueda = Zend_Paginator::factory($listaPublicos);
+        $paginatorBusqueda->setDefaultItemCountPerPage(10);
+        
+        if ($this->_hasParam ( 'page' )) {
+        	$paginatorBusqueda->setCurrentPageNumber( $this->_getParam ( 'page' ) );
+        }
+        
+        $this->view->formBuscar = $formBuscar;
+        $this->view->listaPublicos =  $paginatorBusqueda;
+    }    
     
 }
-

@@ -149,6 +149,27 @@ class Application_Model_UsuarioGrupoDao
     
     	return $this->_table->delete($where);
     }
+    
+    public function usuarioExisteEnGrupo($gru_id,$usu_id)
+    {
+        $where = 'gru_id = '.$gru_id.' and usu_id = '. $usu_id;
+        $resultado = $this->_table->fetchAll($where);
         
+        if(count($resultado) > 0)
+        {
+			return true;
+        }else{
+        	return false;
+        }
+        
+    }
+
+    public function eliminarUsuarioPorGrupoYUsuario2($gru_id,$usu_id)
+    {
+    	$where = 'gru_id = ' . $gru_id.' and usu_id = '. $usu_id;
+    
+    	return $this->_table->delete($where);
+    }
+    
 }
 
