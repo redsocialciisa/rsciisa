@@ -67,7 +67,7 @@ class MuroController extends Zend_Controller_Action
         if ($objPublicacion->getUsuarioId() != $aut->getIdentity()->usu_id)
         {
 	        $textoInv = $aut->getIdentity()->usu_nombre. ' ha comentado tu publicación';
-	        $objNotificacion->setTipoNotificacionId(0);
+	        $objNotificacion->setTipoNotificacionId(7);
 	        $objNotificacion->setVista(0);
 	        $objNotificacion->setFecha($now->format('Y-m-d H:i:s'));
 	        $objNotificacion->setUsuarioId($objPublicacion->getUsuarioId());
