@@ -13,7 +13,12 @@ class AlbumController extends Zend_Controller_Action
         $aut = Zend_Auth::getInstance();
         $form = new Application_Form_FormAlbum();
         $objAlbumDao = new Application_Model_AlbumDao();
-        $id = $this->getRequest()->getParam('id');
+        
+		$id = $this->getRequest()->getParam('id');
+		if($id == null || trim($id) == "")
+		{
+		    $id = $aut->getIdentity()->usu_id;
+		}
         
         if($this->getRequest()->isPost())
         {

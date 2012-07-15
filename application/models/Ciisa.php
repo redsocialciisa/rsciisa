@@ -190,12 +190,12 @@ class Application_Model_Ciisa
     
     	if($numRows > 0)
     	{
-    	$objUsuario = new Application_Model_Usuario();
-    	$row = mssql_fetch_array($result);
+    		$objUsuario = new Application_Model_Usuario();
+    		$row = mssql_fetch_array($result);
     	
-    	return trim($row['PERFIL_NOMBRE']);
+    		return trim($row['PERFIL_NOMBRE']);
     	}else{
-    	return "";
+    		return "";
     	}
     
     	}
