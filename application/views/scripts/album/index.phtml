@@ -4,7 +4,9 @@
     
     <br><h1>ÁLBUMES</h1><br>
     
-   	<p><a href="#" class="btn" onclick="openModalAlbum()"><img src="/imagenes/proyecto/addfolder.png">&nbsp;&nbsp;&nbsp;&nbsp;Nuevo Álbum</a></p>
+    <?php if($this->usuario == $aut->getIdentity()->usu_id){?>
+   		<p><a href="#" class="btn" onclick="openModalAlbum()"><img src="/imagenes/proyecto/addfolder.png">&nbsp;&nbsp;&nbsp;&nbsp;Nuevo Álbum</a></p>
+   	<?php }?>
    	<br>
    	
    	<?php 

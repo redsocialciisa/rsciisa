@@ -1,3 +1,6 @@
+     <?php
+    	$aut = Zend_Auth::getInstance();
+    ?>
     <?php
     	$objAlbumDao = new Application_Model_AlbumDao();
     	$objAlbum = $objAlbumDao->obtenerPorId($this->idAlbum);
@@ -18,7 +21,9 @@
 	
 	<div id="divMensaje"></div>
 	
-	<p><a href="#" class="btn" onclick="openModalAgregarFoto()"><img src="/imagenes/proyecto/foto.png">&nbsp;&nbsp;Agregar Fotos</a></p>
+	<?php if($this->album->getUsuario() == $aut->getIdentity()->usu_id){?>
+			<p><a href="#" class="btn" onclick="openModalAgregarFoto()"><img src="/imagenes/proyecto/foto.png">&nbsp;&nbsp;Agregar Fotos</a></p>
+	<?php } ?>
    	<br>
     
     <div class="tabbable well span9">
@@ -48,7 +53,11 @@
 									</tr>
 									<tr>
 										<td align="left">
-											<a href="#" onclick="openEliminarFoto('<?php echo $foto->getId();?>')"><img src="/imagenes/proyecto/cruz.png" width="20px;">&nbsp;&nbsp;</a>&nbsp;Eliminar
+											<?php if(trim($this->album->getPortada()) != trim($foto->getFoto())){?>
+												<a href="#" onclick="openEliminarFoto('<?php echo $foto->getId();?>')"><img src="/imagenes/proyecto/cruz.png" width="20px;">&nbsp;&nbsp;</a>&nbsp;Eliminar
+											<?php }else{ ?>
+												Portada
+											<?php }?>
 										</td>
 									</tr>
 								</table>						
@@ -83,9 +92,8 @@
 		    </div>
 		    
 		    <!-- Carousel nav -->
-			<div id='html2' style="position:absolute; overflow:hidden; left:0px; top: 0px; width:650px; height:100px;"><a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a></div>
-			<div id='html2' style="position:absolute; overflow:hidden; left:0px; top: 0px; width:650px; height:100px;"><a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a></div>
-		    
+			<div style="position:absolute; overflow:hidden; left:0px; top: 0px; width:100%; height:80px;"><a class="carousel-control left" href="#myCarousel" data-slide="prev" style="z-index: 1">&lsaquo;</a></div>
+			<div style="position:absolute; overflow:hidden; left:0px; top: 0px; width:100%; height:80px;"><a class="carousel-control right" href="#myCarousel" data-slide="next" style="z-index: 1">&rsaquo;</a></div>
 		</div>
     	 
     </div>
@@ -165,7 +173,6 @@
     	
     	document.getElementById("divCarouselInner").innerHTML = htmlGaleria;
 		$('#myModalCarrucel').modal("show");
-
 			
 	}
 

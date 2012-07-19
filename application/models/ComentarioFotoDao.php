@@ -92,6 +92,13 @@ class Application_Model_ComentarioFotoDao
     
     	return $this->_table->delete($where);
     }
+    
+    public function eliminarComentariosPorFotoId($fot_id)
+    {
+    	$where = 'fot_id = ' . $fot_id;
+    
+    	return $this->_table->delete($where);
+    }
 
 }
 

@@ -211,9 +211,29 @@ class MuroController extends Zend_Controller_Action
         		    $fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
         		    
 	        		$foto_name = $_FILES['fileFoto']['name'];
-	        		$objPublicacion->setFoto($fechahora."_".$foto_name);
 	        		$foto_tmp 	= $_FILES['fileFoto']['tmp_name'];
-	        		copy($foto_tmp, "/var/www/rsciisa/public/imagenes/fotos/".$fechahora."_".$foto_name);
+	        		$foto_ext   = str_replace("image/","",$_FILES['fileFoto']['type']);
+	        		
+	        		$location_perfil = "/var/www/rsciisa/public/imagenes/fotos/".$fechahora."_".$foto_name;
+	        		$location_ico = "/var/www/rsciisa/public/imagenes/fotos/icono/".$fechahora."_".$foto_name;
+	        		
+	        		copy($foto_tmp, $location_perfil);
+	        		$objPublicacion->setFoto($fechahora."_".$foto_name);
+	        		
+	        		$objUtilidad = new Application_Model_Utilidad();
+	        		$tmp_perfil = $objUtilidad->recortarImagen($location_perfil,$foto_ext,800,600);
+	        		$tmp_ico = $objUtilidad->recortarImagen($location_perfil,$foto_ext,400, 300);
+	        		
+	        		if($foto_ext == "png")
+	        		{
+	        			imagepng($tmp_perfil,$location_perfil,0);
+	        			imagepng($tmp_ico,$location_ico,0);
+	        		}else{
+	        			//jpeg, jpg
+	        			imagejpeg($tmp_perfil,$location_perfil,95);
+	        			imagejpeg($tmp_ico,$location_ico,95);
+	        		}
+	        		
         		}
         		
         		$objPublicacionDao->guardar($objPublicacion);
@@ -327,9 +347,29 @@ class MuroController extends Zend_Controller_Action
         		    $fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
         		    
 	        		$foto_name = $_FILES['fileFoto']['name'];
-	        		$objPublicacion->setFoto($fechahora."_".$foto_name);
 	        		$foto_tmp 	= $_FILES['fileFoto']['tmp_name'];
-	        		copy($foto_tmp, "/var/www/rsciisa/public/imagenes/fotos/".$fechahora."_".$foto_name);
+	        		$foto_ext   = str_replace("image/","",$_FILES['fileFoto']['type']);
+	        		
+	        		$location_perfil = "/var/www/rsciisa/public/imagenes/fotos/".$fechahora."_".$foto_name;
+	        		$location_ico = "/var/www/rsciisa/public/imagenes/fotos/icono/".$fechahora."_".$foto_name;
+	        		
+	        		copy($foto_tmp, $location_perfil);
+	        		$objPublicacion->setFoto($fechahora."_".$foto_name);
+	        		
+	        		$objUtilidad = new Application_Model_Utilidad();
+	        		$tmp_perfil = $objUtilidad->recortarImagen($location_perfil,$foto_ext,800,600);
+	        		$tmp_ico = $objUtilidad->recortarImagen($location_perfil,$foto_ext,400, 300);
+	        		 
+	        		if($foto_ext == "png")
+	        		{
+	        			imagepng($tmp_perfil,$location_perfil,0);
+	        			imagepng($tmp_ico,$location_ico,0);
+	        		}else{
+	        			//jpeg, jpg
+	        			imagejpeg($tmp_perfil,$location_perfil,95);
+	        			imagejpeg($tmp_ico,$location_ico,95);
+	        		}
+	        		
         		}
         		
         		$textoInv = $aut->getIdentity()->usu_nombre. ' ha publicado en tu muro';
@@ -396,6 +436,16 @@ class MuroController extends Zend_Controller_Action
         }
     }
     
+    public function nombreAction()
+    {
+    	$this->_helper->layout()->disableLayout();
+    	$objPublicacionDao = new Application_Model_PublicacionDao();
+    	
+    	$id = $this->getRequest()->getParam('id');
+    	
+    	$this->view->ok = $objPublicacionDao->obtenerPorId($id)->getTexto();
+    }
+    
     public function muroGrupoAction()
     {
         $idGrupo = $this->getRequest()->getParam('id');
@@ -444,9 +494,29 @@ class MuroController extends Zend_Controller_Action
         		    $fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
         		    
 	        		$foto_name = $_FILES['fileFoto']['name'];
-	        		$objPublicacion->setFoto($fechahora."_".$foto_name);
 	        		$foto_tmp 	= $_FILES['fileFoto']['tmp_name'];
-	        		copy($foto_tmp, "/var/www/rsciisa/public/imagenes/fotos/".$fechahora."_".$foto_name);
+	        		$foto_ext   = str_replace("image/","",$_FILES['fileFoto']['type']);
+	        		
+	        		$location_perfil = "/var/www/rsciisa/public/imagenes/fotos/".$fechahora."_".$foto_name;
+	        		$location_ico = "/var/www/rsciisa/public/imagenes/fotos/icono/".$fechahora."_".$foto_name;
+	        		
+	        		copy($foto_tmp, $location_perfil);
+	        		$objPublicacion->setFoto($fechahora."_".$foto_name);
+	        		 
+	        		$objUtilidad = new Application_Model_Utilidad();
+	        		$tmp_perfil = $objUtilidad->recortarImagen($location_perfil,$foto_ext,800,600);
+	        		$tmp_ico = $objUtilidad->recortarImagen($location_perfil,$foto_ext,400,300);
+	        		
+	        		if($foto_ext == "png")
+	        		{
+	        			imagepng($tmp_perfil,$location_perfil,0);
+	        			imagepng($tmp_ico,$location_ico,0);
+	        		}else{
+	        			//jpeg, jpg
+	        			imagejpeg($tmp_perfil,$location_perfil,95);
+	        			imagejpeg($tmp_ico,$location_ico,95);
+	        		}
+	        		
         		}
         		
         		 //se genera la publicacion

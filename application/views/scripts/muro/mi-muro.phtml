@@ -50,25 +50,25 @@
 							
 							if($publicacion->getTipoId() == 1){ ?>
 								<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha());?></p>
-								<a href="#" onclick="verPublicacionesConCometarios('<?php echo $publicacion->getId();?>','<?php echo $texto;?>','<?php echo $publicacion->getVideo();?>','<?php echo $publicacion->getFoto();?>','<?php echo $publicacion->getTipoId();?>','<?php echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getNombre(); ?>')" class="btn"><i class="icon-plus"></i>&nbsp; Ver más</a>  
+								<a href="#" onclick="verPublicacionesConCometarios('<?php echo $publicacion->getId();?>','<?php echo $publicacion->getVideo();?>','<?php echo $publicacion->getFoto();?>','<?php echo $publicacion->getTipoId();?>','<?php echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getNombre(); ?>')" class="btn"><i class="icon-plus"></i>&nbsp; Ver más</a>  
 							<?php } ?>
 								
 							<?php
 							if($publicacion->getTipoId() == 2){ ?>
 								<div style="width: 320px; height: 100%;">
 									<a class="thumbnail">
-		      							<img src="<?php echo $this->baseUrl()?>/imagenes/fotos/<?php echo $publicacion->getFoto();?>" onclick="verFoto('<?php echo $publicacion->getTexto();?>','<?php echo $publicacion->getFoto();?>')">
+		      							<img src="<?php echo $this->baseUrl()?>/imagenes/fotos/icono/<?php echo $publicacion->getFoto();?>" onclick="verFoto('<?php echo $publicacion->getTexto();?>','<?php echo $publicacion->getFoto();?>')">
 	         						</a>
          						</div><br>
          						<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha()); ?></p>
-         						<a href="#" onclick="verPublicacionesConCometarios('<?php echo $publicacion->getId();?>','<?php echo $texto;?>','<?php echo $publicacion->getVideo();?>','<?php echo $publicacion->getFoto();?>','<?php echo $publicacion->getTipoId();?>','<?php echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getNombre(); ?>')" class="btn"><i class="icon-plus"></i>&nbsp; Ver más</a>    
+         						<a href="#" onclick="verPublicacionesConCometarios('<?php echo $publicacion->getId();?>','<?php echo $publicacion->getVideo();?>','<?php echo $publicacion->getFoto();?>','<?php echo $publicacion->getTipoId();?>','<?php echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getNombre(); ?>')" class="btn"><i class="icon-plus"></i>&nbsp; Ver más</a>    
 							<?php } ?>
 							
 							<?php if($publicacion->getTipoId() == 3){ ?>
 									<iframe class="youtube-player" width="320" height="190" src="http://www.youtube.com/embed/<?php echo $publicacion->getVideo();?>?wmode=transparent">
 									</iframe>
 									<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha()); ?></p>
-									<a href="#" onclick="verPublicacionesConCometarios('<?php echo $publicacion->getId();?>','<?php echo $texto;?>','<?php echo $publicacion->getVideo();?>','<?php echo $publicacion->getFoto();?>','<?php echo $publicacion->getTipoId();?>','<?php echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getNombre(); ?>')" class="btn"><i class="icon-plus"></i>&nbsp; Ver más</a>      
+									<a href="#" onclick="verPublicacionesConCometarios('<?php echo $publicacion->getId();?>','<?php echo $publicacion->getVideo();?>','<?php echo $publicacion->getFoto();?>','<?php echo $publicacion->getTipoId();?>','<?php echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getNombre(); ?>')" class="btn"><i class="icon-plus"></i>&nbsp; Ver más</a>      
 							<?php } ?>
 						</td>
 					</tr>
@@ -232,7 +232,7 @@
 			</tr>
 			<tr>
 				<td colspan="4">
-					<textarea rows="3" id="txtTextoPublicacion" name="txtTextoPublicacion" class="span4" onKeyDown="ValidarCaracteres(this, 499);"></textarea>
+					<textarea rows="3" id="txtTextoPublicacion" name="txtTextoPublicacion" class="span4" onKeyDown="ValidarCaracteres(this, 999);"></textarea>
 					<div id="divErrorTexto"></div>  
 				</td>
 			</tr>
@@ -600,8 +600,9 @@
 		
 	}
 
-	function verPublicacionesConCometarios(idPublicacion,titulo,video,foto,tipoPublicacion,usuarioNombre)
+	function verPublicacionesConCometarios(idPublicacion,video,foto,tipoPublicacion,usuarioNombre)
 	{
+		obtenerNombrePublicacion(idPublicacion);
 		todosComentarios(idPublicacion);
 
 		if(tipoPublicacion == 1)
@@ -624,11 +625,36 @@
 			html = "<iframe class='youtube-player' width='640' height='380' src='http://www.youtube.com/embed/"+video+"?wmode=transparent'></iframe>";
 		}
 		
-		html = html + "<div class='cont wellLateralIzq'>" + titulo + "</div>"; 
+		html = html + "<div class='cont wellLateralIzq'><div id='divTextoPub'></div></div>"; 
 		document.getElementById("divModalGenericoTitulo").innerHTML = "<label>Publicado por: " + usuarioNombre + "</label>";
 		document.getElementById("divModalGenerico").innerHTML = html;
 		
 		$('#myModalGenerico').modal('show');
+	}
+
+
+
+	function obtenerNombrePublicacion(idPublicacion){
+
+		$.ajax(
+				{
+				async: true,
+				type: 'POST',
+				url: '<?php echo $this->baseUrl()?>/muro/nombre',
+				data: 'id=' + idPublicacion,	
+				dataTypeString: 'text',
+				
+				beforeSend: function(data){
+			    },  
+			    success: function(requestData){  
+			    	document.getElementById("divTextoPub").innerHTML = requestData;
+			               		
+			    },  
+			    error: function(requestData, strError, strTipoError){          
+			    }
+			    
+				});
+		
 	}
 	
 

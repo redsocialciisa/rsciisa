@@ -117,7 +117,7 @@
 						<td><a class="btn btn-info" href="#"> Editar </a></td>
 						<td><a class="btn btn-info" onclick="openMyModalCancelarEvento('<?php echo $evento->getId();?>','<?php echo $evento->getNombre();?>')" > Cancelar </a></td>
 					<?php }else{ ?>
-						<td><a class="btn btn-info" onclick="noAsistire(<?php echo $evento->getId();?>)"> No asistiré </a></td>
+						<td><a class="btn btn-info" onclick="openModalDejarEvento(<?php echo $evento->getId();?>)"> No asistiré </a></td>
 					<?php }?>
 				</tr>
 		    <?php } ?>
@@ -250,6 +250,41 @@
 							id="txtDescripcion" name="txtDescripcion"></textarea></td>
 				</tr>
 				<tr>
+					<td>Fecha:</td>
+					<td>
+				<?
+					$fecha = time();
+				?> 
+				<input type="text" id="txtFechaEvento" name="txtFechaEvento"
+						readonly="readonly"> <select id="sltHora" name="sltHora">
+							<option value="">Seleccione</option>
+							<option value="01">01:00</option>
+							<option value="02">02:00</option>
+							<option value="03">03:00</option>
+							<option value="04">04:00</option>
+							<option value="05">05:00</option>
+							<option value="06">06:00</option>
+							<option value="07">07:00</option>
+							<option value="08">08:00</option>
+							<option value="09">09:00</option>
+							<option value="10">10:00</option>
+							<option value="11">11:00</option>
+							<option value="12">12:00</option>
+							<option value="13">13:00</option>
+							<option value="14">14:00</option>
+							<option value="15">15:00</option>
+							<option value="16">16:00</option>
+							<option value="17">17:00</option>
+							<option value="18">18:00</option>
+							<option value="19">19:00</option>
+							<option value="20">20:00</option>
+							<option value="21">21:00</option>
+							<option value="22">22:00</option>
+							<option value="23">23:00</option>
+							<option value="00">00:00</option>
+					</select>					</td>
+				</tr>
+				<tr>
 					<td colspan="2">¿Cuál es el Lugar ? &nbsp;<input type="text"
 						id="address" name="address" />&nbsp;&nbsp;<input type="button"
 						value="Buscar" onclick="geocode()" class="btn btn-success">&nbsp;&nbsp;
@@ -266,42 +301,6 @@
 							<div id="map_canvas" style="width: 80%; height: 400px;"></div>
 							<div id="crosshair"></div>
 						</div>
-					</td>
-				</tr>
-				<tr>
-					<td>Fecha:</td>
-					<td>
-				<?
-					$fecha = time();
-				?> 
-				<input type="text" id="txtFechaEvento" name="txtFechaEvento"
-						readonly="readonly"> <select id="sltHora" name="sltHora">
-							<option value="">Seleccione</option>
-							<option value="01:00">01:00</option>
-							<option value="02:00">02:00</option>
-							<option value="03:00">03:00</option>
-							<option value="04:00">04:00</option>
-							<option value="05:00">05:00</option>
-							<option value="06:00">06:00</option>
-							<option value="07:00">07:00</option>
-							<option value="08:00">08:00</option>
-							<option value="09:00">09:00</option>
-							<option value="10:00">10:00</option>
-							<option value="11:00">11:00</option>
-							<option value="12:00">12:00</option>
-							<option value="13:00">13:00</option>
-							<option value="14:00">14:00</option>
-							<option value="15:00">15:00</option>
-							<option value="16:00">16:00</option>
-							<option value="17:00">17:00</option>
-							<option value="18:00">18:00</option>
-							<option value="19:00">19:00</option>
-							<option value="20:00">20:00</option>
-							<option value="21:00">21:00</option>
-							<option value="22:00">22:00</option>
-							<option value="23:00:00">23:00</option>
-							<option value="00:00">00:00</option>
-					</select>
 					</td>
 				</tr>
 				<tr>
@@ -345,7 +344,7 @@
 		<h2><img src="/imagenes/proyecto/Info.png">&nbsp;&nbsp;&nbsp;Aceptar Invitación</h2>
 	</div>
 	<div class="modal-body">
-		¿Deseas aceptar la invitación al grupo?
+		¿Deseas aceptar la invitación al evento?
 		<div id="divGrupo"></div>
 		<input type="hidden" id="hdnInvitacionId">
 	</div>
@@ -382,6 +381,21 @@
 	</div>
 	<div class="modal-footer">
 		<a href="#" class="btn btn-success" onclick="rechazarInvitacionEvento()" data-dismiss="modal">Si, rechazar</a>
+		<a href="#" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
+	</div>
+</div>
+
+<div class="modal hide" id="myModalDejarEvento" style="width: 700px;">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">×</button>
+		<h2><img src="/imagenes/proyecto/Info.png">&nbsp;&nbsp;&nbsp;Dejar Evento</h2>
+	</div>
+	<div class="modal-body">
+		¿Estás seguro de que no asistirás al evento?
+		<input type="hidden" id="hdnEventoDejarId">
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn btn-success" onclick="noAsistire()" data-dismiss="modal">Si, no asitiré</a>
 		<a href="#" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
 	</div>
 </div>
@@ -468,6 +482,12 @@
 
   function geocode() {
     var address = document.getElementById("address").value;
+
+	if(trim(address) == "")
+	{
+		return;
+	}
+    
     geocoder.geocode({
       'address': address,
       'partialmatch': true}, geocodeResult);
@@ -533,6 +553,7 @@
 
   function crearEvento()
   {
+
 	  var errores = false;
 	  var htmlErrores = "<ul type = square>";
 	  
@@ -572,6 +593,17 @@
 		  errores = true;
 	  }
 
+	  var tNow = new Date();
+	  var fechaHoy = parseInt(tNow.getFullYear())+''+parseInt(tNow.getMonth()+1)+''+parseInt(tNow.getDate())+''+parseInt(tNow.getHours());
+	  var fechaEventoArray = document.getElementById("txtFechaEvento").value.split("-");
+	  var fechaEvento = parseInt(fechaEventoArray[2])+''+parseInt(fechaEventoArray[1])+''+parseInt(fechaEventoArray[0])+''+parseInt(document.getElementById("sltHora").value);
+	  
+	  if(fechaEvento <= fechaHoy)
+	  {
+		  htmlErrores = htmlErrores + "<li><font color='red'>Fecha del evento no puede ser menor a la fecha actual!</font>";
+		  errores = true;
+	  }
+
 	  htmlErrores = htmlErrores + "</ul>";
 
 	  document.getElementById("divErroresEvento").innerHTML = htmlErrores; 
@@ -584,12 +616,17 @@
 	  }
   }
 
+  	function openModalDejarEvento(id)
+  	{
+  		$('#myModalDejarEvento').modal('show');
+  		document.getElementById("hdnEventoDejarId").value = id;
+  	}
+
 	function openModalEvento()
 	{	
 		$('#myModalEvento').modal('show');
 		addMarkerAtCenter();		
 	}
-
 	   
     function openModalAceptarInvitacion(idInvitacion)
 	{
@@ -624,7 +661,7 @@
 							var divMsj = "<div class='alert alert-success'>";
 							divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
 							divMsj = divMsj + "<strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong>";
-							divMsj = divMsj + "Ahora eres parte del grupo.";
+							divMsj = divMsj + "Ahora eres parte del evento.";
 							divMsj = divMsj + "</div>";
 
 							document.getElementById("divMensajeInvitacion").innerHTML = divMsj;  
@@ -651,8 +688,10 @@
 		document.getElementById("hdnEventoId").value = id;
 	}
 
-    function noAsistire(id){
+    function noAsistire(){
 
+    	var id = document.getElementById("hdnEventoDejarId").value;
+    	
 		$.ajax(
 				{
 				async: true,

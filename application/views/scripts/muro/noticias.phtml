@@ -13,9 +13,7 @@
 						<td colspan="2">
 							<label class="wellPublicacionTitulo">
 							<a href="/muro/muro-contacto/id/<?php echo $publicacion->getUsuarioId();?>">
-								<b><?php
-									echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getNombre();
-								?></b>
+								<b><?php echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getNombre(); ?></b>
 							</a>
 							</label>
 						</td>
@@ -46,8 +44,13 @@
 									$objPublicacionEventoAuxDao = new Application_Model_PublicacionEventoDao();
 								?>
 								
-								<a href="/evento/contactos/id/<?php echo $objPublicacionEventoAuxDao->obtenerPorPublicacionId($publicacion->getId())->getEventoId();?>"><?php echo $publicacion->getTexto();?></a>
-								<?php $objPublicacionEventoAuxDao = null; ?>
+								<a href="/evento/contactos/id/<?php echo $objPublicacionEventoAuxDao->obtenerPorPublicacionId($publicacion->getId())->getEventoId();?>"><img src="/imagenes/proyecto/calendario.png">&nbsp;&nbsp;EVENTO: &nbsp;&nbsp;<?php echo $publicacion->getTexto();?></a>
+								<?php
+									$objEventoDao = new Application_Model_EventoDao();
+									$objEvento3 = $objEventoDao->obtenerPorId($objPublicacionEventoAuxDao->obtenerPorPublicacionId($publicacion->getId())->getEventoId());
+									$fechaPublicacion = strtotime($objEvento3->getFechaEvento());
+									$objPublicacionEventoAuxDao = null; 
+								?>
 								
 								</h5>
 								<input type="hidden" id="hdnTextoPublicacion<?php echo $publicacion->getId();?>" value="<?php echo $texto;?>">
@@ -122,7 +125,7 @@
 								$objGrupo = $objGrupoDao->obtenerPorId($gru_id);
 							?>
 								<h5 class="cont4 well">
-								<a href="/muro/muro-grupo/id/<?php echo $objGrupo->getId();?>"><?php echo $publicacion->getTexto();?></a>
+								<a href="/muro/muro-grupo/id/<?php echo $objGrupo->getId();?>"><img src="/imagenes/proyecto/group.png">&nbsp;&nbsp;GRUPO: &nbsp;&nbsp; <?php echo $publicacion->getTexto();?></a>
 								</h5>
 								<input type="hidden" id="hdnTextoPublicacion<?php echo $publicacion->getId();?>" value="<?php echo $texto;?>">
 							

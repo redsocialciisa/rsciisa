@@ -74,7 +74,6 @@ class AlbumController extends Zend_Controller_Action
         	        $objFoto->setNombre($this->getRequest()->getParam('fotoDesc1'));
         	        $objFotoDao->guardar($objFoto);
         	        
-        	        
         	    }
         	    
         		$this->view->error = "ok";
@@ -85,6 +84,7 @@ class AlbumController extends Zend_Controller_Action
         	}
         }
         
+        $this->view->usuario = $id;
         $this->view->listaAlbumes = $objAlbumDao->obtenerTodosPorUsuarioId($id);
         $this->view->form = $form;
         
@@ -286,6 +286,7 @@ class AlbumController extends Zend_Controller_Action
         	}
         }
         
+        $this->view->album = $objAlbumDao->obtenerPorId($id);
         $this->view->success = $this->getRequest()->getParam('success');
         $this->view->form = $form;
         $this->view->listaFotos = $listaFotos;
@@ -317,11 +318,13 @@ class AlbumController extends Zend_Controller_Action
     	$objAlbumDao = new Application_Model_AlbumDao();
     	$objFotoDao = new Application_Model_FotoDao();
     	$listaFotos = $objFotoDao->obtenerPorAlbumId($idAlbum);
+    	$objComentarioFotoDao = new Application_Model_ComentarioFotoDao();
     	
     	foreach ($listaFotos as $foto)
     	{
     	    unlink("/var/www/rsciisa/public/imagenes/fotos/icono/".$foto->getFoto());
     	    unlink("/var/www/rsciisa/public/imagenes/fotos/".$foto->getFoto());
+    	    $objComentarioFotoDao->eliminarComentariosPorFotoId($foto->getId());
     	}
     	
     	$objFotoDao->eliminarFotosPorAlbumId($idAlbum);
@@ -347,12 +350,9 @@ class AlbumController extends Zend_Controller_Action
     			$objUsuario = $objUsuarioDao->obtenerPorId($comentario->getUsuId());
     			
     				$htmlComentarios .= "<div id='divContenedorComentarios".$idFoto."'><hr>";
-	    			$htmlComentarios .= "<table><tr>";
-    				$htmlComentarios .= "<td rowspan='3'><img style='width: 50px;' src='/imagenes/usuarios/icono/".$objUsuario->getFoto()."'></td>";
-					$htmlComentarios .= "<td colspan='2' class='label' width='100%'>".$objUsuario->getNombre()."</td></tr>";
-					$htmlComentarios .=	"<tr><td></td>";
-    				$htmlComentarios .= "<td><div class='cont2'>".$comentario->getTexto()."</div></td></tr>";
-    				$htmlComentarios .= "<tr><td></td>";
+	    			$htmlComentarios .= "<table width='100%;'>";
+					$htmlComentarios .= "<tr><td colspan='2' class='label' width='100%'>".$objUsuario->getNombre()."<br><br><img style='width: 50px;' src='/imagenes/usuarios/icono/".$objUsuario->getFoto()."'>".$comentario->getTexto()."</td></tr>";
+    				$htmlComentarios .= "<tr>";
 					$htmlComentarios .= "<td>".$objUtilidad->calcularTiempoTranscurrido($comentario->getFecha())."</td></tr></table>";
 					$htmlComentarios .= "</div>";
     		}
@@ -396,18 +396,14 @@ class AlbumController extends Zend_Controller_Action
     			$objUsuario = $objUsuarioDao->obtenerPorId($comentario->getUsuId());
     			 
     			$htmlComentarios .= "<div id='divContenedorComentarios".$idFoto."'><hr>";
-    			$htmlComentarios .= "<table><tr>";
-    			$htmlComentarios .= "<td rowspan='3'><img style='width: 50px;' src='/imagenes/usuarios/icono/".$objUsuario->getFoto()."'></td>";
+    			$htmlComentarios .= "<table width='100%;'>";
     			
     			if($idUltimoComentario == $comentario->getId()){
-    				$htmlComentarios .= "<td colspan='2' class='label label-info' width='100%'>".$objUsuario->getNombre()."</td></tr>";
+    			    $htmlComentarios .= "<tr><td colspan='2' class='label label-info' width='100%'>".$objUsuario->getNombre()."<br><br><img style='width: 50px;' src='/imagenes/usuarios/icono/".$objUsuario->getFoto()."'>".$comentario->getTexto()."</td></tr>";
     			}else{
-    			    $htmlComentarios .= "<td colspan='2' class='label width='100%'>".$objUsuario->getNombre()."</td></tr>";
+    			    $htmlComentarios .= "<tr><td colspan='2' class='label' width='100%'>".$objUsuario->getNombre()."<br><br><img style='width: 50px;' src='/imagenes/usuarios/icono/".$objUsuario->getFoto()."'>".$comentario->getTexto()."</td></tr>";
     			}
-    			
-    			$htmlComentarios .=	"<tr><td></td>";
-    			$htmlComentarios .= "<td>".$comentario->getTexto()."</td></tr>";
-    			$htmlComentarios .= "<tr><td></td>";
+    			$htmlComentarios .= "<tr>";
     			$htmlComentarios .= "<td>".$objUtilidad->calcularTiempoTranscurrido($comentario->getFecha())."</td></tr></table>";
     			$htmlComentarios .= "</div>";
     		}

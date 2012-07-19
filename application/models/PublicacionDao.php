@@ -274,10 +274,14 @@ class Application_Model_PublicacionDao
     		    
     		    if($item->tip_pub_id == 4)
     		    {
-    		        if($objEventoDao->obtenerPorId($objPublicacionEventoDao->obtenerPorPublicacionId($item->pub_id)->getEventoId())->getTipoEventoId() == 1)
+    		        $objEventoAux = $objEventoDao->obtenerPorId($objPublicacionEventoDao->obtenerPorPublicacionId($item->pub_id)->getEventoId());
+    		        
+    		        if($objEventoAux->getTipoEventoId() == 1 && $objEventoAux->getCancelado() == 0)
     		    	{
     		    		$lista->attach($this->obtenerPorId($item->pub_id));
     		    	}
+    		    	
+    		    	$objEventoAux = null;
     		    }
     		    
     		}

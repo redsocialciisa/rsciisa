@@ -1,7 +1,32 @@
  
- <br><h1>GRUPOS</h1><br>
+ <br><h1>GRUPO
+ <?php 
+ 	$objGrupoDao = new Application_Model_GrupoDao();
+ 	$objGrupo = $objGrupoDao->obtenerPorId($this->grupoId);
+ 	if ($objGrupo->getTipoGrupoId() == "0"){
+ 		echo "PÚBLICO";
+ 	}else{
+ 		echo "PRIVADO";
+ 	}?>
+ </h1><br>
  
-<br><br><br>
+  <table class="span9" style="width: 100%">
+   		<tr>
+   			<td>
+				<h2>"<?php echo $objGrupo->getNombre();?>"</h3></h2>
+   				<table>
+   					<tr>
+   						<td valign="top">
+							<div class="cont well">
+   								<?php  echo $objGrupo->getDescripcion(); ?>
+   							</div>
+   						</td>
+   					</tr>
+   				</table>
+   			</td>
+  		</tr>
+  </table>
+ 
 <div class="tabbable span9 well">
     <ul class="nav nav-tabs">
     	<li><a href="#GruposContacto" data-toggle="tab"><img src="/imagenes/proyecto/minuscontacto.png">&nbsp;&nbsp;Contactos del grupo</a></li>

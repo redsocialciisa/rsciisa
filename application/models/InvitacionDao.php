@@ -60,7 +60,7 @@ class Application_Model_InvitacionDao
     
     public function eliminarUsuarioPorEvento($eve_id,$usu_id)
     {
-        $where = 'id_actividad  =' . $eve_id. ' and tip_inv_id = 2 and usu_id ='. $usu_id;
+        $where = 'id_actividad='. $eve_id.' and tip_inv_id=2 and usu_id='.$usu_id;
         
         return $this->_table->delete($where);
     }

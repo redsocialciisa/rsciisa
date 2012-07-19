@@ -2,17 +2,23 @@
  
  <?php
  	$aut = Zend_Auth::getInstance();
+ 	$objEventoDao = new Application_Model_EventoDao();
+	$objEvento = $objEventoDao->obtenerPorId($this->id); 
  ?>
  
-<br><h1> EVENTO </h1><br>
+<br><h1> EVENTO 
+<?php 
+	if ($objEvento->getTipoEventoId() == "1"){
+	    echo "PÚBLICO";
+	}else{
+	    echo "PRIVADO";
+	}
+?>
+</h1><br>
  
  <table class="span9" style="width: 100%">
    		<tr>
    			<td>
-   				<?php 
-			   			$objEventoDao = new Application_Model_EventoDao();
-						$objEvento = $objEventoDao->obtenerPorId($this->id); ?>
-						
 						<?php $fechaPublicacion = strtotime($objEvento->getFechaEvento()); ?>	
 						<?php
 							switch (date("m", $fechaPublicacion))

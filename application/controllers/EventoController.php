@@ -300,7 +300,7 @@ class EventoController extends Zend_Controller_Action
     	$objUsuarioEventoDao = new Application_Model_UsuarioEventoDao();
     	$objInvitacionDao = new Application_Model_InvitacionDao();
     	
-    	$listaEliminar = $objUsuarioEventoDao->obtenerUsuariosAEliminar(8);
+    	$listaEliminar = $objUsuarioEventoDao->obtenerUsuariosAEliminar($eventoId);
     	
     	foreach ($listaEliminar as $item)
     	{

@@ -57,8 +57,9 @@ class Application_Model_PublicacionGrupoDao
     	$objPublicacionDao = new Application_Model_PublicacionDao();
     	
     	$where = 'gru_id ='. $gru_id;
+    	$order = 'pub_gru_id desc';
     	 
-    	$resultado = $this->_table->fetchAll($where);
+    	$resultado = $this->_table->fetchAll($where, $order);
     
     	if(count($resultado) > 0){
     

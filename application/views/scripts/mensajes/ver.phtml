@@ -19,7 +19,7 @@ Participantes:<br>
 				<img src="/imagenes/usuarios/icono/<?php echo $objUsuario->obtenerPorId($mensaje->getDe())->getFoto();?>">
 			</td>
 			<td valign="top">
-				&nbsp;&nbsp;<b><font color='green'><?php echo $objUsuario->obtenerPorId($mensaje->getDe())->getNombre();?></font></b>
+				&nbsp;&nbsp;<b><font color='green'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php echo $objUsuario->obtenerPorId($mensaje->getDe())->getNombre();?></font></b>
 			</td>
 			<td valign="top" rowspan="2">
 				<?php 
@@ -30,13 +30,14 @@ Participantes:<br>
 			</td>
 		</tr>
 		<tr>
-			<td valign="top">	
-				<div class="cont4">
-		  			<?php echo $mensaje->getTexto();?>
-		  		</div></td>
-			<td>
-			</td>
-			<td></td>
+				<td valign="top">	
+					<div class="cont4">
+		  				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $mensaje->getTexto();?>
+		  			</div>
+		  		</td>
+		<td>
+		</td>
+		<td></td>
 		</tr>
 		<?php } ?>
 </table>

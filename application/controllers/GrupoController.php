@@ -33,7 +33,6 @@ class GrupoController extends Zend_Controller_Action
         	$formData = $this->_request->getPost();
         	if($form->isValid($this->_getAllParams()))
         	{
-        	    
         	    $fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
         		
         		$objGrupo->setNombre($this->getRequest()->getParam('txtNombre'));
@@ -46,8 +45,27 @@ class GrupoController extends Zend_Controller_Action
         		{
         			$foto_name = $_FILES['fileFoto']['name'];
         			$foto_tmp 	= $_FILES['fileFoto']['tmp_name'];
-        			copy($foto_tmp, "/var/www/rsciisa/public/imagenes/grupos/".$fechahora."_".$foto_name);
+        			$foto_ext   = str_replace("image/","",$_FILES['fileFoto']['type']);
+        			
+        			$location_perfil = "/var/www/rsciisa/public/imagenes/grupos/".$fechahora."_".$foto_name;
+        			$location_ico = "/var/www/rsciisa/public/imagenes/grupos/icono/".$fechahora."_".$foto_name;
+        			
+        			copy($foto_tmp, $location_perfil);
         			$objGrupo->setFoto($fechahora."_".$foto_name);
+        			
+        			$objUtilidad = new Application_Model_Utilidad();
+        			$tmp_perfil = $objUtilidad->recortarImagen($location_perfil,$foto_ext,300,300);
+        			$tmp_ico = $objUtilidad->recortarImagen($location_perfil,$foto_ext,60,80);
+        				
+        			if($foto_ext == "png")
+        			{
+        				imagepng($tmp_perfil,$location_perfil,0);
+        				imagepng($tmp_ico,$location_ico,0);
+        			}else{
+        				//jpeg, jpg
+        				imagejpeg($tmp_perfil,$location_perfil,95);
+        				imagejpeg($tmp_ico,$location_ico,95);
+        			}
         		}
         		$idGrupo = $objGrupoDao->guardar($objGrupo);
         		
