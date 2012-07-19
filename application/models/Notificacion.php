@@ -8,6 +8,7 @@ class Application_Model_Notificacion
     private $_vista;
     private $_usuarioId;
     private $_tipoNotificacionId;
+    private $_actividad;
 	/**
 	 * @return the $_id
 	 */
@@ -51,6 +52,13 @@ class Application_Model_Notificacion
 	}
 
 	/**
+	 * @return the $_actividad
+	 */
+	public function getActividad() {
+		return $this->_actividad;
+	}
+
+	/**
 	 * @param field_type $_id
 	 */
 	public function setId($_id) {
@@ -90,6 +98,13 @@ class Application_Model_Notificacion
 	 */
 	public function setTipoNotificacionId($_tipoNotificacionId) {
 		$this->_tipoNotificacionId = $_tipoNotificacionId;
+	}
+
+	/**
+	 * @param field_type $_actividad
+	 */
+	public function setActividad($_actividad) {
+		$this->_actividad = $_actividad;
 	}
 
 }

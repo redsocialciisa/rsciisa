@@ -238,7 +238,7 @@ class Application_Model_PublicacionDao
     
     public function eliminar($pub_id)
     {
-    	$where = 'pub_id = ' . $pub_id;
+    	$where = 'pub_id = '. $pub_id;
     
     	return $this->_table->delete($where);
     }

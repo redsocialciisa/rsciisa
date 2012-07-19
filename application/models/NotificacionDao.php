@@ -27,6 +27,7 @@ class Application_Model_NotificacionDao
     		$objNotificacion->setVista($resultado->current()->not_vista);
     		$objNotificacion->setUsuarioId($resultado->current()->usu_id);
     		$objNotificacion->setTipoNotificacionId($resultado->current()->tip_not_id);
+    		$objNotificacion->setActividad($resultado->current()->not_actividad);
     
     	}
     	return $objNotificacion;
@@ -40,6 +41,7 @@ class Application_Model_NotificacionDao
     	        'not_vista' => $notificacion->getVista(),
     			'usu_id' => $notificacion->getUsuarioId(),
     			'tip_not_id' => $notificacion->getTipoNotificacionId(),
+    	        'not_actividad' => $notificacion->getActividad()
     	);
     
     	if($notificacion->getId() != null){

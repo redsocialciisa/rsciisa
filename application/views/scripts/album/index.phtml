@@ -58,6 +58,11 @@
 											<a href="#" onclick="openEliminarAlbum('<?php echo $album->getId();?>')"><img src="/imagenes/proyecto/cruz.png" width="20px;">&nbsp;&nbsp;</a>&nbsp;Eliminar
 										</td>
 									</tr>
+									<tr>
+										<td>
+											<a href="<?php echo $this->url(array('controller'=>'album', 'action'=>'editar', 'albumId'=>$album->getId()));?>"><img src="/imagenes/proyecto/editar.png" width="20px;">&nbsp;&nbsp;</a>&nbsp;Editar
+										</td>
+									</tr>
 								</table>						
 							<!-- fin de imprimir el objeto -->
 							<?php 

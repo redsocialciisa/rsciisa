@@ -138,13 +138,21 @@ class GrupoController extends Zend_Controller_Action
         $objGrupoDao = new Application_Model_GrupoDao();
         $objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
         $objPublicacionGrupoDao = new Application_Model_PublicacionGrupoDao();
+        $objPublicacionDao = new Application_Model_PublicacionDao();
         $objInvitacionDao = new Application_Model_InvitacionDao();
         
         $grupoId = $this->getRequest()->getParam('grupoId');
         $objGrupo = $objGrupoDao->obtenerPorId($grupoId);
         unlink("/var/www/rsciisa/public/imagenes/grupos/".$objGrupo->getFoto());
-        $objUsuarioGrupoDao->eliminarUsuariosPorGrupoId($grupoId);
+        $listaPublicacionGrupo = $objPublicacionGrupoDao->obtenerPublicacionesDelGrupo($grupoId);
         $objPublicacionGrupoDao->eliminarPublicaciones($grupoId);
+        $objUsuarioGrupoDao->eliminarUsuariosPorGrupoId($grupoId);
+        
+        foreach ($listaPublicacionGrupo as $item)
+        {
+            $objPublicacionDao->eliminar($item->getId());
+        }    
+        
         $objInvitacionDao->eliminarPorGrupo($grupoId);
         $objGrupoDao->eliminar($grupoId);
         

@@ -72,6 +72,7 @@ class MuroController extends Zend_Controller_Action
 	        $objNotificacion->setFecha($now->format('Y-m-d H:i:s'));
 	        $objNotificacion->setUsuarioId($objPublicacion->getUsuarioId());
 	        $objNotificacion->setTexto($textoInv);
+	        $objNotificacion->setActividad($idPublicacion);
 	        $objNotificacionDao->guardar($objNotificacion);
         }
         $idCom = $objComentarioDao->guardar($objComentario);

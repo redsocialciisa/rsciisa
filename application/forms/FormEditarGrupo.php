@@ -33,6 +33,7 @@ class Application_Form_FormEditarGrupo extends Zend_Form
 		$descripcion->setLabel('Descripcion del grupo: ')
 					->setRequired(true)
 					->setAttrib('rows', 2)
+					->setAttrib('class', 'span4')
 					->clearErrorMessages()
 					->addErrorMessage('Debes ingresar una descripcion');
 		

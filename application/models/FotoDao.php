@@ -80,6 +80,23 @@ class Application_Model_FotoDao
     
     	return $this->_table->delete($where);
     }
+    
+    public function obtenerPorNombre($nomFoto)
+    {
+    	$where = 'fot_foto = "'. $nomFoto.'"';
+    	$resultado = $this->_table->fetchAll($where);
+    	
+    	if(count($resultado) > 0)
+    	{
+    		return $this->obtenerPorId($resultado->current()->fot_id);
+    	}
+    	
+    	return null;
+    	
+    	
+    	
+    
+    }
 
 }
 

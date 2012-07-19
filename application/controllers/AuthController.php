@@ -273,8 +273,8 @@ class AuthController extends Zend_Controller_Action
         		$objIntegracion = $objIntegracionDao->obtenerLlavesIntegracion($objUsuario->getId(),1);
         		$facebook->setAccessToken($objIntegracion->getToken());
         		$user = $facebook->getUser();
-        		$user_profile = $facebook->api('/me','GET');
-        		$fields = $facebook->api('/me', array('fields'=>'picture'));
+        		$user_profile = $facebook->api('me','GET');
+        		$fields = $facebook->api('me', array('fields'=>'picture'));
         		
         		$aut->getIdentity()->facebookNombre = $user_profile['name'];
         		$aut->getIdentity()->facebookFoto = $fields['picture'];
