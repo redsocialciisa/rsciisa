@@ -88,5 +88,17 @@ class Application_Model_PublicacionGrupoDao
         return $this->_table->delete($where);
     }
     
+    public function obtenerIdPublicacion($gru_id)
+    {
+        $where = 'gru_id = '.$gru_id;
+        $resultado = $this->_table->fetchAll($where);
+        
+        if(count($resultado) > 0){
+        
+  			return $resultado->pub_gru_id;
+        }
+        
+    }
+    
 }
 

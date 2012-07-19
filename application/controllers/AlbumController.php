@@ -416,7 +416,32 @@ class AlbumController extends Zend_Controller_Action
     	$this->view->ok = $htmlComentarios;
     }
     
-
+	public function editarAction()
+	{
+	    $fecha = new DateTime();
+	    $objAlbumDao = new Application_Model_AlbumDao();
+	    $objAlbum = new Application_Model_Album();
+	    $objFoto = new Application_Model_Foto();
+	    $objFotoDao = new Application_Model_FotoDao();
+	    $form = new Application_Form_FormEditarAlbum();
+	    
+	    if($this->getRequest()->isPost() == false)
+	    {
+	    	$albumId = $this->getRequest()->getParam('albumId');
+	    	$objAlbum = $objAlbumDao->obtenerPorId($albumId);
+	    	$objFoto = $objFotoDao->obtenerPorNombre($objAlbum->getPortada());
+	    	
+	    	$array = array(
+				"txtNombre" => $objAlbum->getNombre(),
+	    	    "fotoDesc1" => $objFoto->getNombre(),
+	    	    "txtDescripcion" => $objAlbum->getDescripcion()
+	    	);
+	    	$form->populate($array);
+	    }
+	    
+	    $this->view->form = $form;
+	    
+	}
 
 }
 

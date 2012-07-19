@@ -133,6 +133,7 @@ class IntegracionController extends Zend_Controller_Action
         		echo '<p>Para completar la integracion precione el siguiente boton</p>';
         		$link = "'".$authurl."'";
         		echo '<input type=button onClick="parent.location='.$link.'" value="Integrar con Twitter">';
+        		
         	} else {
         		outputError($tmhOAuth);
         	}

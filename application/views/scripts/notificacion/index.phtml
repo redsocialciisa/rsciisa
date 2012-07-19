@@ -44,7 +44,7 @@ $objPublicacionDao = new Application_Model_PublicacionDao();
 			    			$objTipoNotificacion = $objTipoNotificacionDao->obtenerPorId($item->getTipoNotificacionId());
 			    		?>
 			    		
-			    		<a href="<?php echo $objTipoNotificacion->getUrl();?>" >Ver notificación</a>
+			    		<a href="<?php echo $objTipoNotificacion->getUrl().$item->getActividad();?>" >Ver notificación</a>
 			    		<hr>
 			    	</td>
 			  	</tr>

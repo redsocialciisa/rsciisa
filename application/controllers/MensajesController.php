@@ -32,13 +32,14 @@ class MensajesController extends Zend_Controller_Action
 	        	    $objMensaje->setPara($idUsuarioPara);
 	        	    $objMensaje->setFecha($fechahora);
 	        	    $objMensaje->setTexto($this->getRequest()->getParam('txtTextoMensaje'));
+	        	    $objMensajeDao->guardar($objMensaje);
 	        	    $textoInv = $aut->getIdentity()->usu_nombre.' te ha enviado un mensaje';
 	        	    $objNotificacion->setTipoNotificacionId(5);
 	        	    $objNotificacion->setVista(0);
 	        	    $objNotificacion->setFecha($fechahora);
 	        	    $objNotificacion->setUsuarioId($idUsuarioPara);
 	        	    $objNotificacion->setTexto($textoInv);
-	        	    $objMensajeDao->guardar($objMensaje);
+	        	    $objNotificacion->setActividad($aut->getIdentity()->usu_id);
 	        	    $objNotificacionDao->guardar($objNotificacion);
 	        	    
 	        	    $this->view->mensaje_ok = "ok";
@@ -86,13 +87,14 @@ class MensajesController extends Zend_Controller_Action
         		$objMensaje->setPara($usu_id_menu);
         		$objMensaje->setFecha($fechahora);
         		$objMensaje->setTexto($this->getRequest()->getParam('txtTextoResponder'));
+        		$objMensajeDao->guardar($objMensaje);
         		$textoInv = $aut->getIdentity()->usu_nombre.' te ha enviado un mensaje';
         		$objNotificacion->setTipoNotificacionId(5);
         		$objNotificacion->setVista(0);
         		$objNotificacion->setFecha($fechahora);
         		$objNotificacion->setUsuarioId($usu_id_menu);
         		$objNotificacion->setTexto($textoInv);
-        		$objMensajeDao->guardar($objMensaje);
+        		$objNotificacion->setActividad($aut->getIdentity()->usu_id);
         		$objNotificacionDao->guardar($objNotificacion);
         	}
         }

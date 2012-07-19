@@ -44,8 +44,23 @@
 						  
 						</table>
 			</div> 				
-			<?php }?>	
-
+			<?php 
+				}
+				else
+				{    
+			?>
+				<div class="span3 well">
+					<table>
+						<tr>
+							<td align="center" colspan="2" class="label label-info" style="width: 200px;"><img src="/imagenes/proyecto/facebook.png">&nbsp;&nbsp; Facebook</td>
+						</tr>
+						<tr>
+							<td align="center"><a href="/integracion/facebook/" class="btn btn" >Integrar</a></td>
+						</tr>
+					</table>
+				</div>
+			<?php }?>
+			
 		<?php if ( $aut->getIdentity()->linkedinNombre != null ) {?>
 			<div class="span3 well">
 			<table>
@@ -74,6 +89,20 @@
 			</table>
 			</div>
 			
+			<?php }
+				else 
+				{    
+			?>
+				<div class="span3 well">
+					<table>
+						<tr>
+							<td align="center" colspan="2" class="label label-info" style="width: 200px;"><img src="/imagenes/proyecto/linkedin.png">&nbsp;&nbsp; LinkedIn</td>
+						</tr>
+						<tr>
+							<td align="center"><a href="/integracion/twitter/" class="btn btn" >Integrar</a></td>
+						</tr>
+					</table>
+				</div>
 			<?php }?>
 			
 			<?php if ($aut->getIdentity()->twitterArregloDatos != null)
@@ -137,10 +166,23 @@
 					 <hr></hr>
 				       <?php  
 					endforeach;
-					
-					echo "</table></div>";
-					}
 					?>
+					</table>
+					</div>
+					<?php }
+					else{
+					?>
+					<div class="span3 well">
+						<table>
+							<tr>
+								<td align="center" colspan="2" class="label label-info" style="width: 200px;"><img src="/imagenes/proyecto/twitter.png">&nbsp;&nbsp; Twitter</td>
+							</tr>
+							<tr>
+								<td align="center"><a href="/integracion/linkedin/" class="btn btn" >Integrar</a></td>
+							</tr>
+						</table>
+				</div>
+					<?php }?>
 					
 <?php 
 	$objIntegracionDao = null;
