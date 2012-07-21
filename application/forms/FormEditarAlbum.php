@@ -25,18 +25,7 @@ class Application_Form_FormEditarAlbum extends Zend_Form
 	        ->setAttrib('rows','3')
 	        ->setAttrib('onkeypress','ValidarCaracteres(this, 249)')
 	        ->setAttrib('class','span6');
-        
-        $this->setEnctype(Zend_Form::ENCTYPE_MULTIPART);
-        $fileFoto1 = new Zend_Form_Element_File('fileFoto1');
-        $fileFoto1->setLabel(' ')
-        		->setRequired(false)
-		        ->addValidator('IsImage')
-		        ->setAttrib('class', 'span4')
-		        ->setMaxFileSize(5097152)
-		        ->addValidator('Extension',false,array('jpg','jpeg','png'))
-        		->clearErrorMessages()
-        		->addErrorMessage('Debes ingresar el nombre del álbum');
-        
+                
 		$descripcion = new Zend_Form_Element_Textarea('txtDescripcion');
 		$descripcion->setLabel('Descripcion del álbum: ')
 					->setRequired(false)
@@ -47,14 +36,16 @@ class Application_Form_FormEditarAlbum extends Zend_Form
 					->addErrorMessage('Debes ingresar una descripcion');
 		
         $buttonEnviar = $this->createElement('submit', 'enviar');
-        $buttonEnviar->setLabel('Crear Grupo')
+        $buttonEnviar->setLabel('Editar album')
         			 ->setAttrib('class', 'btn btn-success');
         
         
+        $albumId= new Zend_Form_Element_Hidden('hdnIdAlbum');
+        
         $this->addElement($nombre);
         $this->addElement($fotoDesc1);
-        $this->addElement($fileFoto1);
         $this->addElement($descripcion);
+        $this->addElement($albumId);
         $this->addElement($buttonEnviar);
         
         

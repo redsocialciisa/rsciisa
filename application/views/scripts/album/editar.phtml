@@ -1,12 +1,80 @@
-<form action="/album/editar/" method="post" enctype="<?php echo $this->form->getEnctype(); ?>" id="formAlbum">
-			<?php
-                echo $this->form->txtNombre;
-				echo $this->form->txtDescripcion;
-				
-				echo "Portada: ";
-				
-				echo $this->form->fileFoto1;
-				echo $this->form->fotoDesc1;
-				
-	        ?>
-</form>
+<br>
+<h1>Editar Album</h1>
+<br>
+
+<table class="span9">
+	<tr>
+    	<td>
+			<form action="/album/editar/" method="post" enctype="<?php echo $this->form->getEnctype(); ?>" id="formAlbum">
+						<?php
+			                echo $this->form->txtNombre;
+							echo $this->form->txtDescripcion;
+							echo $this->form->hdnIdAlbum;
+						?>
+						<input type="hidden" id="hdnFotoSeleccionada" name="hdnFotoSeleccionada">
+				        <a href="#" class="btn btn-success" onclick="openModalDestinatario()"><img src="/imagenes/proyecto/buscar.png">&nbsp;&nbsp; Seleccionar portada </a>
+						<?php
+							echo $this->form->fotoDesc1;
+						 	echo $this->form->enviar;
+						 ?>
+			</form>
+    	</td>
+    </tr>
+</table>
+
+<div class="modal hide" id="myModalPortada" style="width: 700px;">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">×</button>
+		<h2>
+			<img src="/imagenes/proyecto/buscar.png">&nbsp;&nbsp;Seleccionar portada</h2>
+	</div>
+	<div class="modal-body">
+		<div id="divListadoUsuarios"></div>
+		<div id="divLoaderMensaje"></div>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn btn-success" data-dismiss="modal">Seleccionar</a>
+		<a href="#" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
+	</div>
+</div>
+
+<script type="text/javascript">
+	function openModalDestinatario()
+	{
+		$('#myModalPortada').modal("show");
+		
+		var idAlbum = document.getElementById("hdnIdAlbum").value;
+		
+		var divLoader = "divLoaderMensaje";
+		
+		selectDestino = $('#' + divLoader);
+			$.ajax(
+					{
+					async: true,
+					type: 'POST',
+					url: '<?php echo $this->baseUrl()?>/album/obtener-fotos',
+					data: 'idAlbum=' + idAlbum,	
+					dataTypeString: 'text',
+					
+					beforeSend: function(data){
+		                selectDestino.html('<img src="/imagenes/proyecto/ajax-loader.gif">');
+				    },  
+				    success: function(requestData){
+			               		result = requestData;
+
+			               		document.getElementById("divListadoUsuarios").innerHTML = result;
+				               	document.getElementById(divLoader).innerHTML = "";
+				    },  
+				    error: function(requestData, strError, strTipoError){          
+				    }
+				    
+					});
+		
+	}
+
+ 	function elDestinatario(nombre)
+ 	{
+ 		document.getElementById("hdnFotoSeleccionada").value = nombre;
+ 	}
+			
+</script>
