@@ -231,6 +231,7 @@
 			   
    	    	
 	    	    <ul class="nav secondary-nav pull-right">
+	    	    <?php if($aut->getIdentity()->per_id == 1){  ?>
 			   		<li>
 			    		<a href="/notificacion/" >Notificaciones: 
 			    			<?php 
@@ -242,7 +243,9 @@
 				    			<span class="badge badge-important"><?php echo $objNotificacionDao->cantidadNotificacionesNuevas($aut->getIdentity()->usu_id); ?></span>
 				    		<?php }?>	
 			    		</a>
-			    	</li>	    	    	
+			    	</li>
+			    <?php } ?>
+			    		    	    	
 					<li class="dropdown">
 		              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
 		              			<i class="icon-user icon-white"></i>
