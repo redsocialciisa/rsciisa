@@ -100,6 +100,26 @@ class EventoController extends Zend_Controller_Action
         $aut = Zend_Auth::getInstance();
         $eventoId = $this->getRequest()->getParam('id');
         
+        //SEGURIDAD
+        //Sólo si el usuario está aceptado en el evento, (estado=4), puede ver el detalle del evento privado.
+        if($this->getRequest()->getParam('id') != null){
+            $objEventoDao = new Application_Model_EventoDao();
+            $objEvento = $objEventoDao->obtenerPorId($eventoId);
+            $objInvitacionDao = new Application_Model_InvitacionDao();
+            
+            if($objEvento->getTipoEventoId() == 2){ //PRIVADO
+	            if($aut->getIdentity()->usu_id != $objEvento->getUsuarioId())
+	            {
+		            if($objInvitacionDao->obtenerPorActividadIdUsuarioIdEstado4($aut->getIdentity()->usu_id, $eventoId,2) == false)
+		            {
+			        	echo "<img src='/imagenes/proyecto/denegado.png'>&nbsp;&nbsp;&nbsp;TÚ NO TIENES ACCESO A ESTA INFORMACIÓN.";
+			        	exit();
+		            }
+	            }
+            }
+        }
+        //SEGURIDAD
+        
         $objAmigoDao = new Application_Model_AmigoDao();
         $listaAmigos = $objAmigoDao->obtenerTodosUsuariosPorUsuarioId($aut->getIdentity()->usu_id);
         

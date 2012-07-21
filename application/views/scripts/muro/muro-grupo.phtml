@@ -4,21 +4,23 @@
 	$objGrupoDao = new Application_Model_GrupoDao();
 ?>
 
+<br>
 <table>
   <tr>
-    <td><h1>MURO GRUPO "<?php echo $objGrupoDao->obtenerPorId($this->Grupo)->getNombre(); ?>"</h1></td>
+    <td><h1>MURO GRUPO</h1></td>
     <td>
-    	<br>
-		&nbsp;&nbsp;<a href="#" id="tooltipLapiz" rel="popover" data-original-title="Publica algo aquí.." onMouseOver="tooltipLapiz()"><img src="/imagenes/proyecto/luz.png" width="40px;" onclick="openModalPublicacion()"></a></div>
+		&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="btn btn-large" onclick="openModalPublicacion()"><img src="/imagenes/proyecto/editar.png">&nbsp;&nbsp; Pincha aquí para publicar...  </a>
     </td>
   </tr>
 </table>
+<br>
 
 <table align="center" class="span9">
 	<tr>
 		<td align="center">
 			<div style='width: 500px;'>
 				<a class="thumbnail">
+						<h2><?php echo $objGrupoDao->obtenerPorId($this->Grupo)->getNombre(); ?></h2>
    						<img src="<?php echo $this->baseUrl()?>/imagenes/grupos/<?php echo $objGrupoDao->obtenerPorId($this->Grupo)->getFoto();?>">
 				</a>
 			</div>

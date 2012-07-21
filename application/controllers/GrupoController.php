@@ -171,6 +171,17 @@ class GrupoController extends Zend_Controller_Action
         $objGrupoDao = new Application_Model_GrupoDao();
         $objGrupo = new Application_Model_Grupo();
         $form = new Application_Form_FormEditarGrupo();
+        $aut = Zend_Auth::getInstance();
+        
+        //SEGURIDAD
+        $usuarioGrupoId = $objGrupoDao->obtenerPorId($this->getRequest()->getParam('grupoId'))->getUsuId();
+        if($aut->getIdentity()->usu_id != $usuarioGrupoId)
+        {
+        	echo "<img src='/imagenes/proyecto/denegado.png'>&nbsp;&nbsp;&nbsp;TÚ NO TIENES PERMISOS PARA MODIFICAR ESTA INFORMACIÓN.";
+        	exit();
+        }
+        //SEGURIDAD
+        
         
         if($this->getRequest()->isPost() == false)
         {
@@ -230,10 +241,31 @@ class GrupoController extends Zend_Controller_Action
     public function contactosAction()
     {
         $aut = Zend_Auth::getInstance();
+        $grupoId = $this->getRequest()->getParam('grupoId');
+        
+        //SEGURIDAD
+        //Sólo si el usuario está aceptado en el grupo, (estado=4), puede ver el detalle del grupo privado.
+        if($this->getRequest()->getParam('grupoId') != null){
+        	$objGrupoDao = new Application_Model_GrupoDao();
+        	$objGrupo = $objGrupoDao->obtenerPorId($grupoId);
+        	$objInvitacionDao = new Application_Model_InvitacionDao();
+        	 
+        	if($objGrupo->getTipoGrupoId() == 1){ //PRIVADO
+        		if($aut->getIdentity()->usu_id != $objGrupo->getUsuId())
+        		{
+        			if($objInvitacionDao->obtenerPorActividadIdUsuarioIdEstado4($aut->getIdentity()->usu_id, $grupoId,1) == false)
+        			{
+        				echo "<img src='/imagenes/proyecto/denegado.png'>&nbsp;&nbsp;&nbsp;TÚ NO TIENES ACCESO A ESTA INFORMACIÓN.";
+        				exit();
+        			}
+        		}
+        	}
+        }
+        //SEGURIDAD
+        
         $objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
         $objAmigoDao = new Application_Model_AmigoDao();
         
-        $grupoId = $this->getRequest()->getParam('grupoId');
         $listaGrupoUsuarios = $objUsuarioGrupoDao->obtenerPorGrupoId($grupoId);
         $listaAmigoNoInvitado = $objAmigoDao->amigoNoInvitadoGrupo($grupoId,$aut->getIdentity()->usu_id);
         

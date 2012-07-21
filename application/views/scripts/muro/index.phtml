@@ -3,7 +3,16 @@
 	$objTipPublicacion = new Application_Model_TipoPublicacionDao();
 ?>
 
-<br><h1> MURO </h1><br>
+<br>
+<table>
+  <tr>
+    <td><h1> MURO</h1></td>
+    <td>
+		&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="btn btn-large" onclick="openModalPublicacion()"><img src="/imagenes/proyecto/editar.png">&nbsp;&nbsp; Pincha aquí para publicar...  </a>
+    </td>
+  </tr>
+</table>
+<br>
 
 <?php echo $this->listaPublicaciones;?>
 <?php if(count($this->listaPublicaciones) > 0){ ?>

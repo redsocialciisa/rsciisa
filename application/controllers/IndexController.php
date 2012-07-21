@@ -11,15 +11,12 @@ class IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        try {
-        	if(!@include('/path/to/fichero.php')) {
-        		throw new Exception('Error al cargar el fichero');
-        	}
+        $aut = Zend_Auth::getInstance();
+        if($aut->hasIdentity()){
+        	$this->_redirect('/muro');
+        }else{
+            $this->_redirect('/auth');
         }
-        catch(Exception $e) {
-        	print "asd";
-        }
-        
     }
     
 }

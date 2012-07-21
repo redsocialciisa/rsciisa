@@ -3,15 +3,16 @@
 	$objTipPublicacion = new Application_Model_TipoPublicacionDao();
 ?>
 
+<br>
 <table>
   <tr>
     <td><h1>MI MURO</h1></td>
     <td>
-    	<br>
-		&nbsp;&nbsp;<a href="#" id="tooltipLapiz" rel="popover" data-original-title="Publica algo aquí.." onMouseOver="tooltipLapiz()"><img src="/imagenes/proyecto/luz.png" width="40px;" onclick="openModalPublicacion()"></a></div>
+		&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="btn btn-large" onclick="openModalPublicacion()"><img src="/imagenes/proyecto/editar.png">&nbsp;&nbsp; Pincha aquí para publicar...  </a>
     </td>
   </tr>
 </table>
+<br>
 
 <?php echo $this->listaPublicaciones;?>
 <?php if(count($this->listaPublicaciones) > 0){ ?>

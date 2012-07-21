@@ -5,12 +5,31 @@ class AlbumController extends Zend_Controller_Action
 
     public function init()
     {
-        /* Initialize action controller here */
+        $aut = Zend_Auth::getInstance();
+        if($aut->hasIdentity() == false){
+        	$this->_redirect('/auth');
+        }
     }
 
     public function indexAction()
     {
         $aut = Zend_Auth::getInstance();
+        
+        //SEGURIDAD
+		$objAmigoDao = new Application_Model_AmigoDao();
+		if($this->getRequest()->getParam('id') != null)
+		{
+			if($aut->getIdentity()->usu_id != $this->getRequest()->getParam('id'))
+			{
+				if($objAmigoDao->sonAmigos($aut->getIdentity()->usu_id, $this->getRequest()->getParam('id')) == false)
+				{
+				    echo "<img src='/imagenes/proyecto/denegado.png'>&nbsp;&nbsp;&nbsp;TÚ NO TIENES ACCESO A ESTA INFORMACIÓN.";
+				    exit();
+				}
+			}
+		} 
+		//SEGURIDAD
+        
         $form = new Application_Form_FormAlbum();
         $objAlbumDao = new Application_Model_AlbumDao();
         
@@ -92,16 +111,32 @@ class AlbumController extends Zend_Controller_Action
     
     public function contenidoAction()
     {
+        
+        $aut = Zend_Auth::getInstance();
         $id = $this->getRequest()->getParam('id');
         $objFotoDao = new Application_Model_FotoDao();
         $listaFotos = $objFotoDao->obtenerPorAlbumId($id);
         
-        $aut = Zend_Auth::getInstance();
         $form = new Application_Form_FormFotos();
         $objAlbumDao = new Application_Model_AlbumDao();
         $objFoto = new Application_Model_Foto();
         $objFotoDao = new Application_Model_FotoDao();
         $objUtilidad = new Application_Model_Utilidad();
+        
+        //SEGURIDAD
+        $objAmigoDao = new Application_Model_AmigoDao();
+        $usuarioAlbumId = $objAlbumDao->obtenerPorId($id)->getUsuario();
+        if($this->getRequest()->getParam('id') != null){
+	        if($aut->getIdentity()->usu_id != $usuarioAlbumId)
+	        {
+		        if($objAmigoDao->sonAmigos($aut->getIdentity()->usu_id, $usuarioAlbumId) == false)
+		        {
+		        	echo "<img src='/imagenes/proyecto/denegado.png'>&nbsp;&nbsp;&nbsp;TÚ NO TIENES ACCESO A ESTA INFORMACIÓN.";
+		        	exit();
+		        }
+	        } 
+        }
+        //SEGURIDAD
         
         if($this->getRequest()->isPost())
         {
@@ -414,25 +449,35 @@ class AlbumController extends Zend_Controller_Action
     
 	public function editarAction()
 	{
-	    $fecha = new DateTime();
-	    $objAlbumDao = new Application_Model_AlbumDao();
-	    $objAlbum = new Application_Model_Album();
-	    $objFoto = new Application_Model_Foto();
-	    $objFotoDao = new Application_Model_FotoDao();
-	    $form = new Application_Form_FormEditarAlbum();
-	    
 	    if($this->getRequest()->isPost() == false)
 	    {
 	    	$albumId = $this->getRequest()->getParam('albumId');
-	    	$objAlbum = $objAlbumDao->obtenerPorId($albumId);
-	    	$objFoto = $objFotoDao->obtenerPorNombre($objAlbum->getPortada());
-	    	
-	    	$array = array(
-				"txtNombre" => $objAlbum->getNombre(),
-	    	    "fotoDesc1" => $objFoto->getNombre(),
-	    	    "txtDescripcion" => $objAlbum->getDescripcion()
-	    	);
-	    	$form->populate($array);
+		    $aut = Zend_Auth::getInstance();
+		    $fecha = new DateTime();
+		    $objAlbumDao = new Application_Model_AlbumDao();
+		    $objAlbum = new Application_Model_Album();
+		    $objFoto = new Application_Model_Foto();
+		    $objFotoDao = new Application_Model_FotoDao();
+		    $form = new Application_Form_FormEditarAlbum();
+		    
+		    //SEGURIDAD
+		    $usuarioAlbumId = $objAlbumDao->obtenerPorId($albumId)->getUsuario();
+	    	if($aut->getIdentity()->usu_id != $usuarioAlbumId)
+	    	{
+    			echo "<img src='/imagenes/proyecto/denegado.png'>&nbsp;&nbsp;&nbsp;TÚ NO TIENES PERMISOS PARA MODIFICAR ESTA INFORMACIÓN.";
+    			exit();
+	    	}
+		    //SEGURIDAD
+		    
+		    	$objAlbum = $objAlbumDao->obtenerPorId($albumId);
+		    	$objFoto = $objFotoDao->obtenerPorNombre($objAlbum->getPortada());
+		    	
+		    	$array = array(
+					"txtNombre" => $objAlbum->getNombre(),
+		    	    "fotoDesc1" => $objFoto->getNombre(),
+		    	    "txtDescripcion" => $objAlbum->getDescripcion()
+		    	);
+		    	$form->populate($array);
 	    }
 	    
 	    $this->view->form = $form;

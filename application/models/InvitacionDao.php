@@ -124,6 +124,19 @@ class Application_Model_InvitacionDao
     	return $objInvitacion;
     }
     
+    public function obtenerPorActividadIdUsuarioIdEstado4($usuarioId,$actividadId,$tipoInvId) //para evento y grupo
+    {
+    	$where = 'usu_id ='. $usuarioId.' and tip_inv_id = '.$tipoInvId.' and id_actividad = '.$actividadId.' and inv_estado = 4';
+    	$resultado = $this->_table->fetchall($where);
+    
+    	$objInvitacion = null;
+    
+    	if(count($resultado) > 0){
+    		return true;
+    	}
+    	return false;
+    }
+    
 	public function obtenerGrupoPorInvitar($grupoId)
 	{
 	    $lista = new SplObjectStorage();

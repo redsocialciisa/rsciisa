@@ -2,27 +2,25 @@
 <div id="view-content">
 	<div id="divLogin" align="center">
 	
-	<table class="span9">
+	<table class="span9" style="width: 60%">
 		<tr>
-			<td>
-				<img src="/imagenes/proyecto/rsc.png">
+			<td align="center">
+				<img src="/imagenes/proyecto/logo_vivi.png" width="100%">
 			</td>
-			<td>
+			<td align="center">
 				<form id="frmLogin" name="frmLogin" method="post" action="/index/index">
 					<table>
-						<caption><b>Autenticación</b></caption>
+						<caption><b>
+							Iniciar Sesión
+							<div id="error"></div>
+						</b></caption>
 						<tr>
-							<td colspan="2">
-				        		<div id="error"></div>		        		
-							</td>
+							<td></td><td><input type="text" autocomplete="off" id="txtUsuario" name="txtUsuario" size="12" maxlength="10" value=""  placeholder="Usuario"/></td>
 						</tr>
 						<tr>
-							<td>Usuario: </td><td><input type="text" autocomplete="off" id="txtUsuario" name="txtUsuario" size="12" maxlength="10" value="111-1"/></td>
-						</tr>
-						<tr>
-							<td>Contraseña: </td>
+							<td></td>
 							<td>
-								 <input type="password" id="txtPassword" autocomplete="off" name="txtPassword" size="31" maxlength="30" value="asd"/>
+								 <input type="password" id="txtPassword" autocomplete="off" name="txtPassword" size="31" maxlength="30" value=""  placeholder="Contraseña"/>
 							</td>
 						</tr>
 						<tr>
