@@ -414,6 +414,7 @@ class AlbumController extends Zend_Controller_Action
     
 	public function editarAction()
 	{
+	    $aut = Zend_Auth::getInstance();
 	    $fecha = new DateTime();
 	    $objAlbumDao = new Application_Model_AlbumDao();
 	    $objAlbum = new Application_Model_Album();
@@ -430,14 +431,101 @@ class AlbumController extends Zend_Controller_Action
 	    	$array = array(
 				"txtNombre" => $objAlbum->getNombre(),
 	    	    "fotoDesc1" => $objFoto->getNombre(),
+	    	    "hdnIdAlbum" => $objAlbum->getId(),     
 	    	    "txtDescripcion" => $objAlbum->getDescripcion()
 	    	);
 	    	$form->populate($array);
 	    }
 	    
+	    if($this->getRequest()->isPost())
+	    {
+	        $formData = $this->_request->getPost();
+	        if($form->isValid($this->_getAllParams()))
+	        {
+	            $objAlbumDao = new Application_Model_AlbumDao();
+	            $objAlbum = new Application_Model_Album();
+	            $objFoto = new Application_Model_Foto();
+	            $objFotoDao = new Application_Model_FotoDao();
+	            $objUtilidad = new Application_Model_Utilidad();
+				$album = $objAlbumDao->obtenerPorId($this->getRequest()->getParam('hdnIdAlbum'));
+				$idFoto = $this->getRequest()->getParam('hdnFotoSeleccionada');
+				$objFoto = $objFotoDao->obtenerPorId($idFoto);
+	            
+	            $fecha = new DateTime();
+	            $fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
+	            
+	            $objAlbum->setId($this->getRequest()->getParam('hdnIdAlbum'));
+	            $objAlbum->setNombre($this->getRequest()->getParam('txtNombre'));
+	            $objAlbum->setDescripcion($this->getRequest()->getParam('txtDescripcion'));
+	            $objAlbum->setFechaCreacion($fechahora);
+	            $objAlbum->setUsuario($aut->getIdentity()->usu_id);
+	            
+	            $objFoto->setNombre($this->getRequest()->getParam('fotoDesc1'));
+	            $objFotoDao->guardar($objFoto);
+	            
+	            $objAlbum->setPortada($objFoto->getFoto());
+	            $objAlbumDao->guardar($objAlbum);
+	            
+
+	            $this->_redirect('/album/');
+	        }else{
+	            $form->populate($formData);
+	        }
+	        
+	    }
+	    
 	    $this->view->form = $form;
 	    
 	}
+	
+	function obtenerFotosAction()
+	{
+		$this->_helper->layout()->disableLayout();
+		$aut = Zend_Auth::getInstance();
+	
+		$objFotoDao = new Application_Model_FotoDao();
+		$idAlbum = $this->getRequest()->getParam('idAlbum');
+		
+		$objFoto = new Application_Model_Foto();
+		$objFoto->getFoto();
+		
+		$listafotos = $objFotoDao->obtenerPorAlbumId($idAlbum);
+		
+		$columna = 0;
+		$cantColumna = 8;
+	
+		$html =  "<table width='100%' align='center'>";
+		foreach ($listafotos as $foto){
+			if($columna == 0){
+				$html .= "<tr>";
+			}
+			$html .= "<td>";
+			$html .= "<table align='center'>";
+			$html .= "<tr>";
+			$html .= "<td align='center'>";
+			$html .= "<input type='radio' name='optUsuario' value='".$foto->getId()."' onclick='elDestinatario(".$foto->getId().")'>";
+			$html .= "</td>";
+			$html .= "</tr>";
+			$html .= "<tr>";
+			$html .= "<td align='center'>";
+			$html .= "<img width='70px' src='/imagenes/fotos/icono/".$foto->getFoto()."'></img>";
+			$html .= "</td>";
+			$html .= "</tr>";
+			$html .= "</table>";
+			$html .= "</td>";
+			$columna++;
+			if($columna == $cantColumna){
+				$html .= "</tr>";
+				$columna = 0;
+			}
+		}
+		$html .= "</tr>";
+		$html .= "</table>";
+		 
+		$this->view->ok = $html;
+	
+	}
+	
 
 }
 
