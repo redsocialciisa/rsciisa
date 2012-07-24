@@ -141,7 +141,7 @@ class Application_Model_EventoDao
     public function obtenerPorNombre($nombre)
     {   //NOTE: Solo obtiene los eventos publicos
     $lista = new SplObjectStorage();
-    $where = "eve_nombre like '%". $nombre ."%' AND tip_eve_id = 1";
+    $where = "eve_nombre like '%". $nombre ."%' AND tip_eve_id = 1 AND eve_cancelado = 0";
     $order = 'eve_nombre';
     
     $resultado = $this->_table->fetchAll($where, $order);

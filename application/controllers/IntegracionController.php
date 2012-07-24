@@ -399,7 +399,7 @@ class IntegracionController extends Zend_Controller_Action
         		<content>
         		<title>Publicacion desde Red Social Ciisa</title>
         		<submitted-url>http://redsocial.ipciisa.cl</submitted-url>
-        		<submitted-image-url>http://blog.thewebcafes.com/img/example.jpg</submitted-image-url>
+        		<submitted-image-url>http://redsocial.ipciisa.cl/imagenes/proyecto/logo_vivi.png</submitted-image-url>
         		</content>
         		<visibility>
         		<code>anyone</code>
@@ -534,11 +534,11 @@ class IntegracionController extends Zend_Controller_Action
         		
         		if ($objPublicacion->getTipoId() == 2)
         		{
-        		    $urlFoto = 'http://of.novadvice.com/imagenes/fotos/'.$objPublicacion->getFoto();
+        		    $urlFoto = 'http://redsocial.ipciisa.cl/imagenes/fotos/'.$objPublicacion->getFoto();
         		}
         		else
         		{
-        		    $urlFoto = 'http://of.novadvice.com/imagenes/proyecto/rsc.png';
+        		    $urlFoto = 'http://redsocial.ipciisa.cl/imagenes/proyecto/logo_vivi.png';
         		}        
         		        		
         		$facebook->api('/me/feed','post', array(
