@@ -33,13 +33,30 @@ class Application_Model_Ciisa
         $this->_d = @mssql_select_db($this->_myDB, $this->_con) or die("Couldn't open database $this->_myDB");        
     }
     
+    function escape_query($str) {
+    	return strtr($str, array(
+    			"\0" => "",
+    			"'"  => "",
+    			"\"" => "",
+    			"\\" => "",
+    			// more secure
+    			"<"  => "",
+    			">"  => "",
+    	        "=" => "",
+    	));
+    }
+    
+    
     function validarAcceso($usuario, $password) {        
         
-        $query = "SELECT 1 
-        		  FROM [RC RCA 2007].[dbo].[ACC_LOGIN] 
-        		  WHERE PERS_LOGIN = '$usuario' 
-        		  AND PERS_PASSWORD = '$password'";
-        
+        $usuario_limpio = $this->escape_query($usuario);
+        $password_limpio = $this->escape_query($password);
+                
+        $query = "SELECT 1
+        FROM [RC RCA 2007].[dbo].[ACC_LOGIN]
+        WHERE PERS_LOGIN = '$usuario_limpio'
+        AND PERS_PASSWORD = '$password_limpio'";
+                
         $result = mssql_query($query);
         $numRows = mssql_num_rows($result);
         

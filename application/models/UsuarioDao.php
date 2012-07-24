@@ -52,10 +52,22 @@ class Application_Model_UsuarioDao
     	return null;
     }   
     
+    function escape_query($str) {
+    	return strtr($str, array(
+    			"\0" => "",
+    			"'"  => "",
+    			"\"" => "",
+    			"\\" => "",
+    			// more secure
+    			"<"  => "",
+    			">"  => "",
+    			"=" => "",
+    	));
+    }
        
 	public function validarAdministrador($usuario, $password)    
 	{
-    	$where = "usu_ciisa = '" .$usuario . "' AND usu_password = '". $password. "'";
+    	$where = "usu_ciisa = '" .$this->escape_query($usuario) . "' AND usu_password = '". $this->escape_query($password). "'";
     	
     	$resultado = $this->_table->fetchAll($where);
     	

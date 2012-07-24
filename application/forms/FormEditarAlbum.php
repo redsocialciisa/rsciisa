@@ -36,7 +36,7 @@ class Application_Form_FormEditarAlbum extends Zend_Form
 					->addErrorMessage('Debes ingresar una descripcion');
 		
         $buttonEnviar = $this->createElement('submit', 'enviar');
-        $buttonEnviar->setLabel('Editar album')
+        $buttonEnviar->setLabel('Editar álbum')
         			 ->setAttrib('class', 'btn btn-success');
         
         
