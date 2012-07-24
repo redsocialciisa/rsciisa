@@ -8,6 +8,8 @@
     <div class="tab-content">
     <div class="tab-pane active" id="tab1">
     
+    <div id="divEliminadoOk"></div>
+    
     <?php if(count($this->listaContactos) > 0){?>
     
     	<table width="100%" align="center">
@@ -26,7 +28,7 @@
 								<table align="center">
 									<tr>
 										<td>
-											<table>
+											<table id="imgUsuario<?php echo $usuario->getId(); ?>">
 												<tr>
 													<td valign="top" class="contMini">
 														<div style='width: 100px;'>
@@ -233,6 +235,15 @@ function eliminarContacto()
 		    },  
 		    success: function(requestData){
 		    			var result = requestData;
+		    			document.getElementById("imgUsuario"+id).style.display = "none";
+
+		    			var divMsj = "<div class='alert alert-success'>";
+						divMsj = divMsj + "<button class='close' data-dismiss='alert'>×</button>";
+						divMsj = divMsj + "<strong><img src='/imagenes/proyecto/ok.png'>&nbsp;&nbsp;</strong> Se ha rechazado la solicitud...";
+						divMsj = divMsj + "</div>";
+
+						document.getElementById("divEliminadoOk").innerHTML = divMsj;
+		    			
 		    },  
 		    error: function(requestData, strError, strTipoError){          
 		    }

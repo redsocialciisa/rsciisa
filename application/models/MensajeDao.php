@@ -37,7 +37,7 @@ class Application_Model_MensajeDao
     			'usu_id_de' => $mensaje->getDe(),
     			'usu_id_para' => $mensaje->getPara(),
     	        'men_fecha' => $mensaje->getFecha(),
-    	        'men_texto' => $mensaje->getTexto()
+    	        'men_texto' => strip_tags($mensaje->getTexto())
     			
     	);
     

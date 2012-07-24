@@ -57,9 +57,9 @@ class Application_Model_AlbumDao
     {
     	$data = array('alb_id' => $album->getId(),
     	        'alb_fecha_creacion' => $album->getFechaCreacion(),
-    			'alb_nombre' => $album->getNombre(),    			
+    			'alb_nombre' => strip_tags($album->getNombre()),    			
     	        'usu_id' => $album->getUsuario(),
-    	        'alb_descripcion' => $album->getDescripcion(),
+    	        'alb_descripcion' => strip_tags($album->getDescripcion()),
     	        'alb_portada' => $album->getPortada()
     	);
     

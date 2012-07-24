@@ -4,7 +4,10 @@ class IntegracionController extends Zend_Controller_Action
 {
     public function indexAction ()
     {
-        
+        $aut = Zend_Auth::getInstance();
+        if($aut->hasIdentity() == false){
+        	$this->_redirect('/auth');
+        }
     }
         
     public function facebookAction ()

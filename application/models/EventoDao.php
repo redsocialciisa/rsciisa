@@ -41,9 +41,9 @@ class Application_Model_EventoDao
     {
     	$data = array('eve_id' => $evento->getId(),
     			'usu_id' => $evento->getUsuarioId(),
-    			'eve_nombre' => $evento->getNombre(),
-    	        'eve_descripcion' => $evento->getDescripcion(),
-    	        'eve_lugar' => $evento->getLugar(),
+    			'eve_nombre' => strip_tags($evento->getNombre()),
+    	        'eve_descripcion' => strip_tags($evento->getDescripcion()),
+    	        'eve_lugar' => strip_tags($evento->getLugar()),
     	        'eve_cordenada_x' => $evento->getCordenadaX(),
     	        'eve_cordenada_y' => $evento->getCordenadaY(),
     	        'eve_fecha_creacion' => $evento->getFechaCreacion(),

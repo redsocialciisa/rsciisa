@@ -9,7 +9,16 @@
 
 <div class="hero-unit">
 		<h2><?php if($objAmigoDao->sonAmigos($aut->getIdentity()->usu_id, $this->Contacto->getId())){ ?>
-				<a href="#" id="tooltipLapiz" rel="popover" data-original-title="Publica algo aquí.." onMouseOver="tooltipLapiz()"><img src="/imagenes/proyecto/luz.png" width="40px;" onclick="openModalPublicacion()"></a>
+			    <div>
+					<table>
+					  <tr>
+					    <td><h1> MURO</h1></td>
+					    <td>
+							&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="btn btn-large" onclick="openModalPublicacion()"><img src="/imagenes/proyecto/editar.png">&nbsp;&nbsp; Pincha aquí para publicar...  </a>
+					    </td>
+					  </tr>
+					</table>
+				</div>
 			<?php } ?> 
 			<u><?php echo $objUsuarioDao2->obtenerPorId($this->Contacto->getId())->getNombre();?></u>
 			
@@ -241,7 +250,7 @@
 <div class="<?php echo $flagModal;?>" id="myModalPublicacion" style="width: 700px;">
     <div class="modal-header">
     <button class="close" onclick="closeModalPublicacion()" data-dismiss="modal">×</button>
-	<h2><img src="/imagenes/proyecto/luz.png" width="40px;">&nbsp;&nbsp;&nbsp;Nueva Publicación</h2>
+	<h2><img src="/imagenes/proyecto/editar.png">&nbsp;&nbsp;&nbsp;Nueva Publicación</h2>
     </div>
     <div class="modal-body">
 		

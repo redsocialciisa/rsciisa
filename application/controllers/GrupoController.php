@@ -5,7 +5,10 @@ class GrupoController extends Zend_Controller_Action
 
     public function init()
     {
-        
+        $aut = Zend_Auth::getInstance();
+        if($aut->hasIdentity() == false){
+        	$this->_redirect('/auth');
+        }
     }
 
     public function indexAction()
@@ -181,7 +184,6 @@ class GrupoController extends Zend_Controller_Action
         	exit();
         }
         //SEGURIDAD
-        
         
         if($this->getRequest()->isPost() == false)
         {

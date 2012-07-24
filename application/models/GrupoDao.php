@@ -36,8 +36,8 @@ class Application_Model_GrupoDao
     public function guardar(Application_Model_Grupo $grupo)
     {
     	$data = array('gru_id' => $grupo->getId(),
-    			'gru_nombre' => $grupo->getNombre(),
-    			'gru_descripcion' => $grupo->getDescripcion(),
+    			'gru_nombre' => strip_tags($grupo->getNombre()),
+    			'gru_descripcion' => strip_tags($grupo->getDescripcion()),
     			'gru_foto' => $grupo->getFoto(),
     			'gru_fecha_creacion' => $grupo->getFechaCreacion(),
     	        'tip_gru_id' => $grupo->getTipoGrupoId(),

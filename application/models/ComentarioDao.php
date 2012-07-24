@@ -86,7 +86,7 @@ class Application_Model_ComentarioDao
     public function guardar(Application_Model_Comentario $comentario)
     {
     	$data = array('com_id' => $comentario->getId(),
-    			'com_texto' => $comentario->getTexto(),
+    			'com_texto' => strip_tags($comentario->getTexto()),
     			'com_fecha' => $comentario->getFecha(),
     			'pub_id' => $comentario->getPublicacionId(),
     	        'usu_id' => $comentario->getUsuarioId()

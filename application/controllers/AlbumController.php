@@ -29,7 +29,6 @@ class AlbumController extends Zend_Controller_Action
 			}
 		} 
 		//SEGURIDAD
-        
         $form = new Application_Form_FormAlbum();
         $objAlbumDao = new Application_Model_AlbumDao();
         
@@ -148,7 +147,7 @@ class AlbumController extends Zend_Controller_Action
         	    
         	    if(isset($_FILES['fileFoto1']['name']) && $_FILES['fileFoto1']['name'] != "")
         	    {
-        	    	$foto_name1  = $_FILES['fileFoto1']['name'];
+        	    	$foto_name1  = "1".$_FILES['fileFoto1']['name'];
         	    	$foto_tmp1	= $_FILES['fileFoto1']['tmp_name'];
         	    	$foto_ext1   = str_replace("image/","",$_FILES['fileFoto1']['type']);
         	    	
@@ -182,7 +181,7 @@ class AlbumController extends Zend_Controller_Action
         	    
         	    if(isset($_FILES['fileFoto2']['name']) && $_FILES['fileFoto2']['name'] != "")
         	    {
-        	    	$foto_name2  = $_FILES['fileFoto2']['name'];
+        	    	$foto_name2  = "2".$_FILES['fileFoto2']['name'];
         	    	$foto_tmp2	= $_FILES['fileFoto2']['tmp_name'];
         	    	$foto_ext2   = str_replace("image/","",$_FILES['fileFoto2']['type']);
         	    
@@ -215,7 +214,7 @@ class AlbumController extends Zend_Controller_Action
         	    
         	    if(isset($_FILES['fileFoto3']['name']) && $_FILES['fileFoto3']['name'] != "")
         	    {
-        	    	$foto_name3  = $_FILES['fileFoto3']['name'];
+        	    	$foto_name3  = "3".$_FILES['fileFoto3']['name'];
         	    	$foto_tmp3	= $_FILES['fileFoto3']['tmp_name'];
         	    	$foto_ext3   = str_replace("image/","",$_FILES['fileFoto3']['type']);
         	    	 

@@ -161,12 +161,11 @@
 					
 					<?php
 					if($aut->getIdentity()->usu_id == $objEvento->getUsuarioId()){?>
-					  <center>
-						<input type="button" id="btnEliminarContactos" name="btnEliminarContactos" value="Eliminar Contactos del Evento" onclick="openModalConfirmarEliminar()" class="btn btn-info">
-					  </center>
+					  <button type="button" onclick="openModalConfirmarEliminar()" id="btnEliminarContactos" name="btnEliminarContactos" class="btn btn-success" onclick="openModalConfirmarEliminar(<?php echo $this->grupoId;?>)">
+						<img src="/imagenes/proyecto/papelera.png">&nbsp;&nbsp; Eliminar contactos seleccionados
+					 </button>
 					<?php }
 					?>
-				
     	</div>
     	<div class="tab-pane" id="tab2">
     		

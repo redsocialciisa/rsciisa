@@ -24,7 +24,7 @@ class Application_Form_FormFotos extends Zend_Form
         		->setRequired(false)
 		        ->addValidator('IsImage')
 		        ->setAttrib('class', 'span4')
-		        ->setMaxFileSize(5097152)
+		        ->setMaxFileSize(5199999)
 		        ->addValidator('Extension',false,array('jpg','jpeg','png'));
         
         $fotoDesc2 = new Zend_Form_Element_Textarea('fotoDesc2');
@@ -38,7 +38,7 @@ class Application_Form_FormFotos extends Zend_Form
 		        ->setRequired(false)
 		        ->addValidator('IsImage')
 		        ->setAttrib('class', 'span4')
-		        ->setMaxFileSize(5097152)
+		        ->setMaxFileSize(5199999)
 		        ->addValidator('Extension',false,array('jpg','jpeg','png'));
         
         $fotoDesc3 = new Zend_Form_Element_Textarea('fotoDesc3');
@@ -52,7 +52,7 @@ class Application_Form_FormFotos extends Zend_Form
 		        ->setRequired(false)
 		        ->addValidator('IsImage')
 		        ->setAttrib('class', 'span4')
-		        ->setMaxFileSize(5097152)
+		        ->setMaxFileSize(5199999)
 		        ->addValidator('Extension',false,array('jpg','jpeg','png'));
         
         $fotoDesc4 = new Zend_Form_Element_Textarea('fotoDesc4');
@@ -66,7 +66,7 @@ class Application_Form_FormFotos extends Zend_Form
 		        ->setRequired(false)
 		        ->addValidator('IsImage')
 		        ->setAttrib('class', 'span4')
-		        ->setMaxFileSize(5097152)
+		        ->setMaxFileSize(5199999)
 		        ->addValidator('Extension',false,array('jpg','jpeg','png'));
         
         $fotoDesc5 = new Zend_Form_Element_Textarea('fotoDesc5');
@@ -80,7 +80,7 @@ class Application_Form_FormFotos extends Zend_Form
 		        ->setRequired(false)
 		        ->addValidator('IsImage')
 		        ->setAttrib('class', 'span4')
-		        ->setMaxFileSize(5097152)
+		        ->setMaxFileSize(5199999)
 		        ->addValidator('Extension',false,array('jpg','jpeg','png'));
         
         $this->addElement($fileFoto1);

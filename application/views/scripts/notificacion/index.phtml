@@ -1,13 +1,12 @@
 <?php 
 $objPublicacionDao = new Application_Model_PublicacionDao();
 ?>
+
+<br>
+<h1>NOTIFICACIONES</h1>
+<br>
+
 <table>
-  <tr>
-    <th colspan="2" >Notificaciones</th>
-  </tr>
-  <tr>
-  	<td><br></td>
-  </tr>
 	<?php 
 		foreach ($this->listaNotificaciones as $item)
 		{  
@@ -24,7 +23,7 @@ $objPublicacionDao = new Application_Model_PublicacionDao();
 			    			$objTipoNotificacionDao = new Application_Model_TipoNotificacionDao();
 			    			$objTipoNotificacion = $objTipoNotificacionDao->obtenerPorId($item->getTipoNotificacionId());
 			    		?>
-			    		<a href="<?php echo $objTipoNotificacion->getUrl();?>" >Ver notificación</a>
+			    		<a href="<?php echo $objTipoNotificacion->getUrl().$item->getActividad();?>" class="btn">Ver notificación</a>
 				    <hr>
 				    </td>
 
@@ -44,7 +43,7 @@ $objPublicacionDao = new Application_Model_PublicacionDao();
 			    			$objTipoNotificacion = $objTipoNotificacionDao->obtenerPorId($item->getTipoNotificacionId());
 			    		?>
 			    		
-			    		<a href="<?php echo $objTipoNotificacion->getUrl().$item->getActividad();?>" >Ver notificación</a>
+			    		<a href="<?php echo $objTipoNotificacion->getUrl().$item->getActividad();?>" class="btn">Ver notificación</a>
 			    		<hr>
 			    	</td>
 			  	</tr>

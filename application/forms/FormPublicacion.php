@@ -69,21 +69,11 @@ class Application_Form_FormPublicacion extends Zend_Form
         ->setAttrib('onclick', 'desabilitarFoto()')
         ->setAttrib('name', 'grpTipo');
         
-        /*
-        $nombre = new Zend_Form_Element_Textarea('txtTextoPublicacion');
-        $nombre->setRequired(true)
-        	   ->setValue('')
-        	   ->setAttrib('rows', 4)
-        	   ->setAttrib('class', 'span4')
-        	   ->clearErrorMessages()
-        	   ->setName('txtTextoPublicacion')
-               ->addErrorMessage('Escribe algo...'); */
-        
         $fileFoto = new Zend_Form_Element_File('fileFoto');
         $fileFoto->addValidator('IsImage')
 		        ->setAttrib('class', 'span2')
-		        ->setMaxFileSize(2097152) // 2mb
-		        ->addValidator('Extension',false,array('jpg','jpeg','png','gif'));
+		        ->setMaxFileSize(5199999) // 2mb
+		        ->addValidator('Extension',false,array('jpg','jpeg','png'));
        
         $txtVideo = new Zend_Form_Element_Text('txtVideo');
         $txtVideo->setValue('')

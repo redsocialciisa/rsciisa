@@ -17,7 +17,7 @@ class Application_Form_FormPerfil extends Zend_Form
         $fileFoto->setLabel('Foto Perfil: (jpg, jpeg, png)')
 		        ->addValidator('IsImage')
 		        ->setAttrib('class', 'span4')
-		        ->setMaxFileSize(7097152) // 2mb
+		        ->setMaxFileSize(5199999) // 2mb
 		        ->addValidator('Extension',false,array('jpg','jpeg','png'));
         
         $nombre = new Zend_Form_Element_Text('txtNombre');
@@ -71,14 +71,6 @@ class Application_Form_FormPerfil extends Zend_Form
         	$comboPrivacidad->addMultiOption($item->getId(), $item->getNombre());
         }
         $comboPrivacidad->setValue($objUsuario->getPrivacidadPublicacionId());
-        
-        /*
-        $this->setEnctype(Zend_Form::ENCTYPE_MULTIPART);
-        $fileCv = new Zend_Form_Element_File('fileCurriculum');
-        $fileCv->setLabel('Curriculum Vitae: ')
-        		->setAttrib('class', 'span4')
-        		->setMaxFileSize(2097152) // 2mb
-        		->addValidator('Extension',false,array('doc','pdf'));*/
         
         $buttonEnviar = $this->createElement('submit', 'enviar');
         $buttonEnviar->setLabel('Actualizar mis datos')

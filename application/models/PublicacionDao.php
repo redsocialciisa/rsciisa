@@ -217,9 +217,9 @@ class Application_Model_PublicacionDao
     public function guardar(Application_Model_Publicacion $publicacion)
     {
     	$data = array('pub_id' => $publicacion->getId(),
-    			'pub_texto' => $publicacion->getTexto(),
+    			'pub_texto' => strip_tags($publicacion->getTexto()),
     			'pub_foto' => $publicacion->getFoto(),
-    			'pub_video' => $publicacion->getVideo(),
+    			'pub_video' => strip_tags($publicacion->getVideo()),
     	        'pub_fecha' => $publicacion->getFecha(),
     	        'pri_pub_id' => $publicacion->getPrivacidadId(),
     	        'tip_pub_id' => $publicacion->getTipoId(),

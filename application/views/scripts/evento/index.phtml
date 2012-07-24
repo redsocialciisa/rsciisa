@@ -2,8 +2,20 @@
 
 <br><h1> EVENTOS </h1><br>
 
-<a href="#" onclick="openModalEvento()" class="btn"><img src="/imagenes/proyecto/calendario.png">&nbsp;&nbsp; Crear Evento </a><br><br>
-<a href="/evento/buscar" class="btn"><i class="icon-search"></i> Buscar evento </a><br><br>
+ <br>
+ <table>
+ 	<tr>
+ 		<td>
+ 			 <a href="#" onclick="openModalEvento()" class="btn"><img src="/imagenes/proyecto/calendario.png">&nbsp;&nbsp; Crear Evento </a>
+ 		</td>
+ 		<td>&nbsp;&nbsp;</td>
+ 		<td>
+ 			 <a href="/evento/buscar" class="btn"><img src="/imagenes/proyecto/lupa.png">&nbsp;&nbsp;  Buscar Evento  </a>
+ 		</td>
+ 	</tr>
+ </table>
+ <br>
+
   <?php 
  		if($this->succesEliminarUsuarios == "ok")
 		{
@@ -107,17 +119,20 @@
 							</tr>
 						</table>
 					</td>
-					<td><a class="btn btn-info"
-						href="/evento/contactos/id/<?php echo $evento->getId();?>">Ver Evento</a>
+					<td>
+						&nbsp;&nbsp;
+					</td>
+					<td>
+						<a class="btn btn-info" href="/evento/contactos/id/<?php echo $evento->getId();?>"><img width="15px;" src="/imagenes/proyecto/calendario.png">&nbsp;&nbsp; Ver Evento</a>&nbsp;&nbsp;
 					</td>
 					
 					<?php
 					$aut = Zend_Auth::getInstance();
 					if($aut->getIdentity()->usu_id == $evento->getUsuarioId()){?>
-						<td><a class="btn btn-info" href="#"> Editar </a></td>
-						<td><a class="btn btn-info" onclick="openMyModalCancelarEvento('<?php echo $evento->getId();?>','<?php echo $evento->getNombre();?>')" > Cancelar </a></td>
+						<td><a class="btn btn-info" href="#"> <img width="15px;" src="/imagenes/proyecto/edit.png">&nbsp;&nbsp; Editar </a>&nbsp;&nbsp;</td>
+						<td><a class="btn btn-danger" onclick="openMyModalCancelarEvento('<?php echo $evento->getId();?>','<?php echo $evento->getNombre();?>')" > <img width="15px;" src="/imagenes/proyecto/cruz.png">&nbsp;&nbsp; Cancelar </a>&nbsp;&nbsp;</td>
 					<?php }else{ ?>
-						<td><a class="btn btn-info" onclick="openModalDejarEvento(<?php echo $evento->getId();?>)"> No asistiré </a></td>
+						<td><a class="btn btn-danger" onclick="openModalDejarEvento(<?php echo $evento->getId();?>)"> <img width="15px;" src="/imagenes/proyecto/papelera.png">&nbsp;&nbsp; No asistiré </a></td>
 					<?php }?>
 				</tr>
 		    <?php } ?>

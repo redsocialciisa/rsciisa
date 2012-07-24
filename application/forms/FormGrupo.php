@@ -26,8 +26,8 @@ class Application_Form_FormGrupo extends Zend_Form
         		->setRequired(true)
 		        ->addValidator('IsImage')
 		        ->setAttrib('class', 'span4')
-		        ->setMaxFileSize(2097152) // 2mb
-		        ->addValidator('Extension',false,array('jpg','jpeg','png','gif'));
+		        ->setMaxFileSize(5199999) // 2mb
+		        ->addValidator('Extension',false,array('jpg','jpeg','png'));
         
 		$descripcion = new Zend_Form_Element_Textarea('txtDescripcion');
 		$descripcion->setLabel('Descripcion del grupo: ')

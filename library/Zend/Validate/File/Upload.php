@@ -54,8 +54,8 @@ class Zend_Validate_File_Upload extends Zend_Validate_Abstract
      */
     protected $_messageTemplates = array(
         //self::INI_SIZE       => "File '%value%' exceeds the defined ini size",
-        self::INI_SIZE       => "Archivo excede los 2Mb",
-        self::FORM_SIZE      => "Archivo excede los 2Mb",
+        self::INI_SIZE       => "Archivo excede los 5Mb",
+        self::FORM_SIZE      => "Archivo excede los 5Mb",
         self::PARTIAL        => "File '%value%' was only partially uploaded",
         self::NO_FILE        => "Debe subir un archivo",
         self::NO_TMP_DIR     => "No temporary directory was found for file '%value%'",

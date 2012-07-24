@@ -34,7 +34,7 @@ class Application_Model_FotoDao
     public function guardar(Application_Model_Foto $foto)
     {
     	$data = array('fot_id' => $foto->getId(),
-    			'fot_descripcion' => $foto->getNombre(),
+    			'fot_descripcion' => strip_tags($foto->getNombre()),
     			'fot_foto' => $foto->getFoto(),
     			'fot_fecha_subida' => $foto->getFecha(),
     			'alb_id' => $foto->getAlbumId()

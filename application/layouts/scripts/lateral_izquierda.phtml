@@ -36,7 +36,13 @@
 						$utilidad = null;
 					?>
 				</p>
-				<p><?php echo $aut->getIdentity()->perfil_ciisa;?></p>
+				<p>
+					<?php 
+						$objPerfilRedSocialDao = new Application_Model_PerfilRedSocialDao();
+						echo $objPerfilRedSocialDao->obtenerPorUsuarioId($aut->getIdentity()->usu_id)->getNombre();
+						$objPerfilRedSocialDao = null;
+					?>
+				</p>
 		</ul>
         
 		<img src="/imagenes/proyecto/msj.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/mensajes" style="color: #000;">Mensajes</a><br><br>

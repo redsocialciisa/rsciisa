@@ -99,7 +99,7 @@ class Application_Model_UsuarioDao
     			'usu_fecha_nacimiento' => $usuario->getFechaNacimiento(),
     			'usu_foto' => $usuario->getFoto(),
     			'pri_pub_id' => $usuario->getPrivacidadPublicacionId(),
-    	        'usu_biografia' => $usuario->getBiografia(),
+    	        'usu_biografia' => strip_tags($usuario->getBiografia()),
     	        'emo_id' => $usuario->getPrivacidadPublicacionId()
     	);
     

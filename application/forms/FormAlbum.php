@@ -32,7 +32,7 @@ class Application_Form_FormAlbum extends Zend_Form
         		->setRequired(true)
 		        ->addValidator('IsImage')
 		        ->setAttrib('class', 'span4')
-		        ->setMaxFileSize(5097152)
+		        ->setMaxFileSize(5199999)
 		        ->addValidator('Extension',false,array('jpg','jpeg','png'))
         		->clearErrorMessages()
         		->addErrorMessage('Debes ingresar el nombre del álbum');

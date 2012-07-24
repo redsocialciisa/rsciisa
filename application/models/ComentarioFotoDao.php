@@ -71,7 +71,7 @@ class Application_Model_ComentarioFotoDao
     public function guardar(Application_Model_ComentarioFoto $comentarioFoto)
     {
     	$data = array('com_fot_id' => $comentarioFoto->getId(),
-    			'com_fot_texto' => $comentarioFoto->getTexto(),
+    			'com_fot_texto' => strip_tags($comentarioFoto->getTexto()),
     			'com_fecha' => $comentarioFoto->getFecha(),
     			'fot_id' => $comentarioFoto->getFotoId(),
     	        'usu_id' => $comentarioFoto->getUsuId()

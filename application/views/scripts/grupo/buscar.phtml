@@ -1,13 +1,12 @@
 <?php 
 	$aut = Zend_Auth::getInstance();
 	$objUsuarioGrupoDao = new Application_Model_UsuarioGrupoDao();
-
 ?>
 <form action="/grupo/buscar/" method="post" enctype="<?php echo $this->formBuscar->getEnctype(); ?>">
+
+<br><h1> BUSCAR GRUPOS </h1><br>
+
 <table>
-	<tr>
-	    <th colspan=2>Buscar grupos</th>
-	</tr>
 	<tr>
 		    <td><?php echo $this->formBuscar->txtBuscar;?> </td>
 		    <td><?php echo $this->formBuscar->enviar;?></td>
@@ -20,7 +19,7 @@
 			if (count($this->listaPublicos) > 0)
 			{
 				foreach ($this->listaPublicos as $item)
-				{
+			{
 		?>	    
 		<tr>	
 			<td>

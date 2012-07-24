@@ -4,18 +4,16 @@
 
 ?>
 
+<br><h1> BUSCAR EVENTOS </h1><br>
+
 <form action="/evento/buscar/" method="post" enctype="<?php echo $this->formBuscar->getEnctype(); ?>">
 <table>
-	<tr>
-	    <th colspan=2>Buscar eventos</th>
-	</tr>
 	<tr>
 		    <td><?php echo $this->formBuscar->txtBuscar;?> </td>
 		    <td><?php echo $this->formBuscar->enviar;?></td>
 	</tr>
 </table>
 </form>
-
 
 <table>
 		<?php

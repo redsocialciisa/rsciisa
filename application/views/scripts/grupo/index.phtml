@@ -13,9 +13,22 @@
  	echo $msj;
  }
  ?>
- <br><h1> GRUPOS </h1><br>
- <a href="#" onclick="openModalGrupo()" class="btn"><img src="/imagenes/proyecto/grupo.png">&nbsp;&nbsp; Crear Grupo </a><br><br>
- <a href="/grupo/buscar" class="btn"><i class="icon-search"></i> Buscar grupo </a><br><br> 
+ <br><h1> GRUPOS </h1>
+ 
+ <br>
+ <table>
+ 	<tr>
+ 		<td>
+ 			 <a href="#" onclick="openModalGrupo()" class="btn"><img src="/imagenes/proyecto/grupo.png">&nbsp;&nbsp; Crear Grupo </a>
+ 		</td>
+ 		<td>&nbsp;&nbsp;</td>
+ 		<td>
+ 			 <a href="/grupo/buscar" class="btn"><img src="/imagenes/proyecto/lupa.png">&nbsp;&nbsp;  Buscar Grupo  </a>
+ 		</td>
+ 	</tr>
+ </table>
+ <br>
+  
  <?php 
  if($this->successEliminarUsuarios == "ok")
  {
@@ -66,14 +79,14 @@ if($this->mensaje_ok == "ok"){
 						</td>
 						<td>
 							<?php if ($aut->getIdentity()->usu_id == $item->getUsuId()) {?>
-							<a href="<?php echo $this->url(array('controller'=>'grupo', 'action'=>'contactos', 'grupoId'=>$item->getId())); ?>"  class="btn btn-info"> Contactos </a>
-							<a href="<?php echo $this->url(array('controller'=>'grupo', 'action'=>'editar', 'grupoId'=>$item->getId())); ?>"  class="btn btn-info"> Editar grupo </a>
-							<a class="btn btn-info" onclick="openModalBorrar(<?php echo $item->getId();?>)"> Eliminar grupo </a>
+							<a href="<?php echo $this->url(array('controller'=>'grupo', 'action'=>'contactos', 'grupoId'=>$item->getId())); ?>"  class="btn btn-info"> <img width="15px;" src="/imagenes/proyecto/grupo.png">&nbsp;&nbsp; Contactos </a>
+							<a href="<?php echo $this->url(array('controller'=>'grupo', 'action'=>'editar', 'grupoId'=>$item->getId())); ?>"  class="btn btn-info"> <img width="15px;" src="/imagenes/proyecto/edit.png">&nbsp;&nbsp; Editar grupo </a>
+							<a class="btn btn-danger" onclick="openModalBorrar(<?php echo $item->getId();?>)"> <img width="15px;" src="/imagenes/proyecto/cruz.png">&nbsp;&nbsp; Eliminar grupo </a>
 							<?php }
 							else 
 							{
 							?>
-							<a class="btn btn-info" onclick="openModalDejarParticipar(<?php echo $item->getId();?>)"> Dejar de participar </a>
+							<a class="btn btn-info" onclick="openModalDejarParticipar(<?php echo $item->getId();?>)"> <img width="15px;" src="/imagenes/proyecto/cruz.png">&nbsp;&nbsp;  Dejar de participar </a>
 							<?php }?>
 						</td>			
 					</tr>  

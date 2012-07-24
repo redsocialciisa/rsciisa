@@ -94,11 +94,19 @@
 			</div>
 			<table>
 				<tr>
-					<td><a href="#" class="btn btn-success"
-						onclick="openModalDestinatario()"><img
-							src="/imagenes/proyecto/addcontacto.png">&nbsp;&nbsp; Seleccionar
-							el destinatario
-					</a> <br>
+					<td>
+					
+					<?php 
+						$objAmigoDao = new Application_Model_AmigoDao();
+						$lista = $objAmigoDao->obtenerTodosPorUsuarioId($aut->getIdentity()->usu_id);
+					?>
+					<?php if(count($lista) > 0){ ?>
+						<a href="#" class="btn btn-success" onclick="openModalDestinatario()">
+						<img src="/imagenes/proyecto/addcontacto.png">&nbsp;&nbsp; Seleccionar el destinatario </a>
+					<?php }else{ ?>
+						debes tener al menos 1 contacto para enviar mensajes..
+					<?php } ?>
+					<br>
 					<br>
 						<div id="divNombreDelUsuario"></div>
 						<div id="divErrorDestinatario"></div></td>
@@ -115,7 +123,9 @@
 		</form>
 	</div>
 	<div class="modal-footer">
+		<?php if(count($lista) > 0){ ?>
 		<br> <a href="#" class="btn btn-success" onclick="validarMensaje()">Enviar</a>
+		<?php } ?>
 		<a href="#" class="btn btn-danger" onclick="limpiarSeleccionado()"
 			data-dismiss="modal">Cancelar</a>
 	</div>
