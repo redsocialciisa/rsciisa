@@ -83,20 +83,22 @@ class IntegracionController extends Zend_Controller_Action
         
         	$code = $tmhOAuth->request('GET', $tmhOAuth->url('1/account/verify_credentials'));
         	if ($code == 200) {
-        		$resp = json_decode($tmhOAuth->response['response']);        		
+        	    $aut = Zend_Auth::getInstance();
+        	    $resp = json_decode($tmhOAuth->response['response']);        		
         		$objIntegracionDao = new Application_Model_IntegracionDao();
         		$objIntegracion = new Application_Model_Integracion();
         		
-        		$objIntegracion->setToken($_SESSION['access_token']['oauth_token']);
-        		$objIntegracion->setSecret($_SESSION['access_token']['oauth_token_secret']);
-        		$objIntegracion->setFechaPermiso($now->format( 'Y-m-d' ));
-        		
-        		$aut = Zend_Auth::getInstance();
-        		$objIntegracion->setUsuarioId($aut->getIdentity()->usu_id);
-        		$objIntegracion->setRedId("2");
-        		$objIntegracionDao->guardar($objIntegracion);
-        		$this->view->mensajeTwitter = "Integracion con Twitter exitosa";
-        		
+        		if ($objIntegracionDao->obtenerPorUsuarioAndRedSocial($aut->getIdentity()->usu_id, "2") == null)
+        		{
+	        		$objIntegracion->setToken($_SESSION['access_token']['oauth_token']);
+	        		$objIntegracion->setSecret($_SESSION['access_token']['oauth_token_secret']);
+	        		$objIntegracion->setFechaPermiso($now->format('Y-m-d H:i:s'));
+	        		
+	        		$objIntegracion->setUsuarioId($aut->getIdentity()->usu_id);
+	        		$objIntegracion->setRedId("2");
+	        		$objIntegracionDao->guardar($objIntegracion);
+	        		$this->view->mensajeTwitter = "Integracion con Twitter exitosa";
+        		}
         		
         	} else {
         		outputError($tmhOAuth);
@@ -320,19 +322,22 @@ class IntegracionController extends Zend_Controller_Action
         $_SESSION['linkedin_access_token'] = $data['oauth_token'];
         $_SESSION['linkedin_access_token_secret'] = $data['oauth_token_secret'];
         
+        $aut = Zend_Auth::getInstance();
         $objIntegracionDao = new Application_Model_IntegracionDao();
         $objIntegracion = new Application_Model_Integracion();
         
-        $objIntegracion->setToken($data['oauth_token']);
-        $objIntegracion->setSecret($data['oauth_token_secret']);
-        $objIntegracion->setFechaPermiso($now->format( 'Y-m-d' ));
-        
-        $aut = Zend_Auth::getInstance();
-        $objIntegracion->setUsuarioId($aut->getIdentity()->usu_id);
-        $objIntegracion->setRedId("3");
-        $objIntegracionDao->guardar($objIntegracion);
-        $this->view->mensajeLinkedin = "Integracion con Linked In exitosa";
-        
+        if ($objIntegracionDao->obtenerPorUsuarioAndRedSocial($aut->getIdentity()->usu_id, "3") == null)
+        { 
+	        $objIntegracion->setToken($data['oauth_token']);
+	        $objIntegracion->setSecret($data['oauth_token_secret']);
+	        $objIntegracion->setFechaPermiso($now->format( 'Y-m-d H:i:s' ));
+	        
+	        
+	        $objIntegracion->setUsuarioId($aut->getIdentity()->usu_id);
+	        $objIntegracion->setRedId("3");
+	        $objIntegracionDao->guardar($objIntegracion);
+	        $this->view->mensajeLinkedin = "Integracion con Linked In exitosa";
+        }
         
         unset($_SESSION['linkedin_oauth_token']);
         unset($_SESSION['linkedin_oauth_token_secret']);
