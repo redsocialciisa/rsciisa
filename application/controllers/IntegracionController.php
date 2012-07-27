@@ -83,20 +83,23 @@ class IntegracionController extends Zend_Controller_Action
         
         	$code = $tmhOAuth->request('GET', $tmhOAuth->url('1/account/verify_credentials'));
         	if ($code == 200) {
-        		$resp = json_decode($tmhOAuth->response['response']);        		
+        	    $aut = Zend_Auth::getInstance();
+        	    $resp = json_decode($tmhOAuth->response['response']);        		
         		$objIntegracionDao = new Application_Model_IntegracionDao();
         		$objIntegracion = new Application_Model_Integracion();
         		
-        		$objIntegracion->setToken($_SESSION['access_token']['oauth_token']);
-        		$objIntegracion->setSecret($_SESSION['access_token']['oauth_token_secret']);
-        		$objIntegracion->setFechaPermiso($now->format( 'Y-m-d' ));
         		
-        		$aut = Zend_Auth::getInstance();
-        		$objIntegracion->setUsuarioId($aut->getIdentity()->usu_id);
-        		$objIntegracion->setRedId("2");
-        		$objIntegracionDao->guardar($objIntegracion);
-        		$this->view->mensajeTwitter = "Integración con Twitter exitosa";
-        		
+        		if ($objIntegracionDao->obtenerPorUsuarioAndRedSocial($aut->getIdentity()->usu_id, "2") == null)
+        		{
+	        		$objIntegracion->setToken($_SESSION['access_token']['oauth_token']);
+	        		$objIntegracion->setSecret($_SESSION['access_token']['oauth_token_secret']);
+	        		$objIntegracion->setFechaPermiso($now->format('Y-m-d H:i:s'));
+	        		
+	        		$objIntegracion->setUsuarioId($aut->getIdentity()->usu_id);
+	        		$objIntegracion->setRedId("2");
+	        		$objIntegracionDao->guardar($objIntegracion);
+	        		$this->view->mensajeTwitter = "Integración con Twitter exitosa";
+        		}
         		
         	} else {
         		outputError($tmhOAuth);

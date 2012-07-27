@@ -28,14 +28,20 @@
 		    $resultado = curl_exec ($ch);
 		    parse_str($resultado);
 	    
+		    $aut = Zend_Auth::getInstance();
 		    $objIntegracionDao = new Application_Model_IntegracionDao();
 		    $objIntegracion = new Application_Model_Integracion();
-		    $objIntegracion->setToken($access_token);
-		    $objIntegracion->setFechaPermiso($now->format( 'Y-m-d' ));
-		    $aut = Zend_Auth::getInstance();
-		    $objIntegracion->setUsuarioId($aut->getIdentity()->usu_id);
-		    $objIntegracion->setRedId("1");
-		    $objIntegracionDao->guardar($objIntegracion);
+		    
+		    if ($objIntegracionDao->obtenerPorUsuarioAndRedSocial($aut->getIdentity()->usu_id, "1") == null)
+		    {
+			    $objIntegracion->setToken($access_token);
+			    $objIntegracion->setFechaPermiso($now->format( 'Y-m-d H:i:s' ));
+			    
+			    $objIntegracion->setUsuarioId($aut->getIdentity()->usu_id);
+			    $objIntegracion->setRedId("1");
+			    $objIntegracionDao->guardar($objIntegracion);
+		    }
+		    
 		    curl_close ($ch);
       }      
       else 
