@@ -129,7 +129,6 @@
 					<?php
 					$aut = Zend_Auth::getInstance();
 					if($aut->getIdentity()->usu_id == $evento->getUsuarioId()){?>
-						<td><a class="btn btn-info" href="#"> <img width="15px;" src="/imagenes/proyecto/edit.png">&nbsp;&nbsp; Editar </a>&nbsp;&nbsp;</td>
 						<td><a class="btn btn-danger" onclick="openMyModalCancelarEvento('<?php echo $evento->getId();?>','<?php echo $evento->getNombre();?>')" > <img width="15px;" src="/imagenes/proyecto/cruz.png">&nbsp;&nbsp; Cancelar </a>&nbsp;&nbsp;</td>
 					<?php }else{ ?>
 						<td><a class="btn btn-danger" onclick="openModalDejarEvento(<?php echo $evento->getId();?>)"> <img width="15px;" src="/imagenes/proyecto/papelera.png">&nbsp;&nbsp; No asistiré </a></td>
@@ -319,13 +318,15 @@
 					</td>
 				</tr>
 				<tr>
-					<td><input type="radio" name="cbxTipo" value="1" checked> Público<br>
+					<td><input type="radio" name="cbxTipo" value="1" checked> Público: <br>
 					</td>
-					<td></td>
+					<td>Todos podrán ver el evento, también los que no son tus contactos y asistir a él</td>
 				</tr>
 				<tr>
-					<td><input type="radio" name="cbxTipo" value="2"> Privado</td>
-					<td></td>
+					<td><input type="radio" name="cbxTipo" value="2"> Privado: </td>
+					<td>
+						Sólo los contactos que tú invites podrán ver el evento
+					</td>
 				</tr>
 			</table>
 

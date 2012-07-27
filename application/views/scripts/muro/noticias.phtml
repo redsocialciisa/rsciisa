@@ -54,7 +54,7 @@
 								
 								</h5>
 								<input type="hidden" id="hdnTextoPublicacion<?php echo $publicacion->getId();?>" value="<?php echo $texto;?>">
-							
+								
 								<table class="span2" border="2">
 									<tr>
 										<td align="center" bgcolor="#DF7401">
@@ -111,8 +111,17 @@
 									 	</td>
 									 </tr>
 								</table>
+								
+								<table>
+									<tr>
+										<td>
+											<a href="#" onclick="verPublicacionesConCometarios('<?php echo $publicacion->getId();?>','<?php echo $objUsuarioDao2->obtenerPorId($publicacion->getUsuarioId())->getNombre(); ?>')" class="btn"><i class="icon-plus"></i>&nbsp; Ver más</a>
+										</td>
+									</tr>
+								</table>
+								
 								<p><?php echo $objPublicacionAux->calcularTiempoTranscurrido($publicacion->getFecha());?></p>
-							<?php } ?>
+							<?php } ?> 
 							<?php
 							if($publicacion->getTipoId() == 5){ ?>
 							<?php
@@ -293,6 +302,65 @@
 
 <script type="text/javascript">
 
+	function verPublicacionesConCometarios(idPublicacion,usuarioNombre)
+	{
+		var html = ""; 
+		
+		obtenerNombrePublicacion(idPublicacion);
+		todosComentarios(idPublicacion);
+
+		html = html + "<div class='cont wellLateralIzq'><div id='divTextoPub'></div></div>"; 
+		document.getElementById("divModalGenericoTitulo").innerHTML = "<label>Publicado por: " + usuarioNombre + "</label>";
+		document.getElementById("divModalGenerico").innerHTML = html;
+		
+		$('#myModalGenerico').modal('show');
+	}
+
+	function todosComentarios(idPublicacion){
+
+		$.ajax(
+				{
+				async: true,
+				type: 'POST',
+				url: '<?php echo $this->baseUrl()?>/muro/comentarios',
+				data: 'id=' + idPublicacion,	
+				dataTypeString: 'text',
+				
+				beforeSend: function(data){
+			    },  
+			    success: function(requestData){  
+		               		document.getElementById("divModalGenericoCometarios").innerHTML = requestData;
+			               		
+			    },  
+			    error: function(requestData, strError, strTipoError){          
+			    }
+			    
+				});
+		
+	}
+
+	function obtenerNombrePublicacion(idPublicacion){
+
+		$.ajax(
+				{
+				async: true,
+				type: 'POST',
+				url: '<?php echo $this->baseUrl()?>/muro/nombre',
+				data: 'id=' + idPublicacion,	
+				dataTypeString: 'text',
+				
+				beforeSend: function(data){
+			    },  
+			    success: function(requestData){  
+			    	document.getElementById("divTextoPub").innerHTML = requestData;
+			               		
+			    },  
+			    error: function(requestData, strError, strTipoError){          
+			    }
+			    
+				});
+	}
+
 	function openMyModalUnirseGrupo(id, nombre)
 	{
 		document.getElementById("hdnNombrePublicacion").innerHTML = nombre;
@@ -459,6 +527,8 @@
 		}
 			
 	}
+
+	
 
 	function compartirEnLinkedin(){
 

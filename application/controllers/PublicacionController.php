@@ -33,8 +33,19 @@ class PublicacionController extends Zend_Controller_Action
         $objAmigoDao = new Application_Model_AmigoDao();
         if($this->getRequest()->getParam('id') != null)
         {
-        	if($aut->getIdentity()->usu_id != $objPublicacion->getUsuarioPara())
+            $flag = false;
+        	if($aut->getIdentity()->usu_id == $objPublicacion->getUsuarioPara())
         	{
+        	    $flag = true;
+        	}
+        	
+        	if($aut->getIdentity()->usu_id == $objPublicacion->getUsuarioId())
+        	{
+        	    $flag = true;
+        	}
+        	
+        	if($flag == false){
+        	
         		if($objAmigoDao->sonAmigos($aut->getIdentity()->usu_id, $objPublicacion->getUsuarioPara()) == false)
         		{
         		    echo "<img src='/imagenes/proyecto/denegado.png'>&nbsp;&nbsp;&nbsp;TÚ NO TIENES ACCESO A ESTA INFORMACIÓN.";

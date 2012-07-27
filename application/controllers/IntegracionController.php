@@ -95,7 +95,7 @@ class IntegracionController extends Zend_Controller_Action
         		$objIntegracion->setUsuarioId($aut->getIdentity()->usu_id);
         		$objIntegracion->setRedId("2");
         		$objIntegracionDao->guardar($objIntegracion);
-        		$this->view->mensajeTwitter = "Integracion con Twitter exitosa";
+        		$this->view->mensajeTwitter = "Integración con Twitter exitosa";
         		
         		
         	} else {
@@ -133,9 +133,11 @@ class IntegracionController extends Zend_Controller_Action
         		$method = isset($_REQUEST['authenticate']) ? 'authenticate' : 'authorize';
         		$force  = isset($_REQUEST['force']) ? '&force_login=1' : '';
         		$authurl = $tmhOAuth->url("oauth/{$method}", '') .  "?oauth_token={$_SESSION['oauth']['oauth_token']}{$force}";
-        		echo '<p>Para completar la integracion precione el siguiente boton</p>';
+        		echo '<p>Para completar la integración presione el siguiente botón</p>';
         		$link = "'".$authurl."'";
-        		echo '<input type=button onClick="parent.location='.$link.'" value="Integrar con Twitter">';
+
+        		//echo '<input type=button onClick="parent.location='.$link.'" value="Integrar con Twitter" class="btn">';
+        		echo '<a class="btn" onClick="parent.location='.$link.'"><img src="/imagenes/proyecto/tt.png">&nbsp;&nbsp;Integrar con Twitter</a>';
         		
         	} else {
         		outputError($tmhOAuth);

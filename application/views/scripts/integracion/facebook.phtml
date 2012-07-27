@@ -37,11 +37,14 @@
 		    $objIntegracion->setRedId("1");
 		    $objIntegracionDao->guardar($objIntegracion);
 		    curl_close ($ch);
-    	}      
+      }      
       else 
-      {
-          	echo "<div>";
-		    echo '<a href='.$this->link.' class="btn btn" >Integrar con Facebook</a>';
+      {		
+          	echo "<br><h1>FACEBOOK</h1>";
+          	echo "<br>¡Intégrate con Facebook, unas de las Redes Sociales más importante,<br> de forma segura y confiable y podrás compartir tus  publicaciones desde nuestra Red Social CIISA hacia Facebook¡";
+          	echo "<br><br><img src='/imagenes/proyecto/int_fb.png'><br><br>";
+          	echo "<div class='span9'>";
+		    echo '<a href='.$this->link.' class="btn btn" ><img src="/imagenes/proyecto/fb.png">&nbsp;&nbsp;Integrar con Facebook</a>';
 		    echo "</div>";
       }?>
 
@@ -50,9 +53,6 @@
       <br>
       <h3>Para ver tu perfil integrado con Facebook tienes que ingresar nuevamente.</h3>
     <?php endif ?>
-      <br>
-      
-      <img src="/imagenes/proyecto/int_fb.png">
     	
   </body>
 </html>

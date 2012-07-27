@@ -30,7 +30,7 @@ class Application_Form_FormGrupo extends Zend_Form
 		        ->addValidator('Extension',false,array('jpg','jpeg','png'));
         
 		$descripcion = new Zend_Form_Element_Textarea('txtDescripcion');
-		$descripcion->setLabel('Descripcion del grupo: ')
+		$descripcion->setLabel('Descripción del grupo: ')
 					->setRequired(true)
 					->setAttrib('class', 'span6')
 					->setAttrib('rows', 2)
@@ -40,14 +40,14 @@ class Application_Form_FormGrupo extends Zend_Form
 		
 		$tipoPublico = new Zend_Form_Element_Radio('optPublico');
 		$tipoPublico->addMultiOptions(array(
-				'0' => 'Publico',
+				'0' => 'Público: Todos podrán ver el grupo y generar publicaciones, también los que no son tus contactos',
 		))
 		->setAttrib('checked',true)
 		->setAttrib('name', 'grpTipo');
 		
 		$tipoPrivado = new Zend_Form_Element_Radio('optPrivado');
 		$tipoPrivado->addMultiOptions(array(
-				'1' => 'Privado',
+				'1' => 'Privado: Sólo los contactos que tú invites podrán ver y participar en el grupo',
 		))
 		->setAttrib('name', 'grpTipo');
 				
