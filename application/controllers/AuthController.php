@@ -9,6 +9,7 @@ class AuthController extends Zend_Controller_Action
         if($aut->hasIdentity()){
             $this->_redirect('/muro/index');
         }
+        //
     }
 
     public function indexAction()

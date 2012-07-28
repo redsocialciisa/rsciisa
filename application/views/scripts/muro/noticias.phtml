@@ -143,7 +143,7 @@
 											<img src="/imagenes/grupos/<?php echo $publicacion->getFoto();?>">
 											<br>
 											<?php if($objUsuarioGrupoDao->obtenerPorGrupoYUsuario($gru_id, $aut->getIdentity()->usu_id) == null){?>
-												<button id="btnUnirse<?php echo $publicacion->getId();?>" href="#" onclick="openMyModalUnirseGrupo(<?php echo $publicacion->getId();?>,'<?php echo $objGrupo->getNombre();?>');" class="btn btn-success">Unete</button>
+												<button id="btnUnirse<?php echo $publicacion->getId();?>" href="#" onclick="openMyModalUnirseGrupo(<?php echo $publicacion->getId();?>,'<?php echo $objGrupo->getNombre();?>');" class="btn btn-success">Únete</button>
 											<?php } 
 											$objPublicacionGrupoDao = null;
 											$objUsuarioGrupoDao = null;

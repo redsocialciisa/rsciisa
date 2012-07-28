@@ -9,6 +9,7 @@ class ContactoController extends Zend_Controller_Action
 		if($aut->hasIdentity() == false){
 			$this->_redirect('/auth');
 		}
+		//
     }
 
     public function busquedaAction()
