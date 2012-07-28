@@ -10,6 +10,7 @@ class AlbumController extends Zend_Controller_Action
         	$this->_redirect('/auth');
         }
         //
+        //
     }
 
     public function indexAction()
