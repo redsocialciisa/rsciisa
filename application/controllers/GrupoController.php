@@ -177,17 +177,19 @@ class GrupoController extends Zend_Controller_Action
         $form = new Application_Form_FormEditarGrupo();
         $aut = Zend_Auth::getInstance();
         
-        //SEGURIDAD
-        $usuarioGrupoId = $objGrupoDao->obtenerPorId($this->getRequest()->getParam('grupoId'))->getUsuId();
-        if($aut->getIdentity()->usu_id != $usuarioGrupoId)
-        {
-        	echo "<img src='/imagenes/proyecto/denegado.png'>&nbsp;&nbsp;&nbsp;TÚ NO TIENES PERMISOS PARA MODIFICAR ESTA INFORMACIÓN.";
-        	exit();
-        }
-        //SEGURIDAD
+
         
         if($this->getRequest()->isPost() == false)
         {
+            //SEGURIDAD
+            $usuarioGrupoId = $objGrupoDao->obtenerPorId($this->getRequest()->getParam('grupoId'));
+            if($aut->getIdentity()->usu_id != $usuarioGrupoId->getUsuId())
+            {
+            	echo "<img src='/imagenes/proyecto/denegado.png'>&nbsp;&nbsp;&nbsp;TÚ NO TIENES PERMISOS PARA MODIFICAR ESTA INFORMACIÓN.";
+            	exit();
+            }
+            //SEGURIDAD
+            
             $grupoId = $this->getRequest()->getParam('grupoId');
             $objGrupo = $objGrupoDao->obtenerPorId($grupoId);
 	        $array = array(

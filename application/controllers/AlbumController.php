@@ -495,8 +495,16 @@ class AlbumController extends Zend_Controller_Action
     			$objUtilidad = new Application_Model_Utilidad();
     			$album = $objAlbumDao->obtenerPorId($this->getRequest()->getParam('hdnIdAlbum'));
     			$idFoto = $this->getRequest()->getParam('hdnFotoSeleccionada');
-    			$objFoto = $objFotoDao->obtenerPorId($idFoto);
-    			 
+    			
+    			if ($objFotoDao->obtenerPorId($idFoto) == null)
+    			{
+    			    $objFoto = $objFotoDao->obtenerPorNombre($album->getPortada());
+    			}
+    			else
+    			{
+    			    $objFoto = $objFotoDao->obtenerPorId($idFoto);
+    			}    
+    			
     			$fecha = new DateTime();
     			$fechahora = str_replace(" ","",str_replace("-","",str_replace(":","",$fecha->format('Y-m-d H:i:s'))));
     			 
