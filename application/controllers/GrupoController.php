@@ -9,7 +9,6 @@ class GrupoController extends Zend_Controller_Action
         if($aut->hasIdentity() == false){
         	$this->_redirect('/auth');
         }
-        //
     }
 
     public function indexAction()
@@ -277,10 +276,10 @@ class GrupoController extends Zend_Controller_Action
         //Paginador
         Zend_View_Helper_PaginationControl::setDefaultViewPartial ( 'paginator/items.phtml' );
         $paginatorGrupoUsuarios = Zend_Paginator::factory($listaGrupoUsuarios);
-        $paginatorGrupoUsuarios->setDefaultItemCountPerPage( 5 );
+        $paginatorGrupoUsuarios->setDefaultItemCountPerPage( 36 );
         
         $paginatorAmigoNoInvitado = Zend_Paginator::factory($listaAmigoNoInvitado);
-        $paginatorAmigoNoInvitado->setDefaultItemCountPerPage( 5 );
+        $paginatorAmigoNoInvitado->setDefaultItemCountPerPage( 36 );
         
         if ($this->_hasParam ( 'page' )) {
         	$paginatorGrupoUsuarios->setCurrentPageNumber( $this->_getParam ( 'page' ) );
@@ -289,7 +288,6 @@ class GrupoController extends Zend_Controller_Action
         if ($this->_hasParam ( 'page' )) {
         	$paginatorAmigoNoInvitado->setCurrentPageNumber( $this->_getParam ( 'page' ) );
         }
-        
         
         $this->view->grupoId = $grupoId;
         $this->view->listaGrupoUsuarios = $paginatorGrupoUsuarios;

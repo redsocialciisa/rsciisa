@@ -146,8 +146,7 @@ class Application_Model_Ciisa
 				  	  PERS_LOGIN = '$usuario'";
     
     	$result = mssql_query($query);
-    	$numRows = mssql_num_rows($result);
-    	
+    	$numRows = mssql_num_rows($result);    	
     
     	if($numRows > 0)
     	{
@@ -155,6 +154,8 @@ class Application_Model_Ciisa
     		$row = mssql_fetch_array($result);
     
     		return trim($row['PERFIL_ID']);
+    	}else{
+    	    return "ALUMNO";
     	}
     	
     	mssql_close($this->_con);

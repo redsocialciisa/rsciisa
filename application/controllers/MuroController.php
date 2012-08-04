@@ -10,8 +10,6 @@ class MuroController extends Zend_Controller_Action
 		if($aut->hasIdentity() == false){
 			$this->_redirect('/auth');
 		}
-		//$aut = Zend_Auth::getInstance();
-		//Zend_Debug::dump($aut->getIdentity());exit;
     }
 
     public function indexAction()

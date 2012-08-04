@@ -84,19 +84,19 @@
     	
     	<?php
 			if($aut->getIdentity()->usu_id == $objEvento->getUsuarioId()){?>
-				<li><a href="#tab1" data-toggle="tab"><img src="/imagenes/proyecto/minuscontacto.png">&nbsp;&nbsp; Quitar Contactos </a></li>
 				<li><a href="#tab2" data-toggle="tab"><img src="/imagenes/proyecto/addcontacto.png">&nbsp;&nbsp; Invitar Contactos </a></li>
+				<li><a href="#tab1" data-toggle="tab"><img src="/imagenes/proyecto/minuscontacto.png">&nbsp;&nbsp; Quitar Contactos </a></li>
 		  <?php }else{ ?>
 		      	<li><a href="#tab1" data-toggle="tab"><img src="/imagenes/proyecto/user.png">&nbsp;&nbsp; Contactos </a></li>
 		  <?php } ?>
 		  		<li><a href="#tab3" data-toggle="tab"><img src="/imagenes/proyecto/tierra.png">&nbsp;&nbsp; Mapa </a></li>
     </ul>
     <div class="tab-content">
-    	<div class="tab-pane active" id="tab1">
+    	<div class="tab-pane" id="tab1">
 				
 			<?php 
 				$columna = 0;
-				$cantColumna = 3;
+				$cantColumna = 6;
 			?>
 				<table width="100%" align="center">
 				
@@ -167,11 +167,11 @@
 					<?php }
 					?>
     	</div>
-    	<div class="tab-pane" id="tab2">
+    	<div class="tab-pane active" id="tab2">
     		
     		<?php 
 				$columna = 0;
-				$cantColumna = 3;
+				$cantColumna = 6;
 			?>
 			<table width="100%" align="center">
 				<?php foreach ($this->listaUsuarios as $usuario){ ?>

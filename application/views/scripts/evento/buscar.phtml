@@ -7,7 +7,7 @@
 <br><h1> BUSCAR EVENTOS </h1><br>
 
 <form action="/evento/buscar/" method="post" enctype="<?php echo $this->formBuscar->getEnctype(); ?>">
-<table>
+<table class="span9">
 	<tr>
 		    <td><?php echo $this->formBuscar->txtBuscar;?> </td>
 		    <td><?php echo $this->formBuscar->enviar;?></td>
@@ -88,7 +88,7 @@
 					</td>
 					<?php if ($objUsuarioEventoDao->usuarioExisteEnGrupo($evento->getId(), $aut->getIdentity()->usu_id) == false) {?>
 						<td>
-							<a id="btnUnirse<?php echo $evento->getId();?>" href="#" onclick="openMyModalUnirseEvento(<?php echo $evento->getId();?>);" class="btn"> Unirse al Evento </a>
+							<a id="btnUnirse<?php echo $evento->getId();?>" href="#" onclick="openMyModalUnirseEvento(<?php echo $evento->getId();?>);" class="btn"> Asistir al Evento </a>
 						</td>
 					<?php }?>
 				</tr>

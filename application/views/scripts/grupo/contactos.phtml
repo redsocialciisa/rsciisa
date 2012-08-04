@@ -29,16 +29,16 @@
  
 <div class="tabbable span9 well">
     <ul class="nav nav-tabs">
-    	<li><a href="#GruposContacto" data-toggle="tab"><img src="/imagenes/proyecto/minuscontacto.png">&nbsp;&nbsp;Contactos del grupo</a></li>
     	<li><a href="#GruposInvitarContactos" data-toggle="tab"><img src="/imagenes/proyecto/addcontacto.png">&nbsp;&nbsp;Invitar contactos</a></li>
+    	<li><a href="#GruposContacto" data-toggle="tab"><img src="/imagenes/proyecto/minuscontacto.png">&nbsp;&nbsp;Contactos del grupo</a></li>
     </ul>
     <div class="tab-content">
-    	<div class="tab-pane active" id="GruposContacto">
+    	<div class="tab-pane" id="GruposContacto">
     		<?php echo $this->listaGrupoUsuarios;?>
     		
     		<?php 
 				$columna = 0;
-				$cantColumna = 3;
+				$cantColumna = 6;
 				$countCheck = 0;
 			?>
 				<table width="100%" align="center" class="span9">
@@ -95,11 +95,11 @@
 				</button>
     		
     	</div>
-    	<div class="tab-pane" id="GruposInvitarContactos">
+    	<div class="tab-pane active" id="GruposInvitarContactos">
     		<?php 
     			echo $this->listaAmigoNoInvitado;
 				$columna = 0;
-				$cantColumna = 3;
+				$cantColumna = 6;
 				$countCheck = 0;
 			?>
 				<table width="100%" align="center">
