@@ -141,7 +141,9 @@ class AuthController extends Zend_Controller_Action
         $objUsuarioDao = new Application_Model_UsuarioDao();
         
         $objUsuario = $objUsuarioDao->obtenerPorUsuarioCiisa($usuario);
-                
+		echo $objUsuario;
+		exit();
+        
         $objUsuarioDao->guardarAceptacion($objUsuario);        
     }
     
